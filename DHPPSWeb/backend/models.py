@@ -1,6 +1,6 @@
 # This is an auto-generated Django model module.
 # You'll have to do the following manually to clean this up:
-# * Rearrange models' order
+#   * Rearrange models' order
 #   * Make sure each model has one field with primary_key=True
 #   * Make sure each ForeignKey and OneToOneField has `on_delete` set to the desired behavior
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
@@ -8,21 +8,25 @@
 from django.db import models
 
 
-class Authoritydata(models.Model):
-    id = models.ForeignKey('Userinforrmation', models.DO_NOTHING, db_column='ID', blank=True, null=True)  # Field name made lowercase.
-    authority = models.CharField(max_length=20)
+class Accountinformation(models.Model):
+    userid = models.AutoField(db_column='userID', primary_key=True)  # Field name made lowercase.
+    themeno = models.ForeignKey('Theme', models.DO_NOTHING, db_column='themeNo')  # Field name made lowercase.
+    createdate = models.DateField(db_column='createDate')  # Field name made lowercase.
+    remark = models.CharField(max_length=200)
+    casenumber = models.IntegerField(db_column='caseNumber')  # Field name made lowercase.
+    authority = models.CharField(max_length=50)
 
     class Meta:
         managed = False
-        db_table = 'authoritydata'
+        db_table = 'accountinformation'
 
 
 class Casedata(models.Model):
-    caseid = models.OneToOneField('Userinforrmation', models.DO_NOTHING, db_column='caseID', primary_key=True)  # Field name made lowercase.
-    id = models.CharField(db_column='ID', max_length=20, blank=True, null=True)  # Field name made lowercase.
+    caseid = models.AutoField(db_column='caseID', primary_key=True)  # Field name made lowercase.
+    userid = models.ForeignKey(Accountinformation, models.DO_NOTHING, db_column='userID')  # Field name made lowercase.
     casename = models.CharField(db_column='caseName', max_length=50)  # Field name made lowercase.
-    citynumber = models.CharField(db_column='cityNumber', max_length=50)  # Field name made lowercase.
-    road = models.IntegerField()
+    citynumber = models.IntegerField(db_column='cityNumber')  # Field name made lowercase.
+    roadnumber = models.IntegerField(db_column='roadNumber')  # Field name made lowercase.
     inittotal = models.BigIntegerField(db_column='initTotal')  # Field name made lowercase.
     inittotalinfected = models.BigIntegerField(db_column='initTotalInfected')  # Field name made lowercase.
 
@@ -32,7 +36,7 @@ class Casedata(models.Model):
 
 
 class Cityposition(models.Model):
-    cityid = models.ForeignKey('Initcitydata', models.DO_NOTHING, db_column='cityID', blank=True, null=True)  # Field name made lowercase.
+    cityid = models.OneToOneField('Initcitydata', models.DO_NOTHING, db_column='cityID', primary_key=True)  # Field name made lowercase.
     x = models.FloatField()
     y = models.FloatField()
 
@@ -42,9 +46,9 @@ class Cityposition(models.Model):
 
 
 class Dailyforecastdata(models.Model):
-    nowdate = models.DateField(db_column='nowDate', primary_key=True)  # Field name made lowercase.
-    cityid = models.ForeignKey('Initcitydata', models.DO_NOTHING, db_column='cityID', blank=True, null=True)  # Field name made lowercase.
-    population = models.BigIntegerField(db_column='Population')  # Field name made lowercase.
+    date = models.DateField(primary_key=True)
+    cityid = models.ForeignKey('Initcitydata', models.DO_NOTHING, db_column='cityID')  # Field name made lowercase.
+    population = models.BigIntegerField()
     infected = models.BigIntegerField()
 
     class Meta:
@@ -53,8 +57,8 @@ class Dailyforecastdata(models.Model):
 
 
 class Initcitydata(models.Model):
-    cityid = models.OneToOneField(Cityposition, models.DO_NOTHING, db_column='cityID', primary_key=True)  # Field name made lowercase.
-    caseid = models.ForeignKey(Casedata, models.DO_NOTHING, db_column='caseID', blank=True, null=True)  # Field name made lowercase.
+    cityid = models.AutoField(db_column='cityID', primary_key=True)  # Field name made lowercase.
+    caseid = models.ForeignKey(Casedata, models.DO_NOTHING, db_column='caseID')  # Field name made lowercase.
     cityname = models.CharField(db_column='cityName', max_length=50)  # Field name made lowercase.
     initpop = models.BigIntegerField(db_column='initPop')  # Field name made lowercase.
     initinfect = models.BigIntegerField(db_column='initInfect')  # Field name made lowercase.
@@ -65,8 +69,8 @@ class Initcitydata(models.Model):
 
 
 class Initroaddata(models.Model):
-    roadid = models.CharField(db_column='roadID', primary_key=True, max_length=50)  # Field name made lowercase.
-    caseid = models.ForeignKey(Casedata, models.DO_NOTHING, db_column='caseID', blank=True, null=True)  # Field name made lowercase.
+    roadid = models.AutoField(db_column='roadID', primary_key=True)  # Field name made lowercase.
+    caseid = models.ForeignKey(Casedata, models.DO_NOTHING, db_column='caseID')  # Field name made lowercase.
     departure = models.CharField(max_length=50)
     destination = models.CharField(max_length=50)
     volume = models.BigIntegerField()
@@ -77,8 +81,9 @@ class Initroaddata(models.Model):
 
 
 class Logindata(models.Model):
-    id = models.ForeignKey('Userinforrmation', models.DO_NOTHING, db_column='ID', blank=True, null=True)  # Field name made lowercase.
-    password = models.CharField(db_column='passWord', max_length=20)  # Field name made lowercase.
+    userid = models.OneToOneField(Accountinformation, models.DO_NOTHING, db_column='userID', primary_key=True)  # Field name made lowercase.
+    userpassword = models.CharField(db_column='userPassword', max_length=20)  # Field name made lowercase.
+    salt = models.CharField(max_length=20)
 
     class Meta:
         managed = False
@@ -86,7 +91,7 @@ class Logindata(models.Model):
 
 
 class Modeldata(models.Model):
-    layerid = models.CharField(db_column='layerID', primary_key=True, max_length=20)  # Field name made lowercase.
+    layerid = models.AutoField(db_column='layerID', primary_key=True)  # Field name made lowercase.
     layername = models.CharField(db_column='layerName', max_length=20)  # Field name made lowercase.
     layerparm = models.CharField(db_column='layerParm', max_length=20)  # Field name made lowercase.
 
@@ -95,26 +100,25 @@ class Modeldata(models.Model):
         db_table = 'modeldata'
 
 
-class Userdata(models.Model):
-    id = models.ForeignKey('Userinforrmation', models.DO_NOTHING, db_column='ID', blank=True, null=True)  # Field name made lowercase.
+class Personalprofile(models.Model):
+    userid = models.OneToOneField(Accountinformation, models.DO_NOTHING, db_column='userID', primary_key=True)  # Field name made lowercase.
+    avatar = models.TextField(blank=True, null=True)
     username = models.CharField(db_column='userName', max_length=50)  # Field name made lowercase.
     phonenumber = models.CharField(db_column='phoneNumber', max_length=11)  # Field name made lowercase.
-    sex = models.IntegerField()
+    sex = models.CharField(max_length=10)
     address = models.CharField(max_length=200)
     email = models.CharField(db_column='Email', max_length=50)  # Field name made lowercase.
     birth = models.DateField()
 
     class Meta:
         managed = False
-        db_table = 'userdata'
+        db_table = 'personalprofile'
 
 
-class Userinforrmation(models.Model):
-    id = models.OneToOneField(Logindata, models.DO_NOTHING, db_column='ID', primary_key=True)  # Field name made lowercase.
-    createdate = models.DateField(db_column='createDate')  # Field name made lowercase.
-    remark = models.CharField(max_length=200)
-    casenumber = models.IntegerField(db_column='caseNumber')  # Field name made lowercase.
+class Theme(models.Model):
+    themeno = models.AutoField(db_column='themeNo', primary_key=True)  # Field name made lowercase.
+    themename = models.CharField(db_column='themeName', max_length=50)  # Field name made lowercase.
 
     class Meta:
         managed = False
-        db_table = 'userinforrmation'
+        db_table = 'theme'
