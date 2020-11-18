@@ -5,8 +5,10 @@ from backend import views
 
 
 router = DefaultRouter()
-router.register('books', views.AccountViewSet)
+router.register('AccountInfos', views.AccountViewSet)
 
 urlpatterns = [
-    path('', include(router.urls)),
+    # 渲染首页，其后的页面跳转由前端负责
+    path('', views.index, name="index"),
+    path('accountInfo/', views.AccountViewSet.as_view({'get': 'list'}))
 ]

@@ -6,6 +6,8 @@
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
+import uuid
+import os
 
 
 class Accountinformation(models.Model):
@@ -100,9 +102,16 @@ class Modeldata(models.Model):
         db_table = 'modeldata'
 
 
+def user_directory_path(instance, filename):
+    ext = filename.split('.')[-1]
+    filename = '{}.{}'.format(uuid.uuid4().hex[:10], ext)
+    # return the whole path to the file
+    return os.path.join(instance.user.id, "avatar", filename)
+
+
 class Personalprofile(models.Model):
     userid = models.OneToOneField(Accountinformation, models.DO_NOTHING, db_column='userID', primary_key=True)  # Field name made lowercase.
-    avatar = models.TextField(blank=True, null=True)
+    avatar = models.ImageField(upload_to=user_directory_path, verbose_name="头像")
     username = models.CharField(db_column='userName', max_length=50)  # Field name made lowercase.
     phonenumber = models.CharField(db_column='phoneNumber', max_length=11)  # Field name made lowercase.
     sex = models.CharField(max_length=10)
