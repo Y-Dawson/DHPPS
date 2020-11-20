@@ -1,0 +1,7 @@
+*.pyc
+
+/DHPPSWeb/backend/__pycache__
+
+/DHPPSWeb/backend/migrations/__pycache__
+
+/DHPPSWeb/DHPPSWeb/__pycache__
