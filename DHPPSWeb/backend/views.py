@@ -59,6 +59,6 @@ class PersonalProfileViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.PersonalprofileSerializer
 
 
-class Theme(viewsets.ModelViewSet):
+class ThemeViewSet(viewsets.ModelViewSet):
     queryset = models.Theme.objects.all()
     serializer_class = serializers.ThemeSerializer

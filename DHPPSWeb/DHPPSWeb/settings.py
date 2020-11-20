@@ -131,4 +131,5 @@ STATICFILES_DIRS = [
     ('js', os.path.join(STATIC_ROOT, 'js').replace('\\', '/')),
     ('images', os.path.join(STATIC_ROOT, 'images').replace('\\', '/')),
     ('upload', os.path.join(STATIC_ROOT, 'upload').replace('\\', '/')),
+    os.path.join(BASE_DIR, "frontend/dist/static"),
 ]
