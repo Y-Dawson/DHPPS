@@ -12,11 +12,11 @@ import os
 
 class Accountinformation(models.Model):
     userid = models.AutoField(db_column='userID', primary_key=True)  # Field name made lowercase.
-    themeno = models.ForeignKey('Theme', models.DO_NOTHING, db_column='themeNo',default = 1)  # Field name made lowercase.
+    themeno = models.ForeignKey('Theme', models.DO_NOTHING, db_column='themeNo', default=1)  # Field name made lowercase.
     createdate = models.DateField(db_column='createDate')  # Field name made lowercase.
-    remark = models.CharField(max_length=200,default='无备注')
-    casenumber = models.IntegerField(db_column='caseNumber',default=0)  # Field name made lowercase.
-    authority = models.CharField(max_length=50,default='普通用户')
+    remark = models.CharField(max_length=200, default='无备注')
+    casenumber = models.IntegerField(db_column='caseNumber', default=0)  # Field name made lowercase.
+    authority = models.CharField(max_length=50, default='普通用户')
 
     class Meta:
         managed = False
@@ -26,7 +26,7 @@ class Accountinformation(models.Model):
 class Casedata(models.Model):
     caseid = models.AutoField(db_column='caseID', primary_key=True)  # Field name made lowercase.
     userid = models.ForeignKey(Accountinformation, models.DO_NOTHING, db_column='userID')  # Field name made lowercase.
-    casename = models.CharField(db_column='caseName', max_length=50,default='未命名')  # Field name made lowercase.
+    casename = models.CharField(db_column='caseName', max_length=50, default='未命名')  # Field name made lowercase.
     citynumber = models.IntegerField(db_column='cityNumber')  # Field name made lowercase.
     roadnumber = models.IntegerField(db_column='roadNumber')  # Field name made lowercase.
     inittotal = models.BigIntegerField(db_column='initTotal')  # Field name made lowercase.
@@ -62,8 +62,8 @@ class Initcitydata(models.Model):
     cityid = models.AutoField(db_column='cityID', primary_key=True)  # Field name made lowercase.
     caseid = models.ForeignKey(Casedata, models.DO_NOTHING, db_column='caseID')  # Field name made lowercase.
     cityname = models.CharField(db_column='cityName', max_length=50)  # Field name made lowercase.
-    initpop = models.BigIntegerField(db_column='initPop',default=0)  # Field name made lowercase.
-    initinfect = models.BigIntegerField(db_column='initInfect',default=0)  # Field name made lowercase.
+    initpop = models.BigIntegerField(db_column='initPop', default=0)  # Field name made lowercase.
+    initinfect = models.BigIntegerField(db_column='initInfect', default=0)  # Field name made lowercase.
 
     class Meta:
         managed = False
@@ -114,9 +114,9 @@ class Personalprofile(models.Model):
     avatar = models.ImageField(upload_to=user_directory_path, verbose_name="头像")
     username = models.CharField(db_column='userName', max_length=50)  # Field name made lowercase.
     phonenumber = models.CharField(db_column='phoneNumber', max_length=11)  # Field name made lowercase.
-    sex = models.CharField(max_length=10,default='保密')
-    address = models.CharField(max_length=200,default='保密' )
-    email = models.CharField(db_column='Email', max_length=50,default='保密')  # Field name made lowercase.
+    sex = models.CharField(max_length=10, default='保密')
+    address = models.CharField(max_length=200, default='保密')
+    email = models.CharField(db_column='Email', max_length=50, default='保密')  # Field name made lowercase.
     birth = models.DateField()
 
     class Meta:
