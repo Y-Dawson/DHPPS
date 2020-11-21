@@ -10,16 +10,25 @@ import uuid
 import os
 
 
+class Theme(models.Model):
+    themeno = models.AutoField(db_column='themeNo', primary_key=True)  # Field name made lowercase.
+    themename = models.CharField(db_column='themeName', max_length=50)  # Field name made lowercase.
+
+    class Meta:
+        # managed = False
+        db_table = 'theme'
+
+
 class Accountinformation(models.Model):
     userid = models.AutoField(db_column='userID', primary_key=True)  # Field name made lowercase.
-    themeno = models.ForeignKey('Theme', models.DO_NOTHING, db_column='themeNo', default=1)  # Field name made lowercase.
+    themeno = models.ForeignKey(Theme, models.DO_NOTHING, db_column='themeNo')  # Field name made lowercase.
     createdate = models.DateField(db_column='createDate')  # Field name made lowercase.
     remark = models.CharField(max_length=200, default='无备注')
     casenumber = models.IntegerField(db_column='caseNumber', default=0)  # Field name made lowercase.
     authority = models.CharField(max_length=50, default='普通用户')
 
     class Meta:
-        managed = False
+        # managed = False
         db_table = 'accountinformation'
 
 
@@ -33,29 +42,8 @@ class Casedata(models.Model):
     inittotalinfected = models.BigIntegerField(db_column='initTotalInfected')  # Field name made lowercase.
 
     class Meta:
-        managed = False
+        # managed = False
         db_table = 'casedata'
-
-
-class Cityposition(models.Model):
-    cityid = models.OneToOneField('Initcitydata', models.DO_NOTHING, db_column='cityID', primary_key=True)  # Field name made lowercase.
-    x = models.FloatField()
-    y = models.FloatField()
-
-    class Meta:
-        managed = False
-        db_table = 'cityposition'
-
-
-class Dailyforecastdata(models.Model):
-    date = models.DateField(primary_key=True)
-    cityid = models.ForeignKey('Initcitydata', models.DO_NOTHING, db_column='cityID')  # Field name made lowercase.
-    population = models.BigIntegerField()
-    infected = models.BigIntegerField()
-
-    class Meta:
-        managed = False
-        db_table = 'dailyforecastdata'
 
 
 class Initcitydata(models.Model):
@@ -66,8 +54,29 @@ class Initcitydata(models.Model):
     initinfect = models.BigIntegerField(db_column='initInfect', default=0)  # Field name made lowercase.
 
     class Meta:
-        managed = False
+        # managed = False
         db_table = 'initcitydata'
+
+
+class Cityposition(models.Model):
+    cityid = models.OneToOneField(Initcitydata, models.DO_NOTHING, db_column='cityID', primary_key=True)  # Field name made lowercase.
+    x = models.FloatField()
+    y = models.FloatField()
+
+    class Meta:
+        # managed = False
+        db_table = 'cityposition'
+
+
+class Dailyforecastdata(models.Model):
+    date = models.DateField(primary_key=True)
+    cityid = models.ForeignKey(Initcitydata, models.DO_NOTHING, db_column='cityID')  # Field name made lowercase.
+    population = models.BigIntegerField()
+    infected = models.BigIntegerField()
+
+    class Meta:
+        # managed = False
+        db_table = 'dailyforecastdata'
 
 
 class Initroaddata(models.Model):
@@ -78,7 +87,7 @@ class Initroaddata(models.Model):
     volume = models.BigIntegerField()
 
     class Meta:
-        managed = False
+        # managed = False
         db_table = 'initroaddata'
 
 
@@ -88,7 +97,7 @@ class Logindata(models.Model):
     salt = models.CharField(max_length=20)
 
     class Meta:
-        managed = False
+        # managed = False
         db_table = 'logindata'
 
 
@@ -98,7 +107,7 @@ class Modeldata(models.Model):
     layerparm = models.CharField(db_column='layerParm', max_length=20)  # Field name made lowercase.
 
     class Meta:
-        managed = False
+        # managed = False
         db_table = 'modeldata'
 
 
@@ -120,14 +129,5 @@ class Personalprofile(models.Model):
     birth = models.DateField()
 
     class Meta:
-        managed = False
+        # managed = False
         db_table = 'personalprofile'
-
-
-class Theme(models.Model):
-    themeno = models.AutoField(db_column='themeNo', primary_key=True)  # Field name made lowercase.
-    themename = models.CharField(db_column='themeName', max_length=50)  # Field name made lowercase.
-
-    class Meta:
-        managed = False
-        db_table = 'theme'
