@@ -6,42 +6,64 @@
   <meta name=viewport content="width=device-width,initial-scale=1">
   <script src="https://unpkg.com/vue/dist/vue.js"></script>
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
   <title>frontend</title>
 </head>
 
 <body>
-  <input type="text" id="input1">第一个文本框<br>
-  <input type="text" id="input2">第二个文本框<br>
-  <input type="text" id="input3">第三个文本框<br>
-  <button id="button1">提交</button>
-  <h1 id = "returnContent">{{ content.userid }}</h1>
-  <img :src="'asdasdasdasd' + content.userid">
+  <div id="returnContent">
+    <input type="text" id="input1">第一个文本框<br>
+    <input type="text" id="input2">第二个文本框<br>
+    <input type="text" id="input3">第三个文本框<br>
+    <button id="button1" @click = "putContent">提交</button>
+    <h1>{{ content }}<br>{{ returnData }}</h1>
+  </div>
+
 </body>
 
 <script>
-    new Vue({
-        el: '#returnContent',
-        data: {
-            content: []
-        },
-        created: function () {
-            //为了在内部函数能使用外部函数的this对象，要给它赋值了一个名叫self的变量。
-            this.getContent()
-        },
-        methods: {
-            getContent: function () {
-                var self = this;
-                axios
-                    .get("http://127.0.0.1:8000/backend/profile/13/")
-                    .then(response => (
-                        this.content = response.data,
-                        alert(JSON.stringify(response.data))
-                    ))
-                    .catch(function (error) { // 请求失败处理
-                        alert("数据请求失败wdnmd");
-                    });
-            }
-        }
-    })
+  new Vue({
+    el: '#returnContent',
+    data: {
+      content: [],
+      returnData: []
+    },
+    created: function () {
+      //为了在内部函数能使用外部函数的this对象，要给它赋值了一个名叫self的变量。
+      this.getContent()
+    },
+    methods: {
+      getContent: function () {
+        var self = this;
+        axios
+          .get("http://127.0.0.1:8000/backend/accountInfo/1/")
+          .then(response => (
+            self.content = response.data
+            //alert(JSON.stringify(response))
+          ))
+          .catch(function (error) { // 请求失败处理
+            alert("数据请求失败wdnmd");
+          });
+      },
+      putContent: function () {
+        var self = this;
+        var date = $("#input1").val();
+        axios
+          .post('http://127.0.0.1:8000/backend/accountInfo/',{
+            createdate: "2018-1-1"
+          })
+          .then(response => (
+            self.content = response,
+            alert(JSON.stringify(response))
+          ))
+          .catch(function (error) {
+            alert("数据发送失败");
+            console.log(error.response);
+          });
+      }
+    }
+  })
+
 </script>
+
 </html>
