@@ -11,6 +11,13 @@ urlpatterns = [
     # 渲染首页，其后的页面跳转由前端负责
     path('', views.index, name="index"),
 
+    # 图形验证码请求
+    path('imageCode/', views.ImageCodeView.as_view()),
+
+
+    # 用户管理数据请求
+    path('userManage/', views.GetUserInfos, name="userManage"),
+
     # 以下为对任意模型的增删改查列
 
     # 关于accountInfo的请求：

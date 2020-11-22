@@ -1,4 +1,4 @@
-cityPopulationList = [100000, 200000, 12512512, 124125]、
+cityPopulationList = [100000, 200000, 12512512, 124125]
 
 
 def predictSimulator(cityPopulationList, generateDays):

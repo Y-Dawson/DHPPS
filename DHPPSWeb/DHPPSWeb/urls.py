@@ -20,6 +20,5 @@ from django.views.generic import TemplateView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('index/', TemplateView.as_view(template_name="index.html")),
-    path('backend/', include('backend.urls')),
-    path('captcha/', include('captcha.url'))
+    path('backend/', include('backend.urls'))
 ]
