@@ -176,7 +176,7 @@ class ImageCodeView(View):
 
 def GetUserInfos(request):
     if request.method == "GET":
-        accountInfos = models.Accountinformation.objects.select_related('personalprofile').all()
+        accountInfos = models.Personalprofile.objects.select_related('userid').all()
         resultJson = serializers.serialize("json", accountInfos)
         print(resultJson)
         return JsonResponse(resultJson, safe=False)

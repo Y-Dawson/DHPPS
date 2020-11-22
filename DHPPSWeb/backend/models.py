@@ -116,12 +116,12 @@ def user_directory_path(instance, filename):
     ext = filename.split('.')[-1]
     filename = '{}.{}'.format(uuid.uuid4().hex[:10], ext)
     # return the whole path to the file
-    return os.path.join(instance.user.id, "avatar", filename)
+    return os.path.join(instance.userid, "avatar", filename)
 
 
 class Personalprofile(models.Model):
     userid = models.OneToOneField(Accountinformation, models.CASCADE, db_column='userID', primary_key=True)  # Field name made lowercase.
-    avatar = models.ImageField(upload_to=user_directory_path, verbose_name="头像", default="defaultFiles/defaultAvatar.png")
+    avatar = models.ImageField(upload_to="avatar", verbose_name="头像", default="defaultFiles/defaultAvatar.png")
     username = models.CharField(db_column='userName', max_length=50)  # Field name made lowercase.
     phonenumber = models.CharField(db_column='phoneNumber', max_length=11)  # Field name made lowercase.
     sex = models.CharField(max_length=10, default='保密')
