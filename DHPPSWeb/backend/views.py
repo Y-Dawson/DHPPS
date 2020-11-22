@@ -4,8 +4,9 @@ from django.views import View
 from backend import models
 from backend import serializers
 from django.http import HttpResponse, HttpResponseForbidden, JsonResponse
-from meiduo_mall.libs.captcha.captcha import captcha
+from backend.captcha.captcha import captcha
 from django_redis import get_redis_connection
+from django.utils import timezone
 import hashlib
 import logging
 # Create your views here.
@@ -31,11 +32,12 @@ def hash_pwd(pwd, salt):
 
 def signin(request):
     if request.session.get('is_login', None):
-        return HttpResponse({"data": {"message": "你已经登录"}, "content-type": "application/json"})
+        return HttpResponse({"data": {"message": "你已经登录", "status": 404}, "content-type": "application/json"})
     elif request.method == "POST":
         phonenum = request.POST.get('phonenum', None)
         password = request.POST.get('password', None)
         message = "填写内容不能为空"
+        status = 404
         if phonenum and password:
             phonenum = phonenum.strip()
             try:
@@ -46,12 +48,75 @@ def signin(request):
                     request.session['user_id'] = profile.userid
                     request.session['user_name'] = profile.phonenumber
                     message = "登录成功"
+                    status = 200
                 else:
                     message = "密码错误"
+                    status = 404
             except Exception as identifier:
                 print("捕获异常：", identifier)
                 message = "该电话未注册"
-        return HttpResponse({"data": {"message": message}, "content-type": "application/json"})
+                status = 404
+        return HttpResponse({"data": {"message": message, "status": status}, "content-type": "application/json"})
+
+
+def logout(request):
+    message = "登出成功"
+    status = 200
+    if not request.session.get('is_login', None):
+        # 如果本来就未登录，也就没有登出一说
+        message = "未登录，无法登出"
+        status = 404
+    request.session.flush()
+    # del request.session['is_login']
+    # del request.session['user_id']
+    # del request.session['user_name']
+    return HttpResponse({"data": {"message": message, "status": status}, "content-type": "application/json"})
+
+
+def signup(request):
+    message = "注册成功"
+    if request.session.get('is_login', None):
+        # 登录状态不允许注册。你可以修改这条原则！
+        message = "登录状态，无法注册"
+        status = 404
+    elif request.method == "POST":
+        username = request.POST.get('username', None)
+        phonenum = request.POST.get('phonenum', None)
+        email = request.POST.get('email', None)
+        password = request.POST.get('password', None)
+        password2 = request.POST.get('password2', None)
+        verifyCode = request.POST.get('verifyCode', None)
+        message = "请检查填写的内容！"
+        status = 404
+        if username and phonenum and email and password and password2 and verifyCode:  # 获取数据
+            if password != password2:  # 判断两次密码是否相同
+                message = "两次输入的密码不同！"
+                status = 404
+            else:
+                same_name_user = models.Personalprofile.objects.filter(username=username)
+                if same_name_user:  # 用户名唯一
+                    message = '用户已经存在，请重新选择用户名！'
+                    status = 404
+
+                same_phone_user = models.Personalprofile.objects.filter(phonenumber=phonenum)
+                if same_phone_user:  # 手机号码唯一
+                    message = '该手机号码已被注册，请使用别的手机号码！'
+                    status = 404
+                # 当一切都OK的情况下，创建新用户
+                try:
+                    newAccountInfo = models.Accountinformation.objects.create(themeno=1,
+                                                                              createdate=timezone.now(),)
+                    newUser = models.Personalprofile.objects.create(userid=newAccountInfo.userid,
+                                                                    username=username,
+                                                                    phonenumber=phonenum,
+                                                                    email=email)
+                    logger.info(serializers.serialize("json", newUser))
+                    message = "注册成功"
+                    status = 200
+                except Exception:
+                    message = "注册失败"
+                    status = 404
+    return HttpResponse({"data": {"message": message, "status": status}, "content-type": "application/json"})
 
 
 class ImageCodeView(View):
@@ -87,6 +152,7 @@ class ImageCodeView(View):
         if not uuid:
             return HttpResponseForbidden('uuid无效')
         message = "表单值不合法"
+        status = 404
         try:
             # 3.连接到redis
             redisClient = get_redis_connection('image_code')
@@ -98,11 +164,13 @@ class ImageCodeView(View):
             message
             if inputCode == code:
                 message = "验证码正确"
+                status = 200
             else:
                 message = "验证码错误"
+                status = 404
         except Exception:
             message = "没有获取到验证码"
-        return HttpResponse({"data": {"message": message}, "content-type": "application/json"})
+        return HttpResponse({"data": {"message": message, "status": status}, "content-type": "application/json"})
 
 
 def GetUserInfos(request):

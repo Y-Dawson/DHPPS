@@ -115,7 +115,7 @@ AUTH_PASSWORD_VALIDATORS = [
 CAPTCHA_IMAGE_SIZE = (80, 45)   # 设置 captcha 图片大小
 CAPTCHA_LENGTH = 4   # 字符个数
 CAPTCHA_TIMEOUT = 3   # 超时(minutes)
-
+CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.random_char_challenge'
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
@@ -143,12 +143,16 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "frontend/dist/static"),
 ]
 
+# 配置文件存储目录
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# 配置浏览器访问文件的地址：http://127.0.0.1:8000/media/...
+MEDIA_URL = '/media/'
+# 以上表示浏览器传来的url以media开头的，django统一到MEDIA_ROOT配置的目录下去找
+
 # corsheaders settings
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_ALLOW_ALL = True
-CORS_ORIGIN_WHITELIST = (
-    '*'
-)
+
 CORS_ALLOW_METHODS = (
     'DELETE',
     'GET',

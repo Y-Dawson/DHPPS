@@ -8,6 +8,7 @@
 from django.db import models
 import uuid
 import os
+from _datetime import date
 
 
 class Theme(models.Model):
@@ -34,7 +35,7 @@ class Accountinformation(models.Model):
 
 class Casedata(models.Model):
     caseid = models.AutoField(db_column='caseID', primary_key=True)  # Field name made lowercase.
-    userid = models.ForeignKey(Accountinformation, models.DO_NOTHING, db_column='userID')  # Field name made lowercase.
+    userid = models.ForeignKey(Accountinformation, models.CASCADE, db_column='userID')  # Field name made lowercase.
     casename = models.CharField(db_column='caseName', max_length=50, default='未命名')  # Field name made lowercase.
     citynumber = models.IntegerField(db_column='cityNumber')  # Field name made lowercase.
     roadnumber = models.IntegerField(db_column='roadNumber')  # Field name made lowercase.
@@ -48,7 +49,7 @@ class Casedata(models.Model):
 
 class Initcitydata(models.Model):
     cityid = models.AutoField(db_column='cityID', primary_key=True)  # Field name made lowercase.
-    caseid = models.ForeignKey(Casedata, models.DO_NOTHING, db_column='caseID')  # Field name made lowercase.
+    caseid = models.ForeignKey(Casedata, models.CASCADE, db_column='caseID')  # Field name made lowercase.
     cityname = models.CharField(db_column='cityName', max_length=50)  # Field name made lowercase.
     initpop = models.BigIntegerField(db_column='initPop', default=0)  # Field name made lowercase.
     initinfect = models.BigIntegerField(db_column='initInfect', default=0)  # Field name made lowercase.
@@ -59,7 +60,7 @@ class Initcitydata(models.Model):
 
 
 class Cityposition(models.Model):
-    cityid = models.OneToOneField(Initcitydata, models.DO_NOTHING, db_column='cityID', primary_key=True)  # Field name made lowercase.
+    cityid = models.OneToOneField(Initcitydata, models.CASCADE, db_column='cityID', primary_key=True)  # Field name made lowercase.
     x = models.FloatField()
     y = models.FloatField()
 
@@ -70,7 +71,7 @@ class Cityposition(models.Model):
 
 class Dailyforecastdata(models.Model):
     date = models.DateField(primary_key=True)
-    cityid = models.ForeignKey(Initcitydata, models.DO_NOTHING, db_column='cityID')  # Field name made lowercase.
+    cityid = models.ForeignKey(Initcitydata, models.CASCADE, db_column='cityID')  # Field name made lowercase.
     population = models.BigIntegerField()
     infected = models.BigIntegerField()
 
@@ -81,7 +82,7 @@ class Dailyforecastdata(models.Model):
 
 class Initroaddata(models.Model):
     roadid = models.AutoField(db_column='roadID', primary_key=True)  # Field name made lowercase.
-    caseid = models.ForeignKey(Casedata, models.DO_NOTHING, db_column='caseID')  # Field name made lowercase.
+    caseid = models.ForeignKey(Casedata, models.CASCADE, db_column='caseID')  # Field name made lowercase.
     departure = models.CharField(max_length=50)
     destination = models.CharField(max_length=50)
     volume = models.BigIntegerField()
@@ -92,7 +93,7 @@ class Initroaddata(models.Model):
 
 
 class Logindata(models.Model):
-    userid = models.OneToOneField(Accountinformation, models.DO_NOTHING, db_column='userID', primary_key=True)  # Field name made lowercase.
+    userid = models.OneToOneField(Accountinformation, models.CASCADE, db_column='userID', primary_key=True)  # Field name made lowercase.
     userpassword = models.CharField(db_column='userPassword', max_length=20)  # Field name made lowercase.
     salt = models.CharField(max_length=20)
 
@@ -119,14 +120,17 @@ def user_directory_path(instance, filename):
 
 
 class Personalprofile(models.Model):
-    userid = models.OneToOneField(Accountinformation, models.DO_NOTHING, db_column='userID', primary_key=True)  # Field name made lowercase.
-    avatar = models.ImageField(upload_to=user_directory_path, verbose_name="头像")
+    userid = models.OneToOneField(Accountinformation, models.CASCADE, db_column='userID', primary_key=True)  # Field name made lowercase.
+    avatar = models.ImageField(upload_to=user_directory_path, verbose_name="头像", default="defaultFiles/defaultAvatar.png")
     username = models.CharField(db_column='userName', max_length=50)  # Field name made lowercase.
     phonenumber = models.CharField(db_column='phoneNumber', max_length=11)  # Field name made lowercase.
     sex = models.CharField(max_length=10, default='保密')
     address = models.CharField(max_length=200, default='保密')
     email = models.CharField(db_column='Email', max_length=50, default='保密')  # Field name made lowercase.
-    birth = models.DateField()
+    birth = models.DateField(default=date(1900, 1, 1))
+
+    def getAvatarUrl(self):
+        return "http://localhost:8000/media/" + str(self.avatar)
 
     class Meta:
         # managed = False

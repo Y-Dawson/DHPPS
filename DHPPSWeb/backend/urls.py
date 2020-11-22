@@ -14,6 +14,17 @@ urlpatterns = [
     # 图形验证码请求
     path('imageCode/', views.ImageCodeView.as_view()),
 
+    # 登录请求
+    path('signin/', views.signin, name="signin"),
+
+    # 登出请求
+    path('signout/', views.logout, name="logout"),
+
+    # 注册请求
+    path('signup/', views.signup, name="signup"),
+
+    # 登录请求
+    path('signin/', views.signin, name="signin"),
 
     # 用户管理数据请求
     path('userManage/', views.GetUserInfos, name="userManage"),
@@ -28,9 +39,9 @@ urlpatterns = [
 
     # 关于Casedata的请求
     # 无参数：get=list all,post=create new
-    path('case/', views.ThemeViewSet.as_view({'get': 'list', 'post': 'create'})),
+    path('case/', views.CaseViewSet.as_view({'get': 'list', 'post': 'create'})),
     # 有参数：get=retrieve one,put=update one,delete=delete one
-    path('case/<int:pk>/', views.ThemeViewSet.as_view({'get': 'retrieve', 'put': 'update', 'delete': 'destroy'})),
+    path('case/<int:pk>/', views.CaseViewSet.as_view({'get': 'retrieve', 'put': 'update', 'delete': 'destroy'})),
 
     # 关于Cityposition的请求
     # 无参数：get=list all,post=create new

@@ -50,7 +50,8 @@
         var date = $("#input1").val();
         axios
           .post('http://127.0.0.1:8000/backend/accountInfo/',{
-            createdate: "2018-1-1"
+            createdate: "2018-1-1",
+            themeno: 1
           })
           .then(response => (
             self.content = response,
