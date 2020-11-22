@@ -94,7 +94,7 @@ class Initroaddata(models.Model):
 
 class Logindata(models.Model):
     userid = models.OneToOneField(Accountinformation, models.CASCADE, db_column='userID', primary_key=True)  # Field name made lowercase.
-    userpassword = models.CharField(db_column='userPassword', max_length=20)  # Field name made lowercase.
+    userpassword = models.CharField(db_column='userPassword', max_length=32)  # Field name made lowercase.
     salt = models.CharField(max_length=20)
 
     class Meta:

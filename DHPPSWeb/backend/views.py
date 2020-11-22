@@ -2,11 +2,12 @@ from rest_framework import viewsets
 from django.shortcuts import render, get_object_or_404
 from django.views import View
 from backend import models
-from backend import serializers
+from backend import customSerializers
 from django.http import HttpResponse, HttpResponseForbidden, JsonResponse
 from backend.captcha.captcha import captcha
 from django_redis import get_redis_connection
 from django.utils import timezone
+from django.core import serializers
 import hashlib
 import logging
 # Create your views here.
@@ -127,7 +128,7 @@ class ImageCodeView(View):
         if not uuid:
             return HttpResponseForbidden('uuid无效')
         # 3.生成图片的文本、数据
-        text, code, image = captcha.generate_captcha()
+        code, image = captcha.generate_captcha()
         try:
             # 4.连接到redis
             redisClient = get_redis_connection('image_code')
@@ -175,59 +176,57 @@ class ImageCodeView(View):
 
 def GetUserInfos(request):
     if request.method == "GET":
-        accountInfos = models.Accountinformation.objects.all()
-        profiles = models.Personalprofile.objects.all()
-        result = accountInfos.union(profiles)
-        resultJson = serializers.serialize("json", result)
+        accountInfos = models.Accountinformation.objects.select_related('personalprofile').all()
+        resultJson = serializers.serialize("json", accountInfos)
         print(resultJson)
         return JsonResponse(resultJson, safe=False)
 
 
 class AccountViewSet(viewsets.ModelViewSet):
     queryset = models.Accountinformation.objects.all()
-    serializer_class = serializers.AccountinformationSerializer
+    serializer_class = customSerializers.AccountinformationSerializer
 
 
 class CaseViewSet(viewsets.ModelViewSet):
     queryset = models.Casedata.objects.all()
-    serializer_class = serializers.CasedataSerializer
+    serializer_class = customSerializers.CasedataSerializer
 
 
 class CityPosViewSet(viewsets.ModelViewSet):
     queryset = models.Cityposition.objects.all()
-    serializer_class = serializers.CitypositionSerializer
+    serializer_class = customSerializers.CitypositionSerializer
 
 
 class DailyForeViewSet(viewsets.ModelViewSet):
     queryset = models.Dailyforecastdata.objects.all()
-    serializer_class = serializers.DailyforecastdataSerializer
+    serializer_class = customSerializers.DailyforecastdataSerializer
 
 
 class InitCityViewSet(viewsets.ModelViewSet):
     queryset = models.Initcitydata.objects.all()
-    serializer_class = serializers.InitcitydataSerializer
+    serializer_class = customSerializers.InitcitydataSerializer
 
 
 class InitRoadViewSet(viewsets.ModelViewSet):
     queryset = models.Initroaddata.objects.all()
-    serializer_class = serializers.InitroaddataSerializer
+    serializer_class = customSerializers.InitroaddataSerializer
 
 
 class LoginViewSet(viewsets.ModelViewSet):
     queryset = models.Logindata.objects.all()
-    serializer_class = serializers.LogindataSerializer
+    serializer_class = customSerializers.LogindataSerializer
 
 
 class ModelViewSet(viewsets.ModelViewSet):
     queryset = models.Modeldata.objects.all()
-    serializer_class = serializers.ModeldataSerializer
+    serializer_class = customSerializers.ModeldataSerializer
 
 
 class PersonalProfileViewSet(viewsets.ModelViewSet):
     queryset = models.Personalprofile.objects.all()
-    serializer_class = serializers.PersonalprofileSerializer
+    serializer_class = customSerializers.PersonalprofileSerializer
 
 
 class ThemeViewSet(viewsets.ModelViewSet):
     queryset = models.Theme.objects.all()
-    serializer_class = serializers.ThemeSerializer
+    serializer_class = customSerializers.ThemeSerializer
