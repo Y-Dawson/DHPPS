@@ -10,9 +10,19 @@ from django.utils import timezone
 from django.core import serializers
 import hashlib
 import logging
+import json
+from django.db.models.signals import pre_delete
+from django.forms.models import model_to_dict 
+import datetime
 # Create your views here.
 
 logger = logging.getLogger("django")
+
+'''
+@receiver(pre_delete, sender=models.Personalprofile)
+def handle_camera_deleted(instance: models.Personalprofile, **_):
+    instance.file.delete(save=False)
+'''
 
 
 def index(request):
@@ -29,6 +39,12 @@ def hash_pwd(pwd, salt):
     pwd = pwd + salt
     h.update(pwd.encode())
     return h.hexdigest()
+
+
+class DateEnconding(json.JSONEncoder):
+    def default(self, o):
+        if isinstance(o, datetime.date):
+            return o.strftime('%Y/%m/%d')
 
 
 def signin(request):
@@ -176,10 +192,13 @@ class ImageCodeView(View):
 
 def GetUserInfos(request):
     if request.method == "GET":
-        accountInfos = models.Personalprofile.objects.select_related('userid').all()
-        resultJson = serializers.serialize("json", accountInfos)
-        print(resultJson)
-        return JsonResponse(resultJson, safe=False)
+        accountInfos = models.Accountinformation.objects.select_related("personalprofile").all()
+        jsonList = {"data": []}
+        for accountInfo in accountInfos:
+            accountInfoDict = model_to_dict(accountInfo)
+            profileDict = model_to_dict(accountInfo.personalprofile)
+            jsonList["data"].append({**accountInfoDict, **profileDict})
+        return JsonResponse(json.dumps(jsonList,cls=DateEnconding), safe=False)
 
 
 class AccountViewSet(viewsets.ModelViewSet):
