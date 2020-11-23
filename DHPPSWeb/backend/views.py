@@ -198,7 +198,7 @@ def GetUserInfos(request):
             accountInfoDict = model_to_dict(accountInfo)
             profileDict = model_to_dict(accountInfo.personalprofile)
             jsonList.append({**accountInfoDict, **profileDict})
-        return JsonResponse(json.dumps(jsonList, cls=DateEnconding), safe=False)
+        return HttpResponse(json.loads(json.dumps(jsonList, cls=DateEnconding)))
 
 
 class AccountViewSet(viewsets.ModelViewSet):
