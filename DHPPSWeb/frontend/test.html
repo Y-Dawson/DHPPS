@@ -36,10 +36,10 @@
       getContent: function () {
         var self = this;
         axios
-          .get("http://127.0.0.1:8000/backend/accountInfo/1/")
+          .get("http://127.0.0.1:8000/backend/accountInfo/")
           .then(response => (
-            self.content = response.data
-            //alert(JSON.stringify(response))
+            self.content = response.data,
+            alert(response.data)
           ))
           .catch(function (error) { // 请求失败处理
             alert("数据请求失败wdnmd");
@@ -49,13 +49,10 @@
         var self = this;
         var date = $("#input1").val();
         axios
-          .post('http://127.0.0.1:8000/backend/accountInfo/',{
-            createdate: "2018-1-1",
-            themeno: 1
-          })
+          .get('http://127.0.0.1:8000/backend/userManage/')
           .then(response => (
-            self.content = response,
-            alert(JSON.stringify(response))
+            self.returnData = response.data[0].userid,
+            alert(response.data)
           ))
           .catch(function (error) {
             alert("数据发送失败");
