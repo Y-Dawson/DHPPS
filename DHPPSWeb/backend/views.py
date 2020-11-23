@@ -12,7 +12,7 @@ import hashlib
 import logging
 import json
 from django.db.models.signals import pre_delete
-from django.forms.models import model_to_dict 
+from django.forms.models import model_to_dict
 import datetime
 # Create your views here.
 
@@ -193,12 +193,12 @@ class ImageCodeView(View):
 def GetUserInfos(request):
     if request.method == "GET":
         accountInfos = models.Accountinformation.objects.select_related("personalprofile").all()
-        jsonList = {"data": []}
+        jsonList = []
         for accountInfo in accountInfos:
             accountInfoDict = model_to_dict(accountInfo)
             profileDict = model_to_dict(accountInfo.personalprofile)
-            jsonList["data"].append({**accountInfoDict, **profileDict})
-        return JsonResponse(json.dumps(jsonList,cls=DateEnconding), safe=False)
+            jsonList.append({**accountInfoDict, **profileDict})
+        return JsonResponse(json.dumps(jsonList, cls=DateEnconding), safe=False)
 
 
 class AccountViewSet(viewsets.ModelViewSet):
