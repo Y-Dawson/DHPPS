@@ -28,7 +28,11 @@ urlpatterns = [
 
     # 用户管理数据请求
     path('userManage/', views.GetUserInfos, name="userManage"),
+    path('generalUserManage/', views.GetGeneralUserInfos, name="generalUserManage"),
+    path('adminManage/', views.GetAdminInfos, name="adminManage"),
 
+    # 用户案例数据请求
+    path('caseDataOfUser/<int:userid>', views.GetCaseInfosByUserId, name="caseDataOfUser"),
     # 以下为对任意模型的增删改查列
 
     # 关于accountInfo的请求：

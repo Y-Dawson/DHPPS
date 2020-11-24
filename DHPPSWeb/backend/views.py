@@ -203,6 +203,44 @@ def GetUserInfos(request):
         return JsonResponse(jsonRes, safe=False)
 
 
+def GetGeneralUserInfos(request):
+    if request.method == "GET":
+        generalUserInfos = models.Accountinformation.objects.select_related("personalprofile").filter(authority="普通用户")
+        jsonList = []
+        for accountInfo in generalUserInfos:
+            accountInfoDict = model_to_dict(accountInfo)
+            profileDict = model_to_dict(accountInfo.personalprofile)
+            jsonList.append({**accountInfoDict, **profileDict})
+        jsonRes = json.loads(json.dumps(jsonList, cls=DateEnconding))
+        print(jsonRes)
+        return JsonResponse(jsonRes, safe=False)
+
+
+def GetAdminInfos(request):
+    if request.method == "GET":
+        generalUserInfos = models.Accountinformation.objects.select_related("personalprofile").filter(authority="管理员")
+        jsonList = []
+        for accountInfo in generalUserInfos:
+            accountInfoDict = model_to_dict(accountInfo)
+            profileDict = model_to_dict(accountInfo.personalprofile)
+            jsonList.append({**accountInfoDict, **profileDict})
+        jsonRes = json.loads(json.dumps(jsonList, cls=DateEnconding))
+        print(jsonRes)
+        return JsonResponse(jsonRes, safe=False)
+
+
+def GetCaseInfosByUserId(request, userid):
+    if request.method == "GET":
+        caseDataOfUser = models.Casedata.objects.filter(userid=userid)
+        jsonList = []
+        for caseData in caseDataOfUser:
+            caseDataDict = model_to_dict(caseData)
+            jsonList.append(caseDataDict)
+        jsonRes = json.loads(json.dumps(jsonList, cls=DateEnconding))
+        print(jsonRes)
+        return JsonResponse(jsonRes, safe=False)
+
+
 class AccountViewSet(viewsets.ModelViewSet):
     queryset = models.Accountinformation.objects.all()
     serializer_class = customSerializers.AccountinformationSerializer
