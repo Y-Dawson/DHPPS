@@ -1,4 +1,9 @@
 from rest_framework import viewsets
+from django_filters.rest_framework import DjangoFilterBackend
+from backend import filters
+from django_filters import rest_framework
+from rest_framework.filters import OrderingFilter
+from backend import paginations
 from django.shortcuts import render, get_object_or_404
 from django.views import View
 from backend import models
@@ -14,6 +19,7 @@ import json
 from django.db.models.signals import pre_delete
 from django.forms.models import model_to_dict
 import datetime
+
 # Create your views here.
 
 logger = logging.getLogger("django")
@@ -249,6 +255,11 @@ class AccountViewSet(viewsets.ModelViewSet):
 class CaseViewSet(viewsets.ModelViewSet):
     queryset = models.Casedata.objects.all()
     serializer_class = customSerializers.CasedataSerializer
+    pagination_class = paginations.MyFormatResultsSetPagination
+    filter_backends = (OrderingFilter, DjangoFilterBackend)
+    filter_class = filters.CaseFilter
+    ordering_fields = ('casename', 'inittotal', 'inittotalinfected', 'citynumber', 'roadnumber',)
+    ordering = ('caseid',)
 
 
 class CityPosViewSet(viewsets.ModelViewSet):

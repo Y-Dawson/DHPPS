@@ -38,22 +38,25 @@
         axios
           .get("http://127.0.0.1:8000/backend/accountInfo/")
           .then(response => (
-            self.content = response.data,
-            alert(JSON.stringify(response))
+            self.content = response.data
+            //alert(JSON.stringify(response))
           ))
           .catch(function (error) { // 请求失败处理
-            alert("数据请求失败wdnmd");
+            //alert("数据请求失败wdnmd");
           });
       },
       putContent: function () {
         var self = this;
         var date = $("#input1").val();
         axios
-          .put('http://127.0.0.1:8000/backend/accountInfo/1/',{
+          .get('http://127.0.0.1:8000/backend/case/',{
+            userid: 1,
+            page_size: 1,
+            page: 2
           })
           .then(response => (
             self.returnData = response.data,
-            alert(response.data)
+            alert(JSON.stringify(response))
           ))
           .catch(function (error) {
             alert("数据发送失败");
