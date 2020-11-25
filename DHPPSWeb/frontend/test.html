@@ -36,10 +36,10 @@
       getContent: function () {
         var self = this;
         axios
-          .get("http://127.0.0.1:8000/backend/accountInfo/")
+          .get("http://127.0.0.1:8000/backend/adminManage/")
           .then(response => (
-            self.content = response.data
-            //alert(JSON.stringify(response))
+            self.content = response.data,
+            alert(JSON.stringify(response))
           ))
           .catch(function (error) { // 请求失败处理
             //alert("数据请求失败wdnmd");
@@ -50,9 +50,11 @@
         var date = $("#input1").val();
         axios
           .get('http://127.0.0.1:8000/backend/case/',{
-            userid: 1,
-            page_size: 1,
-            page: 2
+            params:{
+              page_size: 3,
+              page: 1,
+              userid: 1
+            }
           })
           .then(response => (
             self.returnData = response.data,

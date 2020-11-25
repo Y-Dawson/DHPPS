@@ -1,7 +1,6 @@
 from rest_framework import viewsets
 from django_filters.rest_framework import DjangoFilterBackend
 from backend import filters
-from django_filters import rest_framework
 from rest_framework.filters import OrderingFilter
 from backend import paginations
 from django.shortcuts import render, get_object_or_404
@@ -12,7 +11,7 @@ from django.http import HttpResponse, HttpResponseForbidden, JsonResponse
 from backend.captcha.captcha import captcha
 from django_redis import get_redis_connection
 from django.utils import timezone
-from django.core import serializers
+from django.core import serializers, paginator
 import hashlib
 import logging
 import json
@@ -198,9 +197,17 @@ class ImageCodeView(View):
 
 def GetUserInfos(request):
     if request.method == "GET":
+        page_size = request.GET.get("page_size")
+        page = request.GET.get("page")
         accountInfos = models.Accountinformation.objects.select_related("personalprofile").all()
+        accountPaginator = paginator.Paginator(accountInfos, page_size)
+        if page == "":
+            page = 1
+        else:
+            page = int(page)
+        pageInfos = accountPaginator.page(page)
         jsonList = []
-        for accountInfo in accountInfos:
+        for accountInfo in pageInfos:
             accountInfoDict = model_to_dict(accountInfo)
             profileDict = model_to_dict(accountInfo.personalprofile)
             jsonList.append({**accountInfoDict, **profileDict})
@@ -211,9 +218,17 @@ def GetUserInfos(request):
 
 def GetGeneralUserInfos(request):
     if request.method == "GET":
+        page_size = request.GET.get("page_size")
+        page = request.GET.get("page")
         generalUserInfos = models.Accountinformation.objects.select_related("personalprofile").filter(authority="普通用户")
+        accountPaginator = paginator.Paginator(generalUserInfos, page_size)
+        if page == "":
+            page = 1
+        else:
+            page = int(page)
+        pageInfos = accountPaginator.page(page)
         jsonList = []
-        for accountInfo in generalUserInfos:
+        for accountInfo in pageInfos:
             accountInfoDict = model_to_dict(accountInfo)
             profileDict = model_to_dict(accountInfo.personalprofile)
             jsonList.append({**accountInfoDict, **profileDict})
@@ -224,24 +239,20 @@ def GetGeneralUserInfos(request):
 
 def GetAdminInfos(request):
     if request.method == "GET":
-        generalUserInfos = models.Accountinformation.objects.select_related("personalprofile").filter(authority="管理员")
+        page_size = request.GET.get("page_size")
+        page = request.GET.get("page")
+        adminUserInfos = models.Accountinformation.objects.select_related("personalprofile").filter(authority="管理员")
+        accountPaginator = paginator.Paginator(adminUserInfos, page_size)
+        if page == "":
+            page = 1
+        else:
+            page = int(page)
+        pageInfos = accountPaginator.page(page)
         jsonList = []
-        for accountInfo in generalUserInfos:
+        for accountInfo in pageInfos:
             accountInfoDict = model_to_dict(accountInfo)
             profileDict = model_to_dict(accountInfo.personalprofile)
             jsonList.append({**accountInfoDict, **profileDict})
-        jsonRes = json.loads(json.dumps(jsonList, cls=DateEnconding))
-        print(jsonRes)
-        return JsonResponse(jsonRes, safe=False)
-
-
-def GetCaseInfosByUserId(request, userid):
-    if request.method == "GET":
-        caseDataOfUser = models.Casedata.objects.filter(userid=userid)
-        jsonList = []
-        for caseData in caseDataOfUser:
-            caseDataDict = model_to_dict(caseData)
-            jsonList.append(caseDataDict)
         jsonRes = json.loads(json.dumps(jsonList, cls=DateEnconding))
         print(jsonRes)
         return JsonResponse(jsonRes, safe=False)
