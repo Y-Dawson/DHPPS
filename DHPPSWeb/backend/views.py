@@ -17,6 +17,8 @@ import logging
 import json
 from django.db.models.signals import pre_delete
 from django.forms.models import model_to_dict
+from rest_framework.authentication import SessionAuthentication
+from rest_framework.permissions import IsAuthenticated
 import datetime
 
 # Create your views here.
@@ -30,6 +32,7 @@ def handle_camera_deleted(instance: models.Personalprofile, **_):
 '''
 
 
+# 返回渲染主页，其后由前端负责跳转逻辑
 def index(request):
     """
     render index page
@@ -39,6 +42,7 @@ def index(request):
     return render(request, 'index.html')
 
 
+# 对传入的密码和salt进行md5加密，返回得到的加密密码
 def hash_pwd(pwd, salt):
     h = hashlib.md5()
     pwd = pwd + salt
@@ -46,16 +50,23 @@ def hash_pwd(pwd, salt):
     return h.hexdigest()
 
 
+# json序列化时对datetime处理的函数
 class DateEnconding(json.JSONEncoder):
     def default(self, o):
         if isinstance(o, datetime.date):
             return o.strftime('%Y/%m/%d')
 
 
+# 登录函数视图
+# 从参数获取phonenum和password，取出对应salt加密，并判断是否和存储加密密码相同
+# 登录成功，返回消息和200状态码
+# 登录失败，返回消息和404状态码
 def signin(request):
+    # 若已经登录，直接进入已登录账号
     if request.session.get('is_login', None):
         return HttpResponse({"data": {"message": "你已经登录", "status": 404}, "content-type": "application/json"})
     elif request.method == "POST":
+        # 从参数获取phonenum和password
         phonenum = request.POST.get('phonenum', None)
         password = request.POST.get('password', None)
         message = "填写内容不能为空"
@@ -63,12 +74,16 @@ def signin(request):
         if phonenum and password:
             phonenum = phonenum.strip()
             try:
+                # 从数据库获取phonenum和对应userid，取出salt
+                # 获取失败则捕捉错误
                 profile = models.Personalprofile.get(phonenumber=phonenum)
-                logindata = models.Logindata.get(userid=profile.userid)
-                if (logindata.password == hash_pwd(pwd=password, salt=logindata.salt)):
-                    request.session['is_login'] = True
-                    request.session['user_id'] = profile.userid
-                    request.session['user_name'] = profile.phonenumber
+                accountInfo = models.Accountinformation.get(userid=profile.userid)
+                # 判断是否和存储加密密码相同
+                if (accountInfo.logindata.password == hash_pwd(pwd=password, salt=accountInfo.ogindata.salt)):
+                    # 若相同，设置登录状态为True，设置登录id为userid，登录权限为对应权限
+                    request.session['isLogin'] = True
+                    request.session['userId'] = accountInfo.userid
+                    request.session['userAuthority'] = accountInfo.authority
                     message = "登录成功"
                     status = 200
                 else:
@@ -197,10 +212,10 @@ class ImageCodeView(View):
 
 def GetUserInfos(request):
     if request.method == "GET":
-        page_size = request.GET.get("page_size")
+        pageSize = request.GET.get("pageSize")
         page = request.GET.get("page")
         accountInfos = models.Accountinformation.objects.select_related("personalprofile").all()
-        accountPaginator = paginator.Paginator(accountInfos, page_size)
+        accountPaginator = paginator.Paginator(accountInfos, pageSize)
         if page == "":
             page = 1
         else:
@@ -218,10 +233,10 @@ def GetUserInfos(request):
 
 def GetGeneralUserInfos(request):
     if request.method == "GET":
-        page_size = request.GET.get("page_size")
+        pageSize = request.GET.get("pageSize")
         page = request.GET.get("page")
         generalUserInfos = models.Accountinformation.objects.select_related("personalprofile").filter(authority="普通用户")
-        accountPaginator = paginator.Paginator(generalUserInfos, page_size)
+        accountPaginator = paginator.Paginator(generalUserInfos, pageSize)
         if page == "":
             page = 1
         else:
@@ -239,10 +254,10 @@ def GetGeneralUserInfos(request):
 
 def GetAdminInfos(request):
     if request.method == "GET":
-        page_size = request.GET.get("page_size")
+        pageSize = request.GET.get("pageSize")
         page = request.GET.get("page")
         adminUserInfos = models.Accountinformation.objects.select_related("personalprofile").filter(authority="管理员")
-        accountPaginator = paginator.Paginator(adminUserInfos, page_size)
+        accountPaginator = paginator.Paginator(adminUserInfos, pageSize)
         if page == "":
             page = 1
         else:
@@ -309,5 +324,6 @@ class PersonalProfileViewSet(viewsets.ModelViewSet):
 
 
 class ThemeViewSet(viewsets.ModelViewSet):
+    authentication_classes = [SessionAuthentication]
     queryset = models.Theme.objects.all()
     serializer_class = customSerializers.ThemeSerializer
