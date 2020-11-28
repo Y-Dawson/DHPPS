@@ -19,6 +19,7 @@ from django.db.models.signals import pre_delete
 from django.forms.models import model_to_dict
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 import datetime
 
 # Create your views here.
@@ -228,7 +229,12 @@ def GetUserInfos(request):
             jsonList.append({**accountInfoDict, **profileDict})
         jsonRes = json.loads(json.dumps(jsonList, cls=DateEnconding))
         print(jsonRes)
-        return JsonResponse(jsonRes, safe=False)
+        return Response({
+            'data': jsonRes,
+            'pagination': accountPaginator.count,
+            'pageSize': accountPaginator.per_page,
+            'page': accountPaginator.start_index() // accountPaginator.per_page + 1
+        })
 
 
 def GetGeneralUserInfos(request):
@@ -249,7 +255,12 @@ def GetGeneralUserInfos(request):
             jsonList.append({**accountInfoDict, **profileDict})
         jsonRes = json.loads(json.dumps(jsonList, cls=DateEnconding))
         print(jsonRes)
-        return JsonResponse(jsonRes, safe=False)
+        return Response({
+            'data': jsonRes,
+            'pagination': accountPaginator.count,
+            'pageSize': accountPaginator.per_page,
+            'page': accountPaginator.start_index() // accountPaginator.per_page + 1
+        })
 
 
 def GetAdminInfos(request):
@@ -270,7 +281,12 @@ def GetAdminInfos(request):
             jsonList.append({**accountInfoDict, **profileDict})
         jsonRes = json.loads(json.dumps(jsonList, cls=DateEnconding))
         print(jsonRes)
-        return JsonResponse(jsonRes, safe=False)
+        return Response({
+            'data': jsonRes,
+            'pagination': accountPaginator.count,
+            'pageSize': accountPaginator.per_page,
+            'page': accountPaginator.start_index() // accountPaginator.per_page + 1
+        })
 
 
 class AccountViewSet(viewsets.ModelViewSet):

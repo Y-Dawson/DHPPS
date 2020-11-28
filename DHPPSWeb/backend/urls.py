@@ -23,8 +23,6 @@ urlpatterns = [
     # 注册请求
     path('signup/', views.signup, name="signup"),
 
-    # 登录请求
-    path('signin/', views.signin, name="signin"),
 
     # 用户管理数据请求
     path('userManage/', views.GetUserInfos, name="userManage"),
