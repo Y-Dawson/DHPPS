@@ -19,7 +19,6 @@ from django.db.models.signals import pre_delete
 from django.forms.models import model_to_dict
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
 import datetime
 
 # Create your views here.
@@ -215,7 +214,7 @@ def GetUserInfos(request):
     if request.method == "GET":
         pageSize = request.GET.get("pageSize")
         page = request.GET.get("page")
-        accountInfos = models.Accountinformation.objects.select_related("personalprofile").all()
+        accountInfos = models.Accountinformation.objects.select_related("personalprofile").all().order_by('userid')
         accountPaginator = paginator.Paginator(accountInfos, pageSize)
         if page == "":
             page = 1
@@ -229,11 +228,11 @@ def GetUserInfos(request):
             jsonList.append({**accountInfoDict, **profileDict})
         jsonRes = json.loads(json.dumps(jsonList, cls=DateEnconding))
         print(jsonRes)
-        return Response({
+        return JsonResponse({
             'data': jsonRes,
             'pagination': accountPaginator.count,
             'pageSize': accountPaginator.per_page,
-            'page': accountPaginator.start_index() // accountPaginator.per_page + 1
+            'page': pageInfos.start_index() // accountPaginator.per_page + 1
         })
 
 
@@ -241,7 +240,7 @@ def GetGeneralUserInfos(request):
     if request.method == "GET":
         pageSize = request.GET.get("pageSize")
         page = request.GET.get("page")
-        generalUserInfos = models.Accountinformation.objects.select_related("personalprofile").filter(authority="普通用户")
+        generalUserInfos = models.Accountinformation.objects.select_related("personalprofile").filter(authority="普通用户").order_by('userid')
         accountPaginator = paginator.Paginator(generalUserInfos, pageSize)
         if page == "":
             page = 1
@@ -255,11 +254,11 @@ def GetGeneralUserInfos(request):
             jsonList.append({**accountInfoDict, **profileDict})
         jsonRes = json.loads(json.dumps(jsonList, cls=DateEnconding))
         print(jsonRes)
-        return Response({
+        return JsonResponse({
             'data': jsonRes,
             'pagination': accountPaginator.count,
             'pageSize': accountPaginator.per_page,
-            'page': accountPaginator.start_index() // accountPaginator.per_page + 1
+            'page': pageInfos.start_index() // accountPaginator.per_page + 1
         })
 
 
@@ -267,7 +266,7 @@ def GetAdminInfos(request):
     if request.method == "GET":
         pageSize = request.GET.get("pageSize")
         page = request.GET.get("page")
-        adminUserInfos = models.Accountinformation.objects.select_related("personalprofile").filter(authority="管理员")
+        adminUserInfos = models.Accountinformation.objects.select_related("personalprofile").filter(authority="管理员").order_by('userid')
         accountPaginator = paginator.Paginator(adminUserInfos, pageSize)
         if page == "":
             page = 1
@@ -281,11 +280,11 @@ def GetAdminInfos(request):
             jsonList.append({**accountInfoDict, **profileDict})
         jsonRes = json.loads(json.dumps(jsonList, cls=DateEnconding))
         print(jsonRes)
-        return Response({
+        return JsonResponse({
             'data': jsonRes,
             'pagination': accountPaginator.count,
             'pageSize': accountPaginator.per_page,
-            'page': accountPaginator.start_index() // accountPaginator.per_page + 1
+            'page': pageInfos.start_index() // accountPaginator.per_page + 1
         })
 
 
