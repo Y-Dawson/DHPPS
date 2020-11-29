@@ -93,7 +93,7 @@ def signin(request):
                 print("捕获异常：", identifier)
                 message = "该电话未注册"
                 status = 404
-        return HttpResponse({"message": message, "status": status})
+        return JsonResponse({"message": message, "status": status})
 
 
 def logout(request):
@@ -107,7 +107,7 @@ def logout(request):
     # del request.session['is_login']
     # del request.session['user_id']
     # del request.session['user_name']
-    return HttpResponse({"message": message, "status": status})
+    return JsonResponse({"message": message, "status": status})
 
 
 def signup(request):
@@ -153,7 +153,7 @@ def signup(request):
                 except Exception:
                     message = "注册失败"
                     status = 404
-    return HttpResponse({"message": message, "status": status})
+    return JsonResponse({"message": message, "status": status})
 
 
 class ImageCodeView(View):
@@ -179,7 +179,7 @@ class ImageCodeView(View):
         # 8.后台显示验证码信息
         logger.info('verify_text:{}'.format(code))
         # 9.响应：输出图片数据
-        return HttpResponse(image, content_type='image/png')
+        return JsonResponse(image, content_type='image/png')
 
     def post(self, request):
         # 1.接受uuid
@@ -207,7 +207,7 @@ class ImageCodeView(View):
                 status = 404
         except Exception:
             message = "没有获取到验证码"
-        return HttpResponse({"message": message, "status": status})
+        return JsonResponse({"message": message, "status": status})
 
 
 def GetUserInfos(request):
