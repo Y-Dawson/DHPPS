@@ -89,9 +89,13 @@ def signin(request):
                 else:
                     message = "密码错误"
                     status = 404
-            except Exception as identifier:
-                print("捕获异常：", identifier)
-                message = "该电话未注册"
+            except Exception as e:
+                print('str(Exception):\t', str(Exception))
+                print('str(e):\t\t', str(e))
+                print('repr(e):\t', repr(e))
+                print('e.message:\t', e.message)
+                print('########################################################')
+                message = "注册失败"
                 status = 404
         return JsonResponse({"message": message, "status": status})
 
