@@ -7,7 +7,7 @@ from django.shortcuts import render, get_object_or_404
 from django.views import View
 from backend import models
 from backend import customSerializers
-from django.http import HttpResponse, HttpResponseForbidden, JsonResponse
+from django.http import HttpResponseForbidden, JsonResponse
 from backend.captcha.captcha import captcha
 from django_redis import get_redis_connection
 from django.utils import timezone
@@ -57,47 +57,64 @@ class DateEnconding(json.JSONEncoder):
             return o.strftime('%Y/%m/%d')
 
 
+# 登录检测装饰器
+def login_required(view_func):
+    # 登录判断装饰器
+    def wrapper(request, *view_args, **view_kwargs):
+        if request.COOKIES.get("userId", None):
+            userId = request.COOKIES.get("userId", None)
+            print('get cookie [{}]'.format(userId))
+        # 判断用户是否登录,session验证
+        if request.session.get("isLogin", None):
+            userId = request.session.get("userId", None)
+            print('get session userId is [{}]'.format(userId))
+            return view_func(request, *view_args, **view_kwargs)
+        else:
+            # 用户未登录,返回信息
+            return JsonResponse({"message": "还未登录", "status": 404})
+    return wrapper
+
+
 # 登录函数视图
 # 从参数获取phonenum和password，取出对应salt加密，并判断是否和存储加密密码相同
 # 登录成功，返回消息和200状态码
 # 登录失败，返回消息和404状态码
 def signin(request):
     # 若已经登录，直接进入已登录账号
-    if request.session.get('is_login', None):
-        return HttpResponse({"message": "你已经登录", "status": 404})
+    if request.session.get('isLogin', None):
+        return JsonResponse({"message": "你已经登录", "status": 404})
     elif request.method == "POST":
         # 从参数获取phonenum和password
         phonenum = request.POST.get('phonenum', None)
         password = request.POST.get('password', None)
-        message = "填写内容不能为空"
-        status = 404
         if phonenum and password:
             phonenum = phonenum.strip()
             try:
                 # 从数据库获取phonenum和对应userid，取出salt
                 # 获取失败则捕捉错误
-                profile = models.Personalprofile.get(phonenumber=phonenum)
-                accountInfo = models.Accountinformation.get(userid=profile.userid)
+                profile = models.Personalprofile.objects.get(phonenumber=int(phonenum))
+                accountInfo = models.Accountinformation.objects.get(userid=profile.userid.userid)
                 # 判断是否和存储加密密码相同
-                if (accountInfo.logindata.password == hash_pwd(pwd=password, salt=accountInfo.ogindata.salt)):
+                if (accountInfo.logindata.userpassword == hash_pwd(pwd=password, salt=accountInfo.logindata.salt)):
                     # 若相同，设置登录状态为True，设置登录id为userid，登录权限为对应权限
                     request.session['isLogin'] = True
                     request.session['userId'] = accountInfo.userid
                     request.session['userAuthority'] = accountInfo.authority
-                    message = "登录成功"
-                    status = 200
+
+                    response = JsonResponse({"message": "登录成功", "status": 200})
+                    response.set_cookie('userId', accountInfo.userid)
+                    return response
                 else:
-                    message = "密码错误"
-                    status = 404
+                    return JsonResponse({"message": "密码错误", "status": 404})
             except Exception as e:
                 print('str(Exception):\t', str(Exception))
                 print('str(e):\t\t', str(e))
                 print('repr(e):\t', repr(e))
                 print('e.message:\t', e.message)
                 print('########################################################')
-                message = "注册失败"
-                status = 404
-        return JsonResponse({"message": message, "status": status})
+                return JsonResponse({"message": "注册失败", "status": 404})
+        else:
+            return JsonResponse({"message": "填写内容不能为空", "status": 404})
 
 
 def logout(request):
@@ -108,9 +125,9 @@ def logout(request):
         message = "未登录，无法登出"
         status = 404
     request.session.flush()
-    # del request.session['is_login']
-    # del request.session['user_id']
-    # del request.session['user_name']
+    # del request.session['isLogin']
+    # del request.session['userid']
+    # del request.session['username']
     return JsonResponse({"message": message, "status": status})
 
 
