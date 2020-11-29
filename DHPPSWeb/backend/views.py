@@ -20,7 +20,7 @@ from django.forms.models import model_to_dict
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 import datetime
-
+import secrets
 # Create your views here.
 
 logger = logging.getLogger("django")
@@ -113,7 +113,7 @@ def logout(request):
 def signup(request):
     message = "注册成功"
     if request.session.get('is_login', None):
-        # 登录状态不允许注册。你可以修改这条原则！
+        # 登录状态不允许注册。
         message = "登录状态，无法注册"
         status = 404
     elif request.method == "POST":
@@ -121,38 +121,50 @@ def signup(request):
         phonenum = request.POST.get('phonenum', None)
         email = request.POST.get('email', None)
         password = request.POST.get('password', None)
-        password2 = request.POST.get('password2', None)
         verifyCode = request.POST.get('verifyCode', None)
+        print({
+            "username": username,
+            'phonenum': phonenum,
+            'email': email,
+            "password": password,
+            'verifyCode': verifyCode
+        })
         message = "请检查填写的内容！"
         status = 404
-        if username and phonenum and email and password and password2 and verifyCode:  # 获取数据
-            if password != password2:  # 判断两次密码是否相同
-                message = "两次输入的密码不同！"
+        if username and phonenum and email and password and verifyCode:  # 获取数据
+            same_name_user = models.Personalprofile.objects.filter(username=username)
+            if same_name_user:  # 用户名唯一
+                message = '用户已经存在，请重新输入用户名！'
                 status = 404
             else:
-                same_name_user = models.Personalprofile.objects.filter(username=username)
-                if same_name_user:  # 用户名唯一
-                    message = '用户已经存在，请重新选择用户名！'
-                    status = 404
-
                 same_phone_user = models.Personalprofile.objects.filter(phonenumber=phonenum)
                 if same_phone_user:  # 手机号码唯一
                     message = '该手机号码已被注册，请使用别的手机号码！'
                     status = 404
-                # 当一切都OK的情况下，创建新用户
-                try:
-                    newAccountInfo = models.Accountinformation.objects.create(themeno=1,
-                                                                              createdate=timezone.now(),)
-                    newUser = models.Personalprofile.objects.create(userid=newAccountInfo.userid,
-                                                                    username=username,
-                                                                    phonenumber=phonenum,
-                                                                    email=email)
-                    logger.info(serializers.serialize("json", newUser))
-                    message = "注册成功"
-                    status = 200
-                except Exception:
-                    message = "注册失败"
-                    status = 404
+                else:
+                    # 当一切都OK的情况下，创建新用户
+                    try:
+                        newAccountInfo = models.Accountinformation.objects.create(themeno=models.Theme.objects.filter(themeno=1).first(), createdate=timezone.now())
+                        salt = secrets.token_hex(4)
+                        encryPassword = hash_pwd(pwd=password, salt=salt)
+                        newLoginData = models.Logindata.objects.create(userid=newAccountInfo, userpassword=encryPassword, salt=salt)
+
+                        newUser = models.Personalprofile.objects.create(userid=newAccountInfo,
+                                                                        username=username,
+                                                                        phonenumber=phonenum,
+                                                                        email=email)
+                        logger.info(json.dumps(newLoginData, cls=DateEnconding))
+                        logger.info(json.dumps(newUser, cls=DateEnconding))
+                        message = "注册成功"
+                        status = 200
+                    except Exception as e:
+                        print('str(Exception):\t', str(Exception))
+                        print('str(e):\t\t', str(e))
+                        print('repr(e):\t', repr(e))
+                        print('e.message:\t', e.message)
+                        print('########################################################')
+                        message = "注册失败"
+                        status = 404
     return JsonResponse({"message": message, "status": status})
 
 

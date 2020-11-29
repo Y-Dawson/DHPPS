@@ -43,8 +43,8 @@
             }
           })
           .then(response => (
-            self.content = response.data,
-            alert(JSON.stringify(response))
+            self.content = response.data
+            //alert(JSON.stringify(response))
           ))
           .catch(function (error) { // 请求失败处理
             //alert("数据请求失败wdnmd");
@@ -52,15 +52,14 @@
       },
       putContent: function () {
         var self = this;
-        var date = $("#input1").val();
+        let data = new FormData();
+        data.append("username","username");
+        data.append("phonenum",'15151523411');
+        data.append("email",'1241@qq.com');
+        data.append("password",'ads1124');
+        data.append("verifyCode",'asds');
         axios
-          .get('http://127.0.0.1:8000/backend/case/',{
-            params:{
-              pageSize: 3,
-              page: 1,
-              userid: 1
-            }
-          })
+          .post('http://127.0.0.1:8000/backend/signup/', data)
           .then(response => (
             self.returnData = response.data,
             alert(JSON.stringify(response))
