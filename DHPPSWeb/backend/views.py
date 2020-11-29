@@ -64,7 +64,7 @@ class DateEnconding(json.JSONEncoder):
 def signin(request):
     # 若已经登录，直接进入已登录账号
     if request.session.get('is_login', None):
-        return HttpResponse({"data": {"message": "你已经登录", "status": 404}, "content-type": "application/json"})
+        return HttpResponse({"message": "你已经登录", "status": 404})
     elif request.method == "POST":
         # 从参数获取phonenum和password
         phonenum = request.POST.get('phonenum', None)
@@ -93,7 +93,7 @@ def signin(request):
                 print("捕获异常：", identifier)
                 message = "该电话未注册"
                 status = 404
-        return HttpResponse({"data": {"message": message, "status": status}, "content-type": "application/json"})
+        return HttpResponse({"message": message, "status": status})
 
 
 def logout(request):
@@ -107,7 +107,7 @@ def logout(request):
     # del request.session['is_login']
     # del request.session['user_id']
     # del request.session['user_name']
-    return HttpResponse({"data": {"message": message, "status": status}, "content-type": "application/json"})
+    return HttpResponse({"message": message, "status": status})
 
 
 def signup(request):
@@ -153,7 +153,7 @@ def signup(request):
                 except Exception:
                     message = "注册失败"
                     status = 404
-    return HttpResponse({"data": {"message": message, "status": status}, "content-type": "application/json"})
+    return HttpResponse({"message": message, "status": status})
 
 
 class ImageCodeView(View):
@@ -207,7 +207,7 @@ class ImageCodeView(View):
                 status = 404
         except Exception:
             message = "没有获取到验证码"
-        return HttpResponse({"data": {"message": message, "status": status}, "content-type": "application/json"})
+        return HttpResponse({"message": message, "status": status})
 
 
 def GetUserInfos(request):
