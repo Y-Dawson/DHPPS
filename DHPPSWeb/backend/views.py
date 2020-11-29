@@ -102,7 +102,7 @@ def signin(request):
                     request.session['userAuthority'] = accountInfo.authority
 
                     response = JsonResponse({"message": "登录成功", "status": 200})
-                    response.set_cookie('userId', accountInfo.userid)
+                    response.set_cookie('userId', accountInfo.userid,600)
                     return response
                 else:
                     return JsonResponse({"message": "密码错误", "status": 404})
@@ -112,7 +112,7 @@ def signin(request):
                 print('repr(e):\t', repr(e))
                 print('e.message:\t', e.message)
                 print('########################################################')
-                return JsonResponse({"message": "注册失败", "status": 404})
+                return JsonResponse({"message": "登录失败", "status": 404})
         else:
             return JsonResponse({"message": "填写内容不能为空", "status": 404})
 
