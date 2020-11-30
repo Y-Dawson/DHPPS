@@ -212,7 +212,7 @@ def changePwd(request):
     if not request.session.get('isLogin', None):
         return JsonResponse({"message": "你还未登录", "status": 404})
     elif request.method == "POST":
-        # 从参数获取phonenum和password
+        # 从参数获取oldPassword和password
         oldPassword = request.POST.get('oldPassword', None)
         newPassword = request.POST.get('newPassword', None)
         if oldPassword and newPassword:
@@ -220,9 +220,15 @@ def changePwd(request):
             account = models.Accountinformation.objects.filter(userid=userid)
             if not account.exists():
                 return JsonResponse({"message": "当前账号与浏览器记录不一致", "status": 404})
-            account = models.Accountinformation.objects.get(userid=profile.userid.userid)
-
-    return JsonResponse({"message": "修改成功", "status": 200})
+            account = account.first()
+            # 检测账号原密码是否符合
+            if (account.logindata.userpassword == hash_pwd(pwd=oldPassword, salt=account.logindata.salt)):
+                newSalt = secrets.token_hex(4)
+                encryPassword = hash_pwd(pwd=newPassword, salt=newSalt)
+                models.Logindata.objects.filter(userid=userid).update(userpassword=encryPassword, salt=newSalt)
+                return JsonResponse({"message": "修改成功", "status": 200})
+    else:
+        return JsonResponse({"message": "参数传递方式有误", "status": 404})
 
 
 # 修改密码函数视图
@@ -231,7 +237,28 @@ def changePwd(request):
 # 修改成功，返回消息和200状态码
 # 修改失败，返回消息和404状态码
 def forgetPwd(request):
-    return JsonResponse({"message": "成功修改用户密码", "status": 200})
+    if request.method == "POST":
+        # 从参数获取phonenum和password
+        phonenum = request.POST.get('phonenum', None)
+        verifyCode = request.POST.get('verifyCode', None)
+        newPassword = request.POST.get('newPassword', None)
+        if phonenum and verifyCode and newPassword:
+            # 从数据库获取phonenum和对应userid，取出salt
+            # 获取失败则捕捉错误
+            profile = models.Personalprofile.objects.filter(phonenumber=int(phonenum))
+            if not profile.exists():
+                return JsonResponse({"message": "该手机未注册", "status": 404})
+            profile = profile.first()
+            account = models.Accountinformation.objects.get(userid=profile.userid.userid)
+
+            # 缺少逻辑：检测短信验证码是否正确
+
+            newSalt = secrets.token_hex(4)
+            encryPassword = hash_pwd(pwd=newPassword, salt=newSalt)
+            models.Logindata.objects.filter(userid=account.userid).update(userpassword=encryPassword, salt=newSalt)
+            return JsonResponse({"message": "修改成功", "status": 200})
+    else:
+        return JsonResponse({"message": "参数传递方式有误", "status": 404})
 
 
 class ImageCodeView(View):
