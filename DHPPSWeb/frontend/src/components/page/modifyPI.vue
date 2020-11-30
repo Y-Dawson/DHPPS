@@ -25,7 +25,7 @@
             </li>
             <li class="layui-nav-item">
             <a href="javascript:;">
-              <span>用户名</span>
+              <span>{{content.username}}</span>
             </a>
           </li>
         </ul>
@@ -219,7 +219,7 @@ export default {
       getContent: function () {
         var self = this;
         axios
-          .get("http://127.0.0.1:8000/backend/profile/1/")
+          .get("http://127.0.0.1:8000/backend/profile/7/")
           .then(response => (
             self.content = response.data
             // alert(JSON.stringify(response))
@@ -232,7 +232,7 @@ export default {
         var self = this;
         var uname = $("#inputname").val();
         axios
-          .put('http://127.0.0.1:8000/backend/profile/1/',{
+          .put('http://127.0.0.1:8000/backend/profile/7/',{
           
             username : $("#inputname").val(),
             phonenumber : $('#inputphone').val(),

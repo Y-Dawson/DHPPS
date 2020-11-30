@@ -2,48 +2,48 @@
   <div id="login">
     <div class="ms-login">
       <div class="ms-title">高传染性疾病预测系统</div>
-      <el-form :model="loginForm" :rules="loginFormRules" ref="loginFormRef" class="ms-content" action="">
-      <div class="layui-form-item">
-        <div class="layui-inline">
-          <div class="account">
-            <el-form-item prop="account">
-              <el-input
-                v-model="loginForm.account"
-                placeholder="用户名/密码"
-                id="loginPhone"
-              >
-              <el-button slot="prepend" icon="el-icon-user"></el-button>
-              </el-input>
-            </el-form-item>
+        <el-form :model="loginForm" :rules="loginFormRules" ref="loginFormRef" class="ms-content" action="">
+          <div class="layui-form-item">
+            <div class="layui-inline">
+              <div class="account">
+                <el-form-item prop="account">
+                  <el-input
+                    v-model="loginForm.account"
+                    placeholder="用户名/密码"
+                    id="loginPhone"
+                  >
+                  <el-button slot="prepend" icon="el-icon-user"></el-button>
+                  </el-input>
+                </el-form-item>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
 
-      <div class="layui-form-item">
-        <div class="layui-inline">
-          <div class="password">
-            <el-form-item prop="password">
-              <el-input
-                v-model="loginForm.password"
-                placeholder="请填写6到12位密码"
-                type="password"
-                id="loginPass"
-              >
-              <el-button slot="prepend" icon="el-icon-lock"></el-button>
-              </el-input>
-            </el-form-item>
+          <div class="layui-form-item">
+            <div class="layui-inline">
+              <div class="password">
+                <el-form-item prop="password">
+                  <el-input
+                    v-model="loginForm.password"
+                    placeholder="请填写6到12位密码"
+                    type="password"
+                    id="loginPass"
+                  >
+                  <el-button slot="prepend" icon="el-icon-lock"></el-button>
+                  </el-input>
+                </el-form-item>
+              </div>
+            <!-- <div class="layui-form-mid layui-word-aux">请填写6到12位密码</div> -->
+            </div>
           </div>
-          <!-- <div class="layui-form-mid layui-word-aux">请填写6到12位密码</div> -->
-        </div>
-      </div>
 
-      <el-form-item class="btns">
-        <el-button type="primary" @click="login">登 录</el-button>
-        <el-button type="info" @click="resetLoginForm">重 置</el-button>
-      </el-form-item>
-      <router-link to="/signup" class="create-account" style="margin-left:10px; float:left;">创建账号</router-link>
-      <a class="forget-password" href="#" style="margin-right:10px; float:right;">忘记密码</a>
-     </el-form>
+          <el-form-item class="btns">
+            <el-button type="primary" @click="login">登 录</el-button>
+            <el-button type="info" @click="resetLoginForm">重 置</el-button>
+          </el-form-item>
+        <router-link to="/signup" class="create-account" style="margin-left:10px; float:left;">创建账号</router-link>
+        <a class="forget-password" href="#" style="margin-right:10px; float:right;">忘记密码</a>
+      </el-form>
     </div>
   </div>
 </template>
@@ -52,6 +52,7 @@
 export default {
   data() {
     return {
+      loginMassege:'',
       loginForm: {
         account: "",
         password: "",
@@ -79,6 +80,21 @@ export default {
     };
   },
   methods: {
+    submitMessage(){
+      if(this.loginMassege=="登录成功"){
+        this.$message.success("登录成功！");
+        this.$router.push({path:'/Setting'});
+      }
+      else{
+        if(this.loginMassege=="密码错误"){
+          this.$message.error("密码错误")
+        }
+        else{
+          this.$message.error("账号不存在")
+        }
+      }
+    
+    },
     resetLoginForm() {
       this.$refs.loginFormRef.resetFields();
     },
@@ -92,7 +108,7 @@ export default {
           )
         )
         .catch(function (error) {
-          alert(JSON.stringify(response));
+          // alert(JSON.stringify(response));
           alert("数据获取失败");
           console.log(error.response);
         });
@@ -106,12 +122,14 @@ export default {
         .post("http://127.0.0.1:8000/backend/signin/",data)
         .then(response => (
             self.content = response.data,
-            alert("数据发送"),
-            alert(JSON.stringify(response.data.message))
+            self.loginMassege=response.data.message,
+            // alert("数据发送"),
+            // alert(JSON.stringify(self.loginMassege)),
+            self.submitMessage()
           )
         )
         .catch(function (error) {
-          alert(JSON.stringify(response));
+          // alert(JSON.stringify(error.response.data.message));
           alert("数据发送失败");
           console.log(error.response);
         });
@@ -119,15 +137,7 @@ export default {
     login() {
       this.$refs.loginFormRef.validate(async (valid) => {
         if (!valid) return
-        this.getLoginData()
         this.postContent()
-        /*
-      const { data: res }= await this.$http.post('app',this.loginForm);
-      if(res.meta.status !== 200) return this.$message.error('登录失败！');
-      */
-        this.$message.success("登录成功！");
-        window.sessionStorage.setItem("token", res.data.token);
-        this.$router.push("./components/setting");
       });
     },
   },

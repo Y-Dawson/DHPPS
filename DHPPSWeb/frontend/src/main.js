@@ -5,15 +5,16 @@ import App from './App'
 import axios from 'axios'
 import router from './router'
 import ElementUI from 'element-ui'
-import VueResource from 'vue-resource'
+// import VueResource from 'vue-resource'
 import 'element-ui/lib/theme-chalk/index.css'
 
 Vue.use(ElementUI)
-Vue.prototype.$http = axios
-Vue.use(VueResource)
+// Vue.use(VueResource)
 Vue.config.productionTip = false
 
-axios.defaults.withCredentials = true;//允许跨域携带cookie信息
+axios.defaults.baseURL = '/backend'
+Vue.prototype.$http = axios
+axios.defaults.withCredentials = true;  //允许axios请求携带cookie等凭证
 
 /* eslint-disable no-new */
 new Vue({

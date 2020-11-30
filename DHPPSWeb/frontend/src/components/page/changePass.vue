@@ -25,7 +25,7 @@
             </li>
             <li class="layui-nav-item">
             <a href="javascript:;">
-              <span>用户名</span>
+              <span>{{ content.username}}</span>
             </a>
           </li>
         </ul>
@@ -62,10 +62,10 @@
               <div class="list">
                 <el-form :model="ruleForm" :rules="rules" :label-position="labelPosition" ref="ruleForm" label-width="100px" class="demo-ruleForm">
                   <el-form-item label="原密码" prop="prePass" style="margin-bottom:50px;">
-                    <el-input type="password" placeholder="请输入原密码" v-model="ruleForm.prePass" autocomplete="off"></el-input>
+                    <el-input type="password" placeholder="请输入原密码" v-model="ruleForm.prePass" autocomplete="off" id="prepass"></el-input>
                   </el-form-item>
                   <el-form-item label="新密码" prop="pass" style="margin-bottom:50px;">
-                    <el-input type="password" placeholder="请输入新密码" v-model="ruleForm.pass" autocomplete="off"></el-input>
+                    <el-input type="password" placeholder="请输入新密码" v-model="ruleForm.pass" autocomplete="off" id="newpass"></el-input>
                   </el-form-item>
                   <el-form-item label="确认新密码" prop="checkPass">
                     <el-input type="password" placeholder="请再次输入新密码" v-model="ruleForm.checkPass" autocomplete="off"></el-input>
@@ -87,7 +87,7 @@
 <script src="layui.js"></script>
 <script>
 export default {
-  name:'modifyPI',
+  name:'changePass',
     data() {
       var validatePass= (rule, value, callback) => {
         if (!value) {
@@ -113,6 +113,7 @@ export default {
         }
       }
       return {
+        passMassege:'',//获取原密码是否正确的信息
         // 获取信息
         content: [],
         // 头像
@@ -143,54 +144,59 @@ export default {
       this.getContent()
     },
     methods: {
-      changeHandler(value){
-        this.sex=value
-      },
-      getContent: function () {
-        var self = this;
-        axios
-          .get("http://127.0.0.1:8000/backend/profile/1/")
-          .then(response => (
-            self.content = response.data
-            // alert(JSON.stringify(response))
-          ))
-          .catch(function (error) { // 请求失败处理
-            alert("数据请求失败wdnmd");
-          });
-      },
-      putContent: function () {
-        var self = this;
-        var uname = $("#inputname").val();
-        axios
-          .put('http://127.0.0.1:8000/backend/profile/1/',{
-          
-            username : $("#inputname").val(),
-            phonenumber : $('#inputphone').val(),
-            birth : $('#inputbirth').val(),
-            sex: this.ruleForm.radio,
-            email: $('#inputmail').val(),
-            address: $('#inputaddr').val()
-          })
-          .then(response => (
-            self.content = response,
-            alert("数据发送"),
-            alert(JSON.stringify(response))
-          ))
-          .catch(function (error) {
-            alert(JSON.stringify(response))
-            alert("数据发送失败")
-            console.log(error.response)
-          });
+        judgePre(){
+            if(passMassege)
+                this.$message.error("密码错误")
         },
-      submitForm(formName) {
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
-            this.putContent()
-            alert('submit!')
-          } else {
-            console.log('error submit!!')
-            return false
-          }
+        changeHandler(value){
+        this.sex=value
+        },
+        getContent: function () {
+            var self = this
+            var prepass=$("#prepass").val()
+            axios
+            .get("http://127.0.0.1:8000/backend/profile/7/")
+            .then(response => (
+                self.content = response.data
+                // alert(JSON.stringify(response))
+            ))
+            .catch(function (error) { // 请求失败处理
+                alert("数据请求失败wdnmd");
+            });
+        },
+        putContent: function () {
+            var self = this;
+            var uname = $("#inputname").val();
+            axios
+            .put('http://127.0.0.1:8000/backend/profile/7/',{
+                username : $("#inputname").val(),
+                phonenumber : $('#inputphone').val(),
+                birth : $('#inputbirth').val(),
+                sex: this.ruleForm.radio,
+                email: $('#inputmail').val(),
+                address: $('#inputaddr').val()
+            })
+            .then(response => (
+                self.content = response,
+                alert("数据发送"),
+                alert(JSON.stringify(response))
+            ))
+            .catch(function (error) {
+                alert(JSON.stringify(response))
+                alert("数据发送失败")
+                console.log(error.response)
+            });
+        },
+        submitForm(formName) {
+            this.$refs[formName].validate((valid) => {
+            if (valid) {
+                this.getContent()
+                this.putContent()
+                alert('submit!')
+            } else {
+                console.log('error submit!!')
+                return false
+            }
         });
       },
       resetForm(formName) {

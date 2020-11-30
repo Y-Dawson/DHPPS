@@ -19,14 +19,14 @@
         </ul>
         <ul class="layui-nav layui-layout-right">
           <li class="layui-nav-item" style="line-height:40px;" >
-                <a href="javascript:;" style="test-align:center;">回到首页</a>
+                <router-link to="/Setting"  style="margin-left:10px; float:left;">回到首页</router-link>
             </li>
             <li class="layui-nav-item" style="line-height:20px;" >
               <el-avatar shape="circle" :size="30" :fit="fit" :src="url"></el-avatar>
             </li>
             <li class="layui-nav-item">
             <a href="javascript:;">
-              <span>用户名</span>
+              <span>{{ content.username}}</span>
             </a>
           </li>
         </ul>
@@ -73,7 +73,7 @@
                         <span id="returnContent">{{ content.phonenumber}}</span>
                     </li>
                     <li style="margin-top:30px;">
-                        <span class="sex">性别:</span>
+                        <span class="sex">性别：</span>
                         <span id="returnContent">{{ content.sex}}</span>
                     </li>
                     <li style="margin-top:30px;">
@@ -126,7 +126,7 @@ export default {
       getContent: function () {
         var self = this;
         axios
-          .get("http://127.0.0.1:8000/backend/profile/1/")
+          .get("http://127.0.0.1:8000/backend/profile/7/")
           .then(response => (
             self.content = response.data
             // alert(JSON.stringify(response))

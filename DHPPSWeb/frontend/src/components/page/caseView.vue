@@ -143,6 +143,7 @@ export default {
   mounted: function () {
     // this.getcasenum(this.userid)
     this.getCaseContent()
+    this.setPages()
   },
   methods: {
     //上一页
@@ -157,6 +158,9 @@ export default {
         this.currentPage++;
         this.getCaseContent();   
     },
+    setPages(){
+      if(this.totalPage<1) totalPage=1
+    },
     //获取案例内容
     getCaseContent: function () {
       var self = this
@@ -169,7 +173,8 @@ export default {
             }
           })
         .then(response => (
-          self.currentPageData = response.data
+          self.currentPageData = response.data,
+          self.totalPage=Math.ceil(self.currentPageData.pagination/self.pageSize)
           // alert(JSON.stringify(this.currentPageData))
         ))
         .catch(function (error) { // 请求失败处理
