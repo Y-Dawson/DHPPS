@@ -92,8 +92,11 @@ def signin(request):
             try:
                 # 从数据库获取phonenum和对应userid，取出salt
                 # 获取失败则捕捉错误
-                profile = models.Personalprofile.objects.get(phonenumber=int(phonenum))
+                profile = models.Personalprofile.objects.filter(phonenumber=int(phonenum))
+                if not profile.exists():
+                    return JsonResponse({"message": "该账号不存在", "status": 404})
                 accountInfo = models.Accountinformation.objects.get(userid=profile.userid.userid)
+
                 # 判断是否和存储加密密码相同
                 if (accountInfo.logindata.userpassword == hash_pwd(pwd=password, salt=accountInfo.logindata.salt)):
                     # 若相同，设置登录状态为True，设置登录id为userid，登录权限为对应权限
@@ -112,11 +115,15 @@ def signin(request):
                 print('repr(e):\t', repr(e))
                 print('e.message:\t', e.message)
                 print('########################################################')
-                return JsonResponse({"message": "登录失败", "status": 404})
+                return JsonResponse({"message": "数据库错误", "status": 404})
         else:
             return JsonResponse({"message": "填写内容不能为空", "status": 404})
 
 
+# 登出函数视图
+# 从缓存获取对应session
+# 登出成功，返回消息和200状态码
+# 登出失败，返沪消息和404状态码
 def logout(request):
     message = "登出成功"
     status = 200
@@ -133,8 +140,11 @@ def logout(request):
         return response
 
 
+# 注册函数视图
+# 从参数获取username，phonenum,email,password,verifyCode
+# 登出成功，返回消息和200状态码
+# 登出失败，返回消息和404状态码
 def signup(request):
-    message = "注册成功"
     if request.session.get('is_login', None):
         # 登录状态不允许注册。
         message = "登录状态，无法注册"
@@ -189,6 +199,25 @@ def signup(request):
                         message = "注册失败"
                         status = 404
     return JsonResponse({"message": message, "status": status})
+
+
+# 修改密码函数视图
+# 从参数获取原密码和userid
+# 根据userid查找对应用户的logindata的密码
+# 比对通过后，生成新的salt和密码，存入数据库
+# 修改成功，返回消息和200状态码
+# 修改失败，返回消息和404状态码
+def changePwd(request):
+    return JsonResponse({"message": "修改成功", "status": 200})
+
+
+# 修改密码函数视图
+# 从参数获取电话号码以及验证码，密码
+# 验证码比对通过后，生成新的salt和密码，存入数据库
+# 修改成功，返回消息和200状态码
+# 修改失败，返回消息和404状态码
+def forgetPwd(request):
+    return JsonResponse({"message": "成功修改用户密码", "status": 200})
 
 
 class ImageCodeView(View):
