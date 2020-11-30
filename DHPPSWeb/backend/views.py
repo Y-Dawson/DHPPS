@@ -104,7 +104,7 @@ def signin(request):
                     request.session['isLogin'] = True
                     request.session['userId'] = accountInfo.userid
                     request.session['userAuthority'] = accountInfo.authority
-
+                    print(request.session.get('userId', None))
                     response = JsonResponse({"message": "登录成功", "status": 200})
                     response.set_cookie('userId', accountInfo.userid)
                     return response
@@ -216,8 +216,9 @@ def changePwd(request):
         oldPassword = request.POST.get('oldPassword', None)
         newPassword = request.POST.get('newPassword', None)
         if oldPassword and newPassword:
-            userid = request.session.get('userid', None)
-            account = models.Accountinformation.objects.filter(userid=userid)
+            userId = request.session.get('userId', None)
+
+            account = models.Accountinformation.objects.filter(userid=userId)
             if not account.exists():
                 return JsonResponse({"message": "当前账号与浏览器记录不一致", "status": 404})
             account = account.first()
@@ -225,7 +226,7 @@ def changePwd(request):
             if (account.logindata.userpassword == hash_pwd(pwd=oldPassword, salt=account.logindata.salt)):
                 newSalt = secrets.token_hex(4)
                 encryPassword = hash_pwd(pwd=newPassword, salt=newSalt)
-                models.Logindata.objects.filter(userid=userid).update(userpassword=encryPassword, salt=newSalt)
+                models.Logindata.objects.filter(userid=userId).update(userpassword=encryPassword, salt=newSalt)
                 return JsonResponse({"message": "修改成功", "status": 200})
     else:
         return JsonResponse({"message": "参数传递方式有误", "status": 404})
@@ -237,7 +238,9 @@ def changePwd(request):
 # 修改成功，返回消息和200状态码
 # 修改失败，返回消息和404状态码
 def forgetPwd(request):
-    if request.method == "POST":
+    if request.session.get('isLogin', None):
+        return JsonResponse({"message": "你已经登录", "status": 404})
+    elif request.method == "POST":
         # 从参数获取phonenum和password
         phonenum = request.POST.get('phonenum', None)
         verifyCode = request.POST.get('verifyCode', None)

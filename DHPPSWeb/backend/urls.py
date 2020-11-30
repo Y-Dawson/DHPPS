@@ -24,10 +24,10 @@ urlpatterns = [
     path('signup/', views.signup, name="signup"),
 
     # 修改密码请求
-    path('changePwd', views.changePwd, name="changePwd"),
+    path('changePwd/', views.changePwd, name="changePwd"),
 
     # 忘记密码请求
-    path('forgetPwd', views.forgetPwd, name="forgetPwd"),
+    path('forgetPwd/', views.forgetPwd, name="forgetPwd"),
 
     # 用户管理数据请求
     path('userManage/', views.GetUserInfos, name="userManage"),
