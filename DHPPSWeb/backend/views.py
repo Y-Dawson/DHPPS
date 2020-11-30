@@ -95,6 +95,7 @@ def signin(request):
                 profile = models.Personalprofile.objects.filter(phonenumber=int(phonenum))
                 if not profile.exists():
                     return JsonResponse({"message": "该账号不存在", "status": 404})
+                profile = profile.first()
                 accountInfo = models.Accountinformation.objects.get(userid=profile.userid.userid)
 
                 # 判断是否和存储加密密码相同
@@ -208,6 +209,19 @@ def signup(request):
 # 修改成功，返回消息和200状态码
 # 修改失败，返回消息和404状态码
 def changePwd(request):
+    if not request.session.get('isLogin', None):
+        return JsonResponse({"message": "你还未登录", "status": 404})
+    elif request.method == "POST":
+        # 从参数获取phonenum和password
+        oldPassword = request.POST.get('oldPassword', None)
+        newPassword = request.POST.get('newPassword', None)
+        if oldPassword and newPassword:
+            userid = request.session.get('userid', None)
+            account = models.Accountinformation.objects.filter(userid=userid)
+            if not account.exists():
+                return JsonResponse({"message": "当前账号与浏览器记录不一致", "status": 404})
+            account = models.Accountinformation.objects.get(userid=profile.userid.userid)
+
     return JsonResponse({"message": "修改成功", "status": 200})
 
 
