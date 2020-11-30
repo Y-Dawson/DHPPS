@@ -37,6 +37,7 @@
             </div>
           </div>
 
+<<<<<<< HEAD:DHPPSWeb/frontend/src/components/page/login.vue
           <el-form-item class="btns">
             <el-button type="primary" @click="login">登 录</el-button>
             <el-button type="info" @click="resetLoginForm">重 置</el-button>
@@ -44,6 +45,16 @@
         <router-link to="/signup" class="create-account" style="margin-left:10px; float:left;">创建账号</router-link>
         <a class="forget-password" href="#" style="margin-right:10px; float:right;">忘记密码</a>
       </el-form>
+=======
+      <el-form-item class="btns">
+        <el-button type="primary" @click="login">登 录</el-button>
+        <el-button type="info" @click="resetLoginForm">重 置</el-button>
+      </el-form-item>
+      <router-link to="/signup" class="create-account" style="margin-left:10px; float:left;">创建账号</router-link>
+      <router-link to="/forgetPass" class="forget-password" style="margin-left:10px; float:right;">忘记密码</router-link>
+      <!-- <a class="forget-password" href="./forgetPass" style="margin-right:10px; float:right;">忘记密码</a> -->
+     </el-form>
+>>>>>>> bd09dabeec0c75b728ce7fd2079f6bc82486aa3c:DHPPSWeb/frontend/src/components/page/Login.vue
     </div>
   </div>
 </template>

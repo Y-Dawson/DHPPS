@@ -16,7 +16,9 @@
     <input type="text" id="input2">第二个文本框<br>
     <button id="button1" @click = "putContent">提交</button>
     <button id="button2" @click = "login">登录</button>
-    <button id="button2" @click = "logout">登出</button>
+    <button id="button3" @click = "logout">登出</button>
+    <button id="button4" @click = "forgetPwd">忘记密码</button>
+    <button id="button5" @click = "changePwd">修改密码</button>
     <h1>{{ content }}<br>{{ returnData }}</h1>
   </div>
 
@@ -74,7 +76,7 @@
       login: function() {
         var self = this;
         let data = new FormData();
-        data.append("phonenum",'1515152341');
+        data.append("phonenum",'15151523411');
         data.append("password",'ads1124');
         axios
           .post('http://127.0.0.1:8000/backend/signin/', data)
@@ -97,6 +99,39 @@
           ))
           .catch(function (error) {
             alert("数据发送失败");
+            console.log(error.response);
+          });
+      },
+      forgetPwd: function(){
+        var self = this;
+        let data = new FormData();
+        data.append("phonenum",'15151523411');
+        data.append("verifyCode",'asds')
+        data.append("newPassword",'ads1124');
+        axios
+          .post('http://127.0.0.1:8000/backend/forgetPwd/', data)
+          .then(response => (
+            self.returnData = response.data,
+            alert(JSON.stringify(response))
+          ))
+          .catch(function (error) {
+            alert(JSON.stringify(error.response));
+            console.log(error.response);
+          });
+      },
+      changePwd: function(){
+        var self = this;
+        let data = new FormData();
+        data.append("oldPassword",'ads1124');
+        data.append("newPassword",'ads112');
+        axios
+          .post('http://127.0.0.1:8000/backend/changePwd/', data)
+          .then(response => (
+            self.returnData = response.data,
+            alert(JSON.stringify(response))
+          ))
+          .catch(function (error) {
+            alert(JSON.stringify(error.response));
             console.log(error.response);
           });
       }
