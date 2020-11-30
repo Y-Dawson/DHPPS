@@ -42,7 +42,8 @@
         <el-button type="info" @click="resetLoginForm">重 置</el-button>
       </el-form-item>
       <router-link to="/signup" class="create-account" style="margin-left:10px; float:left;">创建账号</router-link>
-      <a class="forget-password" href="#" style="margin-right:10px; float:right;">忘记密码</a>
+      <router-link to="/forgetPass" class="forget-password" style="margin-left:10px; float:right;">忘记密码</router-link>
+      <!-- <a class="forget-password" href="./forgetPass" style="margin-right:10px; float:right;">忘记密码</a> -->
      </el-form>
     </div>
   </div>
@@ -105,9 +106,9 @@ export default {
       axios
         .post("http://127.0.0.1:8000/backend/signin/",data)
         .then(response => (
-            self.content = response.data,
-            alert("数据发送"),
-            alert(JSON.stringify(response.data.message))
+            self.content = response.data
+            // alert("数据发送"),
+            // alert(JSON.stringify(response.data.message))
           )
         )
         .catch(function (error) {
@@ -127,7 +128,7 @@ export default {
       */
         this.$message.success("登录成功！");
         window.sessionStorage.setItem("token", res.data.token);
-        this.$router.push("./components/setting");
+        this.$router.push({path:'/setting'});
       });
     },
   },

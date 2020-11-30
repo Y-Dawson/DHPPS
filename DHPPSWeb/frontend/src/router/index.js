@@ -15,6 +15,9 @@ import SPStaffManage from '@/components/page/SPStaffManage'
 import SPEdit from '@/components/page/SPEdit'
 import SPCaseManage from '@/components/page/SPCaseManage'
 import SPCaseEdit from '@/components/page/SPCaseEdit'
+import forgetPass from '@/components/page/forgetPass'
+import setting from '@/components/page/setting'
+import simulation from '@/components/page/simulation'
 
 
 Vue.use(Router)
@@ -23,8 +26,8 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'modifyPI',
-      component: modifyPI
+      name: 'signup',
+      component: signup
     },
     {path:'/modifyPI', component:modifyPI},
     {path:'/profile', component:profile},
@@ -39,7 +42,9 @@ export default new Router({
     {path:'/SPStaffManage', component: SPStaffManage},
     {path:'/SPEdit', component: SPEdit},
     {path:'/SPCaseManage', component: SPCaseManage},
-    {path:'/SPCaseEdit', component: SPCaseEdit}
-
+    {path:'/SPCaseEdit', component: SPCaseEdit},
+    {path:'/forgetPass', component: forgetPass},
+    {path:'/simulation', component: simulation},
+    {path:'/setting', component: setting},
   ]
 })

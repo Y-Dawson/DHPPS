@@ -1,22 +1,8 @@
 <template>
   <div id="signup">
-    <div
-      class="logo"
-      style="text-align: center; margin-top: 80px; margin-bottom: 30px"
-    >
-      <i
-        class="layui-icon layui-icon-windows"
-        style="font-size: 100px; color: #1e9fff"
-      ></i>
-    </div>
-
-    <el-form
-      :model="signupForm"
-      :rules="signupFormRules"
-      ref="signupForm"
-      class="layui-form"
-      action=""
-    >
+    <div class="ms-login">
+      <div class="ms-title">高传染性疾病预测系统</div>
+      <el-form :model="signupForm" :rules="signupFormRules" ref="signupForm" class="ms-content" action="">
       <div class="layui-form-item">
         <div class="layui-inline">
           <div class="username"  style="margin-bottom: 15px;">
@@ -25,7 +11,9 @@
                 v-model="signupForm.username"
                 placeholder="用户名"
                 id="username"
-              ></el-input>
+              >
+              <el-button slot="prepend" icon="el-icon-user"></el-button>
+              </el-input>
             </el-form-item>
           </div>
         </div>
@@ -40,7 +28,9 @@
                 placeholder="输入密码"
                 type="password"
                 id="password"
-              ></el-input>
+              >
+              <el-button slot="prepend" icon="el-icon-user"></el-button>
+              </el-input>
             </el-form-item>
           </div>
         </div>
@@ -55,7 +45,9 @@
                 placeholder="确认密码"
                 type="password"
                 id="password2"
-              ></el-input>
+              >
+              <el-button slot="prepend" icon="el-icon-user"></el-button>
+              </el-input>
             </el-form-item>
           </div>
         </div>
@@ -69,7 +61,9 @@
                 v-model="signupForm.email"
                 placeholder="邮箱"
                 id="email"
-              ></el-input>
+              >
+              <el-button slot="prepend" icon="el-icon-user"></el-button>
+              </el-input>
             </el-form-item>
           </div>
         </div>
@@ -83,7 +77,9 @@
                 v-model="signupForm.phone"
                 placeholder="11位手机号"
                 id="phonenum"
-              ></el-input>
+              >
+              <el-button slot="prepend" icon="el-icon-user"></el-button>
+              </el-input>
             </el-form-item>
           </div>
         </div>
@@ -97,7 +93,9 @@
                 v-model="signupForm.securitt_code"
                 placeholder="请输入验证码"
                 id="securitt_code"
-              ></el-input>
+              >
+              <el-button slot="prepend" icon="el-icon-user"></el-button>
+              </el-input>
             </el-form-item>
           </div>
         </div>
@@ -111,12 +109,14 @@
         <el-form-item>
           <el-button type="primary" @click="submitForm('signupForm')">确认</el-button>
         </el-form-item>
-
+      </div>
+      <div class="layui-form-item">
         <el-form-item>
           <router-link class="use-account" to='/Login'>使用已有账号登录</router-link>
         </el-form-item>
       </div>
-    </el-form>
+     </el-form>
+    </div>
   </div>
 </template>
 
@@ -137,6 +137,20 @@ export default {
           }
         });
       }
+    // var validatePass= (rule, value, callback) => {
+    //     if (!value) {
+    //       return callback(new Error('请输入密码'));
+    //     }
+    //     setTimeout(() => {
+    //       let reg =  /^[(a-zA-Z0-9\u4e00-\u9fa5){1}_#]{4,20}$/
+    //       if (value == '' || !reg.test(value)) {
+    //         callback(new Error('昵称限16个字符，支持中英文、数字、减号或下划线'));
+    //       }
+    //       else{
+    //         callback();
+    //       }
+    //     });
+    //   }
     var validatePass2 = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请再次输入密码'));
@@ -266,22 +280,43 @@ export default {
   }
 };
 </script>
-
-<style scoped>
+<style>
 @import "../../assets/layui/css/layui.css";
-
 body {
-  background-color: pink;
+  background-image: url(../../assets/img/background2.jpg);
   /* width: 1000px; */
 }
-
-.layui-form * {
+</style>
+<style scoped>
+@import "../../assets/layui/css/layui.css";
+.ms-login {
+    position: absolute;
+    left: 50%;
+    top: 35%;
+    width: 350px;
+    margin: -190px 0 0 -175px;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.5);
+    overflow: hidden;
+}
+.ms-title {
+    width: 100%;
+    line-height: 50px;
+    text-align: center;
+    font-size: 20px;
+    color: #fff;
+    border-bottom: 1px solid #ddd;
+}
+.ms-content {
+  text-align: center;
   margin: 0;
+  padding: 30px 30px;
 }
 
+
 .layui-form input {
-  width: 400px;
-  height: 48px;
+  width: 300px;
+  height: 40px;
 }
 
 .layui-form .layui-input-inline {
@@ -293,7 +328,21 @@ body {
 }
 
 .layui-form-item a {
-  font-size: 12px;
+  font-size: 10px;
+}
+
+.account input.el-input__inner,
+.password input.el-input__inner {
+  border-radius: 0px 5px 5px 0px;
+}
+
+.btns {
+  display: flex;
+  justify-content: center;
+}
+
+.layui-form * {
+  margin: 0;
 }
 
 .layui-form-item .layui-input-block {
@@ -322,10 +371,10 @@ body {
 
 .el-button--info {
   position: absolute;
-  width: 125px;
-  height: 30px;
-  margin-left: 110px;
-  margin-top: -55px;
+  width: 80px;
+  height: 35px;
+  margin-left: 32px;
+  margin-top: -57px;
 }
 
 .el-button--primary {
@@ -337,6 +386,7 @@ body {
 
 .use-account {
   position: absolute;
-  margin-left: 75px;
+  margin-top: 10px;
+  margin-left: -60px;
 }
 </style>
