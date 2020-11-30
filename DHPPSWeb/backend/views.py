@@ -102,7 +102,7 @@ def signin(request):
                     request.session['userAuthority'] = accountInfo.authority
 
                     response = JsonResponse({"message": "登录成功", "status": 200})
-                    response.set_cookie('userId', accountInfo.userid,600)
+                    response.set_cookie('userId', accountInfo.userid)
                     return response
                 else:
                     return JsonResponse({"message": "密码错误", "status": 404})
@@ -120,15 +120,17 @@ def signin(request):
 def logout(request):
     message = "登出成功"
     status = 200
-    if not request.session.get('is_login', None):
+    if not request.session.get('isLogin', None):
         # 如果本来就未登录，也就没有登出一说
-        message = "未登录，无法登出"
-        status = 404
-    request.session.flush()
-    # del request.session['isLogin']
-    # del request.session['userid']
-    # del request.session['username']
-    return JsonResponse({"message": message, "status": status})
+        return JsonResponse({"message": "未登录，无法登出", "status": 404})
+    else:
+        request.session.flush()
+        # del request.session['isLogin']
+        # del request.session['userid']
+        # del request.session['username']
+        response = JsonResponse({"message": message, "status": status})
+        response.delete_cookie("userId")
+        return response
 
 
 def signup(request):

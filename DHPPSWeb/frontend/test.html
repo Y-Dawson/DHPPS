@@ -16,6 +16,7 @@
     <input type="text" id="input2">第二个文本框<br>
     <button id="button1" @click = "putContent">提交</button>
     <button id="button2" @click = "login">登录</button>
+    <button id="button2" @click = "logout">登出</button>
     <h1>{{ content }}<br>{{ returnData }}</h1>
   </div>
 
@@ -75,9 +76,21 @@
         let data = new FormData();
         data.append("phonenum",'15151523411');
         data.append("password",'ads1124');
-
         axios
           .post('http://127.0.0.1:8000/backend/signin/', data)
+          .then(response => (
+            self.returnData = response.data,
+            alert(JSON.stringify(response))
+          ))
+          .catch(function (error) {
+            alert("数据发送失败");
+            console.log(error.response);
+          });
+      },
+      logout: function() {
+        var self = this;
+        axios
+          .post('http://127.0.0.1:8000/backend/signout/')
           .then(response => (
             self.returnData = response.data,
             alert(JSON.stringify(response))
