@@ -56,6 +56,9 @@
           <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
             <ul class="layui-tab-title">
               <li class="layui-this" style="color: #55587e;">修改资料</li>
+              <li>
+                <router-link to="/changePass" style="color: #55587e;">修改密码</router-link>
+              </li>
             </ul>
             <div class="layui-tab-content">
               <div class="list">
