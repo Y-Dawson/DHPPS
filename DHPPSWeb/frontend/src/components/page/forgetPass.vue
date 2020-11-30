@@ -78,9 +78,6 @@
         <el-button type="primary" @click="submitForm">确 定</el-button>
         <!-- <el-button type="info" @click="resetLoginForm">重 置</el-button> -->
       </el-form-item>
-      <!-- <router-link to="/signup" class="create-account" style="margin-left:10px; float:left;">创建账号</router-link>
-      <router-link to="/forgetPass" class="forget-password" style="margin-left:10px; float:right;">忘记密码</router-link> -->
-      <!-- <a class="forget-password" href="./forgetPass" style="margin-right:10px; float:right;">忘记密码</a> -->
      </el-form>
     </div>
   </div>
@@ -114,10 +111,8 @@ export default {
       };
     return {
       forgetForm: {
-        username: "",
         password: "",
         password2: "",
-        email:"",
         phone: "",
         securitt_code: "",
       },
@@ -147,19 +142,22 @@ export default {
   }
 };
 </script>
-
-<style scoped>
+<style>
 @import "../../assets/layui/css/layui.css";
 body {
   background-image: url(../../assets/img/background2.jpg);
   /* width: 1000px; */
 }
+</style>
+
+<style scoped>
+@import "../../assets/layui/css/layui.css";
 .ms-login {
     position: absolute;
     left: 50%;
     top: 50%;
     width: 350px;
-    height: 380px;
+    height:380px;
     margin: -190px 0 0 -175px;
     border-radius: 5px;
     background: rgba(255, 255, 255, 0.5);
@@ -179,7 +177,6 @@ body {
   padding: 30px 30px;
 }
 
-
 .layui-form input {
   width: 300px;
   height: 40px;
@@ -197,16 +194,14 @@ body {
   font-size: 10px;
 }
 
-.account input.el-input__inner,
-.password input.el-input__inner {
-  border-radius: 0px 5px 5px 0px;
-}
+/* .layui-form * {
+  margin: 0;
+} */
 
 .btns {
   display: flex;
   justify-content: center;
 }
-
 .el-button--info {
   position: absolute;
   width: 80px;

@@ -280,13 +280,15 @@ export default {
   }
 };
 </script>
-
-<style scoped>
+<style>
 @import "../../assets/layui/css/layui.css";
 body {
   background-image: url(../../assets/img/background2.jpg);
   /* width: 1000px; */
 }
+</style>
+<style scoped>
+@import "../../assets/layui/css/layui.css";
 .ms-login {
     position: absolute;
     left: 50%;
@@ -385,6 +387,6 @@ body {
 .use-account {
   position: absolute;
   margin-top: 10px;
-  margin-left: -50px;
+  margin-left: -60px;
 }
 </style>
