@@ -13,6 +13,8 @@ Vue.prototype.$http = axios
 Vue.use(VueResource)
 Vue.config.productionTip = false
 
+axios.defaults.withCredentials = true;//允许跨域携带cookie信息
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

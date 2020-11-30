@@ -183,7 +183,7 @@ export default {
         phone: "",
         securitt_code: "",
       },
-
+      returnmessage:"",
       signupFormRules: {
         username: [
           { required: true, validator:checkanme , trigger: "blur"},
@@ -236,9 +236,11 @@ export default {
       axios
         .post('http://127.0.0.1:8000/backend/signup/', data)
         .then(response => (
-          self.returnData = response.data,
-          // alert(JSON.stringify(response)),
-          alert(JSON.stringify(response.data.message))
+          self.content = response.data,
+          self.returnmessage=response.data.message,
+          // alert(self.returnmessage),
+          self.skip()
+          // alert(JSON.stringify(response.data.message))
         ))
         .catch(function (error) {
           alert("数据发送失败");
@@ -255,6 +257,12 @@ export default {
         }
       });
     },
+    skip() {
+      if(this.returnmessage=="注册成功") {
+        this.$router.push({path:'/Login'});
+      }
+      else this.$message(this.returnmessage);
+    }
   }
 };
 </script>
