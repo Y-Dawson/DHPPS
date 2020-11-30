@@ -13,7 +13,8 @@
           </li>
 
           <li class="layui-nav-item" style="line-height: 40px">
-            <a href="profile.vue" style="test-align: center">个人中心</a>
+            <router-link to="/profile" class="create-account" style="margin-left:10px; float:left;">个人中心</router-link>
+            <!-- <a href="profile.vue" style="test-align: center">个人中心</a> -->
           </li>
           <li class="layui-nav-item" style="line-height: 20px">
             <el-avatar
@@ -25,7 +26,7 @@
           </li>
           <li class="layui-nav-item">
             <a href="javascript:;">
-              <span>用户名</span>
+              <span>{{ content.username}}</span>
             </a>
           </li>
         </ul>
@@ -225,7 +226,7 @@
               delete_city('ci1');
             "
           >
-            <img src="../../assets/img/city.png" alt="" />
+            <img src="../../assets/layui/images/city.png" alt="" />
             <div class="city-infor">
               <!-- <el-form-item prop="cityName">
                 <el-input
@@ -273,7 +274,7 @@
               delete_city('ci2');
             "
           >
-            <img src="../../assets/img/city.png" alt="" />
+            <img src="../../assets/layui/images/city.png" alt="" />
             <div class="city-infor">
               <!-- <el-form-item prop="cityName">
                 <el-input
@@ -321,7 +322,7 @@
               delete_city('ci3');
             "
           >
-            <img src="../../assets/img/city.png" alt="" />
+            <img src="../../assets/layui/images/city.png" alt="" />
             <div class="city-infor">
               <el-form-item prop="population">
                 <el-input
@@ -411,6 +412,9 @@ var cn = 0;
 export default {
   data() {
     return {
+      // 用户信息
+      content:[],
+
       np: false,
       cp: false,
       dp: false,
@@ -499,6 +503,10 @@ export default {
         ],
       },
     };
+  },
+  created: function () {
+      //为了在内部函数能使用外部函数的this对象，要给它赋值了一个名叫self的变量。
+      this.getContent()
   },
   // mounted() {
   //   this.connect_city();
@@ -982,6 +990,19 @@ export default {
       if (n == 2) this.isdisabled2 = true;
       if (n == 3) this.isdisabled3 = true;
     },
+
+    getContent: function () {
+      var self = this;
+        axios
+          .get("http://127.0.0.1:8000/backend/profile/7/")
+          .then(response => (
+            self.content = response.data
+            // alert(JSON.stringify(response))
+          ))
+          .catch(function (error) { // 请求失败处理
+            alert("数据请求失败wdnmd");
+          });  
+    },
   },
 };
 </script>
@@ -1076,7 +1097,8 @@ export default {
   background-color: #bfa;
 } */
 .tools-wrapper button:hover {
-  background-color: skyblue;
+  background-color: rgb(255, 255, 255);
+  font-weight: bold;
 }
 /* 
 .tools-wrapper button:active {
@@ -1093,7 +1115,7 @@ export default {
   height: 69px;
   color: #000;
   border: 1px solid transparent;
-  background-color: red;
+  background-color: #8b9bbd;
   /* cursor: url(); */
 }
 
@@ -1218,7 +1240,7 @@ export default {
 }
 
 .add-wrapper button:hover {
-  background-color: red;
+  background-color: rgb(182, 182, 182);
 }
 
 .add-wrapper button:active {
@@ -1292,8 +1314,9 @@ canvas {
   width: 190px;
   margin-top: -220px;
   margin-left: 60px;
-  border: 1px solid rgb(187, 187, 187);
-  background-color: #bfa;
+  /* border: 1px solid rgb(187, 187, 187); */
+  background-color: rgba(187, 187, 187, 0.3);
+  border-radius: 10px;
   z-index: 9999;
 }
 

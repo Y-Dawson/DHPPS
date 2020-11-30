@@ -88,11 +88,7 @@ DATABASES = {
         'HOST': '127.0.0.1',  # 数据库地址，本机 ip 地址 127.0.0.1
         'PORT': 3306,  # 端口
         'USER': 'root',  # 数据库用户名
-<<<<<<< HEAD
-        'PASSWORD': 'xxsql',  # 数据库密码
-=======
-        'PASSWORD': 'z3876390',  # 数据库密码
->>>>>>> bd09dabeec0c75b728ce7fd2079f6bc82486aa3c
+        'PASSWORD': 'root',  # 数据库密码
     }
 }
 

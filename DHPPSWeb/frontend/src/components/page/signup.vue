@@ -227,17 +227,6 @@ export default {
     };
   },
   methods:{
-    submitForm(formName) {
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
-            this.putContent()
-            alert('submit!')
-          } else {
-            console.log('error submit!!')
-            return false
-          }
-        });
-      },
     postAccount: function () {
       var self = this;
       var self = this;
