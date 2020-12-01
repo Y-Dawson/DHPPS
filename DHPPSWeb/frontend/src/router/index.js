@@ -15,9 +15,10 @@ import SPStaffManage from '@/components/page/SPStaffManage'
 import SPEdit from '@/components/page/SPEdit'
 import SPCaseManage from '@/components/page/SPCaseManage'
 import SPCaseEdit from '@/components/page/SPCaseEdit'
-import Setting from '@/components/page/Setting'
+import setting from '@/components/page/setting'
 import changePass from '@/components/page/changePass'
 import forgetPass from '@/components/page/forgetPass'
+import simulation from '@/components/page/simulation'
 
 Vue.use(Router)
 
@@ -30,13 +31,8 @@ export default new Router({
     },
     {path:'/modifyPI', component:modifyPI},
     {path:'/profile', component:profile},
-<<<<<<< Updated upstream
-    {path:'/Login', component:Login},
-    {path:'/caseView', component:caseView},
-=======
     {path:'/Login', component: Login},
     {path:'/caseView', component: caseView},
->>>>>>> Stashed changes
     {path:'/signup', component: signup},
     {path:'/userManagement', component: userManagement},
     {path:'/userEdit', component: userEdit},
@@ -47,8 +43,9 @@ export default new Router({
     {path:'/SPEdit', component: SPEdit},
     {path:'/SPCaseManage', component: SPCaseManage},
     {path:'/SPCaseEdit', component: SPCaseEdit},
-    {path:'/Setting',component:Setting},
+    {path:'/setting',component:setting},
     {path:'/changePass',component:changePass},
-    {path:'/forgetPass',component:forgetPass}
+    {path:'/forgetPass',component:forgetPass},
+    {path:'/simulation',component:simulation}
   ]
 })
