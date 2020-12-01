@@ -218,9 +218,12 @@ def signup(request):
 # 修改成功，返回消息和200状态码
 # 修改失败，返回消息和404状态码
 def changePwd(request):
+    '''
     if not request.session.get('isLogin', None):
         return JsonResponse({"message": "你还未登录", "status": 404})
-    elif request.method == "POST":
+    el
+    '''
+    if request.method == "POST":
         # 从参数获取oldPassword和password
         oldPassword = request.POST.get('oldPassword', None)
         newPassword = request.POST.get('newPassword', None)
@@ -274,6 +277,10 @@ def forgetPwd(request):
 
 
 # 存储前端发回的案例参数视图
+# 获取表单数据
+# 解析表单数据生成对应models存入
+# 保存成功，返回消息和200状态码
+# 保存失败，返回消息和404状态码
 def saveCase(request):
     '''
     if not request.session.get('isLogin', None):
@@ -343,6 +350,30 @@ def saveCase(request):
             message = "注册失败"
             status = 404
         return JsonResponse({"message": message, "status": status, "caseId": newCaseId})
+
+
+# 解析前端发回数据并送入模型进行模拟，取得返回数据并输出
+def startSimulate(request):
+    if request.method == "POST":
+        userId = request.POST.get('userid', None)
+        caseName = request.POST.get('casename', None)
+        initcitydataList = request.POST.get('Initcitydata', None)
+        initroaddataList = request.POST.get('Initroaddata', None)
+        citypositionList = request.POST.get('Cityposition', None)
+
+        if not(userId and caseName and initcitydataList and initroaddataList and citypositionList):
+            return JsonResponse({"message": "表单未填写完整", "status": 404})
+        cityNum = len(initcitydataList)
+        roadNum = len(initroaddataList)
+        # 案例计数：初始人口与初始感染人口
+        initTotalNum = 0
+        initTotalInfectedNum = 0
+        for cityInfo in initcitydataList:
+            initTotalNum += cityInfo["initpop"]
+            initTotalInfectedNum += cityInfo["initinfect"]
+        message = "开始进行案例保存"
+        status = 200
+        newCaseId = 0
 
 
 class ImageCodeView(View):
