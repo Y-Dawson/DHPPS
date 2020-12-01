@@ -391,26 +391,111 @@ def saveCase(request):
 
 # 解析前端发回数据并送入模型进行模拟，取得返回数据并输出
 def startSimulate(request):
+    '''
+    if not request.session.get('isLogin', None):
+        return JsonResponse({"message": "你还未登录，保存案例需要先登录", "status": 404})
+    el
+    '''
     if request.method == "POST":
         userId = request.POST.get('userid', None)
         caseName = request.POST.get('casename', None)
-        initcitydataList = request.POST.get('Initcitydata', None)
-        initroaddataList = request.POST.get('Initroaddata', None)
-        citypositionList = request.POST.get('Cityposition', None)
-
-        if not(userId and caseName and initcitydataList and initroaddataList and citypositionList):
+        cityNum = request.POST.get('citynum', None)
+        roadNum = request.POST.get('roadnum', None)
+        initcitydata = request.POST.get('Initcitydata', None)
+        initroaddata = request.POST.get('Initroaddata', None)
+        cityposition = request.POST.get('Cityposition', None)
+        if not(userId and caseName and cityNum and roadNum and initcitydata and initroaddata and cityposition):
             return JsonResponse({"message": "表单未填写完整", "status": 404})
-        cityNum = len(initcitydataList)
-        roadNum = len(initroaddataList)
         # 案例计数：初始人口与初始感染人口
         initTotalNum = 0
         initTotalInfectedNum = 0
+        initcitydataList = initcitydata.split(",")
+        initroaddataList = initroaddata.split(",")
+        citypositionList = cityposition.split(",")
+
+        cityCount = 0
         for cityInfo in initcitydataList:
-            initTotalNum += cityInfo["initpop"]
-            initTotalInfectedNum += cityInfo["initinfect"]
+            value = cityInfo.split(":")
+            if cityCount % 3 == 1:
+                initpop = int(value)
+                initTotalNum += initpop
+            elif cityCount % 3 == 2:
+                initinfect = int(value)
+                initTotalInfectedNum += initinfect
+            cityCount += 1
         message = "开始进行案例保存"
         status = 200
         newCaseId = 0
+        try:
+            # 新增案例
+            newCase = models.Casedata.objects.create(
+                userid=userId,
+                casename=caseName,
+                citynumber=int(cityNum),
+                roadnumber=int(roadNum),
+                inittotal=initTotalNum,
+                inittotalinfected=initTotalInfectedNum
+            )
+            # 新增城市信息
+            cityCount = 0
+            cityname = ""
+            initpop = ""
+            initinfect = ""
+            x = 0.0
+            y = 0.0
+            for cityInfo in initcitydataList:
+                value = cityInfo.split(":")
+                posValue = citypositionList[cityCount].split(":")
+                if cityCount % 3 == 0:
+                    cityname = value
+                elif cityCount % 3 == 1:
+                    initpop = int(value)
+                    x = float(posValue)
+                elif cityCount % 3 == 2:
+                    initinfect = int(value)
+                    y = float(posValue)
+                    newCity = models.Initcitydata.objects.create(
+                        caseid=newCase.caseid,
+                        cityname=cityname,
+                        initpop=initpop,
+                        initinfect=initinfect
+                    )
+                    models.Cityposition.objects.create(
+                        cityid=newCity.cityid,
+                        x=x,
+                        y=y
+                    )
+                cityCount += 1
+
+            # 新增道路信息
+            roadCount = 0
+            for roadInfo in initroaddataList:
+                value = roadInfo.split(":")
+                if roadCount % 3 == 0:
+                    departure = value
+                elif roadCount % 3 == 1:
+                    destination = value
+                elif roadCount % 3 == 2:
+                    volume = float(value)
+                    models.Initroaddata.objects.create(
+                        caseid=newCase.caseid,
+                        departure=departure,
+                        destination=destination,
+                        volume=volume
+                    )
+                roadCount += 1
+            message = "保存案例成功"
+            status = 200
+            newCaseId = newCase.caseid
+        except Exception as e:
+            print('str(Exception):\t', str(Exception))
+            print('str(e):\t\t', str(e))
+            print('repr(e):\t', repr(e))
+            print('e.message:\t', e.message)
+            print('########################################################')
+            message = "注册失败"
+            status = 404
+        return JsonResponse({"message": message, "status": status, "caseId": newCaseId})
 
 
 class ImageCodeView(View):
