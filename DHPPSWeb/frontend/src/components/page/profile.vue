@@ -19,7 +19,7 @@
         </ul>
         <ul class="layui-nav layui-layout-right">
           <li class="layui-nav-item" style="line-height:40px;" >
-                <router-link to="/Setting"  style="margin-left:10px; float:left;">回到首页</router-link>
+                <router-link to="/setting"  style="margin-left:10px; float:left;">回到首页</router-link>
             </li>
             <li class="layui-nav-item" style="line-height:20px;" >
               <el-avatar shape="circle" :size="30" :fit="fit" :src="url"></el-avatar>
