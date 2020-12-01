@@ -306,7 +306,7 @@ def saveCase(request):
 
         cityCount = 0
         for cityInfo in initcitydataList:
-            value = cityInfo.split(":")
+            value = cityInfo.split(":")[1]
             if cityCount % 3 == 1:
                 initpop = int(value)
                 initTotalNum += initpop
@@ -335,8 +335,8 @@ def saveCase(request):
             x = 0.0
             y = 0.0
             for cityInfo in initcitydataList:
-                value = cityInfo.split(":")
-                posValue = citypositionList[cityCount].split(":")
+                value = cityInfo.split(":")[1]
+                posValue = citypositionList[cityCount].split(":")[1]
                 if cityCount % 3 == 0:
                     cityname = value
                 elif cityCount % 3 == 1:
@@ -361,7 +361,7 @@ def saveCase(request):
             # 新增道路信息
             roadCount = 0
             for roadInfo in initroaddataList:
-                value = roadInfo.split(":")
+                value = roadInfo.split(":")[1]
                 if roadCount % 3 == 0:
                     departure = value
                 elif roadCount % 3 == 1:
@@ -415,7 +415,7 @@ def startSimulate(request):
 
         cityCount = 0
         for cityInfo in initcitydataList:
-            value = cityInfo.split(":")
+            value = cityInfo.split(":")[1]
             if cityCount % 3 == 1:
                 initpop = int(value)
                 initTotalNum += initpop
@@ -444,8 +444,8 @@ def startSimulate(request):
             x = 0.0
             y = 0.0
             for cityInfo in initcitydataList:
-                value = cityInfo.split(":")
-                posValue = citypositionList[cityCount].split(":")
+                value = cityInfo.split(":")[1]
+                posValue = citypositionList[cityCount].split(":")[1]
                 if cityCount % 3 == 0:
                     cityname = value
                 elif cityCount % 3 == 1:
@@ -470,7 +470,7 @@ def startSimulate(request):
             # 新增道路信息
             roadCount = 0
             for roadInfo in initroaddataList:
-                value = roadInfo.split(":")
+                value = roadInfo.split(":")[1]
                 if roadCount % 3 == 0:
                     departure = value
                 elif roadCount % 3 == 1:
