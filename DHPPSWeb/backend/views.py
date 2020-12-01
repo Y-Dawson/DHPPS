@@ -178,15 +178,24 @@ def signup(request):
                 else:
                     # 当一切都OK的情况下，创建新用户
                     try:
-                        newAccountInfo = models.Accountinformation.objects.create(themeno=models.Theme.objects.filter(themeno=1).first(), createdate=timezone.now())
+                        newAccountInfo = models.Accountinformation.objects.create(
+                            themeno=models.Theme.objects.filter(themeno=1).first(),
+                            createdate=timezone.now()
+                        )
+
                         salt = secrets.token_hex(4)
                         encryPassword = hash_pwd(pwd=password, salt=salt)
-                        newLoginData = models.Logindata.objects.create(userid=newAccountInfo, userpassword=encryPassword, salt=salt)
-
-                        newUser = models.Personalprofile.objects.create(userid=newAccountInfo,
-                                                                        username=username,
-                                                                        phonenumber=phonenum,
-                                                                        email=email)
+                        newLoginData = models.Logindata.objects.create(
+                            userid=newAccountInfo,
+                            userpassword=encryPassword,
+                            salt=salt
+                        )
+                        newUser = models.Personalprofile.objects.create(
+                            userid=newAccountInfo,
+                            username=username,
+                            phonenumber=phonenum,
+                            email=email
+                        )
                         logger.info(json.dumps(newLoginData, cls=DateEnconding))
                         logger.info(json.dumps(newUser, cls=DateEnconding))
                         message = "注册成功"
@@ -232,14 +241,14 @@ def changePwd(request):
         return JsonResponse({"message": "参数传递方式有误", "status": 404})
 
 
-# 修改密码函数视图
+# 忘记密码函数视图
 # 从参数获取电话号码以及验证码，密码
 # 验证码比对通过后，生成新的salt和密码，存入数据库
 # 修改成功，返回消息和200状态码
 # 修改失败，返回消息和404状态码
 def forgetPwd(request):
     if request.session.get('isLogin', None):
-        return JsonResponse({"message": "你已经登录", "status": 404})
+        return JsonResponse({"message": "你已经登录，忘记密码需先退出", "status": 404})
     elif request.method == "POST":
         # 从参数获取phonenum和password
         phonenum = request.POST.get('phonenum', None)
@@ -262,6 +271,79 @@ def forgetPwd(request):
             return JsonResponse({"message": "修改成功", "status": 200})
     else:
         return JsonResponse({"message": "参数传递方式有误", "status": 404})
+
+
+# 存储前端发回的案例参数视图
+def saveCase(request):
+    '''
+    if not request.session.get('isLogin', None):
+        return JsonResponse({"message": "你还未登录，保存案例需要先登录", "status": 404})
+    el
+    '''
+    if request.method == "POST":
+        userId = request.session.get('userId', None)
+        if not userId != request.POST.get('userid', None):
+            return JsonResponse({"message": "当前登录信息异常，疑似被攻击", "status": 404})
+        # 从参数获取phonenum和password
+        caseName = request.POST.get('casename', None)
+        initcitydataList = request.POST.get('Initcitydata', None)
+        initroaddataList = request.POST.get('Initroaddata', None)
+        citypositionList = request.POST.get('Cityposition', None)
+        cityNum = len(initcitydataList)
+        roadNum = len(initroaddataList)
+        # 案例计数：初始人口与初始感染人口
+        initTotalNum = 0
+        initTotalInfectedNum = 0
+        for cityInfo in initcitydataList:
+            initTotalNum += cityInfo["initpop"]
+            initTotalInfectedNum += cityInfo["initinfect"]
+        message = "开始进行案例保存"
+        status = 200
+        newCaseId = 0
+        try:
+            # 新增案例
+            newCase = models.Casedata.objects.create(
+                userid=userId,
+                casename=caseName,
+                citynumber=cityNum,
+                roadnumber=roadNum,
+                inittotal=initTotalNum,
+                inittotalinfected=initTotalInfectedNum
+            )
+            # 新增城市信息
+            index = 0
+            for cityInfo in initcitydataList:
+                newCity = models.Initcitydata.objects.create(
+                    caseid=newCase.caseid,
+                    cityname=cityInfo["cityname"],
+                    initpop=cityInfo["initpop"],
+                    initinfect=cityInfo["initinfect"]
+                )
+                models.Cityposition.objects.create(
+                    cityid=newCity.cityid,
+                    x=citypositionList[index]['x'],
+                    y=citypositionList[index]['y']
+                )
+            # 新增道路信息
+            for roadInfo in initroaddataList:
+                models.Initroaddata.objects.create(
+                    caseid=newCase.caseid,
+                    departure=roadInfo['departure'],
+                    destination=roadInfo['destination'],
+                    volume=roadInfo["volume"]
+                )
+            message = "保存案例成功"
+            status = 200
+            newCaseId = newCase.caseid
+        except Exception as e:
+            print('str(Exception):\t', str(Exception))
+            print('str(e):\t\t', str(e))
+            print('repr(e):\t', repr(e))
+            print('e.message:\t', e.message)
+            print('########################################################')
+            message = "注册失败"
+            status = 404
+        return JsonResponse({"message": message, "status": status, "caseId": newCaseId})
 
 
 class ImageCodeView(View):

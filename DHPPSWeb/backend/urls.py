@@ -29,6 +29,9 @@ urlpatterns = [
     # 忘记密码请求
     path('forgetPwd/', views.forgetPwd, name="forgetPwd"),
 
+    # 保存案例请求
+    path('saveCase/', views.saveCase, name="saveCase"),
+
     # 用户管理数据请求
     path('userManage/', views.GetUserInfos, name="userManage"),
     path('generalUserManage/', views.GetGeneralUserInfos, name="generalUserManage"),
