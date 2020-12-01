@@ -301,8 +301,12 @@ def saveCase(request):
         initTotalNum = 0
         initTotalInfectedNum = 0
         for cityInfo in initcitydataList:
-            initTotalNum += cityInfo["initpop"]
-            initTotalInfectedNum += cityInfo["initinfect"]
+            cityStrList = cityInfo.split(",")
+            cityname = cityStrList[0].split(":")[1]
+            initpop = int(cityStrList[1].split(":")[1])
+            initinfect = int(cityStrList[2].split(":")[1])
+            initTotalNum += initpop
+            initTotalInfectedNum += initinfect
         message = "开始进行案例保存"
         status = 200
         newCaseId = 0
@@ -319,24 +323,39 @@ def saveCase(request):
             # 新增城市信息
             index = 0
             for cityInfo in initcitydataList:
+                cityStrList = cityInfo.split(",")
+                cityname = cityStrList[0].split(":")[1]
+                initpop = int(cityStrList[1].split(":")[1])
+                initinfect = int(cityStrList[2].split(":")[1])
                 newCity = models.Initcitydata.objects.create(
                     caseid=newCase.caseid,
-                    cityname=cityInfo["cityname"],
-                    initpop=cityInfo["initpop"],
-                    initinfect=cityInfo["initinfect"]
+                    cityname=cityname,
+                    initpop=initpop,
+                    initinfect=initinfect
                 )
+
+                posStrList = citypositionList[index].split(",")
+                x = float(posStrList[1].split(":")[1])
+                y = float(posStrList[2].split(":")[1])
                 models.Cityposition.objects.create(
                     cityid=newCity.cityid,
-                    x=citypositionList[index]['x'],
-                    y=citypositionList[index]['y']
+                    x=x,
+                    y=y
                 )
+                index += 1
+
             # 新增道路信息
             for roadInfo in initroaddataList:
+                cityStrList = cityInfo.split(",")
+                departure = cityStrList[0].split(":")[1]
+                destination = cityStrList[1].split(":")[1]
+                volume = float(cityStrList[2].split(":")[1])
+
                 models.Initroaddata.objects.create(
                     caseid=newCase.caseid,
-                    departure=roadInfo['departure'],
-                    destination=roadInfo['destination'],
-                    volume=roadInfo["volume"]
+                    departure=departure,
+                    destination=destination,
+                    volume=volume
                 )
             message = "保存案例成功"
             status = 200
