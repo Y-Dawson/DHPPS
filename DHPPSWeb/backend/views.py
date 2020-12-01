@@ -352,7 +352,7 @@ def saveCase(request):
                         initinfect=initinfect
                     )
                     models.Cityposition.objects.create(
-                        cityid=newCity.cityid,
+                        cityid=newCity,
                         x=x,
                         y=y
                     )
