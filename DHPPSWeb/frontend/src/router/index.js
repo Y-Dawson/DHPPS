@@ -18,7 +18,7 @@ import SPCaseEdit from '@/components/page/SPCaseEdit'
 import setting from '@/components/page/setting'
 import changePass from '@/components/page/changePass'
 import forgetPass from '@/components/page/forgetPass'
-
+import simulation from '@/components/page/simulation'
 
 Vue.use(Router)
 
@@ -31,8 +31,8 @@ export default new Router({
     },
     {path:'/modifyPI', component:modifyPI},
     {path:'/profile', component:profile},
-    {path:'/Login', component:Login},
-    {path:'/caseView', component:caseView},
+    {path:'/Login', component: Login},
+    {path:'/caseView', component: caseView},
     {path:'/signup', component: signup},
     {path:'/userManagement', component: userManagement},
     {path:'/userEdit', component: userEdit},
@@ -45,6 +45,7 @@ export default new Router({
     {path:'/SPCaseEdit', component: SPCaseEdit},
     {path:'/setting',component:setting},
     {path:'/changePass',component:changePass},
-    {path:'/forgetPass',component:forgetPass}
+    {path:'/forgetPass',component:forgetPass},
+    {path:'/simulation',component:simulation}
   ]
 })

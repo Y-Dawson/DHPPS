@@ -1,10 +1,8 @@
 <template>
-  <div id="login">
+  <div calss="login" :style="bgImg" >
     <div class="ms-login">
       <div class="ms-title">高传染性疾病预测系统</div>
         <el-form :model="loginForm" :rules="loginFormRules" ref="loginFormRef" class="ms-content" action="">
-          <div class="layui-form-item">
-            <div class="layui-inline">
               <div class="account">
                 <el-form-item prop="account">
                   <el-input
@@ -16,11 +14,7 @@
                   </el-input>
                 </el-form-item>
               </div>
-            </div>
-          </div>
 
-          <div class="layui-form-item">
-            <div class="layui-inline">
               <div class="password">
                 <el-form-item prop="password">
                   <el-input
@@ -33,9 +27,6 @@
                   </el-input>
                 </el-form-item>
               </div>
-            <!-- <div class="layui-form-mid layui-word-aux">请填写6到12位密码</div> -->
-            </div>
-          </div>
 
       <el-form-item class="btns">
         <el-button type="primary" @click="login">登 录</el-button>
@@ -50,13 +41,17 @@
 </template>
 
 <script>
+
 export default {
   data() {
     return {
+      bgImg:{ backgroundImage:"url(" + require("../../assets/img/background2.jpg") + ")",
+              height:'100vh',//这里一定要设置高度 否则背景图无法显示
+              backgroundRepeat: "no-repeat"},
       loginMassege:'',
       loginForm: {
-        account: "",
-        password: "",
+      account: "",
+      password: "",
       },
 
       loginFormRules: {
@@ -83,6 +78,8 @@ export default {
   methods: {
     submitMessage(){
       if(this.loginMassege=="登录成功"){
+        // this.$cookies.get(keyName)
+        // alert(this.$cookies.get(sessionid))
         this.$message.success("登录成功！");
         this.$router.push({path:'/setting'});
       }
@@ -147,10 +144,9 @@ export default {
 
 <style>
 @import "../../assets/layui/css/layui.css";
-body {
-  background-image: url(../../assets/img/background2.jpg);
-  /* width: 1000px; */
-}
+ /* body {
+  background-image: url(../../assets/img/background2.jpg)
+} */
 .ms-login {
     position: absolute;
     left: 50%;
@@ -176,28 +172,14 @@ body {
 }
 
 
-.layui-form input {
-  width: 300px;
-  height: 40px;
-}
-
-.layui-form .layui-input-inline {
-  margin: 0;
-}
-
-.layui-form .layui-form-item {
-  text-align: center;
-}
-
-.layui-form-item a {
-  font-size: 10px;
-}
-
 .account input.el-input__inner,
 .password input.el-input__inner {
   border-radius: 0px 5px 5px 0px;
 }
-
+.el-input{
+  width: 270px;
+  height: 20px;
+}
 .btns {
   display: flex;
   justify-content: center;

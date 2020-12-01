@@ -178,15 +178,24 @@ def signup(request):
                 else:
                     # 当一切都OK的情况下，创建新用户
                     try:
-                        newAccountInfo = models.Accountinformation.objects.create(themeno=models.Theme.objects.filter(themeno=1).first(), createdate=timezone.now())
+                        newAccountInfo = models.Accountinformation.objects.create(
+                            themeno=models.Theme.objects.filter(themeno=1).first(),
+                            createdate=timezone.now()
+                        )
+
                         salt = secrets.token_hex(4)
                         encryPassword = hash_pwd(pwd=password, salt=salt)
-                        newLoginData = models.Logindata.objects.create(userid=newAccountInfo, userpassword=encryPassword, salt=salt)
-
-                        newUser = models.Personalprofile.objects.create(userid=newAccountInfo,
-                                                                        username=username,
-                                                                        phonenumber=phonenum,
-                                                                        email=email)
+                        newLoginData = models.Logindata.objects.create(
+                            userid=newAccountInfo,
+                            userpassword=encryPassword,
+                            salt=salt
+                        )
+                        newUser = models.Personalprofile.objects.create(
+                            userid=newAccountInfo,
+                            username=username,
+                            phonenumber=phonenum,
+                            email=email
+                        )
                         logger.info(json.dumps(newLoginData, cls=DateEnconding))
                         logger.info(json.dumps(newUser, cls=DateEnconding))
                         message = "注册成功"
@@ -209,9 +218,12 @@ def signup(request):
 # 修改成功，返回消息和200状态码
 # 修改失败，返回消息和404状态码
 def changePwd(request):
+    '''
     if not request.session.get('isLogin', None):
         return JsonResponse({"message": "你还未登录", "status": 404})
-    elif request.method == "POST":
+    el
+    '''
+    if request.method == "POST":
         # 从参数获取oldPassword和password
         oldPassword = request.POST.get('oldPassword', None)
         newPassword = request.POST.get('newPassword', None)
@@ -232,14 +244,14 @@ def changePwd(request):
         return JsonResponse({"message": "参数传递方式有误", "status": 404})
 
 
-# 修改密码函数视图
+# 忘记密码函数视图
 # 从参数获取电话号码以及验证码，密码
 # 验证码比对通过后，生成新的salt和密码，存入数据库
 # 修改成功，返回消息和200状态码
 # 修改失败，返回消息和404状态码
 def forgetPwd(request):
     if request.session.get('isLogin', None):
-        return JsonResponse({"message": "你已经登录", "status": 404})
+        return JsonResponse({"message": "你已经登录，忘记密码需先退出", "status": 404})
     elif request.method == "POST":
         # 从参数获取phonenum和password
         phonenum = request.POST.get('phonenum', None)
@@ -262,6 +274,228 @@ def forgetPwd(request):
             return JsonResponse({"message": "修改成功", "status": 200})
     else:
         return JsonResponse({"message": "参数传递方式有误", "status": 404})
+
+
+# 存储前端发回的案例参数视图
+# 获取表单数据
+# 解析表单数据生成对应models存入
+# 保存成功，返回消息和200状态码
+# 保存失败，返回消息和404状态码
+def saveCase(request):
+    '''
+    if not request.session.get('isLogin', None):
+        return JsonResponse({"message": "你还未登录，保存案例需要先登录", "status": 404})
+    el
+    '''
+    if request.method == "POST":
+        userId = request.POST.get('userid', None)
+        caseName = request.POST.get('casename', None)
+        cityNum = request.POST.get('citynum', None)
+        roadNum = request.POST.get('roadnum', None)
+        initcitydata = request.POST.get('Initcitydata', None)
+        initroaddata = request.POST.get('Initroaddata', None)
+        cityposition = request.POST.get('Cityposition', None)
+        if not(userId and caseName and cityNum and roadNum and initcitydata and initroaddata and cityposition):
+            return JsonResponse({"message": "表单未填写完整", "status": 404})
+        # 案例计数：初始人口与初始感染人口
+        initTotalNum = 0
+        initTotalInfectedNum = 0
+        initcitydataList = initcitydata.split(",")
+        initroaddataList = initroaddata.split(",")
+        citypositionList = cityposition.split(",")
+
+        cityCount = 0
+        for cityInfo in initcitydataList:
+            value = cityInfo.split(":")[1]
+            if cityCount % 3 == 1:
+                initpop = int(value)
+                initTotalNum += initpop
+            elif cityCount % 3 == 2:
+                initinfect = int(value)
+                initTotalInfectedNum += initinfect
+            cityCount += 1
+        message = "开始进行案例保存"
+        status = 200
+        newCaseId = 0
+        try:
+            # 新增案例
+            newCase = models.Casedata.objects.create(
+                userid=models.Accountinformation.objects.filter(userid=userId).first(),
+                casename=caseName,
+                citynumber=int(cityNum),
+                roadnumber=int(roadNum),
+                inittotal=initTotalNum,
+                inittotalinfected=initTotalInfectedNum
+            )
+            # 新增城市信息
+            cityCount = 0
+            cityname = ""
+            initpop = ""
+            initinfect = ""
+            x = 0.0
+            y = 0.0
+            for cityInfo in initcitydataList:
+                value = cityInfo.split(":")[1]
+                posValue = citypositionList[cityCount].split(":")[1]
+                if cityCount % 3 == 0:
+                    cityname = value
+                elif cityCount % 3 == 1:
+                    initpop = int(value)
+                    x = float(posValue)
+                elif cityCount % 3 == 2:
+                    initinfect = int(value)
+                    y = float(posValue)
+                    newCity = models.Initcitydata.objects.create(
+                        caseid=newCase,
+                        cityname=cityname,
+                        initpop=initpop,
+                        initinfect=initinfect
+                    )
+                    models.Cityposition.objects.create(
+                        cityid=newCity,
+                        x=x,
+                        y=y
+                    )
+                cityCount += 1
+
+            # 新增道路信息
+            roadCount = 0
+            for roadInfo in initroaddataList:
+                value = roadInfo.split(":")[1]
+                if roadCount % 3 == 0:
+                    departure = value
+                elif roadCount % 3 == 1:
+                    destination = value
+                elif roadCount % 3 == 2:
+                    volume = float(value)
+                    models.Initroaddata.objects.create(
+                        caseid=newCase,
+                        departure=departure,
+                        destination=destination,
+                        volume=volume
+                    )
+                roadCount += 1
+            message = "保存案例成功"
+            status = 200
+            newCaseId = newCase.caseid
+        except Exception as e:
+            print('str(Exception):\t', str(Exception))
+            print('str(e):\t\t', str(e))
+            print('repr(e):\t', repr(e))
+            # print('e.message:\t', e.message)
+            print('########################################################')
+            message = "注册失败"
+            status = 404
+        return JsonResponse({"message": message, "status": status, "caseId": newCaseId})
+
+
+# 解析前端发回数据并送入模型进行模拟，取得返回数据并输出
+def startSimulate(request):
+    '''
+    if not request.session.get('isLogin', None):
+        return JsonResponse({"message": "你还未登录，保存案例需要先登录", "status": 404})
+    el
+    '''
+    if request.method == "POST":
+        userId = request.POST.get('userid', None)
+        caseName = request.POST.get('casename', None)
+        cityNum = request.POST.get('citynum', None)
+        roadNum = request.POST.get('roadnum', None)
+        initcitydata = request.POST.get('Initcitydata', None)
+        initroaddata = request.POST.get('Initroaddata', None)
+        cityposition = request.POST.get('Cityposition', None)
+        if not(userId and caseName and cityNum and roadNum and initcitydata and initroaddata and cityposition):
+            return JsonResponse({"message": "表单未填写完整", "status": 404})
+        # 案例计数：初始人口与初始感染人口
+        initTotalNum = 0
+        initTotalInfectedNum = 0
+        initcitydataList = initcitydata.split(",")
+        initroaddataList = initroaddata.split(",")
+        citypositionList = cityposition.split(",")
+
+        cityCount = 0
+        for cityInfo in initcitydataList:
+            value = cityInfo.split(":")[1]
+            if cityCount % 3 == 1:
+                initpop = int(value)
+                initTotalNum += initpop
+            elif cityCount % 3 == 2:
+                initinfect = int(value)
+                initTotalInfectedNum += initinfect
+            cityCount += 1
+        message = "开始进行案例保存"
+        status = 200
+        newCaseId = 0
+        try:
+            # 新增案例
+            newCase = models.Casedata.objects.create(
+                userid=models.Accountinformation.objects.filter(userid=userId).first(),
+                casename=caseName,
+                citynumber=int(cityNum),
+                roadnumber=int(roadNum),
+                inittotal=initTotalNum,
+                inittotalinfected=initTotalInfectedNum
+            )
+            # 新增城市信息
+            cityCount = 0
+            cityname = ""
+            initpop = ""
+            initinfect = ""
+            x = 0.0
+            y = 0.0
+            for cityInfo in initcitydataList:
+                value = cityInfo.split(":")[1]
+                posValue = citypositionList[cityCount].split(":")[1]
+                if cityCount % 3 == 0:
+                    cityname = value
+                elif cityCount % 3 == 1:
+                    initpop = int(value)
+                    x = float(posValue)
+                elif cityCount % 3 == 2:
+                    initinfect = int(value)
+                    y = float(posValue)
+                    newCity = models.Initcitydata.objects.create(
+                        caseid=newCase,
+                        cityname=cityname,
+                        initpop=initpop,
+                        initinfect=initinfect
+                    )
+                    models.Cityposition.objects.create(
+                        cityid=newCity,
+                        x=x,
+                        y=y
+                    )
+                cityCount += 1
+
+            # 新增道路信息
+            roadCount = 0
+            for roadInfo in initroaddataList:
+                value = roadInfo.split(":")[1]
+                if roadCount % 3 == 0:
+                    departure = value
+                elif roadCount % 3 == 1:
+                    destination = value
+                elif roadCount % 3 == 2:
+                    volume = float(value)
+                    models.Initroaddata.objects.create(
+                        caseid=newCase,
+                        departure=departure,
+                        destination=destination,
+                        volume=volume
+                    )
+                roadCount += 1
+            message = "保存案例成功"
+            status = 200
+            newCaseId = newCase.caseid
+        except Exception as e:
+            print('str(Exception):\t', str(Exception))
+            print('str(e):\t\t', str(e))
+            print('repr(e):\t', repr(e))
+            # print('e.message:\t', e.message)
+            print('########################################################')
+            message = "注册失败"
+            status = 404
+        return JsonResponse({"message": message, "status": status, "caseId": newCaseId})
 
 
 class ImageCodeView(View):

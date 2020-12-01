@@ -21,7 +21,7 @@
                 <a href="javascript:;" style="test-align:center;">回到首页</a>
             </li>
             <li class="layui-nav-item" style="line-height:20px;" >
-              <!-- <el-avatar shape="circle" :size="30" :fit="fit" :src="url"></el-avatar> -->
+              <el-avatar shape="circle" :size="30" :fit="fit" :src="url"></el-avatar>
             </li>
             <li class="layui-nav-item">
             <a href="javascript:;">

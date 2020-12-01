@@ -7,6 +7,10 @@ import router from './router'
 import ElementUI from 'element-ui'
 // import VueResource from 'vue-resource'
 import 'element-ui/lib/theme-chalk/index.css'
+
+// import VueCookies from 'vue-cookies'
+// Vue.use(VueCookies)
+
 axios.defaults.withCredentials = true;
 
 Vue.use(ElementUI)
@@ -14,7 +18,7 @@ Vue.use(ElementUI)
 Vue.config.productionTip = false
 
 axios.defaults.baseURL = '/backend'
-Vue.prototype.$http = axios
+Vue.prototype.$axios = axios
 axios.defaults.withCredentials = true;  //允许axios请求携带cookie等凭证
 
 /* eslint-disable no-new */
