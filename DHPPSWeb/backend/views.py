@@ -80,10 +80,13 @@ def login_required(view_func):
 # 登录成功，返回消息和200状态码
 # 登录失败，返回消息和404状态码
 def signin(request):
+    '''
     # 若已经登录，直接进入已登录账号
     if request.session.get('isLogin', None):
         return JsonResponse({"message": "你已经登录", "status": 404})
-    elif request.method == "POST":
+    el
+    '''
+    if request.method == "POST":
         # 从参数获取phonenum和password
         phonenum = request.POST.get('phonenum', None)
         password = request.POST.get('password', None)
@@ -105,7 +108,12 @@ def signin(request):
                     request.session['userId'] = accountInfo.userid
                     request.session['userAuthority'] = accountInfo.authority
                     print(request.session.get('userId', None))
-                    response = JsonResponse({"message": "登录成功", "status": 200})
+                    response = JsonResponse({
+                        "message": "登录成功",
+                        "status": 200,
+                        "userId": accountInfo.userid,
+                        "userAuthority": accountInfo.authority
+                        })
                     response.set_cookie('userId', accountInfo.userid)
                     return response
                 else:
@@ -225,11 +233,10 @@ def changePwd(request):
     '''
     if request.method == "POST":
         # 从参数获取oldPassword和password
+        userId = request.POST.get("userid", None)
         oldPassword = request.POST.get('oldPassword', None)
         newPassword = request.POST.get('newPassword', None)
-        if oldPassword and newPassword:
-            userId = request.session.get('userId', None)
-
+        if userId and oldPassword and newPassword:
             account = models.Accountinformation.objects.filter(userid=userId)
             if not account.exists():
                 return JsonResponse({"message": "当前账号与浏览器记录不一致", "status": 404})
@@ -250,9 +257,12 @@ def changePwd(request):
 # 修改成功，返回消息和200状态码
 # 修改失败，返回消息和404状态码
 def forgetPwd(request):
+    '''
     if request.session.get('isLogin', None):
         return JsonResponse({"message": "你已经登录，忘记密码需先退出", "status": 404})
-    elif request.method == "POST":
+    el
+    '''
+    if request.method == "POST":
         # 从参数获取phonenum和password
         phonenum = request.POST.get('phonenum', None)
         verifyCode = request.POST.get('verifyCode', None)
