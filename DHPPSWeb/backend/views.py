@@ -281,14 +281,13 @@ def saveCase(request):
     el
     '''
     if request.method == "POST":
-        userId = request.session.get('userId', None)
-        if not userId != request.POST.get('userid', None):
-            return JsonResponse({"message": "当前登录信息异常，疑似被攻击", "status": 404})
-        # 从参数获取phonenum和password
+        userId = request.POST.get('userid', None)
         caseName = request.POST.get('casename', None)
         initcitydataList = request.POST.get('Initcitydata', None)
         initroaddataList = request.POST.get('Initroaddata', None)
         citypositionList = request.POST.get('Cityposition', None)
+        if not(userId and caseName and initcitydataList and initroaddataList and citypositionList):
+            return JsonResponse({"message": "表单未填写完整", "status": 404})
         cityNum = len(initcitydataList)
         roadNum = len(initroaddataList)
         # 案例计数：初始人口与初始感染人口
