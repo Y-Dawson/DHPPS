@@ -429,7 +429,7 @@ def startSimulate(request):
         try:
             # 新增案例
             newCase = models.Casedata.objects.create(
-                userid=userId,
+                userid=models.Accountinformation.objects.filter(userid=userId).first(),
                 casename=caseName,
                 citynumber=int(cityNum),
                 roadnumber=int(roadNum),
