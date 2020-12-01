@@ -290,23 +290,30 @@ def saveCase(request):
     if request.method == "POST":
         userId = request.POST.get('userid', None)
         caseName = request.POST.get('casename', None)
-        initcitydataList = request.POST.get('Initcitydata', None)
-        initroaddataList = request.POST.get('Initroaddata', None)
-        citypositionList = request.POST.get('Cityposition', None)
-        if not(userId and caseName and initcitydataList and initroaddataList and citypositionList):
+        cityNum = request.POST.get('citynum', None)
+        roadNum = request.POST.get('roadnum', None)
+        initcitydata = request.POST.get('Initcitydata', None)
+        initroaddata = request.POST.get('Initroaddata', None)
+        cityposition = request.POST.get('Cityposition', None)
+        if not(userId and caseName and cityNum and roadNum and initcitydata and initroaddata and cityposition):
             return JsonResponse({"message": "表单未填写完整", "status": 404})
-        cityNum = len(initcitydataList)
-        roadNum = len(initroaddataList)
         # 案例计数：初始人口与初始感染人口
         initTotalNum = 0
         initTotalInfectedNum = 0
+        initcitydataList = initcitydata.split(",")
+        initroaddataList = initroaddata.split(",")
+        citypositionList = cityposition.split(",")
+
+        cityCount = 0
         for cityInfo in initcitydataList:
-            cityStrList = cityInfo.split(",")
-            cityname = cityStrList[0].split(":")[1]
-            initpop = int(cityStrList[1].split(":")[1])
-            initinfect = int(cityStrList[2].split(":")[1])
-            initTotalNum += initpop
-            initTotalInfectedNum += initinfect
+            value = cityInfo.split(":")
+            if cityCount % 3 == 1:
+                initpop = int(value)
+                initTotalNum += initpop
+            elif cityCount % 3 == 2:
+                initinfect = int(value)
+                initTotalInfectedNum += initinfect
+            cityCount += 1
         message = "开始进行案例保存"
         status = 200
         newCaseId = 0
@@ -315,48 +322,59 @@ def saveCase(request):
             newCase = models.Casedata.objects.create(
                 userid=userId,
                 casename=caseName,
-                citynumber=cityNum,
-                roadnumber=roadNum,
+                citynumber=int(cityNum),
+                roadnumber=int(roadNum),
                 inittotal=initTotalNum,
                 inittotalinfected=initTotalInfectedNum
             )
             # 新增城市信息
-            index = 0
+            cityCount = 0
+            cityname = ""
+            initpop = ""
+            initinfect = ""
+            x = 0.0
+            y = 0.0
             for cityInfo in initcitydataList:
-                cityStrList = cityInfo.split(",")
-                cityname = cityStrList[0].split(":")[1]
-                initpop = int(cityStrList[1].split(":")[1])
-                initinfect = int(cityStrList[2].split(":")[1])
-                newCity = models.Initcitydata.objects.create(
-                    caseid=newCase.caseid,
-                    cityname=cityname,
-                    initpop=initpop,
-                    initinfect=initinfect
-                )
-
-                posStrList = citypositionList[index].split(",")
-                x = float(posStrList[1].split(":")[1])
-                y = float(posStrList[2].split(":")[1])
-                models.Cityposition.objects.create(
-                    cityid=newCity.cityid,
-                    x=x,
-                    y=y
-                )
-                index += 1
+                value = cityInfo.split(":")
+                posValue = citypositionList[cityCount].split(":")
+                if cityCount % 3 == 0:
+                    cityname = value
+                elif cityCount % 3 == 1:
+                    initpop = int(value)
+                    x = float(posValue)
+                elif cityCount % 3 == 2:
+                    initinfect = int(value)
+                    y = float(posValue)
+                    newCity = models.Initcitydata.objects.create(
+                        caseid=newCase.caseid,
+                        cityname=cityname,
+                        initpop=initpop,
+                        initinfect=initinfect
+                    )
+                    models.Cityposition.objects.create(
+                        cityid=newCity.cityid,
+                        x=x,
+                        y=y
+                    )
+                cityCount += 1
 
             # 新增道路信息
+            roadCount = 0
             for roadInfo in initroaddataList:
-                cityStrList = cityInfo.split(",")
-                departure = cityStrList[0].split(":")[1]
-                destination = cityStrList[1].split(":")[1]
-                volume = float(cityStrList[2].split(":")[1])
-
-                models.Initroaddata.objects.create(
-                    caseid=newCase.caseid,
-                    departure=departure,
-                    destination=destination,
-                    volume=volume
-                )
+                value = roadInfo.split(":")
+                if roadCount % 3 == 0:
+                    departure = value
+                elif roadCount % 3 == 1:
+                    destination = value
+                elif roadCount % 3 == 2:
+                    volume = float(value)
+                    models.Initroaddata.objects.create(
+                        caseid=newCase.caseid,
+                        departure=departure,
+                        destination=destination,
+                        volume=volume
+                    )
+                roadCount += 1
             message = "保存案例成功"
             status = 200
             newCaseId = newCase.caseid
