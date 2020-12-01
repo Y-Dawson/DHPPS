@@ -320,7 +320,7 @@ def saveCase(request):
         try:
             # 新增案例
             newCase = models.Casedata.objects.create(
-                userid=userId,
+                userid=models.Accountinformation.objects.filter(userid=userId).first(),
                 casename=caseName,
                 citynumber=int(cityNum),
                 roadnumber=int(roadNum),
@@ -346,7 +346,7 @@ def saveCase(request):
                     initinfect = int(value)
                     y = float(posValue)
                     newCity = models.Initcitydata.objects.create(
-                        caseid=newCase.caseid,
+                        caseid=newCase,
                         cityname=cityname,
                         initpop=initpop,
                         initinfect=initinfect
@@ -369,7 +369,7 @@ def saveCase(request):
                 elif roadCount % 3 == 2:
                     volume = float(value)
                     models.Initroaddata.objects.create(
-                        caseid=newCase.caseid,
+                        caseid=newCase,
                         departure=departure,
                         destination=destination,
                         volume=volume
@@ -491,7 +491,7 @@ def startSimulate(request):
             print('str(Exception):\t', str(Exception))
             print('str(e):\t\t', str(e))
             print('repr(e):\t', repr(e))
-            print('e.message:\t', e.message)
+            # print('e.message:\t', e.message)
             print('########################################################')
             message = "注册失败"
             status = 404
