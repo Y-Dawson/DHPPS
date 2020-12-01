@@ -17,6 +17,7 @@ import SPCaseManage from '@/components/page/SPCaseManage'
 import SPCaseEdit from '@/components/page/SPCaseEdit'
 import Setting from '@/components/page/Setting'
 import changePass from '@/components/page/changePass'
+import forgetPass from '@/components/page/forgetPass'
 
 
 Vue.use(Router)
@@ -43,6 +44,7 @@ export default new Router({
     {path:'/SPCaseManage', component: SPCaseManage},
     {path:'/SPCaseEdit', component: SPCaseEdit},
     {path:'/Setting',component:Setting},
-    {path:'/changePass',component:changePass}
+    {path:'/changePass',component:changePass},
+    {path:'/forgetPass',component:forgetPass}
   ]
 })

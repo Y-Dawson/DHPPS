@@ -130,7 +130,7 @@ export default {
         setTimeout(() => {
           let reg =  /^[(a-zA-Z0-9\u4e00-\u9fa5){1}_#]{4,20}$/
           if (value == '' || !reg.test(value)) {
-            callback(new Error('昵称限16个字符，支持中英文、数字、减号或下划线'));
+            callback(new Error('昵称限16个字符，支持中英文、数字或下划线'));
           }
           else{
             callback();
@@ -262,6 +262,7 @@ export default {
     },
     skip() {
       if(this.returnmessage=="注册成功") {
+        this.$message(this.returnmessage);
         this.$router.push({path:'/Login'});
       }
       else this.$message(this.returnmessage);
@@ -276,6 +277,7 @@ body {
   /* width: 1000px; */
 }
 </style>
+
 <style scoped>
 @import "../../assets/layui/css/layui.css";
 .ms-login {
@@ -302,60 +304,8 @@ body {
   padding: 30px 30px;
 }
 
-
-.layui-form input {
-  width: 300px;
-  height: 40px;
-}
-
-.layui-form .layui-input-inline {
-  margin: 0;
-}
-
 .layui-form .layui-form-item {
   text-align: center;
-}
-
-.layui-form-item a {
-  font-size: 10px;
-}
-
-.account input.el-input__inner,
-.password input.el-input__inner {
-  border-radius: 0px 5px 5px 0px;
-}
-
-.btns {
-  display: flex;
-  justify-content: center;
-}
-
-.layui-form * {
-  margin: 0;
-}
-
-.layui-form-item .layui-input-block {
-  margin-bottom: 20px;
-}
-
-.get-verification {
-  margin-left: -25px;
-  background-color: #fff;
-  font-size: 16px;
-  border-radius: 10px;
-}
-
-.username input.el-input__inner,
-.password input.el-input__inner,
-.password2 input.el-input__inner,
-.phone input.el-input__inner,
-.securitt_code input.el-input__inner {
-  border-radius: 30px;
-}
-
-.securitt_code input.el-input__inner {
-  margin-left: -150px;
-  width: 250px;
 }
 
 .el-button--info {

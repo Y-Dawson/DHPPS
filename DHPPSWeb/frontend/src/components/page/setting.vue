@@ -13,8 +13,7 @@
           </li>
 
           <li class="layui-nav-item" style="line-height: 40px">
-            <router-link to="/profile" class="create-account" style="margin-left:10px; float:left;">个人中心</router-link>
-            <!-- <a href="profile.vue" style="test-align: center">个人中心</a> -->
+            <a href="profile.vue" style="test-align: center">个人中心</a>
           </li>
           <li class="layui-nav-item" style="line-height: 20px">
             <el-avatar
@@ -26,7 +25,7 @@
           </li>
           <li class="layui-nav-item">
             <a href="javascript:;">
-              <span>{{ content.username}}</span>
+              <span>用户名</span>
             </a>
           </li>
         </ul>
@@ -412,9 +411,6 @@ var cn = 0;
 export default {
   data() {
     return {
-      // 用户信息
-      content:[],
-
       np: false,
       cp: false,
       dp: false,
@@ -504,10 +500,6 @@ export default {
       },
     };
   },
-  created: function () {
-      //为了在内部函数能使用外部函数的this对象，要给它赋值了一个名叫self的变量。
-      this.getContent()
-  },
   // mounted() {
   //   this.connect_city();
   // },
@@ -566,6 +558,8 @@ export default {
       this.dr = false;
       this.sc = false;
       this.mc = false;
+
+      this.$router.push("/simulation");
     },
 
     sct(sc) {
@@ -578,7 +572,7 @@ export default {
       this.bs = false;
       this.mc = false;
 
-
+      this.save_confirm().then((response) => {});
     },
 
     mct(mc) {
@@ -620,6 +614,112 @@ export default {
     //       Global.cityForm.citytop
     //   );
     // },
+    save_confirm() {
+      this.$prompt("请输入此案例名称", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        inputPattern: /^[0-9]/,
+        inputErrorMessage: "案例名称格式不正确",
+      })
+        .then(({ value }) => {
+          this.sc = false;
+
+          var myFormData = new FormData();
+
+          myFormData.append("userid", 1);
+
+          myFormData.append("casename", value);
+
+          var city_infor = [];
+          var cn = "Z";
+          var initpop = 0;
+          var initinfect = 0;
+          var loopcnt = 0;
+          var citycnt = 0;
+          for (var cid in this.city_po) {
+            loopcnt += 1;
+            if (loopcnt == 1) {
+              cn = this.city_po[cid].substring(0, 1);
+              initpop = this.city_po[cid].substring(7);
+            }
+            if (loopcnt == 2) {
+              initinfect = this.city_po[cid].substring(7);
+              citycnt += 1;
+              var s =
+                "cityname:" +
+                cn +
+                ",initpop:" +
+                initpop +
+                ",initinfect:" +
+                initinfect;
+              city_infor.push(s);
+              loopcnt = 0;
+            }
+          }
+          myFormData.append("citynum", citycnt);
+
+          var roadcnt = 0;
+          var road_inf = [];
+          for (var rid in this.road_di) {
+            roadcnt += 1;
+            var departure = this.road_di[rid].substring(0, 1);
+            var destination = this.road_di[rid].substring(2, 3);
+            var volume = this.road_di[rid].substring(4);
+            var s =
+              "departure:" +
+              departure +
+              ",destination:" +
+              destination +
+              ",volume:" +
+              volume;
+            road_inf.push(s);
+          }
+          myFormData.append("roadnum", roadcnt);
+
+          myFormData.append("Initcitydata", city_infor);
+          myFormData.append("Initroaddata", road_inf);
+
+          var city_position = [];
+          loopcnt = 0;
+          for (var cid in this.city_po) {
+            loopcnt += 1;
+            if (loopcnt % 2 == 1) {
+              var cityName = this.city_po[cid].substring(0, 1);
+              var cityID = this.getID(cityName);
+
+              console.log("cityName:" + cityName + " cityID:" + cityID);
+
+              var c = document.getElementById(cityID);
+              var x = c.style.left.substring(0, c.style.left.length - 2);
+              var y = c.style.top.substring(0, c.style.top.length - 2);
+              var s = "cityname:" + cityName + ",x:" + x + ",y:" + y;
+              city_position.push(s);
+            }
+          }
+          myFormData.append("Cityposition", city_position);
+
+          for (var value of myFormData.values()) {
+            console.log(value);
+          }
+
+          axios
+            .post("http://127.0.0.1:8000/backend/saveCase/", myFormData)
+            .then(
+              (response) => (alert(JSON.stringify(response)), alert("保存案例"))
+            )
+            .catch(function (error) {
+              alert(JSON.stringify(response));
+              alert("发送失败");
+            });
+        })
+        .catch(() => {
+          this.sc = false;
+          this.$message({
+            type: "info",
+            message: "取消输入",
+          });
+        });
+    },
 
     show(e) {
       window.cityleft = e.pageX;
@@ -697,10 +797,34 @@ export default {
           }
 
           var ll = document.getElementById("line" + linecnt);
-          ll.style.left = (ttcx1 + ttcx2) / 2 - 100 + "px";
+          // ll.style.left = (ttcx1 + ttcx2) / 2 - parseInt((parseInt(dis)*Math.abs(Math.cos(rotang)))/2) + "px";
+          // var trotang = rotang;
+          // if (trotang > 90) {
+          //   trotang = 180 - trotang;
+          // }
+          // if (ttcx1 >= ttcx2) {
+          //   ll.style.left = ttcx2 + "px";
+          //   // ttcx2 -
+          //   // parseInt(dis) / 2 +
+          //   // parseInt((parseInt(dis) * Math.abs(Math.cos(trotang))) / 2) +
+          //   // "px";
+          // } else {
+          //   ll.style.left = ttcx1 + "px";
+          //   // ttcx1 -
+          //   // parseInt(dis) / 2 +
+          //   // parseInt((parseInt(dis) * Math.abs(Math.cos(trotang))) / 2) +
+          //   // "px";
+          // }
+
+          // ll.style.left = ttcx1 + "px";
+          ll.style.left = (ttcx1 + ttcx2) / 2 - parseInt(dis) / 2 + 20 + "px";
           ll.style.top = (ttcy1 + ttcy2) / 2 + 50 + "px";
           ll.style.width = parseInt(dis) + "px";
           ll.style.transform = "rotate(" + rotang + "deg)";
+
+          console.log("dis_cos：" + (parseInt(dis) * Math.cos(rotang)) / 2);
+          console.log("ll.style.left：" + ll.style.left);
+          console.log("ttcx1：" + ttcx1);
 
           console.log("dis：" + dis);
           console.log("width：" + ll.style.width);
@@ -840,8 +964,15 @@ export default {
           console.log("city：" + e);
           var ce = this.getName(city_tno);
           var cid;
-          
+
           for (var j in this.road_di) {
+            console.log("第一次输出：" + this.road_di[j]);
+          }
+
+          var wait_delete = [];
+
+          for (var j in this.road_di) {
+            console.log("road_di数组:" + this.road_di[j]);
             var c1 = this.road_di[j].substring(0, 1);
             var c2 = this.road_di[j].substring(2, 3);
             console.log("c1：" + c1 + " c1.type：" + typeof c1);
@@ -850,11 +981,13 @@ export default {
             console.log("j：" + j);
             if (c1 == ce) {
               cid = this.getID(c2);
-              this.road_di.splice(j, 1);
+              // this.road_di.splice(j, 1);
+              wait_delete.push(j);
             }
             if (c2 == ce) {
               cid = this.getID(c1);
-              this.road_di.splice(j, 1);
+              wait_delete.push(j);
+              // this.road_di.splice(j, 1);
             }
             var dc = document.getElementById(cid);
 
@@ -884,8 +1017,14 @@ export default {
               if (td == ttw) {
                 tr.style.left = 10000 + "px";
                 tr.style.top = 10000 + "px";
+                break;
               }
             }
+          }
+
+          var twd = wait_delete.reverse();
+          for (var j in twd) {
+            this.road_di.splice(twd[j], 1);
           }
 
           c.style.left = 10000 + "px";
@@ -950,6 +1089,10 @@ export default {
       }
     },
 
+    // changeString(str) {
+    //   return str.replace(/<br>/g, "\n");
+    // },
+
     city_confirm() {
       this.np = false;
       // console.log("city_Name:" + this.cityForm.cityName);
@@ -957,8 +1100,9 @@ export default {
       console.log("city_Infected:" + this.cityForm.beginInfected);
       var cn = this.getName(citycnt);
 
-      var cy = cn + "：" + this.cityForm.population;
-      // console.log(cy);
+      var cy = cn + ": 总人口:" + this.cityForm.population;
+      this.city_po.push(cy);
+      cy = "初始感染人数:" + this.cityForm.beginInfected;
       this.city_po.push(cy);
 
       this.setButton(citycnt);
@@ -989,19 +1133,6 @@ export default {
       if (n == 1) this.isdisabled1 = true;
       if (n == 2) this.isdisabled2 = true;
       if (n == 3) this.isdisabled3 = true;
-    },
-
-    getContent: function () {
-      var self = this;
-        axios
-          .get("http://127.0.0.1:8000/backend/profile/7/")
-          .then(response => (
-            self.content = response.data
-            // alert(JSON.stringify(response))
-          ))
-          .catch(function (error) { // 请求失败处理
-            alert("数据请求失败wdnmd");
-          });  
     },
   },
 };
@@ -1097,8 +1228,7 @@ export default {
   background-color: #bfa;
 } */
 .tools-wrapper button:hover {
-  background-color: rgb(255, 255, 255);
-  font-weight: bold;
+  background-color: skyblue;
 }
 /* 
 .tools-wrapper button:active {
@@ -1115,7 +1245,7 @@ export default {
   height: 69px;
   color: #000;
   border: 1px solid transparent;
-  background-color: #8b9bbd;
+  background-color: red;
   /* cursor: url(); */
 }
 
@@ -1240,7 +1370,7 @@ export default {
 }
 
 .add-wrapper button:hover {
-  background-color: rgb(182, 182, 182);
+  background-color: red;
 }
 
 .add-wrapper button:active {
@@ -1314,9 +1444,8 @@ canvas {
   width: 190px;
   margin-top: -220px;
   margin-left: 60px;
-  /* border: 1px solid rgb(187, 187, 187); */
-  background-color: rgba(187, 187, 187, 0.3);
-  border-radius: 10px;
+  border: 1px solid rgb(187, 187, 187);
+  background-color: #bfa;
   z-index: 9999;
 }
 
@@ -1330,7 +1459,7 @@ canvas {
   z-index: 9999;
 }
 
-.city-infor .el-form-item{
+.city-infor .el-form-item {
   margin-bottom: 15px;
 }
 

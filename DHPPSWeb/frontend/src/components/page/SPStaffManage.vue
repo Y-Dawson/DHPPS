@@ -62,8 +62,8 @@
                                     <td>{{item.address}}</td>
                                     <td>{{item.remark}}</td>
                                     <td>
-                                        <button><router-link :to="{path:'/SPEdit',query:{uN:item.username,uT:item.phonenumber,uI:item.userid,uC:item.createdate}}">编辑</router-link></button>
-                                        <button type="danger" @click="handleDel(item.userid)">删除</button>
+                                        <button class="buttonA"><router-link :to="{path:'/SPEdit',query:{uN:item.username,uT:item.phonenumber,uI:item.userid,uC:item.createdate}}">编辑</router-link></button>
+                                        <button class="buttonA" type="danger" @click="handleDel(item.userid)">删除</button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -128,7 +128,8 @@ export default {
             self.content = response.data.data,
             self.paginate=response.data.pagination,
             self.pageSize=response.data.pageSize,
-            self.totalPage=Math.ceil(self.paginate / self.pageSize)
+            self.totalPage=Math.ceil(self.paginate / self.pageSize),
+            this.testPage()
             // alert(JSON.stringify(response))
           ))
           .catch(function (error) { // 请求失败处理
@@ -185,32 +186,23 @@ export default {
              this.currentPage++;
              this.getContent();
             
-        }
+        },
+      testPage:function(){
+        if(this.totalPage==0) this.totalPage=1;
+      }
     }
   }
 </script>
 
-// 修改elementui的样式
-<style>
-.el-pagination.is-background .el-pager li:not(.disabled).active{
-  background-color:#55587e!important;
-}
-.el-pagination.is-background .el-pager li:not(.disabled).active:hover{
-    color:#fff !important;
-}
-.el-pagination.is-background .el-pager li:hover{
-  color:#55587e !important;
-}
-</style>
-
 <style scoped>
 @import "../../assets/layui/css/layui.css";
 
-
+/* 列表大小 */
 .list{
   text-align:center;
-  margin: 10px 300px;
+  margin: 20px 40px;
 }
+/* 分页 */
 .paginate{
   margin-top: 20px;
   text-align: center;
@@ -225,137 +217,63 @@ export default {
 .primaryb:hover{
   background: #8b9bbd;
 }
-/* 表单 */
-.el-form {
-  text-align:center;
+/* 编辑删除按钮 */
+.buttonA{
+  border: 5px;
+  box-shadow:3px 3px 5px #d6d6d6;
+  width: 40px;
+  height: 20px;
 }
-.el-form-item{
-  margin-top: 20px;
-  width: 320px;
-}
-/* 案例块文字内容 */
-.box-text{
-    margin-left: 5px;
-    line-height: 18px;
-    font-size: 12px;
-    color:rgb(71, 71, 71);
-}
-/* 案例块样式 */
-.box-card{
-    width:240px;
-    float:left;
-    margin-right:50px;
-    margin-bottom:20px;
-}
-/* el按钮 */
-.el-button{
-  margin-top: 30px;
-  background: #55587e;
-  border:0px;
-  width: 60px;
-  height: 30px;
-}
-.reset{
-  background: #fff;
-  border:1px #55587e solid;
-}
-.el-checkbox :hover{
+.buttonA:hover{
   background: #8b9bbd;
 }
 
 /* 左侧导航栏 */
-         /* 第一个hover */
-        .layui-nav-tree .layui-nav-item a{
-            text-align: center;
-            font-weight: bold;
-            background-color: rgb(131, 137, 158);
-        }
-        .layui-nav-tree .layui-nav-item a:hover{background-color:#55587e}
-        /* 第二三块的字体 */
-        .layui-nav-tree .layui-nav-child a{
-            text-align: center;
-            height:40px;
-            line-height:40px;
-            font-weight:normal;
-            background-color:#fff;
-            color:rgba(10, 12, 22, 0.411)
-        }
-        /* 第二三块的背景 */
-        .layui-nav-itemed>.layui-nav-child{
-            display:block;
-            padding:0;
-            background-color:rgba(212, 187, 187, 0.966)
-        }
-        /* 第二三块的hover */
-        .layui-nav .layui-nav-child a:hover{background-color:#55587e;color:rgb(255, 255, 255)}
-        /* LOGO */
-       .layui-layout-admin .layui-logo{
-            position:absolute;
-            left:0;
-            top:0;
-            width:200px;
-            height:50%;
-            line-height:40px;
-            text-align:center;
-            color:#ffffff;
-        }
-        .layui-layout-admin .layui-logotext{
-            position:absolute;
-            left:0;
-            top:0;
-            width:200px;
-            height:50%;
-            line-height:80px;
-            text-align:center;
-            color:#ffffff;
-        }
-        .layui-layout-admin .layui-header{background-color:#8b9bbd}
-        .layui-side-scroll{
-            position:relative;
-            width:220px;height:100%;
-            overflow-x:hidden;
-            background-color: #ffffff;
-        }
-        /* 选项卡 */
-        .layui-tab-brief{
-            color:#61637c;
-        }
-        .layui-tab-title{
-            color:#61637c;
-        }
-        .layui-tab-brief>.layui-tab-more li.layui-this:after,.layui-tab-brief>.layui-tab-title .layui-this:after{
-            border:none;
-            border-radius:0;
-            border-bottom:2px solid rgb(245, 152, 65)
-        }
-        .layui-this{
-            color: #55587e;
-            font-weight: bold;
-        }
-        /* 列表list */
-        .list{
-            margin: 20px 40px;
-        }
-        ul.pagination {
-            display: inline-block;
-            padding: 0;
-            margin: 0;
-        }
-
-        ul.pagination li {display: inline;}
-
-        ul.pagination li a {
-            color: black;
-            float: left;
-            padding: 8px 16px;
-            text-decoration: none;
-        }
-
-        ul.pagination li a.active {
-            background-color: #55587e;
-            color: white;
-        }
-        .layui-off-content{
-            display: none;
-        }
+/* 第一个hover */
+.layui-nav-tree .layui-nav-item a{
+  text-align: center;
+  font-weight: bold;
+  background-color: rgb(131, 137, 158);
+}
+.layui-nav-tree .layui-nav-item a:hover{background-color:#55587e}
+/* 第二三块的字体 */
+.layui-nav-tree .layui-nav-child a{
+  text-align: center;
+  height:40px;
+  line-height:40px;
+  font-weight:normal;
+  background-color:#fff;
+  color:rgba(10, 12, 22, 0.411)
+}
+/* 第二三块的背景 */
+.layui-nav-itemed>.layui-nav-child{
+  display:block;
+  padding:0;
+  background-color:rgba(212, 187, 187, 0.966)
+}
+/* 第二三块的hover */
+.layui-nav .layui-nav-child a:hover{background-color:#55587e;color:rgb(255, 255, 255)}
+/* 左侧位置 */
+.layui-side-scroll{
+  position:relative;
+  width:220px;height:100%;
+  overflow-x:hidden;
+  background-color: #ffffff;
+}
+/* 选项卡 */
+.layui-tab-brief{
+  color:#61637c;
+}
+.layui-tab-title{
+  color:#61637c;
+}
+.layui-tab-brief>.layui-tab-more li.layui-this:after,.layui-tab-brief>.layui-tab-title .layui-this:after{
+  border:none;
+  border-radius:0;
+  border-bottom:2px solid rgb(245, 152, 65)
+}
+.layui-this{
+  color: #55587e;
+  font-weight: bold;
+}
 </style>
