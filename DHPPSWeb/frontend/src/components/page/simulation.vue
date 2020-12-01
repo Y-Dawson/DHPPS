@@ -175,7 +175,7 @@
               top: cityForm.citytop + 'px',
             }"
           >
-            <img src="../../assets/img/city.png" alt="" />
+            <img src="../../assets/layui/images/city.png" alt="" />
             <div class="city-infor">
               <el-form-item prop="population">
                 <el-input
@@ -209,7 +209,7 @@
               top: cityForm.citytop + 'px',
             }"
           >
-            <img src="../../assets/img/city.png" alt="" />
+            <img src="../../assets/layui/images/city.png" alt="" />
             <div class="city-infor">
               <el-form-item prop="population">
                 <el-input
@@ -243,7 +243,7 @@
               top: cityForm.citytop + 'px',
             }"
           >
-            <img src="../../assets/img/city.png" alt="" />
+            <img src="../../assets/layui/images/city.png" alt="" />
             <div class="city-infor">
               <el-form-item prop="population">
                 <el-input
