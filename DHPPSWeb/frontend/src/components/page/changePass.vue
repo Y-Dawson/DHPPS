@@ -21,7 +21,7 @@
                 <a href="javascript:;" style="test-align:center;">回到首页</a>
             </li>
             <li class="layui-nav-item" style="line-height:20px;" >
-              <!-- <el-avatar shape="circle" :size="30" :fit="fit" :src="url"></el-avatar> -->
+              <el-avatar shape="circle" :size="30" :fit="fit" :src="url"></el-avatar>
             </li>
             <li class="layui-nav-item">
             <a href="javascript:;">
@@ -94,9 +94,12 @@ export default {
           return callback(new Error('请输入密码'));
         }
         setTimeout(() => {
-          let reg =  /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[._~!@#$^&*])[A-Za-z0-9._~!@#$^&*]{6,12}$/
-          if (value == '' || !reg.test(value)) {
-            callback(new Error('密码长度为6-12位，必须由字母、数字、特殊符号（. _ ~ ! @ # $ ^ & *）组成，区分大小写'));
+          // let reg =  /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[._~!@#$^&*])[A-Za-z0-9._~!@#$^&*]{6,12}$/
+          // if (value == '' || !reg.test(value)) {
+          //   callback(new Error('密码长度为6-12位，必须由字母、数字、特殊符号（. _ ~ ! @ # $ ^ & *）组成，区分大小写'));
+          // }
+          if(value==''){
+            callback(new Error('请输入密码'))
           }
           else{
             callback();
@@ -144,54 +147,41 @@ export default {
       this.getContent()
     },
     methods: {
-        judgePre(){
-            if(passMassege)
-                this.$message.error("密码错误")
-        },
-        changeHandler(value){
-        this.sex=value
-        },
-        getContent: function () {
+        changePass: function () {
             var self = this
-            var prepass=$("#prepass").val()
+            // var prepass=$("#prepass").val()
             axios
-            .get("http://127.0.0.1:8000/backend/profile/7/")
+            .post("http://127.0.0.1:8000/backend/changePwd/",{
+              pram:{
+                oldPassword: $('#prepass').val(),
+                newPassword: $('#newpass').val()
+              }
+            })
             .then(response => (
-                self.content = response.data
-                // alert(JSON.stringify(response))
+                self.content = response.data,
+                alert(JSON.stringify(response))
             ))
             .catch(function (error) { // 请求失败处理
                 alert("数据请求失败wdnmd");
             });
         },
-        putContent: function () {
-            var self = this;
-            var uname = $("#inputname").val();
-            axios
-            .put('http://127.0.0.1:8000/backend/profile/7/',{
-                username : $("#inputname").val(),
-                phonenumber : $('#inputphone').val(),
-                birth : $('#inputbirth').val(),
-                sex: this.ruleForm.radio,
-                email: $('#inputmail').val(),
-                address: $('#inputaddr').val()
-            })
-            .then(response => (
-                self.content = response,
-                alert("数据发送"),
-                alert(JSON.stringify(response))
-            ))
-            .catch(function (error) {
-                alert(JSON.stringify(response))
-                alert("数据发送失败")
-                console.log(error.response)
-            });
-        },
+        getContent: function () {
+        var self = this;
+        axios
+          .get("http://127.0.0.1:8000/backend/profile/7/")
+          .then(response => (
+            self.content = response.data
+            // alert(JSON.stringify(response))
+          ))
+          .catch(function (error) { // 请求失败处理
+            alert("数据请求失败wdnmd");
+          });
+      },
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {
             if (valid) {
-                this.getContent()
-                this.putContent()
+                this.changePass()
+                // this.putContent()
                 alert('submit!')
             } else {
                 console.log('error submit!!')

@@ -13,8 +13,17 @@
           </li>
 
           <li class="layui-nav-item" style="line-height: 40px">
+<<<<<<< Updated upstream
             <router-link to="/profile" class="create-account" style="margin-left:10px; float:left;">个人中心</router-link>
             <!-- <a href="profile.vue" style="test-align: center">个人中心</a> -->
+=======
+            <router-link to="profile" style="test-align: center">个人中心</router-link>
+          </li>
+          <!-- 登出功能 -->
+          <li class="layui-nav-item" style="line-height: 40px;margin-left:-20px;">
+            <el-button id="delete" type="text" style="margin-left:20px;margin-right:20px;font-size:8px;color:#fff" @click="">退出登录</el-button>
+            <!-- <router-link to="Login">退出登录</router-link> -->
+>>>>>>> Stashed changes
           </li>
           <li class="layui-nav-item" style="line-height: 20px">
             <el-avatar
@@ -25,9 +34,13 @@
             ></el-avatar>
           </li>
           <li class="layui-nav-item">
+<<<<<<< Updated upstream
             <a href="javascript:;">
               <span>{{ content.username}}</span>
             </a>
+=======
+            <span style="margin-left:10px;">用户名</span>
+>>>>>>> Stashed changes
           </li>
         </ul>
       </div>
@@ -516,6 +529,8 @@ export default {
   // }
 
   methods: {
+
+
     npt(np) {
       this.cp = false;
       this.dp = false;
@@ -1007,7 +1022,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 @import "../../assets/layui/css/layui.css";
 
 /* body {
@@ -1105,9 +1120,6 @@ export default {
   background-color: yellowgreen;
 } */
 
-.el-form-item {
-  margin: 0;
-}
 
 .tools-wrapper .active1 {
   display: block;

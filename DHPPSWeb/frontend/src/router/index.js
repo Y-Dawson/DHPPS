@@ -17,7 +17,7 @@ import SPCaseManage from '@/components/page/SPCaseManage'
 import SPCaseEdit from '@/components/page/SPCaseEdit'
 import Setting from '@/components/page/Setting'
 import changePass from '@/components/page/changePass'
-
+import forgetPass from '@/components/page/forgetPass'
 
 Vue.use(Router)
 
@@ -30,8 +30,13 @@ export default new Router({
     },
     {path:'/modifyPI', component:modifyPI},
     {path:'/profile', component:profile},
+<<<<<<< Updated upstream
     {path:'/Login', component:Login},
     {path:'/caseView', component:caseView},
+=======
+    {path:'/Login', component: Login},
+    {path:'/caseView', component: caseView},
+>>>>>>> Stashed changes
     {path:'/signup', component: signup},
     {path:'/userManagement', component: userManagement},
     {path:'/userEdit', component: userEdit},
@@ -43,6 +48,7 @@ export default new Router({
     {path:'/SPCaseManage', component: SPCaseManage},
     {path:'/SPCaseEdit', component: SPCaseEdit},
     {path:'/Setting',component:Setting},
-    {path:'/changePass',component:changePass}
+    {path:'/changePass',component:changePass},
+    {path:'/forgetPass',component:forgetPass}
   ]
 })

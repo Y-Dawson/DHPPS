@@ -1,5 +1,5 @@
 <template>
-  <div id="forgetPass">
+  <div id="forgetPass" :style="bgImg">
     <div class="ms-login">
       <div class="ms-title">高传染性疾病预测系统</div>
       <el-form :model="forgetForm" :rules="forgetFormRules" ref="forgetForm" class="ms-content" action="">
@@ -110,6 +110,9 @@ export default {
         });
       };
     return {
+      bgImg:{ backgroundImage:"url(" + require("../../assets/img/background2.jpg") + ")",
+              height:'100vh',//这里一定要设置高度 否则背景图无法显示
+              backgroundRepeat: "no-repeat"},
       forgetForm: {
         password: "",
         password2: "",
@@ -142,11 +145,10 @@ export default {
 };
 </script>
 <style>
-@import "../../assets/layui/css/layui.css";
+/* @import "../../assets/layui/css/layui.css";
 body {
   background-image: url(../../assets/img/background2.jpg);
-  /* width: 1000px; */
-}
+} */
 </style>
 
 <style scoped>
