@@ -84,7 +84,7 @@ export default {
     submitMessage(){
       if(this.loginMassege=="登录成功"){
         this.$message.success("登录成功！");
-        this.$router.push({path:'/Setting'});
+        this.$router.push({path:'/setting'});
       }
       else{
         if(this.loginMassege=="密码错误"){
