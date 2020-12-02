@@ -407,6 +407,7 @@ def startSimulate(request):
     el
     '''
     if request.method == "POST":
+        # 获取post提交数据
         userId = request.POST.get('userid', None)
         caseName = request.POST.get('casename', None)
         cityNum = request.POST.get('citynum', None)
@@ -422,7 +423,6 @@ def startSimulate(request):
         initcitydataList = initcitydata.split(",")
         initroaddataList = initroaddata.split(",")
         citypositionList = cityposition.split(",")
-
         cityCount = 0
         for cityInfo in initcitydataList:
             value = cityInfo.split(":")[1]
@@ -433,19 +433,19 @@ def startSimulate(request):
                 initinfect = int(value)
                 initTotalInfectedNum += initinfect
             cityCount += 1
-        message = "开始进行案例保存"
+        # 案例解析：从获取数据分别解析
+        # 各城市人数 = 一维List
+        # 各城市道路流通指数 = 实对称矩阵
+        # 各城市感染人数 = 一维List
+        # 各城市位置 = List，每个元素为一个数对，表示
+        
+        message = "开始进行案例解析"
         status = 200
         newCaseId = 0
+        initPopList = []
+        initRoadList = []
+        initInfectedList = []
         try:
-            # 新增案例
-            newCase = models.Casedata.objects.create(
-                userid=models.Accountinformation.objects.filter(userid=userId).first(),
-                casename=caseName,
-                citynumber=int(cityNum),
-                roadnumber=int(roadNum),
-                inittotal=initTotalNum,
-                inittotalinfected=initTotalInfectedNum
-            )
             # 新增城市信息
             cityCount = 0
             cityname = ""
@@ -503,9 +503,13 @@ def startSimulate(request):
             print('repr(e):\t', repr(e))
             # print('e.message:\t', e.message)
             print('########################################################')
-            message = "注册失败"
+            message = "案例保存失败，数据库出错"
             status = 404
+
+        #构造发回数据
+        returnDict = {"DailyforecastData": }
         return JsonResponse({"message": message, "status": status, "caseId": newCaseId})
+    return JsonResponse({"message": "该接口不支持此方法", "status": 404})
 
 
 class ImageCodeView(View):
