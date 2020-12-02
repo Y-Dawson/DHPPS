@@ -247,6 +247,8 @@ def changePwd(request):
                 encryPassword = hash_pwd(pwd=newPassword, salt=newSalt)
                 models.Logindata.objects.filter(userid=userId).update(userpassword=encryPassword, salt=newSalt)
                 return JsonResponse({"message": "修改成功", "status": 200})
+            else:
+                return JsonResponse({"message": "账号原密码错误", "status": 404})
     else:
         return JsonResponse({"message": "参数传递方式有误", "status": 404})
 
@@ -415,7 +417,8 @@ def startSimulate(request):
         initcitydata = request.POST.get('Initcitydata', None)
         initroaddata = request.POST.get('Initroaddata', None)
         cityposition = request.POST.get('Cityposition', None)
-        if not(userId and caseName and cityNum and roadNum and initcitydata and initroaddata and cityposition):
+        dayNum = request.POST.get('daynum', None)
+        if not(userId and caseName and cityNum and roadNum and initcitydata and initroaddata and cityposition and dayNum):
             return JsonResponse({"message": "表单未填写完整", "status": 404})
         # 案例计数：初始人口与初始感染人口
         initTotalNum = 0
@@ -438,12 +441,12 @@ def startSimulate(request):
         # 各城市道路流通指数 = 实对称矩阵
         # 各城市感染人数 = 一维List
         # 各城市位置 = List，每个元素为一个数对，表示城市x,y坐标
-        message = "开始进行案例解析"
-        status = 200
-        newCaseId = 0
+        cityNum = int(cityNum)
+        roadNum = int(roadNum)
+        dayNum = int(dayNum)
         cityNameList = []
         initPopList = []
-        initRoadList = []
+        initRoadList = [[0] * cityNum for row in range(cityNum)]
         initInfectedList = []
         cityPosList = []
         try:
@@ -469,32 +472,52 @@ def startSimulate(request):
                     y = float(posValue)
                     cityPosList.append(list(x, y))
                 cityCount += 1
-
+            
             # 新增道路信息
             roadCount = 0
             for roadInfo in initroaddataList:
                 value = roadInfo.split(":")[1]
                 if roadCount % 3 == 0:
-                    departure = value
+                    # 出发城市下标
+                    departure = cityNameList.index(value)
                 elif roadCount % 3 == 1:
-                    destination = value
+                    # 到达城市下标
+                    destination = cityNameList.index(value)
                 elif roadCount % 3 == 2:
                     volume = float(value)
+                    initRoadList[departure][destination] = volume
+                    initRoadList[destination][departure] = volume
                 roadCount += 1
-            message = "保存案例成功"
-            status = 200
         except Exception as e:
             print('str(Exception):\t', str(Exception))
             print('str(e):\t\t', str(e))
             print('repr(e):\t', repr(e))
             # print('e.message:\t', e.message)
             print('########################################################')
-            message = "案例保存失败，数据库出错"
-            status = 404
-
+            return JsonResponse({"message": "案例保存失败，数据库出错", "status": 404})
+        # 调用模型函数，传入参数，获得返回值
+        # dailyInfectMatrix = RunTheModel(initPopList,initRoadList,initInfectedList,dayNum)
+        # 以下为模拟产生返回数据
+        dailyInfectMatrix = []
+        for dayCount in range(dayNum):
+            dayNewInfect = []
+            for cityIdx in range(dayNum):
+                dayNewInfect.append(dayCount*10)
+            dailyInfectMatrix.append(dayNewInfect)
         # 构造发回数据
-        # returnDict = {"DailyforecastData": }
-        return JsonResponse({"message": message, "status": status, "caseId": newCaseId})
+        DailyforecastData = []
+        for dayCount in range(dayNum):
+            dayCase = {}
+            for cityIdx in range(dayNum):
+                dayCase["cityname"] = cityNameList[cityIdx]
+                dayCase["population"] = initPopList[cityIdx]
+                dayCase["dailyinfected"] = dailyInfectMatrix[dayCount][cityIdx]
+                if (dayCount == 0):
+                    dayCase["infected"] = initInfectedList[cityIdx]
+                else:
+                    dayCase["infected"] = DailyforecastData[dayCount-1]["infected"] + dayCase["dailyinfected"]
+            DailyforecastData.append(dayCase)
+        return JsonResponse({"DailyforecastData": DailyforecastData, "status": 200})
     return JsonResponse({"message": "该接口不支持此方法", "status": 404})
 
 

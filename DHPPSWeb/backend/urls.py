@@ -32,6 +32,8 @@ urlpatterns = [
     # 保存案例请求
     path('saveCase/', views.saveCase, name="saveCase"),
 
+    # 开始模拟请求
+    path('startSimulate/', views.startSimulate, name="startSimulate"),
     # 用户管理数据请求
     path('userManage/', views.GetUserInfos, name="userManage"),
     path('generalUserManage/', views.GetGeneralUserInfos, name="generalUserManage"),
