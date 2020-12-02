@@ -247,6 +247,8 @@ def changePwd(request):
                 encryPassword = hash_pwd(pwd=newPassword, salt=newSalt)
                 models.Logindata.objects.filter(userid=userId).update(userpassword=encryPassword, salt=newSalt)
                 return JsonResponse({"message": "修改成功", "status": 200})
+            else:
+                return JsonResponse({"message": "账号原密码错误", "status": 404})
     else:
         return JsonResponse({"message": "参数传递方式有误", "status": 404})
 
