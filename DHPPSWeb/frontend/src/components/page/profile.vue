@@ -40,10 +40,10 @@
                     <i class="layui-icon layui-icon-app" style="font-size: 20px; color:rgb(173, 173, 173);"></i>
                     系统菜单
                 </div>
-                <router-link to="/profile">个人资料</router-link>
+                <router-link :to="{path:'/profile',query:{userId:userId}}"  >个人资料</router-link>
                 <dl class="layui-nav-child">
-                    <dd><router-link to="/modifyPI">修改资料</router-link></dd>
-                    <dd><router-link to="/caseView">案例查看</router-link></dd>
+                    <dd><router-link :to="{path:'/modifyPI',query:{userId:userId}}">修改资料</router-link></dd>
+                    <dd><router-link :to="{path:'/caseView',query:{userId:userId}}">案例查看</router-link></dd>
                 </dl>
             </li>
           </ul>
@@ -110,6 +110,7 @@ export default {
     name: 'profile',
     data: function () {
       return {
+        userId:this.$route.query.userId,
         // 传参
         content: [],
         // 头像
@@ -126,7 +127,7 @@ export default {
       getContent: function () {
         var self = this;
         axios
-          .get("http://127.0.0.1:8000/backend/profile/7/")
+          .get("http://127.0.0.1:8000/backend/profile/"+self.userId)
           .then(response => (
             self.content = response.data
             // alert(JSON.stringify(response))

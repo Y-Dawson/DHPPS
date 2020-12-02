@@ -149,19 +149,20 @@ export default {
     methods: {
         changePass: function () {
             var self = this
+            let data = new FormData()
+            data.append("userid",7)
+            data.append("oldPassword",$('#prepass').val())
+            data.append("newPassword",$('#newpass').val())
             // var prepass=$("#prepass").val()
             axios
-            .post("http://127.0.0.1:8000/backend/changePwd/",{
-              pram:{
-                oldPassword: $('#prepass').val(),
-                newPassword: $('#newpass').val()
-              }
-            })
+            .post('http://127.0.0.1:8000/backend/changePwd/', data)
             .then(response => (
                 self.content = response.data,
-                alert(JSON.stringify(response))
+                alert(JSON.stringify(response)),
+                self.$message.success("修改密码成功")
             ))
             .catch(function (error) { // 请求失败处理
+                alert(JSON.stringify(error.response))
                 alert("数据请求失败wdnmd");
             });
         },

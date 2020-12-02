@@ -40,11 +40,11 @@
                     系统菜单
                 </div>
                 <dl class="layui-nav-child">
-                    <dd><router-link to="/profile">个人资料</router-link></dd>
+                    <dd><router-link :to="{path:'/profile',query:{userId:userId}}">个人资料</router-link></dd>
                 </dl>
-                <router-link to="/modifyPI">修改资料</router-link>
+                <router-link :to="{path:'/modifyPI',query:{userId:userId}}">修改资料</router-link>
                 <dl class="layui-nav-child">
-                    <dd><router-link to="/caseView">案例查看</router-link></dd>
+                    <dd><router-link :to="{path:'/caseView',query:{userId:userId}}">案例查看</router-link></dd>
                 </dl>
             </li>
           </ul>
@@ -158,6 +158,7 @@ export default {
         });
       };
       return {
+        userId:'',
         sex:'',
         // 获取信息
         content: [],

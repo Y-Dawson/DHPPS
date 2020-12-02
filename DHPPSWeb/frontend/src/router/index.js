@@ -26,8 +26,8 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Login',
-      component: Login
+      name: 'profile',
+      component: profile
     },
     {path:'/modifyPI', component:modifyPI},
     {path:'/profile', component:profile},

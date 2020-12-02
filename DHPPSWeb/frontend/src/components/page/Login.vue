@@ -49,6 +49,8 @@ export default {
               height:'100vh',//这里一定要设置高度 否则背景图无法显示
               backgroundRepeat: "no-repeat"},
       loginMassege:'',
+      userId:'',
+      userAuthority:"",
       loginForm: {
       account: "",
       password: "",
@@ -81,7 +83,39 @@ export default {
         // this.$cookies.get(keyName)
         // alert(this.$cookies.get(sessionid))
         this.$message.success("登录成功！");
-        this.$router.push({path:'/setting'});
+        if(this.userAuthority=="普通用户"){
+          this.$router.push({
+            path:'/setting',
+            query:{
+              params:JSON.stringify({
+                userId:this.userId,
+                userAuthority:this.userAuthority
+              })
+            },
+          });
+        }
+        else if(this.userAuthority=="管理员"){
+          this.$router.push({
+            path:'/userManagement',
+            query:{
+              params:JSON.stringify({
+                userId:this.userId,
+                userAuthority:this.userAuthority
+              })
+            },
+          });
+        }
+        else if(this.userAuthority=="超级管理员"){
+          this.$router.push({
+            path:'/SPUserManagement',
+            query:{
+              params:JSON.stringify({
+                userId:this.userId,
+                userAuthority:this.userAuthority
+              })
+            },
+          });
+        }
       }
       else{
         if(this.loginMassege=="密码错误"){
@@ -121,8 +155,10 @@ export default {
         .then(response => (
             self.content = response.data,
             self.loginMassege=response.data.message,
-            alert("数据发送"),
-            // alert(JSON.stringify(self.loginMassege)),
+            self.userId=response.data.userId,
+            self.userAuthority=response.data.userAuthority,
+            // alert("数据发送"),
+            alert(JSON.stringify(response)),
             self.submitMessage()
           )
         )
