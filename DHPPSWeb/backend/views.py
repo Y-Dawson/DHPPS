@@ -437,18 +437,18 @@ def startSimulate(request):
         # 各城市人数 = 一维List
         # 各城市道路流通指数 = 实对称矩阵
         # 各城市感染人数 = 一维List
-        # 各城市位置 = List，每个元素为一个数对，表示
-        
+        # 各城市位置 = List，每个元素为一个数对，表示城市x,y坐标
         message = "开始进行案例解析"
         status = 200
         newCaseId = 0
+        cityNameList = []
         initPopList = []
         initRoadList = []
         initInfectedList = []
+        cityPosList = []
         try:
             # 新增城市信息
             cityCount = 0
-            cityname = ""
             initpop = ""
             initinfect = ""
             x = 0.0
@@ -457,24 +457,17 @@ def startSimulate(request):
                 value = cityInfo.split(":")[1]
                 posValue = citypositionList[cityCount].split(":")[1]
                 if cityCount % 3 == 0:
-                    cityname = value
+                    # 存入城市名称
+                    cityNameList.append(value)
                 elif cityCount % 3 == 1:
-                    initpop = int(value)
+                    # 存入城市初始人口
+                    initPopList.append(int(value))
                     x = float(posValue)
                 elif cityCount % 3 == 2:
-                    initinfect = int(value)
+                    # 存入城市感染人口和城市坐标
+                    initInfectedList.append(int(value))
                     y = float(posValue)
-                    newCity = models.Initcitydata.objects.create(
-                        caseid=newCase,
-                        cityname=cityname,
-                        initpop=initpop,
-                        initinfect=initinfect
-                    )
-                    models.Cityposition.objects.create(
-                        cityid=newCity,
-                        x=x,
-                        y=y
-                    )
+                    cityPosList.append(list(x, y))
                 cityCount += 1
 
             # 新增道路信息
@@ -487,16 +480,9 @@ def startSimulate(request):
                     destination = value
                 elif roadCount % 3 == 2:
                     volume = float(value)
-                    models.Initroaddata.objects.create(
-                        caseid=newCase,
-                        departure=departure,
-                        destination=destination,
-                        volume=volume
-                    )
                 roadCount += 1
             message = "保存案例成功"
             status = 200
-            newCaseId = newCase.caseid
         except Exception as e:
             print('str(Exception):\t', str(Exception))
             print('str(e):\t\t', str(e))
@@ -506,8 +492,8 @@ def startSimulate(request):
             message = "案例保存失败，数据库出错"
             status = 404
 
-        #构造发回数据
-        returnDict = {"DailyforecastData": }
+        # 构造发回数据
+        # returnDict = {"DailyforecastData": }
         return JsonResponse({"message": message, "status": status, "caseId": newCaseId})
     return JsonResponse({"message": "该接口不支持此方法", "status": 404})
 
