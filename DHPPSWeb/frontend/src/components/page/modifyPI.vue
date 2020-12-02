@@ -158,7 +158,7 @@ export default {
         });
       };
       return {
-        userId:'',
+        userId:this.$route.query.userId,
         sex:'',
         // 获取信息
         content: [],

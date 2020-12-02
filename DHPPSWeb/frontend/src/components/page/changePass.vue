@@ -116,6 +116,7 @@ export default {
         }
       }
       return {
+        userId:this.$route.query.userId,
         passMassege:'',//获取原密码是否正确的信息
         // 获取信息
         content: [],

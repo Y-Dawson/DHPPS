@@ -121,13 +121,13 @@ export default {
     },
     created: function () {
       //为了在内部函数能使用外部函数的this对象，要给它赋值了一个名叫self的变量。
-      this.getContent()
+      this.getContent(this.userId)
     },
     methods: {
-      getContent: function () {
+      getContent: function (userId) {
         var self = this;
         axios
-          .get("http://127.0.0.1:8000/backend/profile/"+self.userId)
+          .get('http://127.0.0.1:8000/backend/profile/'+userId+'/')
           .then(response => (
             self.content = response.data
             // alert(JSON.stringify(response))
