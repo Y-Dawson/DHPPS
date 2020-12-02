@@ -8,8 +8,8 @@ import ElementUI from 'element-ui'
 // import VueResource from 'vue-resource'
 import 'element-ui/lib/theme-chalk/index.css'
 
-import VueCookies from 'vue-cookies'
-Vue.use(VueCookies)
+// import VueCookies from 'vue-cookies'
+// Vue.use(VueCookies)
 
 axios.defaults.withCredentials = true;
 

@@ -81,7 +81,7 @@ export default {
         // this.$cookies.get(keyName)
         // alert(this.$cookies.get(sessionid))
         this.$message.success("登录成功！");
-        this.$router.push({path:'/Setting'});
+        this.$router.push({path:'/setting'});
       }
       else{
         if(this.loginMassege=="密码错误"){

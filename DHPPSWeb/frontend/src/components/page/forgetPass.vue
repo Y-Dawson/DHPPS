@@ -1,5 +1,5 @@
 <template>
-  <div id="forgetPass" :style="bgImg">
+  <div id="forgetPass">
     <div class="ms-login">
       <div class="ms-title">高传染性疾病预测系统</div>
       <el-form :model="forgetForm" :rules="forgetFormRules" ref="forgetForm" class="ms-content" action="">
@@ -10,7 +10,7 @@
               <el-input
                 v-model="forgetForm.phone"
                 placeholder="请输入11位手机号"
-                id="phonenum"
+                id="phone"
               >
               <el-button slot="prepend" icon="el-icon-user"></el-button>
               </el-input>
@@ -75,7 +75,7 @@
       </div>
 
       <el-form-item class="btns">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
+        <el-button type="primary" @click="submitForm('forgetForm')">确 定</el-button>
         <!-- <el-button type="info" @click="resetLoginForm">重 置</el-button> -->
       </el-form-item>
      </el-form>
@@ -110,15 +110,13 @@ export default {
         });
       };
     return {
-      bgImg:{ backgroundImage:"url(" + require("../../assets/img/background2.jpg") + ")",
-              height:'100vh',//这里一定要设置高度 否则背景图无法显示
-              backgroundRepeat: "no-repeat"},
       forgetForm: {
         password: "",
         password2: "",
         phone: "",
-        securitt_code: "",
+        securitt_code: ""
       },
+      returnData:[],
       returnmessage:"",
       forgetFormRules: {
         password: [
@@ -141,14 +139,51 @@ export default {
     };
   },
   methods:{
+    forgetPass: function () {
+      var self = this;
+      let data = new FormData();
+      data.append("phonenum",$("#phone").val());
+      data.append("verifyCode",$("#securitt_code").val());
+      data.append("newPassword",$("#password").val());
+      axios
+        .post('http://127.0.0.1:8000/backend/forgetPwd/', data)
+        .then(response => (
+          self.returnData = response.data,
+          self.returnmessage=response.data.message,
+          // alert(self.returnmessage),
+          self.skip()
+        ))
+        .catch(function (error) {
+          alert(JSON.stringify(error.response));
+          console.log(error.response);
+        });
+    },
+    submitForm(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.forgetPass()
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      });
+    },
+    skip() {
+      if(this.returnmessage=="修改成功") {
+        this.$message(this.returnmessage);
+        this.$router.push({path:'/Login'});
+      }
+      else this.$message(this.returnmessage);
+    }
   }
 };
 </script>
 <style>
-/* @import "../../assets/layui/css/layui.css";
+@import "../../assets/layui/css/layui.css";
 body {
   background-image: url(../../assets/img/background2.jpg);
-} */
+  /* width: 1000px; */
+}
 </style>
 
 <style scoped>
@@ -178,30 +213,8 @@ body {
   padding: 30px 30px;
 }
 
-.layui-form input {
-  width: 300px;
-  height: 40px;
-}
-
-.layui-form .layui-input-inline {
-  margin: 0;
-}
-
 .layui-form .layui-form-item {
   text-align: center;
-}
-
-.layui-form-item a {
-  font-size: 10px;
-}
-
-/* .layui-form * {
-  margin: 0;
-} */
-
-.btns {
-  display: flex;
-  justify-content: center;
 }
 .el-button--info {
   position: absolute;
@@ -216,6 +229,5 @@ body {
   width: 150px;
   height: 40px;
   margin-left: -70px;
-  /* margin-top: -10px; */
 }
 </style>
