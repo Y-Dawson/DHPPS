@@ -124,7 +124,7 @@ export default {
   data: function () {
     return {
       // 传参
-      userid:1,
+      userid:3,
       contentList:[],
       isBackground:true,
       casenum:8,
@@ -167,7 +167,7 @@ export default {
       axios
         .get('http://127.0.0.1:8000/backend/case/',{
             params:{
-              userid: 1,
+              userid: 3,
               page_size: 6,
               page: self.currentPage
             }

@@ -1010,21 +1010,6 @@ export default {
             .then((response) => {
               alert(JSON.stringify(response));
               alert("保存案例");
-              this.$router.push({
-                path: "/simulation",
-                query: {
-                  params: JSON.stringify({
-                    userid: 1,
-                    casename: value,
-                    citynum: citycnt,
-                    roadnum: roadcnt,
-                    Initcitydata: city_infor,
-                    Initroaddata: road_inf,
-                    Cityposition: city_position,
-                    // DailyInfected: response,
-                  }),
-                },
-              });
             })
             .catch(function (error) {
               alert(JSON.stringify(response));
