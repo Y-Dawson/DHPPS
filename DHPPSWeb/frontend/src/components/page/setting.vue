@@ -725,6 +725,7 @@ export default {
                     Initcitydata: city_infor,
                     Initroaddata: road_inf,
                     Cityposition: city_position,
+                    Daynum: value,
                     DailyInfected: response,
                   }),
                 },
@@ -1303,7 +1304,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 @import "../../assets/layui/css/layui.css";
 
 /* body {
