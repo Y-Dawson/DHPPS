@@ -519,7 +519,7 @@ def startSimulate(request):
                 if (dayCount == 0):
                     cityCase["infected"] = initInfectedList[cityIdx]
                 else:
-                    cityCase["infected"] = DailyforecastData[dayCount-1]["infected"] + cityCase["dailyinfected"]
+                    cityCase["infected"] = DailyforecastData[dayCount-1][cityIdx]["infected"] + cityCase["dailyinfected"]
                 dayCase.append(cityCase)
             DailyforecastData.append(dayCase)
         return JsonResponse({"DailyforecastData": DailyforecastData, "status": 200})
