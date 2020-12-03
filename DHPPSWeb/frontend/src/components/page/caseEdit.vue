@@ -3,7 +3,7 @@
     <div id="app">
         <div class="layui-layout layui-layout-admin">
             <!-- 导航栏 -->
-            <topBar layoutName='后台管理系统'></topBar>
+            <topBar layoutName='后台管理系统' userId='11'></topBar>
             <div class="layui-side layui-bg-black">
                 <div class="layui-side-scroll">
                 <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
@@ -100,6 +100,7 @@ export default {
     },
   data: function () {
     return {
+      userId:this.$route.query.userId,
       // 传参
       userid:this.$route.query.uI,
       contentList:[],

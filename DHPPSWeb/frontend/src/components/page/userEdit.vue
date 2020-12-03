@@ -3,7 +3,7 @@
     <div id="app">
         <div class="layui-layout layui-layout-admin">
             <!-- 导航栏 -->
-            <topBar layoutName='后台管理系统'></topBar>
+            <topBar layoutName='后台管理系统' userId='11'></topBar>
         
             <div class="layui-side layui-bg-black">
                 <div class="layui-side-scroll">
@@ -87,6 +87,7 @@ export default {
     },
     data() {
       return {
+        userId:this.$route.query.userId,
         editTel:this.$route.query.uT,
         editName:this.$route.query.uN,
         userid:this.$route.query.uI,

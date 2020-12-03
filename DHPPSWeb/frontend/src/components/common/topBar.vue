@@ -38,23 +38,27 @@ export default {
     name:"topBar",
     data() {
       return {
-        content: []
+        content: [],
+        userId:0
       };
     },
-    props:['layoutName'],
-    
+    props:{
+      layoutName:String,
+      userId:Number
+    },    
     created: function () {
       //为了在内部函数能使用外部函数的this对象，要给它赋值了一个名叫self的变量。
-      this.getContent()
+      this.getContent(this.userId)
     },
     methods: {
-      getContent: function () {
+      getContent: function (userId) {
       var self = this
+      // alert(userid)
       axios
-        .get("http://127.0.0.1:8000/backend/profile/1/")
+        .get("http://127.0.0.1:8000/backend/profile/"+userId+"/")
         .then(response => (
         self.content = response.data
-        //alert(JSON.stringify(response))
+        // alert(JSON.stringify(response))
       ))
       .catch(function (error) { // 请求失败处理
         alert("数据请求失败wdnmd")

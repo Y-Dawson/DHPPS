@@ -3,7 +3,8 @@
     <div id="app">
         <div class="layui-layout layui-layout-admin">
             <!-- 导航栏 -->
-            <topBar layoutName='后台管理系统'></topBar>
+            
+            <topBar layoutName='后台管理系统' userId='11'></topBar>
             <div class="layui-side layui-bg-black">
                 <div class="layui-side-scroll">
                 <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
@@ -101,6 +102,7 @@ export default {
     },
     data() {
       return {
+        userId:this.$route.query.userId,
         //分页
         totalPage: 3, // 统共页数，默认为1
         currentPage: 1, //当前页数 ，默认为1
