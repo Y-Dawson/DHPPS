@@ -149,10 +149,6 @@
             <li id="city_inf" v-for="city in city_po" :key="city">
               {{ city }}
             </li>
-            <!-- <span id="city_inf" v-for="(index,item) in city_po"> -->
-            <!-- <span>B：400</span>
-            <span>C：100</span>
-            <span>D：800</span> -->
           </div>
         </li>
         <li>
@@ -167,34 +163,19 @@
 
       <ul class="img-list">
         <li>
-          <div
-            id="ci1"
-            class="city"
-            :style="{
-              left: cityForm.cityleft + 'px',
-              top: cityForm.citytop + 'px',
-            }"
-          >
+          <div id="ci1" class="city" style="left: 300px; top: 300px">
             <img src="../../assets/layui/images/city.png" alt="" />
             <div class="city-infor">
               <el-form-item prop="population">
-                <el-input
-                  v-model="cityForm.population"
-                  placeholder="城市人口"
-                ></el-input>
+                <span>总人口：{{ ci1_population[day] }}</span>
               </el-form-item>
 
               <el-form-item prop="beginInfected">
-                <el-input
-                  v-model="cityForm.beginInfected"
-                  placeholder="初始感染人数"
-                ></el-input>
+                <span>总感染人数：{{ ci1_totalInfected[day] }}</span>
               </el-form-item>
 
               <el-form-item>
-                <el-button type="primary" :disabled="isdisabled1"
-                  >确认</el-button
-                >
+                <span>新增感染人数：{{ ci1_newInfected[day] }}</span>
               </el-form-item>
             </div>
           </div>
@@ -212,10 +193,7 @@
             <img src="../../assets/layui/images/city.png" alt="" />
             <div class="city-infor">
               <el-form-item prop="population">
-                <el-input
-                  v-model="cityForm.population"
-                  placeholder="城市人口"
-                ></el-input>
+                <span>总人口：{{}}</span>
               </el-form-item>
 
               <el-form-item prop="beginInfected">
@@ -319,6 +297,8 @@
 <script>
 import Global from "../../global_vue";
 
+var linecnt = 1;
+
 export default {
   data() {
     return {
@@ -339,6 +319,7 @@ export default {
       // citytop: Global.citytop,
       lineleft: Global.lineleft,
       linetop: Global.linetop,
+      params: "",
 
       cityForm: {
         // cityName: "",
@@ -353,6 +334,13 @@ export default {
         cityleft: Global.cityleft,
         citytop: Global.citytop,
       },
+
+      day: 0,
+
+      ci1_population: ["100", "200", "300", "400", "500"],
+      ci1_totalInfected: ["100", "200", "300", "400", "500"],
+      ci1_newInfected: ["100", "200", "300", "400", "500"],
+
       city_po: [],
       road_di: [],
       road_c1: "",
@@ -398,14 +386,158 @@ export default {
       },
     };
   },
+
+  mounted: function () {
+    this.params = JSON.parse(this.$route.query.params);
+    
+    console.log("用户ID：", this.params.userid);
+    console.log("案例名：", this.params.casename);
+    console.log("城市数目：", this.params.citynum);
+    console.log("道路数目：", this.params.roadnum);
+    console.log("初始城市信息：", this.params.Initcitydata);
+    console.log("道路信息：", this.params.Initroaddata);
+    console.log("城市坐标：", this.params.Cityposition);
+    console.log("每日病例：", this.params.DailyInfected.data.DailyforecastData);
+
+    var cnt = 0;
+    for (var j in this.params.Cityposition) {
+      var te = this.params.Cityposition[j].split(",");
+      var tt, ci, x, y, cid;
+      cnt = 0;
+      for (var k in te) {
+        cnt++;
+        if (cnt == 1) {
+          tt = te[k].split(":");
+          ci = tt[1];
+        }
+        if (cnt == 2) {
+          tt = te[k].split(":");
+          x = tt[1];
+        }
+        if (cnt == 3) {
+          tt = te[k].split(":");
+          y = tt[1];
+        }
+      }
+      console.log("te:", te);
+      console.log("ci:" + ci);
+      console.log("x:" + x);
+      console.log("y:" + y);
+      cid = this.getID(ci);
+      console.log(cid);
+      var cityentity = document.getElementById(cid);
+      cityentity.style.left = x + "px";
+      cityentity.style.top = y + "px";
+    }
+
+    for (var j in this.params.Initroaddata) {
+      console.log(this.params.Initroaddata[j]);
+      var ri = this.params.Initroaddata[j].split(",");
+      console.log(ri);
+      var city1, city2, vol, tt, s;
+      cnt = 0;
+      for (var k in ri) {
+        cnt += 1;
+        if (cnt == 1) {
+          tt = ri[k].split(":");
+          city1 = tt[1];
+        }
+        if (cnt == 2) {
+          tt = ri[k].split(":");
+          city2 = tt[1];
+        }
+        if (cnt == 3) {
+          tt = ri[k].split(":");
+          vol = tt[1];
+        }
+      }
+      s = city1 + "-" + city2 + ":" + vol;
+      this.road_di.push(s);
+      var cid1 = this.getID(city1);
+      var cid2 = this.getID(city2);
+      console.log(cid1, cid2);
+
+      this.drawline(cid1, cid2);
+    }
+  },
+
   methods: {
     sst(ss) {
       this.ss = false;
       this.$router.push("/setting");
     },
+
     formatTooltip(val) {
-      
-      return val / 20;
+      this.day = val / 5;
+      var d = val / 5 + 1;
+      var m = 1;
+      if (d > 31) {
+        m += 1;
+        d -= 31;
+      }
+      var s = m + "月" + d + "日";
+      return s;
+    },
+
+    drawline(ci1, ci2) {
+      var c1 = document.getElementById(ci1);
+      var c2 = document.getElementById(ci2);
+
+      var cx1 = c1.style.left;
+      var tcx1 = cx1.substring(0, cx1.length - 2);
+      var cy1 = c1.style.top;
+      var tcy1 = cy1.substring(0, cy1.length - 2);
+      var cx2 = c2.style.left;
+      var tcx2 = cx2.substring(0, cx2.length - 2);
+      var cy2 = c2.style.top;
+      var tcy2 = cy2.substring(0, cy2.length - 2);
+
+      console.log("tcx1:",tcx1);
+      console.log("tcy1:",tcy1);
+      console.log("tcx2:",tcx2);
+      console.log("tcy2:",tcy2);
+
+      const dx = Math.abs(tcx1 - tcx2);
+      const dy = Math.abs(tcy1 - tcy2);
+      var dis = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+
+      console.log("dis:",dis);
+
+      var ttcx1 = parseInt(tcx1);
+      var ttcx2 = parseInt(tcx2);
+      var ttcy1 = parseInt(tcy1);
+      var ttcy2 = parseInt(tcy2);
+
+      var rotang = 0;
+      if (
+        (ttcx1 <= ttcx2 && ttcy1 <= ttcy2) ||
+        (ttcx1 >= ttcx2 && ttcy1 >= ttcy2)
+      ) {
+        rotang = Math.asin(parseFloat(dy / dis));
+        rotang = (rotang / Math.PI) * 180;
+      }
+      if (
+        (ttcx1 <= ttcx2 && ttcy1 >= ttcy2) ||
+        (ttcx1 >= ttcx2 && ttcy1 <= ttcy2)
+      ) {
+        rotang = Math.asin(parseFloat(dy / dis));
+        rotang = (rotang / Math.PI) * 180;
+        rotang = 180 - rotang;
+      }
+
+      var ll = document.getElementById("line" + linecnt);
+      ll.style.left = (ttcx1 + ttcx2) / 2 - parseInt(dis) / 2 + 20 + "px";
+      ll.style.top = (ttcy1 + ttcy2) / 2 + 50 + "px";
+      ll.style.width = parseInt(dis) + "px";
+      ll.style.transform = "rotate(" + rotang + "deg)";
+      linecnt += 1;
+    },
+
+    getID(n) {
+      if (n == "A") return "ci1";
+      if (n == "B") return "ci2";
+      if (n == "C") return "ci3";
+      if (n == "D") return "ci4";
     },
   },
 };
@@ -725,7 +857,6 @@ canvas {
 }
 
 .img-list .city .city-infor {
-  display: none;
   height: 185px;
   width: 190px;
   margin-top: -220px;

@@ -13,7 +13,11 @@
           </li>
 
           <li class="layui-nav-item" style="line-height: 40px">
-            <a href="profile.vue" style="test-align: center">个人中心</a>
+            <router-link
+              :to="{ path: '/profile', query: { userId: userId } }"
+              style="margin-left: 10px; float: left"
+              >个人中心</router-link
+            >
           </li>
           <li class="layui-nav-item" style="line-height: 20px">
             <el-avatar
@@ -411,6 +415,8 @@ var cn = 0;
 export default {
   data() {
     return {
+      userId: "",
+
       np: false,
       cp: false,
       dp: false,
@@ -500,12 +506,11 @@ export default {
       },
     };
   },
-  // mounted() {
-  //   this.connect_city();
-  // },
-  // directives: {
-  //   show()
-  // }
+
+  mounted: function () {
+    this.params = JSON.parse(this.$route.query.params);
+    this.userId = this.params.userId;
+  },
 
   methods: {
     npt(np) {
@@ -559,7 +564,7 @@ export default {
       this.sc = false;
       this.mc = false;
 
-      this.$router.push("/simulation");
+      this.begin_simulation().then((response) => {});
     },
 
     sct(sc) {
@@ -614,25 +619,28 @@ export default {
     //       Global.cityForm.citytop
     //   );
     // },
-    save_confirm() {
-      this.$prompt("请输入此案例名称", "提示", {
+    add_day(casename){
+      this.$prompt("请输入模拟天数", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         inputPattern: /^[0-9]/,
-        inputErrorMessage: "案例名称格式不正确",
+        inputErrorMessage: "模拟天数格式不正确",
       })
         .then(({ value }) => {
+          this.sc = false;
+
           var myFormData = new FormData();
 
           myFormData.append("userid", 1);
 
-          myFormData.append("casename", value);
+          myFormData.append("casename", casename);
 
           var city_infor = [];
           var cn = "Z";
           var initpop = 0;
           var initinfect = 0;
           var loopcnt = 0;
+          var citycnt = 0;
           for (var cid in this.city_po) {
             loopcnt += 1;
             if (loopcnt == 1) {
@@ -641,6 +649,7 @@ export default {
             }
             if (loopcnt == 2) {
               initinfect = this.city_po[cid].substring(7);
+              citycnt += 1;
               var s =
                 "cityname:" +
                 cn +
@@ -652,10 +661,12 @@ export default {
               loopcnt = 0;
             }
           }
-          myFormData.append("Initcitydata", city_infor);
+          myFormData.append("citynum", citycnt);
 
+          var roadcnt = 0;
           var road_inf = [];
           for (var rid in this.road_di) {
+            roadcnt += 1;
             var departure = this.road_di[rid].substring(0, 1);
             var destination = this.road_di[rid].substring(2, 3);
             var volume = this.road_di[rid].substring(4);
@@ -666,9 +677,11 @@ export default {
               destination +
               ",volume:" +
               volume;
-            console.log(s);
             road_inf.push(s);
           }
+          myFormData.append("roadnum", roadcnt);
+
+          myFormData.append("Initcitydata", city_infor);
           myFormData.append("Initroaddata", road_inf);
 
           var city_position = [];
@@ -682,13 +695,153 @@ export default {
               console.log("cityName:" + cityName + " cityID:" + cityID);
 
               var c = document.getElementById(cityID);
+              var x = c.style.left.substring(0, c.style.left.length - 2);
+              var y = c.style.top.substring(0, c.style.top.length - 2);
+              var s = "cityname:" + cityName + ",x:" + x + ",y:" + y;
+              city_position.push(s);
+            }
+          }
+          myFormData.append("Cityposition", city_position);
+
+          myFormData.append("daynum",value);
+
+          for (var value of myFormData.values()) {
+            console.log(value);
+          }
+
+          axios
+            .post("http://127.0.0.1:8000/backend/startSimulate/", myFormData)
+            .then((response) => {
+              alert(JSON.stringify(response));
+              alert("保存案例");
+              this.$router.push({
+                path: "/simulation",
+                query: {
+                  params: JSON.stringify({
+                    userid: 1,
+                    casename: value,
+                    citynum: citycnt,
+                    roadnum: roadcnt,
+                    Initcitydata: city_infor,
+                    Initroaddata: road_inf,
+                    Cityposition: city_position,
+                    DailyInfected: response,
+                  }),
+                },
+              });
+            })
+            .catch(function (error) {
+              alert(JSON.stringify(response));
+              alert("发送失败");
+            });
+        })
+        .catch(() => {
+          this.sc = false;
+          this.$message({
+            type: "info",
+            message: "取消输入",
+          });
+        });
+    },
+
+    begin_simulation() {
+      this.$prompt("请输入案例名称", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        inputPattern: /^[0-9]/,
+        inputErrorMessage: "案例名称格式不正确",
+      })
+        .then(({ value }) => {
+          this.add_day(value).then((response) => {});
+        })
+        .catch(() => {
+          this.sc = false;
+          this.$message({
+            type: "info",
+            message: "取消输入",
+          });
+        });
+    },
+
+    save_confirm() {
+      this.$prompt("请输入此案例名称", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        inputPattern: /^[0-9]/,
+        inputErrorMessage: "案例名称格式不正确",
+      })
+        .then(({ value }) => {
+          this.sc = false;
+
+          var myFormData = new FormData();
+
+          myFormData.append("userid", 1);
+
+          myFormData.append("casename", value);
+
+          var city_infor = [];
+          var cn = "Z";
+          var initpop = 0;
+          var initinfect = 0;
+          var loopcnt = 0;
+          var citycnt = 0;
+          for (var cid in this.city_po) {
+            loopcnt += 1;
+            if (loopcnt == 1) {
+              cn = this.city_po[cid].substring(0, 1);
+              initpop = this.city_po[cid].substring(7);
+            }
+            if (loopcnt == 2) {
+              initinfect = this.city_po[cid].substring(7);
+              citycnt += 1;
               var s =
                 "cityname:" +
-                cityName +
-                ",x:" +
-                c.style.left +
-                ",y:" +
-                c.style.top;
+                cn +
+                ",initpop:" +
+                initpop +
+                ",initinfect:" +
+                initinfect;
+              city_infor.push(s);
+              loopcnt = 0;
+            }
+          }
+          myFormData.append("citynum", citycnt);
+
+          var roadcnt = 0;
+          var road_inf = [];
+          for (var rid in this.road_di) {
+            roadcnt += 1;
+            var departure = this.road_di[rid].substring(0, 1);
+            var destination = this.road_di[rid].substring(2, 3);
+            var volume = this.road_di[rid].substring(4);
+            var s =
+              "departure:" +
+              departure +
+              ",destination:" +
+              destination +
+              ",volume:" +
+              volume;
+            road_inf.push(s);
+          }
+          myFormData.append("roadnum", roadcnt);
+
+          myFormData.append("Initcitydata", city_infor);
+          myFormData.append("Initroaddata", road_inf);
+
+          var city_position = [];
+          loopcnt = 0;
+          for (var cid in this.city_po) {
+            loopcnt += 1;
+            if (loopcnt % 2 == 1) {
+              var cityName = this.city_po[cid].substring(0, 1);
+              var cityID = this.getID(cityName);
+
+              console.log("cityName:" + cityName + " cityID:" + cityID);
+
+              var c = document.getElementById(cityID);
+              var x = c.style.left.substring(0, c.style.left.length - 2);
+              var y = c.style.top.substring(0, c.style.top.length - 2);
+              var s = "cityname:" + cityName + ",x:" + x + ",y:" + y;
               city_position.push(s);
             }
           }
@@ -700,9 +853,25 @@ export default {
 
           axios
             .post("http://127.0.0.1:8000/backend/saveCase/", myFormData)
-            .then(
-              (response) => (alert(JSON.stringify(response)), alert("保存案例"))
-            )
+            .then((response) => {
+              alert(JSON.stringify(response));
+              alert("保存案例");
+              this.$router.push({
+                path: "/simulation",
+                query: {
+                  params: JSON.stringify({
+                    userid: 1,
+                    casename: value,
+                    citynum: citycnt,
+                    roadnum: roadcnt,
+                    Initcitydata: city_infor,
+                    Initroaddata: road_inf,
+                    Cityposition: city_position,
+                    // DailyInfected: response,
+                  }),
+                },
+              });
+            })
             .catch(function (error) {
               alert(JSON.stringify(response));
               alert("发送失败");
