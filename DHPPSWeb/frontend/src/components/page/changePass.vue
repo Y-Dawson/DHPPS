@@ -40,11 +40,11 @@
                     系统菜单
                 </div>
                 <dl class="layui-nav-child">
-                    <dd><router-link to="/profile">个人资料</router-link></dd>
+                    <dd><router-link :to="{path:'/profile',query:{userId:userId}}">个人资料</router-link></dd>
                 </dl>
-                <router-link to="/modifyPI">修改资料</router-link>
+                <router-link :to="{path:'/modifyPI',query:{userId:userId}}">修改资料</router-link>
                 <dl class="layui-nav-child">
-                    <dd><router-link to="/caseView">案例查看</router-link></dd>
+                    <dd><router-link :to="{path:'/caseView',query:{userId:userId}}">案例查看</router-link></dd>
                 </dl>
             </li>
           </ul>
@@ -55,7 +55,7 @@
         <div style="padding: 15px;">
           <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
             <ul class="layui-tab-title">
-              <li><router-link to="/modifyPI" style="color: #55587e;">修改资料</router-link></li>
+              <li><router-link :to="{path:'/modifyPI',query:{userId:userId}}" style="color: #55587e;">修改资料</router-link></li>
               <li class="layui-this" style="color: #55587e;">修改密码</li>
             </ul>
             <div class="layui-tab-content" style="margin-top:30px;">

@@ -159,7 +159,7 @@ export default {
             self.userId=response.data.userId,
             self.userAuthority=response.data.userAuthority,
             // alert("数据发送"),
-            alert(JSON.stringify(response)),
+            // alert(JSON.stringify(response)),
             self.submitMessage()
           )
         )

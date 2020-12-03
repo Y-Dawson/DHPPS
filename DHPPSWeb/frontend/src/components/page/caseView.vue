@@ -40,10 +40,10 @@
                             系统菜单
                         </div>
                         <dl class="layui-nav-child">
-                            <dd><router-link to="/profile">个人资料</router-link></dd>
-                            <dd><router-link to="/modifyPI">修改资料</router-link></dd>
+                            <dd><router-link :to="{path:'/profile',query:{userId:userId}}">个人资料</router-link></dd>
+                            <dd><router-link :to="{path:'/modifyPI',query:{userId:userId}}">修改资料</router-link></dd>
                         </dl>
-                        <router-link to="/caseView">案例查看</router-link>
+                        <router-link :to="{path:'/caseView',query:{userId:userId}}">案例查看</router-link>
                     </li>
                 </ul>
                 </div>
@@ -76,7 +76,7 @@
                                             <div style="font-size:8px;line-height:20px;float:right;text-align:right">
                                               <a href="javascript:;" style="font-size:8px;color:#8b9bbd">进入编辑</a>
                                               <br>
-                                              <el-button id="delete" type="text" style="font-size:8px;color:rgb(221, 0, 0)" @click="open(item.citynumber)">删除</el-button>
+                                              <el-button id="delete" type="text" style="font-size:8px;color:rgb(221, 0, 0)" @click="open(item.caseid)">删除</el-button>
                                             </div>
                                         </div>
                                         <dl class="box-text">
@@ -124,7 +124,7 @@ export default {
   data: function () {
     return {
       // 传参
-      userid:3,
+      userId:this.$route.query.userId,
       contentList:[],
       isBackground:true,
       casenum:8,
@@ -142,6 +142,7 @@ export default {
   
   mounted: function () {
     // this.getcasenum(this.userid)
+    alert(this.userId)
     this.getCaseContent()
     this.setPages()
   },
@@ -167,7 +168,7 @@ export default {
       axios
         .get('http://127.0.0.1:8000/backend/case/',{
             params:{
-              userid: 3,
+              userid: this.$route.query.userId,
               page_size: 6,
               page: self.currentPage
             }

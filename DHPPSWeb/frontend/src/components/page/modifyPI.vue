@@ -57,7 +57,7 @@
             <ul class="layui-tab-title">
               <li class="layui-this" style="color: #55587e;">修改资料</li>
               <li>
-                <router-link to="/changePass" style="color: #55587e;">修改密码</router-link>
+                <router-link :to="{path:'/changePass',query:{userId:userId}}" style="color: #55587e;">修改密码</router-link>
               </li>
             </ul>
             <div class="layui-tab-content">
@@ -212,6 +212,7 @@ export default {
     },
     created: function () {
       //为了在内部函数能使用外部函数的this对象，要给它赋值了一个名叫self的变量。
+      // alert(this.userId)
       this.getContent()
     },
     methods: {
@@ -221,12 +222,12 @@ export default {
       getContent: function () {
         var self = this;
         axios
-          .get("http://127.0.0.1:8000/backend/profile/3/")
+          .get("http://127.0.0.1:8000/backend/profile/"+this.userId+'/')
           .then(response => (
             self.content = response.data
             // alert(JSON.stringify(response))
           ))
-          .catch(function (error) { // 请求失败处理
+          .catch(function (error) { // 请求失败处理.
             alert("数据请求失败wdnmd");
           });
       },
