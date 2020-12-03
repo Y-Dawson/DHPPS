@@ -83,7 +83,7 @@
             <button
               type="primary"
               v-bind:class="{ active1: ss }"
-              @click="ss = !ss"
+              @click="ss = !ss;sst(ss);"
             >
               <i class="layui-icon layui-icon-pause"></i>
               <span>停止模拟</span>
@@ -332,6 +332,14 @@ export default {
 
       day: 0,
 
+      userId: "",
+      casename: "",
+      citycnt: 1,
+      linecnt: 1,
+      city_inf: [],
+      road_inf: [],
+      city_position: [],
+
       ci1_population: [],
       ci1_totalInfected: [],
       ci1_newInfected: [],
@@ -398,6 +406,14 @@ export default {
     console.log("每日病例：", this.params.DailyInfected.data.DailyforecastData);
     var foreData = this.params.DailyInfected.data.DailyforecastData;
 
+    this.userId = this.params.userid;
+    this.casename = this.params.casename;
+    this.citycnt = this.params.citynum;
+    this.linecnt = this.params.roadnum;
+    this.city_inf = this.params.Initcitydata;
+    this.road_inf = this.params.Initroaddata;
+    this.city_position = this.params.Cityposition;
+
     var cnt = 0;
     for (var j in this.params.Cityposition) {
       var te = this.params.Cityposition[j].split(",");
@@ -418,12 +434,7 @@ export default {
           y = tt[1];
         }
       }
-      console.log("te:", te);
-      console.log("ci:" + ci);
-      console.log("x:" + x);
-      console.log("y:" + y);
       cid = this.getID(ci);
-      console.log(cid);
       var cityentity = document.getElementById(cid);
       cityentity.style.left = x + "px";
       cityentity.style.top = y + "px";
@@ -470,8 +481,6 @@ export default {
 
     for (var i = 0; i < parseInt(this.params.Daynum); i++) {
       for (var j = 0; j < parseInt(this.params.citynum); j++) {
-        console.log("newdata:", foreData[i][j]);
-        console.log("newcityname:", foreData[i][j]["cityname"]);
         this.add_inf(
           foreData[i][j]["cityname"],
           foreData[i][j]["population"],
@@ -484,8 +493,24 @@ export default {
 
   methods: {
     sst(ss) {
-      this.ss = false;
-      this.$router.push("/setting");
+      if (this.ss == true) {
+        console.log("返回设置参数界面");
+        this.ss = false;
+        this.$router.push({
+          path: "/setting",
+          query: {
+            params: JSON.stringify({
+              userId: 3,
+              casename: this.casename,
+              citynum: this.citycnt,
+              roadnum: this.linecnt,
+              Initcitydata: this.city_inf,
+              Initroaddata: this.road_inf,
+              Cityposition: this.city_position,
+            }),
+          },
+        });
+      }
     },
 
     formatTooltip(val) {
@@ -551,7 +576,7 @@ export default {
       ll.style.top = (ttcy1 + ttcy2) / 2 + 50 + "px";
       ll.style.width = parseInt(dis) + "px";
       ll.style.transform = "rotate(" + rotang + "deg)";
-      linecnt += 1;
+      this.linecnt += 1;
     },
 
     getID(n) {

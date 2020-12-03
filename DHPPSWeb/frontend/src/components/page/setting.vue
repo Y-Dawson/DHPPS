@@ -509,7 +509,104 @@ export default {
 
   mounted: function () {
     this.params = JSON.parse(this.$route.query.params);
+    console.log("用户ID：", this.params.userId);
+    console.log("案例名：", this.params.casename);
+    console.log("类型：", typeof this.params.casename);
+    console.log("城市数目：", this.params.citynum);
+    console.log("道路数目：", this.params.roadnum);
+    console.log("初始城市信息：", this.params.Initcitydata);
+    console.log("道路信息：", this.params.Initroaddata);
+    console.log("城市坐标：", this.params.Cityposition);
     this.userId = this.params.userId;
+
+    if (this.params.casename != 999) {
+      console.log("从模拟界面返回");
+      citycnt = this.params.citynum + 1;
+      linecnt = 1;
+      var cnt = 0;
+      for (var j in this.params.Cityposition) {
+        var te = this.params.Cityposition[j].split(",");
+        var tt, ci, x, y, cid;
+        cnt = 0;
+        for (var k in te) {
+          cnt++;
+          if (cnt == 1) {
+            tt = te[k].split(":");
+            ci = tt[1];
+          }
+          if (cnt == 2) {
+            tt = te[k].split(":");
+            x = tt[1];
+          }
+          if (cnt == 3) {
+            tt = te[k].split(":");
+            y = tt[1];
+          }
+        }
+        cid = this.getID(ci);
+        var cityentity = document.getElementById(cid);
+        cityentity.style.left = x + "px";
+        cityentity.style.top = y + "px";
+        var nu = this.getNum(cid);
+        nu = parseInt(nu);
+        this.setButton(nu);
+      }
+
+      for (var j in this.params.Initroaddata) {
+        console.log(this.params.Initroaddata[j]);
+        var ri = this.params.Initroaddata[j].split(",");
+        console.log(ri);
+        var city1, city2, vol, tt, s;
+        cnt = 0;
+        for (var k in ri) {
+          cnt += 1;
+          if (cnt == 1) {
+            tt = ri[k].split(":");
+            city1 = tt[1];
+          }
+          if (cnt == 2) {
+            tt = ri[k].split(":");
+            city2 = tt[1];
+          }
+          if (cnt == 3) {
+            tt = ri[k].split(":");
+            vol = tt[1];
+          }
+        }
+        s = city1 + "-" + city2 + ":" + vol;
+        this.road_di.push(s);
+        var cid1 = this.getID(city1);
+        var cid2 = this.getID(city2);
+        console.log(cid1, cid2);
+
+        this.drawline(cid1, cid2);
+      }
+
+      for (var j in this.params.Initcitydata) {
+        var ci = this.params.Initcitydata[j].split(",");
+        var tt, cityna, initpo, initIn;
+        cnt = 0;
+        for (var k in ci) {
+          cnt += 1;
+          if (cnt == 1) {
+            tt = ci[k].split(":");
+            cityna = tt[1];
+          }
+          if (cnt == 2) {
+            tt = ci[k].split(":");
+            initpo = tt[1];
+          }
+          if (cnt == 3) {
+            tt = ci[k].split(":");
+            initIn = tt[1];
+          }
+        }
+        var s = cityna + ": 总人口:" + initpo;
+        this.city_po.push(s);
+        s = "初始感染人数:" + initIn;
+        this.city_po.push(s);
+      }
+    }
   },
 
   methods: {
@@ -619,7 +716,63 @@ export default {
     //       Global.cityForm.citytop
     //   );
     // },
-    add_day(casename){
+    drawline(ci1, ci2) {
+      var c1 = document.getElementById(ci1);
+      var c2 = document.getElementById(ci2);
+
+      var cx1 = c1.style.left;
+      var tcx1 = cx1.substring(0, cx1.length - 2);
+      var cy1 = c1.style.top;
+      var tcy1 = cy1.substring(0, cy1.length - 2);
+      var cx2 = c2.style.left;
+      var tcx2 = cx2.substring(0, cx2.length - 2);
+      var cy2 = c2.style.top;
+      var tcy2 = cy2.substring(0, cy2.length - 2);
+
+      console.log("tcx1:", tcx1);
+      console.log("tcy1:", tcy1);
+      console.log("tcx2:", tcx2);
+      console.log("tcy2:", tcy2);
+
+      const dx = Math.abs(tcx1 - tcx2);
+      const dy = Math.abs(tcy1 - tcy2);
+      var dis = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+
+      console.log("dis:", dis);
+
+      var ttcx1 = parseInt(tcx1);
+      var ttcx2 = parseInt(tcx2);
+      var ttcy1 = parseInt(tcy1);
+      var ttcy2 = parseInt(tcy2);
+
+      var rotang = 0;
+      if (
+        (ttcx1 <= ttcx2 && ttcy1 <= ttcy2) ||
+        (ttcx1 >= ttcx2 && ttcy1 >= ttcy2)
+      ) {
+        rotang = Math.asin(parseFloat(dy / dis));
+        rotang = (rotang / Math.PI) * 180;
+      }
+      if (
+        (ttcx1 <= ttcx2 && ttcy1 >= ttcy2) ||
+        (ttcx1 >= ttcx2 && ttcy1 <= ttcy2)
+      ) {
+        rotang = Math.asin(parseFloat(dy / dis));
+        rotang = (rotang / Math.PI) * 180;
+        rotang = 180 - rotang;
+      }
+
+      var ll = document.getElementById("line" + linecnt);
+      ll.style.left = (ttcx1 + ttcx2) / 2 - parseInt(dis) / 2 + 20 + "px";
+      ll.style.top = (ttcy1 + ttcy2) / 2 + 50 + "px";
+      ll.style.width = parseInt(dis) + "px";
+      ll.style.transform = "rotate(" + rotang + "deg)";
+      linecnt += 1;
+
+      console.log("画了这条线了：", linecnt);
+    },
+
+    add_day(casename) {
       this.$prompt("请输入模拟天数", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -631,7 +784,7 @@ export default {
 
           var myFormData = new FormData();
 
-          myFormData.append("userid", 1);
+          myFormData.append("userid", 3);
 
           myFormData.append("casename", casename);
 
@@ -703,7 +856,7 @@ export default {
           }
           myFormData.append("Cityposition", city_position);
 
-          myFormData.append("daynum",value);
+          myFormData.append("daynum", value);
 
           for (var value of myFormData.values()) {
             console.log(value);
@@ -719,7 +872,7 @@ export default {
                 query: {
                   params: JSON.stringify({
                     userid: 1,
-                    casename: value,
+                    casename: casename,
                     citynum: citycnt,
                     roadnum: roadcnt,
                     Initcitydata: city_infor,
@@ -776,7 +929,7 @@ export default {
 
           var myFormData = new FormData();
 
-          myFormData.append("userid", 1);
+          myFormData.append("userid", 3);
 
           myFormData.append("casename", value);
 
@@ -935,7 +1088,7 @@ export default {
         inputErrorMessage: "人流量格式不正确",
       })
         .then(({ value }) => {
-          var road_inf = this.road_c1 + "-" + this.road_c2 + "：" + value;
+          var road_inf = this.road_c1 + "-" + this.road_c2 + ":" + value;
           console.log(road_inf);
 
           console.log("tcx1：" + tcx1);
@@ -963,26 +1116,7 @@ export default {
           }
 
           var ll = document.getElementById("line" + linecnt);
-          // ll.style.left = (ttcx1 + ttcx2) / 2 - parseInt((parseInt(dis)*Math.abs(Math.cos(rotang)))/2) + "px";
-          // var trotang = rotang;
-          // if (trotang > 90) {
-          //   trotang = 180 - trotang;
-          // }
-          // if (ttcx1 >= ttcx2) {
-          //   ll.style.left = ttcx2 + "px";
-          //   // ttcx2 -
-          //   // parseInt(dis) / 2 +
-          //   // parseInt((parseInt(dis) * Math.abs(Math.cos(trotang))) / 2) +
-          //   // "px";
-          // } else {
-          //   ll.style.left = ttcx1 + "px";
-          //   // ttcx1 -
-          //   // parseInt(dis) / 2 +
-          //   // parseInt((parseInt(dis) * Math.abs(Math.cos(trotang))) / 2) +
-          //   // "px";
-          // }
 
-          // ll.style.left = ttcx1 + "px";
           ll.style.left = (ttcx1 + ttcx2) / 2 - parseInt(dis) / 2 + 20 + "px";
           ll.style.top = (ttcy1 + ttcy2) / 2 + 50 + "px";
           ll.style.width = parseInt(dis) + "px";
@@ -1119,7 +1253,7 @@ export default {
           }
 
           console.log("cn：" + cn);
-          this.city_po.splice(cn, 1);
+          this.city_po.splice(cn*2, 2);
 
           for (var i in this.city_po) {
             console.log(this.city_po[i]);
@@ -1293,6 +1427,13 @@ export default {
       if (n == "B") return "ci2";
       if (n == "C") return "ci3";
       if (n == "D") return "ci4";
+    },
+
+    getNum(n) {
+      if (n == "ci1") return 1;
+      if (n == "ci2") return 2;
+      if (n == "ci3") return 3;
+      if (n == "ci4") return 4;
     },
 
     setButton(n) {
@@ -1629,7 +1770,7 @@ canvas {
   margin-bottom: 15px;
 }
 
-.city-infor .set_input{
+.city-infor .set_input {
   border-radius: 10px;
   width: 150px;
   margin-left: 20px;
