@@ -1433,9 +1433,9 @@ export default {
 <style scoped>
 @import "../../assets/layui/css/layui.css";
 
-/* body {
+body {
   overflow: hidden;
-} */
+}
 
 .layui-nav-tree .layui-nav-item a {
   font-weight: bold;
