@@ -238,26 +238,26 @@
                 ></el-input>
               </el-form-item> -->
 
-              <el-form-item prop="population">
+              <el-form-item prop="population" class="set_input">
                 <el-input
                   v-model="cityForm.population"
                   placeholder="城市人口"
                 ></el-input>
               </el-form-item>
 
-              <el-form-item prop="beginInfected">
+              <el-form-item prop="beginInfected" class="set_input">
                 <el-input
                   v-model="cityForm.beginInfected"
                   placeholder="初始感染人数"
                 ></el-input>
               </el-form-item>
 
-              <el-form-item>
+              <el-form-item class="set_button">
                 <el-button
                   type="primary"
                   @click="city_confirm"
                   :disabled="isdisabled1"
-                  >确认</el-button
+                  >确 认</el-button
                 >
               </el-form-item>
             </div>
@@ -286,26 +286,26 @@
                 ></el-input>
               </el-form-item> -->
 
-              <el-form-item prop="population">
+              <el-form-item prop="population" class="set_input">
                 <el-input
                   v-model="cityForm.population"
                   placeholder="城市人口"
                 ></el-input>
               </el-form-item>
 
-              <el-form-item prop="beginInfected">
+              <el-form-item prop="beginInfected" class="set_input">
                 <el-input
                   v-model="cityForm.beginInfected"
                   placeholder="初始感染人数"
                 ></el-input>
               </el-form-item>
 
-              <el-form-item>
+              <el-form-item class="set_button">
                 <el-button
                   type="primary"
                   @click="city_confirm"
                   :disabled="isdisabled2"
-                  >确认</el-button
+                  >确 认</el-button
                 >
               </el-form-item>
             </div>
@@ -327,26 +327,26 @@
           >
             <img src="../../assets/layui/images/city.png" alt="" />
             <div class="city-infor">
-              <el-form-item prop="population">
+              <el-form-item prop="population" class="set_input">
                 <el-input
                   v-model="cityForm.population"
                   placeholder="城市人口"
                 ></el-input>
               </el-form-item>
 
-              <el-form-item prop="beginInfected">
+              <el-form-item prop="beginInfected" class="set_input">
                 <el-input
                   v-model="cityForm.beginInfected"
                   placeholder="初始感染人数"
                 ></el-input>
               </el-form-item>
 
-              <el-form-item>
+              <el-form-item class="set_button">
                 <el-button
                   type="primary"
                   @click="city_confirm"
                   :disabled="isdisabled3"
-                  >确认</el-button
+                  >确 认</el-button
                 >
               </el-form-item>
             </div>
@@ -1629,7 +1629,7 @@ canvas {
   margin-bottom: 15px;
 }
 
-.city-infor input.el-input__inner {
+.city-infor .set_input{
   border-radius: 10px;
   width: 150px;
   margin-left: 20px;
@@ -1639,9 +1639,10 @@ canvas {
 
 .city-infor .el-button--primary,
 .city-infor .el-button--info {
-  display: inline;
+  width: 75px;
+  height: 30px;
   margin-top: 10px;
-  margin-left: 100px;
+  margin-left: 95px;
 }
 
 .line_list .road_line {
