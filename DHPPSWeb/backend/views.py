@@ -510,15 +510,17 @@ def startSimulate(request):
         # 构造发回数据
         DailyforecastData = []
         for dayCount in range(dayNum):
-            dayCase = {}
+            dayCase = []
             for cityIdx in range(cityNum):
-                dayCase["cityname"] = cityNameList[cityIdx]
-                dayCase["population"] = initPopList[cityIdx]
-                dayCase["dailyinfected"] = dailyInfectMatrix[dayCount][cityIdx]
+                cityCase = {}
+                cityCase["cityname"] = cityNameList[cityIdx]
+                cityCase["population"] = initPopList[cityIdx]
+                cityCase["dailyinfected"] = dailyInfectMatrix[dayCount][cityIdx]
                 if (dayCount == 0):
-                    dayCase["infected"] = initInfectedList[cityIdx]
+                    cityCase["infected"] = initInfectedList[cityIdx]
                 else:
-                    dayCase["infected"] = DailyforecastData[dayCount-1]["infected"] + dayCase["dailyinfected"]
+                    cityCase["infected"] = DailyforecastData[dayCount-1]["infected"] + cityCase["dailyinfected"]
+                dayCase.append(cityCase)
             DailyforecastData.append(dayCase)
         return JsonResponse({"DailyforecastData": DailyforecastData, "status": 200})
     return JsonResponse({"message": "该接口不支持此方法", "status": 404})
