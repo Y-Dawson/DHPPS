@@ -4,10 +4,10 @@
       <div class="ms-title">高传染性疾病预测系统</div>
         <el-form :model="loginForm" :rules="loginFormRules" ref="loginFormRef" class="ms-content" action="">
               <div class="account">
-                <el-form-item prop="account">
+                <el-form-item prop="account" class="loginForm">
                   <el-input
                     v-model="loginForm.account"
-                    placeholder="用户名/密码"
+                    placeholder="用户名/手机号"
                     id="loginPhone"
                   >
                   <el-button slot="prepend" icon="el-icon-user"></el-button>
@@ -16,7 +16,7 @@
               </div>
 
               <div class="password">
-                <el-form-item prop="password">
+                <el-form-item prop="password" class="loginForm">
                   <el-input
                     v-model="loginForm.password"
                     placeholder="请填写6到12位密码"
@@ -32,8 +32,8 @@
         <el-button type="primary" @click="login">登 录</el-button>
         <el-button type="info" @click="resetLoginForm">重 置</el-button>
       </el-form-item>
-      <router-link to="/signup" class="create-account" style="margin-left:10px; float:left;">创建账号</router-link>
-      <router-link to="/forgetPass" class="forget-password" style="margin-left:10px; float:right;">忘记密码</router-link>
+      <router-link to="/signup" class="create-account" style="font-size:14px;margin-left:10px; float:left;">创建账号</router-link>
+      <router-link to="/forgetPass" class="forget-password" style="font-size:14px;margin-left:10px; float:right;">忘记密码</router-link>
       <!-- <a class="forget-password" href="./forgetPass" style="margin-right:10px; float:right;">忘记密码</a> -->
      </el-form>
     </div>
@@ -178,7 +178,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 @import "../../assets/layui/css/layui.css";
  /* body {
   background-image: url(../../assets/img/background2.jpg)
@@ -208,9 +208,9 @@ export default {
 }
 
 
-.account input.el-input__inner,
-.password input.el-input__inner {
+.loginForm {
   border-radius: 0px 5px 5px 0px;
+  padding-bottom: 20px;
 }
 .el-input{
   width: 270px;
@@ -224,5 +224,6 @@ export default {
 .el-button--primary,
 .el-button--info {
   width: 100px;
+  height: 35px;
 }
 </style>

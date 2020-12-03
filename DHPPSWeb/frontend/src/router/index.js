@@ -19,6 +19,7 @@ import setting from '@/components/page/setting'
 import changePass from '@/components/page/changePass'
 import forgetPass from '@/components/page/forgetPass'
 import simulation from '@/components/page/simulation'
+// import uploadTest from '@/components/page/uploadTest'
 
 Vue.use(Router)
 
@@ -26,9 +27,10 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'profile',
-      component: profile
+      name: 'Login',
+      component: Login
     },
+    // {patht:'/uploadTest',component:uploadTest},
     {path:'/modifyPI', component:modifyPI},
     {path:'/profile', component:profile},
     {path:'/Login', component: Login},

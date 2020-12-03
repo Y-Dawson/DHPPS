@@ -84,8 +84,9 @@
                   <el-form-item label="生日">
                       <el-date-picker
                           clearable
-                          v-model="ruleForm.value1"
+                          v-model="value1"
                           type="date"
+                          value-format="yyyy-MM-dd"
                           placeholder="选择日期" size=small style="margin-left:0;align:left;display:block;float:left;"
                           id="inputdate">
                       </el-date-picker>
@@ -174,12 +175,12 @@ export default {
           }
         },
         labelPosition: 'left',
+        value1:'',
         ruleForm: {
           name: '',
           phone: '',
           email: '',
           radio:'男',
-          value1:'',
           delivery: false,
           type: [],
           addr:''
@@ -229,24 +230,32 @@ export default {
             alert("数据请求失败wdnmd");
           });
       },
-      putContent: function () {
+      putContent: function (userId) {
         var self = this;
         var uname = $("#inputname").val();
         axios
-          .put('http://127.0.0.1:8000/backend/profile/7/',{
+          .put('http://127.0.0.1:8000/backend/profile/'+userId+'/',{
           
             username : $("#inputname").val(),
             phonenumber : $('#inputphone').val(),
-            birth : $('#inputbirth').val(),
+            birth : this.value1,
             sex: this.ruleForm.radio,
             email: $('#inputmail').val(),
             address: $('#inputaddr').val()
           })
           .then(response => (
             self.content = response,
-            alert("数据发送"),
-            alert(JSON.stringify(response)),
-            alert("now")
+            // alert("数据发送"),
+            this.$message.success("修改成功"),
+            this.$router.push({
+            path:'/profile',
+            query:{
+              params:JSON.stringify({
+                userId:this.userId,
+              })
+            },
+          })
+            // alert(JSON.stringify(response))
           ))
           .catch(function (error) {
             alert(JSON.stringify(response))
@@ -257,10 +266,10 @@ export default {
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            this.putContent()
-            alert('submit!')
+            this.putContent(this.userId)
+            // alert('submit!')
           } else {
-            console.log('error submit!!')
+            this.$message.error("修改失败")
             return false
           }
         });

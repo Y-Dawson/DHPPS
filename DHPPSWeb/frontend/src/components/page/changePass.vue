@@ -148,10 +148,21 @@ export default {
       this.getContent()
     },
     methods: {
+        submitMessage: function(){
+          if(this.passMassege=="账号原密码错误"){
+            this.$message.error("原密码错误")
+          }
+          else if(this.passMassege=="修改成功"){
+            this.$message.success("修改密码成功")
+          }
+          else{
+            this.$message.error("修改失败")
+          }
+        },
         changePass: function () {
             var self = this
             let data = new FormData()
-            data.append("userid",7)
+            data.append("userid",this.userId)
             data.append("oldPassword",$('#prepass').val())
             data.append("newPassword",$('#newpass').val())
             // var prepass=$("#prepass").val()
@@ -159,8 +170,10 @@ export default {
             .post('http://127.0.0.1:8000/backend/changePwd/', data)
             .then(response => (
                 self.content = response.data,
-                alert(JSON.stringify(response)),
-                self.$message.success("修改密码成功")
+                self.passMassege=response.data.message,
+                // alert(JSON.stringify(response.data.message)),
+                // self.$message.success("修改密码成功")
+                self.submitMessage()
             ))
             .catch(function (error) { // 请求失败处理
                 alert(JSON.stringify(error.response))
@@ -184,7 +197,7 @@ export default {
             if (valid) {
                 this.changePass()
                 // this.putContent()
-                alert('submit!')
+                // alert('submit!')
             } else {
                 console.log('error submit!!')
                 return false
