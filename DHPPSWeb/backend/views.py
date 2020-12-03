@@ -470,7 +470,10 @@ def startSimulate(request):
                     # 存入城市感染人口和城市坐标
                     initInfectedList.append(int(value))
                     y = float(posValue)
-                    cityPosList.append(list(x, y))
+                    posList=[]
+                    posList.append(x)
+                    posList.append(y)
+                    cityPosList.append(posList)
                 cityCount += 1
             
             # 新增道路信息
@@ -501,21 +504,23 @@ def startSimulate(request):
         dailyInfectMatrix = []
         for dayCount in range(dayNum):
             dayNewInfect = []
-            for cityIdx in range(dayNum):
+            for cityIdx in range(cityNum):
                 dayNewInfect.append(dayCount*10)
             dailyInfectMatrix.append(dayNewInfect)
         # 构造发回数据
         DailyforecastData = []
         for dayCount in range(dayNum):
-            dayCase = {}
-            for cityIdx in range(dayNum):
-                dayCase["cityname"] = cityNameList[cityIdx]
-                dayCase["population"] = initPopList[cityIdx]
-                dayCase["dailyinfected"] = dailyInfectMatrix[dayCount][cityIdx]
+            dayCase = []
+            for cityIdx in range(cityNum):
+                cityCase = {}
+                cityCase["cityname"] = cityNameList[cityIdx]
+                cityCase["population"] = initPopList[cityIdx]
+                cityCase["dailyinfected"] = dailyInfectMatrix[dayCount][cityIdx]
                 if (dayCount == 0):
-                    dayCase["infected"] = initInfectedList[cityIdx]
+                    cityCase["infected"] = initInfectedList[cityIdx]
                 else:
-                    dayCase["infected"] = DailyforecastData[dayCount-1]["infected"] + dayCase["dailyinfected"]
+                    cityCase["infected"] = DailyforecastData[dayCount-1][cityIdx]["infected"] + cityCase["dailyinfected"]
+                dayCase.append(cityCase)
             DailyforecastData.append(dayCase)
         return JsonResponse({"DailyforecastData": DailyforecastData, "status": 200})
     return JsonResponse({"message": "该接口不支持此方法", "status": 404})

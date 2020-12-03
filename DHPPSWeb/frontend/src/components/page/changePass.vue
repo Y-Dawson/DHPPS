@@ -40,11 +40,11 @@
                     系统菜单
                 </div>
                 <dl class="layui-nav-child">
-                    <dd><router-link to="/profile">个人资料</router-link></dd>
+                    <dd><router-link :to="{path:'/profile',query:{userId:userId}}">个人资料</router-link></dd>
                 </dl>
-                <router-link to="/modifyPI">修改资料</router-link>
+                <router-link :to="{path:'/modifyPI',query:{userId:userId}}">修改资料</router-link>
                 <dl class="layui-nav-child">
-                    <dd><router-link to="/caseView">案例查看</router-link></dd>
+                    <dd><router-link :to="{path:'/caseView',query:{userId:userId}}">案例查看</router-link></dd>
                 </dl>
             </li>
           </ul>
@@ -55,7 +55,7 @@
         <div style="padding: 15px;">
           <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
             <ul class="layui-tab-title">
-              <li><router-link to="/modifyPI" style="color: #55587e;">修改资料</router-link></li>
+              <li><router-link :to="{path:'/modifyPI',query:{userId:userId}}" style="color: #55587e;">修改资料</router-link></li>
               <li class="layui-this" style="color: #55587e;">修改密码</li>
             </ul>
             <div class="layui-tab-content" style="margin-top:30px;">
@@ -148,10 +148,21 @@ export default {
       this.getContent()
     },
     methods: {
+        submitMessage: function(){
+          if(this.passMassege=="账号原密码错误"){
+            this.$message.error("原密码错误")
+          }
+          else if(this.passMassege=="修改成功"){
+            this.$message.success("修改密码成功")
+          }
+          else{
+            this.$message.error("修改失败")
+          }
+        },
         changePass: function () {
             var self = this
             let data = new FormData()
-            data.append("userid",7)
+            data.append("userid",this.userId)
             data.append("oldPassword",$('#prepass').val())
             data.append("newPassword",$('#newpass').val())
             // var prepass=$("#prepass").val()
@@ -159,8 +170,10 @@ export default {
             .post('http://127.0.0.1:8000/backend/changePwd/', data)
             .then(response => (
                 self.content = response.data,
-                alert(JSON.stringify(response)),
-                self.$message.success("修改密码成功")
+                self.passMassege=response.data.message,
+                // alert(JSON.stringify(response.data.message)),
+                // self.$message.success("修改密码成功")
+                self.submitMessage()
             ))
             .catch(function (error) { // 请求失败处理
                 alert(JSON.stringify(error.response))
@@ -170,7 +183,7 @@ export default {
         getContent: function () {
         var self = this;
         axios
-          .get("http://127.0.0.1:8000/backend/profile/7/")
+          .get("http://127.0.0.1:8000/backend/profile/"+this.userId+"/")
           .then(response => (
             self.content = response.data
             // alert(JSON.stringify(response))
@@ -184,7 +197,7 @@ export default {
             if (valid) {
                 this.changePass()
                 // this.putContent()
-                alert('submit!')
+                // alert('submit!')
             } else {
                 console.log('error submit!!')
                 return false
