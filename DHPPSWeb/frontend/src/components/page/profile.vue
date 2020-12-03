@@ -110,7 +110,7 @@ export default {
     name: 'profile',
     data: function () {
       return {
-        userId:7,
+        userId:this.$route.query.userId,
         // 传参
         content: [],
         // 头像
