@@ -500,7 +500,7 @@ export default {
           path: "/setting",
           query: {
             params: JSON.stringify({
-              userId: 3,
+              userId: this.userId,
               casename: this.casename,
               citynum: this.citycnt,
               roadnum: this.linecnt,

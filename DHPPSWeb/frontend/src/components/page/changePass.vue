@@ -183,7 +183,7 @@ export default {
         getContent: function () {
         var self = this;
         axios
-          .get("http://127.0.0.1:8000/backend/profile/7/")
+          .get("http://127.0.0.1:8000/backend/profile/"+this.userId+"/")
           .then(response => (
             self.content = response.data
             // alert(JSON.stringify(response))

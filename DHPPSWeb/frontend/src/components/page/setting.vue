@@ -784,7 +784,7 @@ export default {
 
           var myFormData = new FormData();
 
-          myFormData.append("userid", 3);
+          myFormData.append("userid", this.userId);
 
           myFormData.append("casename", casename);
 
@@ -871,7 +871,7 @@ export default {
                 path: "/simulation",
                 query: {
                   params: JSON.stringify({
-                    userid: 1,
+                    userid: this.userId,
                     casename: casename,
                     citynum: citycnt,
                     roadnum: roadcnt,
@@ -929,7 +929,7 @@ export default {
 
           var myFormData = new FormData();
 
-          myFormData.append("userid", 3);
+          myFormData.append("userid", this.userId);
 
           myFormData.append("casename", value);
 
