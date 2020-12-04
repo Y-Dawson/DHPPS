@@ -165,27 +165,25 @@
 export default {
   name: "changePass",
   data() {
-    var validatePass = (rule, value, callback) => {
-      if (!value) {
-        return callback(new Error("请输入密码"));
-      }
-      setTimeout(() => {
-        // let reg =  /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[._~!@#$^&*])[A-Za-z0-9._~!@#$^&*]{6,12}$/
-        // if (value == '' || !reg.test(value)) {
-        //   callback(new Error('密码长度为6-12位，必须由字母、数字、特殊符号（. _ ~ ! @ # $ ^ & *）组成，区分大小写'));
-        // }
-        if (value == "") {
-          callback(new Error("请输入密码"));
-        } else {
-          callback();
+    var validatePass= (rule, value, callback) => {
+        if (!value) {
+          return callback(new Error('请输入密码'));
         }
-      });
-    };
+        setTimeout(() => {
+          let reg =  /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[._~!@#$^&*])[A-Za-z0-9._~!@#$^&*]{6,12}$/
+          if (value == '' || !reg.test(value)) {
+            callback(new Error('密码长度为6~12位，必须由字母、数字、特殊符号(._~!@#$^&*)组成'));
+          }
+          else{
+            callback();
+          }
+        });
+      }
     var validatePass2 = (rule, value, callback) => {
-      if (value === "") {
-        callback(new Error("请再次输入密码"));
+      if (value === '') {
+        callback(new Error('请再次输入密码'));
       } else if (value !== this.ruleForm.pass) {
-        callback(new Error("两次输入密码不一致!"));
+        callback(new Error('两次输入密码不一致!'));
       } else {
         callback();
       }
@@ -270,6 +268,7 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          alert("this is submit")
           this.changePass();
           // this.putContent()
           // alert('submit!')
