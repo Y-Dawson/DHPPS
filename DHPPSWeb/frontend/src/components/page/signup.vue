@@ -1,5 +1,5 @@
 <template>
-  <div id="signup">
+  <div id="signup" :style="bgImg">
     <div class="ms-login">
       <div class="ms-title">高传染性疾病预测系统</div>
       <el-form :model="signupForm" :rules="signupFormRules" ref="signupForm" class="ms-content" action="">
@@ -189,6 +189,9 @@ export default {
         });
       };
     return {
+      bgImg:{ backgroundImage:"url(" + require("../../assets/img/background2.jpg") + ")",
+              height:'100vh',//这里一定要设置高度 否则背景图无法显示
+              backgroundRepeat: "no-repeat"},
       signupForm: {
         username: "",
         password: "",
@@ -261,13 +264,6 @@ export default {
   }
 };
 </script>
-<style>
-@import "../../assets/layui/css/layui.css";
-body {
-  background-image: url(../../assets/img/background2.jpg);
-  /* width: 1000px; */
-}
-</style>
 
 <style scoped>
 @import "../../assets/layui/css/layui.css";

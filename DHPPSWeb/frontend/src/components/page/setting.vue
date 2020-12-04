@@ -1321,7 +1321,7 @@ export default {
 
           var myFormData = new FormData();
 
-          myFormData.append("userid", this.userId);
+          myFormData.append("userid", 3);
 
           myFormData.append("casename", value);
 
@@ -1825,9 +1825,9 @@ export default {
 <style scoped>
 @import "../../assets/layui/css/layui.css";
 
-body {
+/* body {
   overflow: hidden;
-}
+} */
 
 .layui-nav-tree .layui-nav-item a {
   font-weight: bold;
