@@ -11,6 +11,7 @@
           <li class="layui-nav-item">个人中心</li>
         </ul>
         <ul class="layui-nav layui-layout-right">
+<<<<<<< Updated upstream
           <li class="layui-nav-item" style="line-height: 40px">
             <router-link
               style="margin-left: 10px; float: left"
@@ -35,6 +36,15 @@
             ></el-avatar>
           </li>
           <li class="layui-nav-item">
+=======
+          <li class="layui-nav-item" style="line-height:40px;" >
+                <router-link :to="{path:'/setting',query:{userId:userId}}">回到首页</router-link>
+            </li>
+            <li class="layui-nav-item" style="line-height:20px;" >
+              <el-avatar shape="circle" :size="30" :fit="fit" :src="url"></el-avatar>
+            </li>
+            <li class="layui-nav-item">
+>>>>>>> Stashed changes
             <a href="javascript:;">
               <span>{{ content.username }}</span>
             </a>
@@ -332,9 +342,7 @@ export default {
             this.$router.push({
               path: "/profile",
               query: {
-                params: JSON.stringify({
-                  userId: this.userId,
-                }),
+                  userId: this.userId
               },
             })
             // alert(JSON.stringify(response))

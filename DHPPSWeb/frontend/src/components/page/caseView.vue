@@ -36,7 +36,7 @@
           </li>
           <li class="layui-nav-item">
             <a href="javascript:;">
-              <span>用户名</span>
+              <span>{{ content.username }}</span>
             </a>
           </li>
         </ul>
@@ -193,6 +193,7 @@ export default {
   data: function () {
     return {
       // 传参
+      content:[],
       userId: this.$route.query.userId,
       contentList: [],
       isBackground: true,
@@ -209,7 +210,9 @@ export default {
       currentPageData: [], //当前页显示内容
     };
   },
-
+  created: function (){
+    this.getContent()
+  },
   mounted: function () {
     // this.getcasenum(this.userid)
     // alert(this.userId)
@@ -231,6 +234,20 @@ export default {
     },
     setPages() {
       if (this.totalPage < 1) totalPage = 1;
+    },
+    getContent: function () {
+      var self = this;
+      axios
+        .get("http://127.0.0.1:8000/backend/profile/" + this.userId + "/")
+        .then(
+          (response) => (self.content = response.data),
+          alert(JSON.stringify("response.data")),
+          alert(JSON.stringify(response.data))
+        )
+        .catch(function (error) {
+          // 请求失败处理
+          alert("数据请求失败wdnmd");
+        });
     },
     //获取案例内容
     getCaseContent: function () {

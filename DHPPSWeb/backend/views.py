@@ -8,6 +8,7 @@ from django.views import View
 from backend import models
 from backend import customSerializers
 from backend.sendSms import sendSms
+from backend.returnDataSimulator import model
 from django.http import HttpResponseForbidden, JsonResponse
 from backend.captcha.captcha import captcha
 from django_redis import get_redis_connection
@@ -521,14 +522,15 @@ def startSimulate(request):
             print('########################################################')
             return JsonResponse({"message": "案例保存失败，数据库出错", "status": 404})
         # 调用模型函数，传入参数，获得返回值
-        # dailyInfectMatrix = RunTheModel(initPopList,initRoadList,initInfectedList,dayNum)
+        dailyInfectMatrix = model(initPopList, dayNum)
         # 以下为模拟产生返回数据
-        dailyInfectMatrix = []
-        for dayCount in range(dayNum):
-            dayNewInfect = []
-            for cityIdx in range(cityNum):
-                dayNewInfect.append(dayCount*10)
-            dailyInfectMatrix.append(dayNewInfect)
+        # dailyInfectMatrix = []
+        # for dayCount in range(dayNum):
+        #     dayNewInfect = []
+        #     for cityIdx in range(cityNum):
+        #         dayNewInfect.append(dayCount*10)
+        #     dailyInfectMatrix.append(dayNewInfect)
+
         # 构造发回数据
         DailyforecastData = []
         for dayCount in range(dayNum):
@@ -537,7 +539,7 @@ def startSimulate(request):
                 cityCase = {}
                 cityCase["cityname"] = cityNameList[cityIdx]
                 cityCase["population"] = initPopList[cityIdx]
-                cityCase["dailyinfected"] = dailyInfectMatrix[dayCount][cityIdx]
+                cityCase["dailyinfected"] = dailyInfectMatrix[cityIdx][dayCount]
                 if (dayCount == 0):
                     cityCase["infected"] = initInfectedList[cityIdx]
                 else:

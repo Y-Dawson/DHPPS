@@ -86,6 +86,20 @@
 <script>
 export default {
   data() {
+    var validatePass= (rule, value, callback) => {
+        if (!value) {
+          return callback(new Error('请输入密码'));
+        }
+        setTimeout(() => {
+          let reg =  /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[._~!@#$^&*])[A-Za-z0-9._~!@#$^&*]{6,12}$/
+          if (value == '' || !reg.test(value)) {
+            callback(new Error('密码长度为6~12位，必须由字母、数字、特殊符号(._~!@#$^&*)组成'));
+          }
+          else{
+            callback();
+          }
+        });
+      }
     var validatePass2 = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请再次输入密码'));
@@ -119,18 +133,9 @@ export default {
       returnData:[],
       returnmessage:"",
       forgetFormRules: {
-        password: [
-          { required: true, message: "请输入密码", trigger: "blur"},
-          { min: 6, max: 12, message: "长度在6到12个字符之间", trigger: "blur"}          ],
-        password2: [
-          { required: true, message: "请再次输入密码", trigger: "blur"},
-          // { min: 6, max: 12, message: "长度在6到12个字符之间", trigger: "blur"},
-          { validator: validatePass2, trigger: 'blur', required: true }
-          ],
-        phone: [
-          { required: true, validator:checkphone, trigger: "blur"},
-          { min: 11, max: 11, message: "请输入11位手机号", trigger: "blur"}
-          ],
+        password: [{ required: true, validator:validatePass,trigger: "blur"}],
+        password2: [{ validator: validatePass2, trigger: 'blur', required: true }],
+        phone: [{ required: true, validator:checkphone, trigger: "blur"}],
         securitt_code: [
           { required: true, message: "请输入验证码", trigger: "blur"},
           { min: 4, max: 4, message: "请输入4位验证码", trigger: "blur"}
