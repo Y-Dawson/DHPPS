@@ -83,7 +83,7 @@
             <button
               type="primary"
               v-bind:class="{ active1: ss }"
-              @click="ss = !ss"
+              @click="ss = !ss;sst(ss);"
             >
               <i class="layui-icon layui-icon-pause"></i>
               <span>停止模拟</span>
@@ -193,20 +193,15 @@
             <img src="../../assets/layui/images/city.png" alt="" />
             <div class="city-infor">
               <el-form-item prop="population">
-                <span>总人口：{{}}</span>
+                <span>总人口：{{ ci2_population[day] }}</span>
               </el-form-item>
 
               <el-form-item prop="beginInfected">
-                <el-input
-                  v-model="cityForm.beginInfected"
-                  placeholder="初始感染人数"
-                ></el-input>
+                <span>总感染人数：{{ ci2_totalInfected[day] }}</span>
               </el-form-item>
 
               <el-form-item>
-                <el-button type="primary" :disabled="isdisabled2"
-                  >确认</el-button
-                >
+                <span>新增感染人数：{{ ci2_newInfected[day] }}</span>
               </el-form-item>
             </div>
           </div>
@@ -337,9 +332,20 @@ export default {
 
       day: 0,
 
-      ci1_population: ["100", "200", "300", "400", "500"],
-      ci1_totalInfected: ["100", "200", "300", "400", "500"],
-      ci1_newInfected: ["100", "200", "300", "400", "500"],
+      userId: "",
+      casename: "",
+      citycnt: 1,
+      linecnt: 1,
+      city_inf: [],
+      road_inf: [],
+      city_position: [],
+
+      ci1_population: [],
+      ci1_totalInfected: [],
+      ci1_newInfected: [],
+      ci2_population: [],
+      ci2_totalInfected: [],
+      ci2_newInfected: [],
 
       city_po: [],
       road_di: [],
@@ -389,7 +395,7 @@ export default {
 
   mounted: function () {
     this.params = JSON.parse(this.$route.query.params);
-    
+
     console.log("用户ID：", this.params.userid);
     console.log("案例名：", this.params.casename);
     console.log("城市数目：", this.params.citynum);
@@ -398,6 +404,15 @@ export default {
     console.log("道路信息：", this.params.Initroaddata);
     console.log("城市坐标：", this.params.Cityposition);
     console.log("每日病例：", this.params.DailyInfected.data.DailyforecastData);
+    var foreData = this.params.DailyInfected.data.DailyforecastData;
+
+    this.userId = this.params.userid;
+    this.casename = this.params.casename;
+    this.citycnt = this.params.citynum;
+    this.linecnt = this.params.roadnum;
+    this.city_inf = this.params.Initcitydata;
+    this.road_inf = this.params.Initroaddata;
+    this.city_position = this.params.Cityposition;
 
     var cnt = 0;
     for (var j in this.params.Cityposition) {
@@ -419,12 +434,7 @@ export default {
           y = tt[1];
         }
       }
-      console.log("te:", te);
-      console.log("ci:" + ci);
-      console.log("x:" + x);
-      console.log("y:" + y);
       cid = this.getID(ci);
-      console.log(cid);
       var cityentity = document.getElementById(cid);
       cityentity.style.left = x + "px";
       cityentity.style.top = y + "px";
@@ -459,12 +469,48 @@ export default {
 
       this.drawline(cid1, cid2);
     }
+    // for (var case in foreData) {
+    //   for(var city in case){
+
+    //   }
+    // }
+    console.log("开始处理每日病例数据");
+    console.log(foreData[0]);
+    console.log(foreData[0][0]);
+    console.log(foreData[0][0]["cityname"]);
+
+    for (var i = 0; i < parseInt(this.params.Daynum); i++) {
+      for (var j = 0; j < parseInt(this.params.citynum); j++) {
+        this.add_inf(
+          foreData[i][j]["cityname"],
+          foreData[i][j]["population"],
+          foreData[i][j]["dailyinfected"],
+          foreData[i][j]["infected"]
+        );
+      }
+    }
   },
 
   methods: {
     sst(ss) {
-      this.ss = false;
-      this.$router.push("/setting");
+      if (this.ss == true) {
+        console.log("返回设置参数界面");
+        this.ss = false;
+        this.$router.push({
+          path: "/setting",
+          query: {
+            params: JSON.stringify({
+              userId: this.userId,
+              casename: this.casename,
+              citynum: this.citycnt,
+              roadnum: this.linecnt,
+              Initcitydata: this.city_inf,
+              Initroaddata: this.road_inf,
+              Cityposition: this.city_position,
+            }),
+          },
+        });
+      }
     },
 
     formatTooltip(val) {
@@ -492,16 +538,16 @@ export default {
       var cy2 = c2.style.top;
       var tcy2 = cy2.substring(0, cy2.length - 2);
 
-      console.log("tcx1:",tcx1);
-      console.log("tcy1:",tcy1);
-      console.log("tcx2:",tcx2);
-      console.log("tcy2:",tcy2);
+      console.log("tcx1:", tcx1);
+      console.log("tcy1:", tcy1);
+      console.log("tcx2:", tcx2);
+      console.log("tcy2:", tcy2);
 
       const dx = Math.abs(tcx1 - tcx2);
       const dy = Math.abs(tcy1 - tcy2);
       var dis = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
 
-      console.log("dis:",dis);
+      console.log("dis:", dis);
 
       var ttcx1 = parseInt(tcx1);
       var ttcx2 = parseInt(tcx2);
@@ -530,7 +576,7 @@ export default {
       ll.style.top = (ttcy1 + ttcy2) / 2 + 50 + "px";
       ll.style.width = parseInt(dis) + "px";
       ll.style.transform = "rotate(" + rotang + "deg)";
-      linecnt += 1;
+      this.linecnt += 1;
     },
 
     getID(n) {
@@ -539,11 +585,34 @@ export default {
       if (n == "C") return "ci3";
       if (n == "D") return "ci4";
     },
+
+    add_inf(n, popu, dinf, inf) {
+      if (n == "A") {
+        this.ci1_population.push(popu);
+        this.ci1_totalInfected.push(inf);
+        this.ci1_newInfected.push(dinf);
+      }
+      if (n == "B") {
+        this.ci2_population.push(popu);
+        this.ci2_totalInfected.push(inf);
+        this.ci2_newInfected.push(dinf);
+      }
+      if (n == "C") {
+        this.ci3_population.push(popu);
+        this.ci3_totalInfected.push(inf);
+        this.ci3_newInfected.push(dinf);
+      }
+      if (n == "D") {
+        this.ci3_population.push(popu);
+        this.ci3_totalInfected.push(inf);
+        this.ci3_newInfected.push(dinf);
+      }
+    },
   },
 };
 </script>
 
-<style>
+<style scoped>
 @import "../../assets/layui/css/layui.css";
 
 /* body {
