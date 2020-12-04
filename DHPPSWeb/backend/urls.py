@@ -20,6 +20,12 @@ urlpatterns = [
     # 登出请求
     path('signout/', views.logout, name="logout"),
 
+    # 请求短信验证码
+    path('requestSmsCode/', views.requestSmsCode, name="requestSmsCode"),
+
+    # 请求对应caseId的案例信息
+    path('getCaseInfo/', views.getAllCaseInfos, name="getCaseInfo"),
+
     # 注册请求
     path('signup/', views.signup, name="signup"),
 
@@ -35,9 +41,9 @@ urlpatterns = [
     # 开始模拟请求
     path('startSimulate/', views.startSimulate, name="startSimulate"),
     # 用户管理数据请求
-    path('userManage/', views.GetUserInfos, name="userManage"),
-    path('generalUserManage/', views.GetGeneralUserInfos, name="generalUserManage"),
-    path('adminManage/', views.GetAdminInfos, name="adminManage"),
+    path('userManage/', views.getUserInfos, name="userManage"),
+    path('generalUserManage/', views.getGeneralUserInfos, name="generalUserManage"),
+    path('adminManage/', views.getAdminInfos, name="adminManage"),
     # 以下为对任意模型的增删改查列
 
     # 关于accountInfo的请求：

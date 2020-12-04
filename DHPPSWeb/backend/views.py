@@ -7,6 +7,7 @@ from django.shortcuts import render, get_object_or_404
 from django.views import View
 from backend import models
 from backend import customSerializers
+from backend.sendSms import sendSms
 from django.http import HttpResponseForbidden, JsonResponse
 from backend.captcha.captcha import captcha
 from django_redis import get_redis_connection
@@ -132,7 +133,7 @@ def signin(request):
 # 登出函数视图
 # 从缓存获取对应session
 # 登出成功，返回消息和200状态码
-# 登出失败，返沪消息和404状态码
+# 登出失败，返回消息和404状态码
 def logout(request):
     message = "登出成功"
     status = 200
@@ -147,6 +148,28 @@ def logout(request):
         response = JsonResponse({"message": message, "status": status})
         response.delete_cookie("userId")
         return response
+
+
+# 请求短信验证码函数视图
+# 通过阿里云短信服务发送验证码，并保存验证码到redis缓存
+# 发送成功，返回消息和200状态码
+# 发送失败，返回消息和404状态码
+def requestSmsCode(request):
+    if request.method == "POST":
+        phonenum = request.POST.get('phonenum', None)
+        code, message, result = sendSms(phonenum)
+        try:
+            # 4.连接到redis
+            redisClient = get_redis_connection('sms_code')
+            # 5.生成redis管道
+            pipeline = redisClient.pipeline()
+            # 6.保存验证码，用于后续与用户输入值对比，设置过期时间
+            pipeline.setex(phonenum, 300, code)
+            # 7.传递指令
+            pipeline.execute()
+        except Exception:
+            JsonResponse({"message": "保存到redis失败", "status": 404})
+        JsonResponse({"message": "验证码已发送", "status": 200})
 
 
 # 注册函数视图
@@ -279,7 +302,6 @@ def forgetPwd(request):
             account = models.Accountinformation.objects.get(userid=profile.userid.userid)
 
             # 缺少逻辑：检测短信验证码是否正确
-
             newSalt = secrets.token_hex(4)
             encryPassword = hash_pwd(pwd=newPassword, salt=newSalt)
             models.Logindata.objects.filter(userid=account.userid).update(userpassword=encryPassword, salt=newSalt)
@@ -470,12 +492,12 @@ def startSimulate(request):
                     # 存入城市感染人口和城市坐标
                     initInfectedList.append(int(value))
                     y = float(posValue)
-                    posList=[]
+                    posList = []
                     posList.append(x)
                     posList.append(y)
                     cityPosList.append(posList)
                 cityCount += 1
-            
+
             # 新增道路信息
             roadCount = 0
             for roadInfo in initroaddataList:
@@ -580,7 +602,50 @@ class ImageCodeView(View):
         return JsonResponse({"message": message, "status": status})
 
 
-def GetUserInfos(request):
+def getAllCaseInfos(request):
+    if request.method == "GET":
+        caseId = request.GET.get("caseid")
+        if caseId:
+            try:
+                caseInfo = models.Casedata.objects.filter(caseid=caseId).first()
+                cityInfos = models.Initcitydata.objects.filter(caseid=caseInfo)
+                # cityInfos.citypostion
+                roadInfos = models.Initaroaddata.objects.filter(caseid=caseInfo)
+
+                cases = {}
+                cityList = []
+                for cityIdx in range(len(cityInfos)):
+                    cityCase = {}
+                    cityCase["cityname"] = cityInfos[cityIdx].cityname
+                    cityCase["initpop"] = cityInfos[cityIdx].initpop
+                    cityCase["initinfect"] = cityInfos[cityIdx].initinfect
+                    cityCase["x"] = cityInfos[cityIdx].cityposition.x
+                    cityCase["y"] = cityInfos[cityIdx].cityposition.y
+                    cityList.append(cityCase)
+
+                roadList = []
+                for roadIdx in range(len(roadInfos)):
+                    roadCase = {}
+                    roadCase["departure"] = roadInfos[roadIdx].departure
+                    roadCase["destination"] = roadInfos[roadIdx].destination
+                    roadCase["volume"] = roadInfos[roadIdx].volume
+                    roadList.append(roadCase)
+
+                cases["cities"] = cityList
+                cases["roads"] = roadList
+                return JsonResponse({"message": "成功返回数据", "cases": cases, "status": 200})
+            except Exception as e:
+                print('str(Exception):\t', str(Exception))
+                print('str(e):\t\t', str(e))
+                print('repr(e):\t', repr(e))
+                # print('e.message:\t', e.message)
+                print('########################################################')
+                return JsonResponse({"message": "成功返回数据", "status": 200})
+        return JsonResponse({"message": "请求参数未填写", "status": 404})
+    return JsonResponse({"message": "请求方法未注册", "status": 404})
+
+
+def getUserInfos(request):
     if request.method == "GET":
         pageSize = request.GET.get("pageSize")
         page = request.GET.get("page")
@@ -606,7 +671,7 @@ def GetUserInfos(request):
         })
 
 
-def GetGeneralUserInfos(request):
+def getGeneralUserInfos(request):
     if request.method == "GET":
         pageSize = request.GET.get("pageSize")
         page = request.GET.get("page")
@@ -632,7 +697,7 @@ def GetGeneralUserInfos(request):
         })
 
 
-def GetAdminInfos(request):
+def getAdminInfos(request):
     if request.method == "GET":
         pageSize = request.GET.get("pageSize")
         page = request.GET.get("page")
