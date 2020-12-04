@@ -519,6 +519,8 @@ export default {
     console.log("城市坐标：", this.params.Cityposition);
     this.userId = this.params.userId;
 
+    
+
     if (this.params.casename != 999) {
       console.log("从模拟界面返回");
       citycnt = this.params.citynum + 1;
@@ -685,7 +687,10 @@ export default {
       this.dr = false;
       this.bs = false;
       this.sc = false;
-      this.$router.push("/caseView");
+      this.$router.push({
+        path: "/caseView",
+        query: { userId: this.userId },
+      });
     },
     // canvas() {
     //   var canvas = this.$refs.canvas;
@@ -865,8 +870,8 @@ export default {
           axios
             .post("http://127.0.0.1:8000/backend/startSimulate/", myFormData)
             .then((response) => {
-              alert(JSON.stringify(response));
-              alert("保存案例");
+              // alert(JSON.stringify(response));
+              // alert("保存案例");
               this.$router.push({
                 path: "/simulation",
                 query: {
@@ -885,8 +890,8 @@ export default {
               });
             })
             .catch(function (error) {
-              alert(JSON.stringify(response));
-              alert("发送失败");
+              // alert(JSON.stringify(response));
+              // alert("发送失败");
             });
         })
         .catch(() => {
@@ -1008,12 +1013,12 @@ export default {
           axios
             .post("http://127.0.0.1:8000/backend/saveCase/", myFormData)
             .then((response) => {
-              alert(JSON.stringify(response));
-              alert("保存案例");
+              // alert(JSON.stringify(response));
+              // alert("保存案例");
             })
             .catch(function (error) {
-              alert(JSON.stringify(response));
-              alert("发送失败");
+              // alert(JSON.stringify(response));
+              // alert("发送失败");
             });
         })
         .catch(() => {
@@ -1238,7 +1243,7 @@ export default {
           }
 
           console.log("cn：" + cn);
-          this.city_po.splice(cn*2, 2);
+          this.city_po.splice(cn * 2, 2);
 
           for (var i in this.city_po) {
             console.log(this.city_po[i]);
