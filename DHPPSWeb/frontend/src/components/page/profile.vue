@@ -19,7 +19,10 @@
         </ul>
         <ul class="layui-nav layui-layout-right">
           <li class="layui-nav-item" style="line-height:40px;" >
-                <router-link to="/setting"  style="margin-left:10px; float:left;">回到首页</router-link>
+                <router-link :to="{path:'/setting',query:{
+                  params:JSON.stringify({
+                  userId:this.userId
+              })}}">回到首页</router-link>
             </li>
             <li class="layui-nav-item" style="line-height:20px;" >
               <el-avatar shape="circle" :size="30" :fit="fit" :src="url"></el-avatar>
@@ -121,6 +124,7 @@ export default {
     },
     created: function () {
       //为了在内部函数能使用外部函数的this对象，要给它赋值了一个名叫self的变量。
+      alert(this.userId)
       this.getContent(this.userId)
     },
     methods: {

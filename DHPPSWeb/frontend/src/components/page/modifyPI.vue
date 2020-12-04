@@ -18,7 +18,7 @@
         </ul>
         <ul class="layui-nav layui-layout-right">
           <li class="layui-nav-item" style="line-height:40px;" >
-                <a href="javascript:;" style="test-align:center;">回到首页</a>
+                <router-link :to="{path:'/setting',query:{userId:userId}}">回到首页</router-link>
             </li>
             <li class="layui-nav-item" style="line-height:20px;" >
               <el-avatar shape="circle" :size="30" :fit="fit" :src="url"></el-avatar>

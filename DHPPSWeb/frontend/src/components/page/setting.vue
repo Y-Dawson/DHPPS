@@ -518,7 +518,7 @@ export default {
     console.log("道路信息：", this.params.Initroaddata);
     console.log("城市坐标：", this.params.Cityposition);
     this.userId = this.params.userId;
-
+    // alert(this.userId)
     if (this.params.casename != 999) {
       console.log("从模拟界面返回");
       citycnt = this.params.citynum + 1;
@@ -929,7 +929,7 @@ export default {
 
           var myFormData = new FormData();
 
-          myFormData.append("userid", this.userId);
+          myFormData.append("userid", 3);
 
           myFormData.append("casename", value);
 
@@ -1433,9 +1433,9 @@ export default {
 <style scoped>
 @import "../../assets/layui/css/layui.css";
 
-body {
+/* body {
   overflow: hidden;
-}
+} */
 
 .layui-nav-tree .layui-nav-item a {
   font-weight: bold;
