@@ -83,7 +83,10 @@
             <button
               type="primary"
               v-bind:class="{ active1: ss }"
-              @click="ss = !ss;sst(ss);"
+              @click="
+                ss = !ss;
+                sst(ss);
+              "
             >
               <i class="layui-icon layui-icon-pause"></i>
               <span>停止模拟</span>
@@ -219,23 +222,67 @@
             <img src="../../assets/layui/images/city.png" alt="" />
             <div class="city-infor">
               <el-form-item prop="population">
-                <el-input
-                  v-model="cityForm.population"
-                  placeholder="城市人口"
-                ></el-input>
+                <span>总人口：{{ ci3_population[day] }}</span>
               </el-form-item>
 
               <el-form-item prop="beginInfected">
-                <el-input
-                  v-model="cityForm.beginInfected"
-                  placeholder="初始感染人数"
-                ></el-input>
+                <span>总感染人数：{{ ci3_totalInfected[day] }}</span>
               </el-form-item>
 
               <el-form-item>
-                <el-button type="primary" :disabled="isdisabled3"
-                  >确认</el-button
-                >
+                <span>新增感染人数：{{ ci3_newInfected[day] }}</span>
+              </el-form-item>
+            </div>
+          </div>
+        </li>
+
+        <li>
+          <div
+            id="ci4"
+            class="city"
+            :style="{
+              left: cityForm.cityleft + 'px',
+              top: cityForm.citytop + 'px',
+            }"
+          >
+            <img src="../../assets/layui/images/city.png" alt="" />
+            <div class="city-infor">
+              <el-form-item prop="population">
+                <span>总人口：{{ ci4_population[day] }}</span>
+              </el-form-item>
+
+              <el-form-item prop="beginInfected">
+                <span>总感染人数：{{ ci4_totalInfected[day] }}</span>
+              </el-form-item>
+
+              <el-form-item>
+                <span>新增感染人数：{{ ci4_newInfected[day] }}</span>
+              </el-form-item>
+            </div>
+          </div>
+        </li>
+
+        <li>
+          <div
+            id="ci5"
+            class="city"
+            :style="{
+              left: cityForm.cityleft + 'px',
+              top: cityForm.citytop + 'px',
+            }"
+          >
+            <img src="../../assets/layui/images/city.png" alt="" />
+            <div class="city-infor">
+              <el-form-item prop="population">
+                <span>总人口：{{ ci5_population[day] }}</span>
+              </el-form-item>
+
+              <el-form-item prop="beginInfected">
+                <span>总感染人数：{{ ci5_totalInfected[day] }}</span>
+              </el-form-item>
+
+              <el-form-item>
+                <span>新增感染人数：{{ ci5_newInfected[day] }}</span>
               </el-form-item>
             </div>
           </div>
@@ -268,6 +315,28 @@
         <li>
           <div
             id="line3"
+            class="road_line"
+            :style="{
+              left: lineleft + 'px',
+              top: linetop + 'px',
+            }"
+          ></div>
+        </li>
+
+        <li>
+          <div
+            id="line4"
+            class="road_line"
+            :style="{
+              left: lineleft + 'px',
+              top: linetop + 'px',
+            }"
+          ></div>
+        </li>
+
+        <li>
+          <div
+            id="line5"
             class="road_line"
             :style="{
               left: lineleft + 'px',
@@ -346,6 +415,15 @@ export default {
       ci2_population: [],
       ci2_totalInfected: [],
       ci2_newInfected: [],
+      ci3_population: [],
+      ci3_totalInfected: [],
+      ci3_newInfected: [],
+      ci4_population: [],
+      ci4_totalInfected: [],
+      ci4_newInfected: [],
+      ci5_population: [],
+      ci5_totalInfected: [],
+      ci5_newInfected: [],
 
       city_po: [],
       road_di: [],
