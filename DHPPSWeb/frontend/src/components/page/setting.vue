@@ -519,8 +519,8 @@ export default {
     console.log("城市坐标：", this.params.Cityposition);
     this.userId = this.params.userId;
 
-    
-
+    citycnt = 1;
+    linecnt = 1;
     if (this.params.casename != 999) {
       console.log("从模拟界面返回");
       citycnt = this.params.citynum + 1;

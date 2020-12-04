@@ -13,10 +13,19 @@
         </ul>
         <ul class="layui-nav layui-layout-right">
           <li class="layui-nav-item" style="line-height: 40px">
-            <router-link style="margin-left: 10px; float: left"
-                    :to="{ path: '/setting', query: { params: JSON.stringify({userId: this.userId, casename: 999 }) }}"
-                    >回到首页</router-link
-                  >
+            <router-link
+              style="margin-left: 10px; float: left"
+              :to="{
+                path: '/setting',
+                query: {
+                  params: JSON.stringify({
+                    userId: this.userId,
+                    casename: 999,
+                  }),
+                },
+              }"
+              >回到首页</router-link
+            >
           </li>
           <li class="layui-nav-item" style="line-height: 20px">
             <el-avatar
@@ -170,9 +179,8 @@ export default {
       axios
         .get("http://127.0.0.1:8000/backend/profile/" + userId + "/")
         .then(
-          (response) =>
-            (self.content = response.data)
-            // alert(JSON.stringify(response))
+          (response) => (self.content = response.data)
+          // alert(JSON.stringify(response))
         )
         .catch(function (error) {
           // 请求失败处理
@@ -187,9 +195,8 @@ export default {
           createdate: "2018-1-1",
         })
         .then(
-          (response) =>
-            (self.content = response)
-            // alert(JSON.stringify(response))
+          (response) => (self.content = response)
+          // alert(JSON.stringify(response))
         )
         .catch(function (error) {
           // alert("数据发送失败");
