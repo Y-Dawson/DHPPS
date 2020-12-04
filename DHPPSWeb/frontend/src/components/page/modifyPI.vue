@@ -332,9 +332,7 @@ export default {
             this.$router.push({
               path: "/profile",
               query: {
-                params: JSON.stringify({
-                  userId: this.userId,
-                }),
+                  userId: this.userId
               },
             })
             // alert(JSON.stringify(response))

@@ -128,9 +128,9 @@ export default {
           return callback(new Error('请输入昵称'));
         }
         setTimeout(() => {
-          let reg =  /^[(a-zA-Z0-9\u4e00-\u9fa5){1}_#]{4,20}$/
+          let reg =  /^[(a-zA-Z0-9\u4e00-\u9fa5){1}_#]{1,20}$/
           if (value == '' || !reg.test(value)) {
-            callback(new Error('昵称限16个字符，支持中英文、数字或下划线'));
+            callback(new Error('昵称限20个字符，支持中英文、数字或下划线'));
           }
           else{
             callback();
@@ -201,7 +201,7 @@ export default {
       signupFormRules: {
         username: [
           { required: true, validator:checkanme , trigger: "blur"},
-          { min: 3, max: 15, message: "长度在3到15个字符之间", trigger: "blur"}
+          { min: 1, max: 15, message: "长度在1到20个字符之间", trigger: "blur"}
           ],
         password: [
           { required: true, message: "请输入密码", trigger: "blur"},
