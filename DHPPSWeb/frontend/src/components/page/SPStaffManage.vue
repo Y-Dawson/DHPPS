@@ -3,7 +3,7 @@
     <div id="app">
         <div class="layui-layout layui-layout-admin">
             <!-- 导航栏 -->
-            <topBar layoutName='后台管理系统'></topBar>
+            <topBar layoutName='后台管理系统' :userId="userId"></topBar>
             <div class="layui-side layui-bg-black">
                 <div class="layui-side-scroll">
                 <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
@@ -15,7 +15,7 @@
                             </div>
                             <a class="" href="javascript:;" >信息管理</a>
                             <dl class="layui-nav-child">
-                                <dd><router-link to='/SPCaseManage'>案例管理</router-link></dd>
+                                <dd><router-link :to="{path:'/SPCaseManage',query:{uI:this.userId}}">案例管理</router-link></dd>
                                 <dd><a href="javascript:;">模型查看</a></dd>
                             </dl>
                         </li>
@@ -28,7 +28,7 @@
                 <!-- 选项卡 -->
                     <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
                         <ul class="layui-tab-title">
-                            <li class="layui-off"><router-link to='/SPUserManage'>用户管理</router-link></li>
+                            <li class="layui-off"><router-link :to="{path:'/SPUserManage',query:{uI:this.userId}}">用户管理</router-link></li>
                             <li class="layui-this" style="color: #55587e;">员工管理</li>
                             <li class="layui-off">编辑</li>
                         </ul>
@@ -62,7 +62,7 @@
                                     <td>{{item.address}}</td>
                                     <td>{{item.remark}}</td>
                                     <td>
-                                        <button class="buttonA"><router-link :to="{path:'/SPEdit',query:{uN:item.username,uT:item.phonenumber,uI:item.userid,uC:item.createdate}}">编辑</router-link></button>
+                                        <button class="buttonA"><router-link :to="{path:'/SPEdit',query:{uN:item.username,uT:item.phonenumber,uI:item.userid,uC:item.createdate,userId:userId}}">编辑</router-link></button>
                                         <button class="buttonA" type="danger" @click="handleDel(item.userid)">删除</button>
                                     </td>
                                 </tr>
@@ -102,6 +102,7 @@ export default {
     },
     data() {
       return {
+        userId:this.$route.query.uI,
         //分页
         totalPage: 3, // 统共页数，默认为1
         currentPage: 1, //当前页数 ，默认为1

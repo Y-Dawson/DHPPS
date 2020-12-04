@@ -3,7 +3,7 @@
     <div id="app">
         <div class="layui-layout layui-layout-admin">
             <!-- 导航栏 -->
-            <topBar layoutName='后台管理系统'></topBar>
+            <topBar layoutName='后台管理系统' :userId="userId"></topBar>
         
             <div class="layui-side layui-bg-black">
                 <div class="layui-side-scroll">
@@ -16,7 +16,7 @@
                             </div>
                             <a class="" href="javascript:;" >信息管理</a>
                             <dl class="layui-nav-child">
-                                <dd><router-link to='/caseManagement'>案例管理</router-link></dd>
+                                <dd><router-link :to="{path:'/caseManagement',query:{uI:this.userId}}">案例管理</router-link></dd>
                                 <dd><a href="javascript:;">模型查看</a></dd>
                             </dl>
                         </li>
@@ -30,7 +30,7 @@
                 <!-- 选项卡 -->
                     <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
                         <ul class="layui-tab-title">
-                            <li><router-link to='/userManagement'>用户管理</router-link></li>
+                            <li><router-link :to="{path:'/userManagement',query:{uI:this.userId}}">用户管理</router-link></li>
                             <li class="layui-this" style="color: #55587e;">用户编辑</li>
                         </ul>
                     <div class="layui-tab-content">
@@ -87,6 +87,7 @@ export default {
     },
     data() {
       return {
+        userId:this.$route.query.userId,
         editTel:this.$route.query.uT,
         editName:this.$route.query.uN,
         userid:this.$route.query.uI,

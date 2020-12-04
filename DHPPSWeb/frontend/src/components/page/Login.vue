@@ -108,7 +108,7 @@ export default {
         }
         else if(this.userAuthority=="超级管理员"){
           this.$router.push({
-            path:'/SPUserManagement',
+            path:'/SPUserManage',
             query:{
               params:JSON.stringify({
                 userId:this.userId,
