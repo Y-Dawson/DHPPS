@@ -352,6 +352,293 @@
             </div>
           </div>
         </li>
+
+        <li>
+          <div
+            id="ci4"
+            class="city"
+            :style="{
+              left: cityForm.cityleft + 'px',
+              top: cityForm.citytop + 'px',
+            }"
+            @click="
+              connect_city('ci4');
+              delete_city('ci4');
+            "
+          >
+            <img src="../../assets/layui/images/city.png" alt="" />
+            <div class="city-infor">
+              <el-form-item prop="population" class="set_input">
+                <el-input
+                  v-model="cityForm.population"
+                  placeholder="城市人口"
+                ></el-input>
+              </el-form-item>
+
+              <el-form-item prop="beginInfected" class="set_input">
+                <el-input
+                  v-model="cityForm.beginInfected"
+                  placeholder="初始感染人数"
+                ></el-input>
+              </el-form-item>
+
+              <el-form-item class="set_button">
+                <el-button
+                  type="primary"
+                  @click="city_confirm"
+                  :disabled="isdisabled3"
+                  >确 认</el-button
+                >
+              </el-form-item>
+            </div>
+          </div>
+        </li>
+
+        <li>
+          <div
+            id="ci5"
+            class="city"
+            :style="{
+              left: cityForm.cityleft + 'px',
+              top: cityForm.citytop + 'px',
+            }"
+            @click="
+              connect_city('ci5');
+              delete_city('ci5');
+            "
+          >
+            <img src="../../assets/layui/images/city.png" alt="" />
+            <div class="city-infor">
+              <el-form-item prop="population" class="set_input">
+                <el-input
+                  v-model="cityForm.population"
+                  placeholder="城市人口"
+                ></el-input>
+              </el-form-item>
+
+              <el-form-item prop="beginInfected" class="set_input">
+                <el-input
+                  v-model="cityForm.beginInfected"
+                  placeholder="初始感染人数"
+                ></el-input>
+              </el-form-item>
+
+              <el-form-item class="set_button">
+                <el-button
+                  type="primary"
+                  @click="city_confirm"
+                  :disabled="isdisabled3"
+                  >确 认</el-button
+                >
+              </el-form-item>
+            </div>
+          </div>
+        </li>
+
+        <li>
+          <div
+            id="ci6"
+            class="city"
+            :style="{
+              left: cityForm.cityleft + 'px',
+              top: cityForm.citytop + 'px',
+            }"
+            @click="
+              connect_city('ci6');
+              delete_city('ci6');
+            "
+          >
+            <img src="../../assets/layui/images/city.png" alt="" />
+            <div class="city-infor">
+              <el-form-item prop="population" class="set_input">
+                <el-input
+                  v-model="cityForm.population"
+                  placeholder="城市人口"
+                ></el-input>
+              </el-form-item>
+
+              <el-form-item prop="beginInfected" class="set_input">
+                <el-input
+                  v-model="cityForm.beginInfected"
+                  placeholder="初始感染人数"
+                ></el-input>
+              </el-form-item>
+
+              <el-form-item class="set_button">
+                <el-button
+                  type="primary"
+                  @click="city_confirm"
+                  :disabled="isdisabled3"
+                  >确 认</el-button
+                >
+              </el-form-item>
+            </div>
+          </div>
+        </li>
+
+        <li>
+          <div
+            id="ci7"
+            class="city"
+            :style="{
+              left: cityForm.cityleft + 'px',
+              top: cityForm.citytop + 'px',
+            }"
+            @click="
+              connect_city('ci7');
+              delete_city('ci7');
+            "
+          >
+            <img src="../../assets/layui/images/city.png" alt="" />
+            <div class="city-infor">
+              <el-form-item prop="population" class="set_input">
+                <el-input
+                  v-model="cityForm.population"
+                  placeholder="城市人口"
+                ></el-input>
+              </el-form-item>
+
+              <el-form-item prop="beginInfected" class="set_input">
+                <el-input
+                  v-model="cityForm.beginInfected"
+                  placeholder="初始感染人数"
+                ></el-input>
+              </el-form-item>
+
+              <el-form-item class="set_button">
+                <el-button
+                  type="primary"
+                  @click="city_confirm"
+                  :disabled="isdisabled3"
+                  >确 认</el-button
+                >
+              </el-form-item>
+            </div>
+          </div>
+        </li>
+
+        <li>
+          <div
+            id="ci8"
+            class="city"
+            :style="{
+              left: cityForm.cityleft + 'px',
+              top: cityForm.citytop + 'px',
+            }"
+            @click="
+              connect_city('ci8');
+              delete_city('ci8');
+            "
+          >
+            <img src="../../assets/layui/images/city.png" alt="" />
+            <div class="city-infor">
+              <el-form-item prop="population" class="set_input">
+                <el-input
+                  v-model="cityForm.population"
+                  placeholder="城市人口"
+                ></el-input>
+              </el-form-item>
+
+              <el-form-item prop="beginInfected" class="set_input">
+                <el-input
+                  v-model="cityForm.beginInfected"
+                  placeholder="初始感染人数"
+                ></el-input>
+              </el-form-item>
+
+              <el-form-item class="set_button">
+                <el-button
+                  type="primary"
+                  @click="city_confirm"
+                  :disabled="isdisabled3"
+                  >确 认</el-button
+                >
+              </el-form-item>
+            </div>
+          </div>
+        </li>
+
+        <li>
+          <div
+            id="ci9"
+            class="city"
+            :style="{
+              left: cityForm.cityleft + 'px',
+              top: cityForm.citytop + 'px',
+            }"
+            @click="
+              connect_city('ci9');
+              delete_city('ci9');
+            "
+          >
+            <img src="../../assets/layui/images/city.png" alt="" />
+            <div class="city-infor">
+              <el-form-item prop="population" class="set_input">
+                <el-input
+                  v-model="cityForm.population"
+                  placeholder="城市人口"
+                ></el-input>
+              </el-form-item>
+
+              <el-form-item prop="beginInfected" class="set_input">
+                <el-input
+                  v-model="cityForm.beginInfected"
+                  placeholder="初始感染人数"
+                ></el-input>
+              </el-form-item>
+
+              <el-form-item class="set_button">
+                <el-button
+                  type="primary"
+                  @click="city_confirm"
+                  :disabled="isdisabled3"
+                  >确 认</el-button
+                >
+              </el-form-item>
+            </div>
+          </div>
+        </li>
+
+        <li>
+          <div
+            id="ci10"
+            class="city"
+            :style="{
+              left: cityForm.cityleft + 'px',
+              top: cityForm.citytop + 'px',
+            }"
+            @click="
+              connect_city('ci10');
+              delete_city('ci10');
+            "
+          >
+            <img src="../../assets/layui/images/city.png" alt="" />
+            <div class="city-infor">
+              <el-form-item prop="population" class="set_input">
+                <el-input
+                  v-model="cityForm.population"
+                  placeholder="城市人口"
+                ></el-input>
+              </el-form-item>
+
+              <el-form-item prop="beginInfected" class="set_input">
+                <el-input
+                  v-model="cityForm.beginInfected"
+                  placeholder="初始感染人数"
+                ></el-input>
+              </el-form-item>
+
+              <el-form-item class="set_button">
+                <el-button
+                  type="primary"
+                  @click="city_confirm"
+                  :disabled="isdisabled3"
+                  >确 认</el-button
+                >
+              </el-form-item>
+            </div>
+          </div>
+        </li>
       </ul>
 
       <ul class="line_list">
@@ -365,14 +652,6 @@
             }"
             @click="delete_road('line1')"
           >
-            <!-- <div class="road_inf">
-              <el-form-item prop="distance">
-                <el-input
-                  v-model="cityForm.distance"
-                  placeholder="人流量"
-                ></el-input>
-              </el-form-item>
-            </div> -->
           </div>
         </li>
 
@@ -397,6 +676,114 @@
               top: linetop + 'px',
             }"
             @click="delete_road('line3')"
+          ></div>
+        </li>
+
+        <li>
+          <div
+            id="line4"
+            class="road_line"
+            :style="{
+              left: lineleft + 'px',
+              top: linetop + 'px',
+            }"
+            @click="delete_road('line4')"
+          ></div>
+        </li>
+
+        <li>
+          <div
+            id="line5"
+            class="road_line"
+            :style="{
+              left: lineleft + 'px',
+              top: linetop + 'px',
+            }"
+            @click="delete_road('line5')"
+          ></div>
+        </li>
+
+        <li>
+          <div
+            id="line6"
+            class="road_line"
+            :style="{
+              left: lineleft + 'px',
+              top: linetop + 'px',
+            }"
+            @click="delete_road('line6')"
+          ></div>
+        </li>
+
+        <li>
+          <div
+            id="line7"
+            class="road_line"
+            :style="{
+              left: lineleft + 'px',
+              top: linetop + 'px',
+            }"
+            @click="delete_road('line7')"
+          ></div>
+        </li>
+
+        <li>
+          <div
+            id="line8"
+            class="road_line"
+            :style="{
+              left: lineleft + 'px',
+              top: linetop + 'px',
+            }"
+            @click="delete_road('line8')"
+          ></div>
+        </li>
+
+        <li>
+          <div
+            id="line9"
+            class="road_line"
+            :style="{
+              left: lineleft + 'px',
+              top: linetop + 'px',
+            }"
+            @click="delete_road('line9')"
+          ></div>
+        </li>
+
+        <li>
+          <div
+            id="line10"
+            class="road_line"
+            :style="{
+              left: lineleft + 'px',
+              top: linetop + 'px',
+            }"
+            @click="delete_road('line10')"
+          ></div>
+        </li>
+
+        <li>
+          <div
+            id="line11"
+            class="road_line"
+            :style="{
+              left: lineleft + 'px',
+              top: linetop + 'px',
+            }"
+            @click="delete_road('line11')"
+          ></div>
+        </li>
+
+        <li>
+          <div
+            id="line12"
+            class="road_line"
+            :style="{
+              left: lineleft + 'px',
+              top: linetop + 'px',
+            }"
+            @click="delete_road('line12')"
           ></div>
         </li>
       </ul>
@@ -456,8 +843,8 @@ export default {
       road_di: [],
       road_c1: "",
       road_c2: "",
-      ci: ["ci1", "ci2", "ci3"],
-      ri: ["line1", "line2", "line3"],
+      ci: ["ci1", "ci2", "ci3", "ci4", "ci5", "ci6", "ci7", "ci8", "ci9", "ci10"],
+      ri: ["line1", "line2", "line3", "line4", "line5", "line6", "line7", "line8", "line9", "line10", "line11", "line12"],
       cityFormRule: {
         // cityName: [
         //   { required: true, message: "请输入城市名", trigger: "blur" },
