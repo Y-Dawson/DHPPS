@@ -19,7 +19,7 @@ def seir(y, t, b, a, g, p, u, N):
 IncubPeriod = 5  # Incubation period, days
 DurMildInf = 10  # Duration of mild infections, days
 FracMild = 0.75  # Fraction of infections that are mild
-FracSevere = 0.  # Fraction of infections that are severe
+FracSevere = 0.2  # Fraction of infections that are severe
 FracCritical = 0.05  # Fraction of infections that are critical
 CFR = 0.02  # Case fatality rate (fraction of infections resulting in death)
 TimeICUDeath = 7  # Time from ICU admission to death, days
