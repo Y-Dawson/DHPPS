@@ -386,7 +386,7 @@
                 <el-button
                   type="primary"
                   @click="city_confirm"
-                  :disabled="isdisabled3"
+                  :disabled="isdisabled4"
                   >确 认</el-button
                 >
               </el-form-item>
@@ -427,7 +427,7 @@
                 <el-button
                   type="primary"
                   @click="city_confirm"
-                  :disabled="isdisabled3"
+                  :disabled="isdisabled5"
                   >确 认</el-button
                 >
               </el-form-item>
@@ -468,7 +468,7 @@
                 <el-button
                   type="primary"
                   @click="city_confirm"
-                  :disabled="isdisabled3"
+                  :disabled="isdisabled6"
                   >确 认</el-button
                 >
               </el-form-item>
@@ -509,7 +509,7 @@
                 <el-button
                   type="primary"
                   @click="city_confirm"
-                  :disabled="isdisabled3"
+                  :disabled="isdisabled7"
                   >确 认</el-button
                 >
               </el-form-item>
@@ -550,7 +550,7 @@
                 <el-button
                   type="primary"
                   @click="city_confirm"
-                  :disabled="isdisabled3"
+                  :disabled="isdisabled8"
                   >确 认</el-button
                 >
               </el-form-item>
@@ -591,7 +591,7 @@
                 <el-button
                   type="primary"
                   @click="city_confirm"
-                  :disabled="isdisabled3"
+                  :disabled="isdisabled9"
                   >确 认</el-button
                 >
               </el-form-item>
@@ -632,7 +632,7 @@
                 <el-button
                   type="primary"
                   @click="city_confirm"
-                  :disabled="isdisabled3"
+                  :disabled="isdisabled10"
                   >确 认</el-button
                 >
               </el-form-item>
@@ -819,6 +819,13 @@ export default {
       isdisabled1: false,
       isdisabled2: false,
       isdisabled3: false,
+      isdisabled4: false,
+      isdisabled5: false,
+      isdisabled6: false,
+      isdisabled7: false,
+      isdisabled8: false,
+      isdisabled9: false,
+      isdisabled10: false,
       showed: true,
       // cityleft: Global.cityleft,
       // citytop: Global.citytop,
@@ -1723,6 +1730,7 @@ export default {
             var dis = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
 
             for (var k in this.ri) {
+              console.log("lineID：",this.ri[k]);
               var tr = document.getElementById(this.ri[k]);
               var td = parseInt(dis);
               var wi = tr.style.width;
@@ -1732,7 +1740,6 @@ export default {
               if (td == ttw) {
                 tr.style.left = 10000 + "px";
                 tr.style.top = 10000 + "px";
-                break;
               }
             }
           }
@@ -1835,6 +1842,9 @@ export default {
       if (n == 5) return "E";
       if (n == 6) return "F";
       if (n == 7) return "G";
+      if (n == 8) return "H";
+      if (n == 9) return "I";
+      if (n == 10) return "J";
     },
 
     getID(n) {
@@ -1842,6 +1852,12 @@ export default {
       if (n == "B") return "ci2";
       if (n == "C") return "ci3";
       if (n == "D") return "ci4";
+      if (n == "E") return "ci5";
+      if (n == "F") return "ci6";
+      if (n == "G") return "ci7";
+      if (n == "H") return "ci8";
+      if (n == "I") return "ci9";
+      if (n == "J") return "ci10";
     },
 
     getNum(n) {
@@ -1849,12 +1865,25 @@ export default {
       if (n == "ci2") return 2;
       if (n == "ci3") return 3;
       if (n == "ci4") return 4;
+      if (n == "ci5") return 5;
+      if (n == "ci6") return 6;
+      if (n == "ci7") return 7;
+      if (n == "ci8") return 8;
+      if (n == "ci9") return 9;
+      if (n == "ci10") return 10;
     },
 
     setButton(n) {
       if (n == 1) this.isdisabled1 = true;
       if (n == 2) this.isdisabled2 = true;
       if (n == 3) this.isdisabled3 = true;
+      if (n == 4) this.isdisabled4 = true;
+      if (n == 5) this.isdisabled5 = true;
+      if (n == 6) this.isdisabled6 = true;
+      if (n == 7) this.isdisabled7 = true;
+      if (n == 8) this.isdisabled8 = true;
+      if (n == 9) this.isdisabled9 = true;
+      if (n == 10) this.isdisabled10 = true;
     },
   },
 };
@@ -1863,9 +1892,9 @@ export default {
 <style scoped>
 @import "../../assets/layui/css/layui.css";
 
-/* body {
+body {
   overflow: hidden;
-} */
+}
 
 .layui-nav-tree .layui-nav-item a {
   font-weight: bold;

@@ -118,13 +118,13 @@
                         <!-- <span>{{casenum}}</span> -->
                         <span>初始城市数量：</span>
                         <span id="returnContent">{{ item.citynumber }}</span>
-                        <br>
+                        <br />
                         <span>初始道路数量：</span>
                         <span id="returnContent">{{ item.roadnumber }}</span>
-                        <br>
+                        <br />
                         <span>初始总人口：</span>
                         <span id="returnContent">{{ item.inittotal }}</span>
-                        <br>
+                        <br />
                         <span>初始感染人口：</span>
                         <span id="returnContent">{{
                           item.inittotalinfected
@@ -161,8 +161,8 @@ export default {
   data: function () {
     return {
       // 传参
-      cases:[],
-      content:[],
+      cases: [],
+      content: [],
       userId: this.$route.query.userId,
       contentList: [],
       isBackground: true,
@@ -179,8 +179,8 @@ export default {
       currentPageData: [], //当前页显示内容
     };
   },
-  created: function (){
-    this.getContent(this.userId)
+  created: function () {
+    this.getContent(this.userId);
   },
   mounted: function () {
     // this.getcasenum(this.userid)
@@ -208,9 +208,7 @@ export default {
       var self = this;
       axios
         .get("http://127.0.0.1:8000/backend/profile/" + userId + "/")
-        .then(
-          response => ((self.content = response.data)
-        ))
+        .then((response) => (self.content = response.data))
         .catch(function (error) {
           // 请求失败处理
           alert("数据请求失败wdnmd");
@@ -242,37 +240,76 @@ export default {
           // alert('数据请求失败wdnmd')
         });
     },
-    edit:function(id){
+    edit: function (id) {
       var self = this;
       let data = new FormData();
-      data.append("caseid",id)
+      data.append("caseid", id);
       axios
-        .post("http://127.0.0.1:8000/backend/getCaseInfo/",data)
-        .then(
-          (response) => (
-            self.cases=response.data.cases,
-            // alert(JSON.stringify(self.cases)),
-            this.$router.push({
-              path:'/setting',
-              query:{
-                params:JSON.stringify({
-                  userId:this.userId,
-                  casename:this.cases.casename,
-                  citynum:this.cases.citynum,
-                  roadnum:this.cases.roadnum,
-                  Initcitydata:this.cases.Initcitydata,
-                  Initroaddata:this.cases.Initroaddata,
-                  Cityposition:this.cases.Cityposition
-                })
-              }
-            })
-          )
-        )
+        .post("http://127.0.0.1:8000/backend/getCaseInfo/", data)
+        .then((response) => {
+          self.cases = response.data.cases;
+          console.log(JSON.stringify(self.cases));
+
+          console.log(self.cases.Initcitydata);
+          var city_inf = [];
+          for (var j in self.cases.Initcitydata) {
+            var s =
+              "cityname:" +
+              self.cases.Initcitydata[j].cityname +
+              ",initpop:" +
+              self.cases.Initcitydata[j].initpop +
+              ",initinfect:" +
+              self.cases.Initcitydata[j].initinfect;
+            console.log("s:", s);
+            city_inf.push(s);
+          }
+
+          var road_inf = [];
+          for (var j in self.cases.Initroaddata) {
+            var s =
+              "departure:" +
+              self.cases.Initroaddata[j].departure +
+              ",destination:" +
+              self.cases.Initroaddata[j].destination +
+              ",volume:" +
+              self.cases.Initroaddata[j].volume;
+            console.log("s:", s);
+            road_inf.push(s);
+          }
+
+          var city_pos = [];
+          for (var j in self.cases.Cityposition) {
+            var s =
+              "cityname:" +
+              self.cases.Cityposition[j].cityname +
+              ",x:" +
+              self.cases.Cityposition[j].x +
+              ",y:" +
+              self.cases.Cityposition[j].y;
+            console.log("s:", s);
+            city_pos.push(s);
+          }
+
+          this.$router.push({
+            path: "/setting",
+            query: {
+              params: JSON.stringify({
+                userId: this.userId,
+                casename: this.cases.casename,
+                citynum: this.cases.citynum,
+                roadnum: this.cases.roadnum,
+                Initcitydata: city_inf,
+                Initroaddata: road_inf,
+                Cityposition: city_pos,
+              }),
+            },
+          });
+        })
         .catch(function (error) {
           // 请求失败处理
           // alert(JSON.stringify(response));
-          // alert(JSON.stringify(error.response));
-          alert('数据请求失败wdnmd')
+          alert(JSON.stringify(error.response));
+          alert("数据请求失败wdnmd");
         });
     },
     deleteCaseContent: function (id) {
@@ -280,9 +317,8 @@ export default {
       axios
         .delete("http://127.0.0.1:8000/backend/case/" + id, {})
         .then(
-          (response) =>
-            (self.currentPageData = response.data)
-            // alert(JSON.stringify(this.currentPageData))
+          (response) => (self.currentPageData = response.data)
+          // alert(JSON.stringify(this.currentPageData))
         )
         .catch(function (error) {
           // 请求失败处理

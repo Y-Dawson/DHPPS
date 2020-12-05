@@ -19,6 +19,8 @@ import setting from '@/components/page/setting'
 import changePass from '@/components/page/changePass'
 import forgetPass from '@/components/page/forgetPass'
 import simulation from '@/components/page/simulation'
+import modelView from '@/components/page/modelView'
+import SPModelView from '@/components/page/SPModelView'
 // import uploadTest from '@/components/page/uploadTest'
 
 Vue.use(Router)
@@ -48,6 +50,8 @@ export default new Router({
     {path:'/setting',component:setting},
     {path:'/changePass',component:changePass},
     {path:'/forgetPass',component:forgetPass},
-    {path:'/simulation',component:simulation}
+    {path:'/simulation',component:simulation},
+    {path:'/modelView',component:modelView},
+    {path:'/SPModelView',component:SPModelView}
   ]
 })

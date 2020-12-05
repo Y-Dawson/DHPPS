@@ -18,7 +18,7 @@
                         </dl>
                         <a class="" href="javascript:;" >案例管理</a>
                         <dl class="layui-nav-child">
-                            <dd><a href="javascript:;">模型查看</a></dd>
+                            <dd><router-link :to="{path:'/SPModelView',query:{uI:this.userId}}">模型查看</router-link></dd>
                         </dl>
                     </li>
                 </ul>
