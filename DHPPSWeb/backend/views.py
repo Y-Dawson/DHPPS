@@ -539,7 +539,7 @@ def startSimulate(request):
                 cityCase = {}
                 cityCase["cityname"] = cityNameList[cityIdx]
                 cityCase["population"] = initPopList[cityIdx]
-                cityCase["dailyinfected"] = dailyInfectMatrix[cityIdx][dayCount]
+                cityCase["dailyinfected"] = int(dailyInfectMatrix[cityIdx][dayCount])
                 if (dayCount == 0):
                     cityCase["infected"] = initInfectedList[cityIdx]
                 else:
@@ -605,25 +605,33 @@ class ImageCodeView(View):
 
 
 def getAllCaseInfos(request):
-    if request.method == "GET":
-        caseId = request.GET.get("caseid")
+    if request.method == "POST":
+        caseId = request.POST.get("caseid", None)
         if caseId:
             try:
                 caseInfo = models.Casedata.objects.filter(caseid=caseId).first()
                 cityInfos = models.Initcitydata.objects.filter(caseid=caseInfo)
-                # cityInfos.citypostion
-                roadInfos = models.Initaroaddata.objects.filter(caseid=caseInfo)
+                roadInfos = models.Initroaddata.objects.filter(caseid=caseInfo)
 
                 cases = {}
+                cases["casename"] = caseInfo.casename
+                cases["citynum"] = len(cityInfos)
+                cases["roadnum"] = len(roadInfos)
+
                 cityList = []
+                cityPosList = []
                 for cityIdx in range(len(cityInfos)):
                     cityCase = {}
                     cityCase["cityname"] = cityInfos[cityIdx].cityname
                     cityCase["initpop"] = cityInfos[cityIdx].initpop
                     cityCase["initinfect"] = cityInfos[cityIdx].initinfect
-                    cityCase["x"] = cityInfos[cityIdx].cityposition.x
-                    cityCase["y"] = cityInfos[cityIdx].cityposition.y
                     cityList.append(cityCase)
+
+                    cityPosCase = {}
+                    cityPosCase["cityname"] = cityInfos[cityIdx].cityname
+                    cityPosCase["x"] = cityInfos[cityIdx].cityposition.x
+                    cityPosCase["y"] = cityInfos[cityIdx].cityposition.y
+                    cityPosList.append(cityPosCase)
 
                 roadList = []
                 for roadIdx in range(len(roadInfos)):
@@ -633,8 +641,10 @@ def getAllCaseInfos(request):
                     roadCase["volume"] = roadInfos[roadIdx].volume
                     roadList.append(roadCase)
 
-                cases["cities"] = cityList
-                cases["roads"] = roadList
+                cases["Initcitydata"] = cityList
+                cases["Initroaddata"] = roadList
+                cases["Cityposition"] = cityPosList
+
                 return JsonResponse({"message": "成功返回数据", "cases": cases, "status": 200})
             except Exception as e:
                 print('str(Exception):\t', str(Exception))
@@ -642,7 +652,7 @@ def getAllCaseInfos(request):
                 print('repr(e):\t', repr(e))
                 # print('e.message:\t', e.message)
                 print('########################################################')
-                return JsonResponse({"message": "成功返回数据", "status": 200})
+                return JsonResponse({"message": "数据库出错", "status": 404})
         return JsonResponse({"message": "请求参数未填写", "status": 404})
     return JsonResponse({"message": "请求方法未注册", "status": 404})
 

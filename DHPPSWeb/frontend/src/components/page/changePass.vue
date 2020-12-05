@@ -256,10 +256,10 @@ export default {
       axios
         .get("http://127.0.0.1:8000/backend/profile/" + this.userId + "/")
         .then(
-          (response) =>
+          response =>(
             (self.content = response.data)
             // alert(JSON.stringify(response))
-        )
+        )) 
         .catch(function (error) {
           // 请求失败处理
           alert("数据请求失败wdnmd");
