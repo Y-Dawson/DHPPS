@@ -195,6 +195,7 @@ export default {
   data: function () {
     return {
       // 传参
+      cases:[],
       content:[],
       userId: this.$route.query.userId,
       contentList: [],
@@ -276,7 +277,37 @@ export default {
         });
     },
     edit:function(id){
-
+      var self = this;
+      let data = new FormData();
+      data.append("caseid",id)
+      axios
+        .post("http://127.0.0.1:8000/backend/getCaseInfo/",data)
+        .then(
+          (response) => (
+            self.cases=response.data.cases,
+            alert(JSON.stringify(self.cases)),
+            this.$router.push({
+              path:'/setting',
+              query:{
+                params:JSON.stringify({
+                  userId:this.userId,
+                  casename:this.cases.casename,
+                  citynum:this.cases.citynum,
+                  roadnum:this.cases.roadnum,
+                  Initcitydata:this.cases.Initcitydata,
+                  Initroaddata:this.cases.Initroaddata,
+                  Cityposition:this.cases.Cityposition
+                })
+              }
+            })
+          )
+        )
+        .catch(function (error) {
+          // 请求失败处理
+          // alert(JSON.stringify(response));
+          alert(JSON.stringify(error.response));
+          alert('数据请求失败wdnmd')
+        });
     },
     deleteCaseContent: function (id) {
       var self = this;
