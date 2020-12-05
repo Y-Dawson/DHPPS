@@ -104,7 +104,7 @@ export default {
       return {
         userId:this.$route.query.uI,
         //分页
-        totalPage: 3, // 统共页数，默认为1
+        totalPage: 1, // 统共页数，默认为1
         currentPage: 1, //当前页数 ，默认为1
         pageSize: 4, // 每页显示数量
         content: [], //当前页显示内容
@@ -112,11 +112,11 @@ export default {
       };
     },
     created: function () {
+      this.getContent()
       this.params = JSON.parse(this.$route.query.params);
       console.log("用户ID：", this.params.userId);
       this.userId = this.params.userId;
       //为了在内部函数能使用外部函数的this对象，要给它赋值了一个名叫self的变量。
-      this.getContent()
     },
     methods: {
       getContent: function () {

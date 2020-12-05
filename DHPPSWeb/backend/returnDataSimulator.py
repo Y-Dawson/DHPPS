@@ -104,7 +104,7 @@ def model(inputList, length):
     for u in range(len(rateList)):
         tempList = []
         for k in soln:
-            tempList.append((k[1] + k[2] + k[3]) * rateList[u])
+            tempList.append((k[2]) * rateList[u])
         returnList.append(tempList)
     return returnList
 

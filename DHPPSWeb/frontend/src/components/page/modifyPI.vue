@@ -2,45 +2,7 @@
   <!-- 实现了生日日期选择，没有实现输入框校验！！！ -->
   <div id="app">
     <div class="layui-layout layui-layout-admin">
-      <div class="layui-header">
-        <div class="layui-logo">LOGO</div>
-        <div class="layui-logotext">高传染性疾病预测系统</div>
-        <!-- <div class="layui-logo">高传染性疾病预测系统</div> -->
-        <!-- 头部区域（可配合layui已有的水平导航） -->
-        <ul class="layui-nav layui-layout-left">
-          <li class="layui-nav-item">个人中心</li>
-        </ul>
-        <ul class="layui-nav layui-layout-right">
-          <li class="layui-nav-item" style="line-height: 40px">
-            <router-link
-              style="margin-left: 10px; float: left"
-              :to="{
-                path: '/setting',
-                query: {
-                  params: JSON.stringify({
-                    userId: this.userId,
-                    casename: 999,
-                  }),
-                },
-              }"
-              >回到首页</router-link
-            >
-          </li>
-          <li class="layui-nav-item" style="line-height: 20px">
-            <el-avatar
-              shape="circle"
-              :size="30"
-              :fit="fit"
-              :src="url"
-            ></el-avatar>
-          </li>
-          <li class="layui-nav-item">
-            <a href="javascript:;">
-              <span>{{ content.username }}</span>
-            </a>
-          </li>
-        </ul>
-      </div>
+      <topBar layoutName='个人中心' :userId="userId"></topBar>
       <div class="layui-side layui-bg-black">
         <div class="layui-side-scroll">
           <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
@@ -199,8 +161,12 @@
 
 <script src="layui.js"></script>
 <script>
+import topBar from '../common/topBar.vue';
 export default {
   name: "modifyPI",
+  components:{
+      topBar
+    },
   data() {
     var checkanme = (rule, value, callback) => {
       if (!value) {

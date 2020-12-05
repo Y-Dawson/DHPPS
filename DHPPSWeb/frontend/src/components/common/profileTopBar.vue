@@ -8,21 +8,28 @@
       <ul class="layui-nav layui-layout-left">
         <li class="layui-nav-item">
           {{ layoutName }}
-          <!-- 个人中心 -->
         </li>
       </ul>
       <ul class="layui-nav layui-layout-right">
         <li class="layui-nav-item" style="line-height: 40px">
           <router-link
-            style="margin-left: 10px; float: left"
+            style="margin-left: 0px; float: left"
+            :to="{
+              path: this.adminUrl,
+              query: {
+                params: JSON.stringify({ userId: this.userId, casename: 999 }),
+              },
+            }"
+            >{{ isbut }}</router-link>
+          <router-link
+            style="margin-left: 0px; float: left"
             :to="{
               path: '/setting',
               query: {
                 params: JSON.stringify({ userId: this.userId, casename: 999 }),
               },
             }"
-            >回到首页</router-link
-          >
+            >回到首页</router-link>
         </li>
         <li class="layui-nav-item" style="line-height: 20px">
           <el-avatar
@@ -33,7 +40,7 @@
           ></el-avatar>
         </li>
         <li class="layui-nav-item">
-          <span>{{ list }}</span>
+          <!-- <span>{{ list }}</span> -->
           <a href="javascript:;">
             {{ content.username }}
           </a>
@@ -48,8 +55,12 @@ export default {
   name: "topBar",
   data() {
     return {
+      adminUrl: '/userManagement',
       content: [],
+      acontent:[],
       userId:0,
+      isAdmin:'',
+      ifbut:'',
       // 头像
       fits: ["fill"],
       url:
@@ -62,6 +73,7 @@ export default {
     },
   created: function () {
     //为了在内部函数能使用外部函数的this对象，要给它赋值了一个名叫self的变量。
+    this.getAuthority(this.userId)
     this.getContent(this.userId);
   },
   methods: {
@@ -70,16 +82,43 @@ export default {
       axios
         .get("http://127.0.0.1:8000/backend/profile/"+userId+"/")
         .then(
-          (response) =>
-            (self.content = response.data)
+          (response =>
+            self.content = response.data
             //alert(JSON.stringify(response))
-        )
+        ))
+        .catch(function (error) {
+          // 请求失败处理
+          alert("数据请求失败wdnmd");
+        });
+    },
+    setbut:function(a){
+      if(a=="普通用户"){
+        this.isbut=''
+      }
+      else{
+        this.isbut ="进入后台"
+        if(a=="超级管理员"){
+          this.adminUrl='/SPUserManage'
+        }
+      }
+    },
+    getAuthority:function(userId){
+      var self = this;
+      axios
+        .get("http://127.0.0.1:8000/backend/accountInfo/"+userId+"/")
+        .then(response =>(
+            self.acontent = response.data,
+            self.isAdmin=self.acontent.authority,
+            self.setbut(this.isAdmin)
+            // alert(self.isAdmin)
+            //alert(JSON.stringify(response))
+        ))
         .catch(function (error) {
           // 请求失败处理
           alert("数据请求失败wdnmd");
         });
     }
-  },
+  }
 };
 </script>
 
