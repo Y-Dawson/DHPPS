@@ -611,7 +611,7 @@ def getAllCaseInfos(request):
             try:
                 caseInfo = models.Casedata.objects.filter(caseid=caseId).first()
                 cityInfos = models.Initcitydata.objects.filter(caseid=caseInfo)
-                roadInfos = models.Initaroaddata.objects.filter(caseid=caseInfo)
+                roadInfos = models.Initroaddata.objects.filter(caseid=caseInfo)
 
                 cases = {}
                 cases["casename"] = caseInfo.casename
