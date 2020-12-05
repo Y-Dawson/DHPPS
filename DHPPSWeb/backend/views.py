@@ -606,12 +606,11 @@ class ImageCodeView(View):
 
 def getAllCaseInfos(request):
     if request.method == "POST":
-        caseId = request.POST.get("caseid")
+        caseId = request.POST.get("caseid", None)
         if caseId:
             try:
                 caseInfo = models.Casedata.objects.filter(caseid=caseId).first()
                 cityInfos = models.Initcitydata.objects.filter(caseid=caseInfo)
-                # cityInfos.citypostion
                 roadInfos = models.Initaroaddata.objects.filter(caseid=caseInfo)
 
                 cases = {}
@@ -653,7 +652,7 @@ def getAllCaseInfos(request):
                 print('repr(e):\t', repr(e))
                 # print('e.message:\t', e.message)
                 print('########################################################')
-                return JsonResponse({"message": "成功返回数据", "status": 200})
+                return JsonResponse({"message": "数据库出错", "status": 404})
         return JsonResponse({"message": "请求参数未填写", "status": 404})
     return JsonResponse({"message": "请求方法未注册", "status": 404})
 
