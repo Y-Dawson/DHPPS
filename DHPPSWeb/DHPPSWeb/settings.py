@@ -87,13 +87,8 @@ DATABASES = {
         'NAME': 'dhppsdb',  # 数据库名称
         'HOST': '127.0.0.1',  # 数据库地址，本机 ip 地址 127.0.0.1
         'PORT': 3306,  # 端口
-<<<<<<< HEAD
-        'USER': 'root',  # 数据库用户名
-        'PASSWORD': 'root',  # 数据库密码
-=======
         'USER': 'root',  # 数据库用户
-        'PASSWORD': 'xxsql',  # 数据库密码
->>>>>>> e7205d8e148334b6962fc287ae98bfb3170ca15c
+        'PASSWORD': '1125wcjlg',  # 数据库密码
     }
 }
 

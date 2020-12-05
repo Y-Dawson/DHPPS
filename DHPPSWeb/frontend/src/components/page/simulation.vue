@@ -7,14 +7,7 @@
         <!-- <div class="layui-logo">高传染性疾病预测系统</div> -->
         <!-- 头部区域（可配合layui已有的水平导航） -->
         <ul class="layui-nav layui-layout-right">
-          <li class="layui-nav-item theme">
-            <i class="layui-icon layui-icon-theme"></i>
-            <div class="theme-wrapper"></div>
-          </li>
 
-          <li class="layui-nav-item" style="line-height: 40px">
-            <a href="javascript:;" style="test-align: center">个人中心</a>
-          </li>
           <li class="layui-nav-item" style="line-height: 20px">
             <el-avatar
               shape="circle"
