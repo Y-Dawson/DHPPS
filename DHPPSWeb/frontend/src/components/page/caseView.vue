@@ -135,10 +135,12 @@
                             text-align: right;
                           "
                         >
-                          <a
-                            href="javascript:;"
-                            style="font-size: 8px; color: #8b9bbd"
-                            >进入编辑</a
+                          <el-button
+                            id="delete"
+                            type="text"
+                            style="font-size: 8px; color: #55587e"
+                            @click="edit(item.caseid)"
+                            >进入编辑</el-button
                           >
                           <br />
                           <el-button
@@ -154,13 +156,13 @@
                         <!-- <span>{{casenum}}</span> -->
                         <span>初始城市数量：</span>
                         <span id="returnContent">{{ item.citynumber }}</span>
-                        <br />
+                        <br>
                         <span>初始道路数量：</span>
                         <span id="returnContent">{{ item.roadnumber }}</span>
-                        <br />
+                        <br>
                         <span>初始总人口：</span>
                         <span id="returnContent">{{ item.inittotal }}</span>
-                        <br />
+                        <br>
                         <span>初始感染人口：</span>
                         <span id="returnContent">{{
                           item.inittotalinfected
@@ -211,7 +213,7 @@ export default {
     };
   },
   created: function (){
-    this.getContent()
+    this.getContent(this.userId)
   },
   mounted: function () {
     // this.getcasenum(this.userid)
@@ -235,15 +237,13 @@ export default {
     setPages() {
       if (this.totalPage < 1) totalPage = 1;
     },
-    getContent: function () {
+    getContent: function (userId) {
       var self = this;
       axios
-        .get("http://127.0.0.1:8000/backend/profile/" + this.userId + "/")
+        .get("http://127.0.0.1:8000/backend/profile/" + userId + "/")
         .then(
-          (response) => (self.content = response.data),
-          alert(JSON.stringify("response.data")),
-          alert(JSON.stringify(response.data))
-        )
+          response => ((self.content = response.data)
+        ))
         .catch(function (error) {
           // 请求失败处理
           alert("数据请求失败wdnmd");
@@ -263,16 +263,20 @@ export default {
         .then(
           (response) => (
             (self.currentPageData = response.data),
+            alert(JSON.stringify(this.currentPageData))
             (self.totalPage = Math.ceil(
               self.currentPageData.pagination / self.pageSize
             ))
-            // alert(JSON.stringify(this.currentPageData))
+            // 
           )
         )
         .catch(function (error) {
           // 请求失败处理
           // alert('数据请求失败wdnmd')
         });
+    },
+    edit:function(id){
+
     },
     deleteCaseContent: function (id) {
       var self = this;
