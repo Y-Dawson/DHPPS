@@ -651,8 +651,7 @@
               top: linetop + 'px',
             }"
             @click="delete_road('line1')"
-          >
-          </div>
+          ></div>
         </li>
 
         <li>
@@ -843,8 +842,32 @@ export default {
       road_di: [],
       road_c1: "",
       road_c2: "",
-      ci: ["ci1", "ci2", "ci3", "ci4", "ci5", "ci6", "ci7", "ci8", "ci9", "ci10"],
-      ri: ["line1", "line2", "line3", "line4", "line5", "line6", "line7", "line8", "line9", "line10", "line11", "line12"],
+      ci: [
+        "ci1",
+        "ci2",
+        "ci3",
+        "ci4",
+        "ci5",
+        "ci6",
+        "ci7",
+        "ci8",
+        "ci9",
+        "ci10",
+      ],
+      ri: [
+        "line1",
+        "line2",
+        "line3",
+        "line4",
+        "line5",
+        "line6",
+        "line7",
+        "line8",
+        "line9",
+        "line10",
+        "line11",
+        "line12",
+      ],
       cityFormRule: {
         // cityName: [
         //   { required: true, message: "请输入城市名", trigger: "blur" },
@@ -858,9 +881,9 @@ export default {
         population: [
           { required: true, message: "请输入城市人数", trigger: "blur" },
           {
-            min: 1000,
+            min: 1,
             max: 15000,
-            message: "总人数在1000到15000之间",
+            message: "城市人数在1到15000之间",
             trigger: "blur",
           },
         ],
@@ -898,7 +921,7 @@ export default {
     this.params = JSON.parse(this.$route.query.params);
     console.log("用户ID：", this.params.userId);
     console.log("案例名：", this.params.casename);
-    console.log("类型：", typeof this.params.casename);
+    // console.log("类型：", typeof this.params.casename);
     console.log("城市数目：", this.params.citynum);
     console.log("道路数目：", this.params.roadnum);
     console.log("初始城市信息：", this.params.Initcitydata);
@@ -1248,7 +1271,7 @@ export default {
           }
           myFormData.append("Cityposition", city_position);
 
-          myFormData.append("daynum", value);
+          myFormData.append("daynum", parseInt(value) + 1);
 
           for (var value of myFormData.values()) {
             console.log(value);

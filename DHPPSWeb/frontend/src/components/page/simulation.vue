@@ -350,7 +350,7 @@
         <el-slider
           v-model="value1"
           :format-tooltip="formatTooltip"
-          :step="5"
+          :step="daily_step"
           show-stops
         ></el-slider>
       </div>
@@ -369,6 +369,8 @@ export default {
       ss: false,
       disable: true,
       value1: 0,
+      daily_step: 0,
+      day_num: 0,
 
       cityx1: 0,
       cityy1: 0,
@@ -391,10 +393,6 @@ export default {
         beginInfected: "",
         distance: "",
         traffic: "",
-        // cityleft: Global.cityleft,
-        // citytop: Global.citytop,
-        // cityleft: this.$root.cityleft,
-        // citytop: this.$root.citytop
         cityleft: Global.cityleft,
         citytop: Global.citytop,
       },
@@ -491,6 +489,10 @@ export default {
     this.city_inf = this.params.Initcitydata;
     this.road_inf = this.params.Initroaddata;
     this.city_position = this.params.Cityposition;
+    this.day_num = parseInt(this.params.Daynum);
+    this.daily_step = 100 / this.day_num;
+    console.log("模拟天数：", this.params.Daynum);
+    console.log("每日跨度：", this.daily_step);
 
     var cnt = 0;
     for (var j in this.params.Cityposition) {
@@ -552,10 +554,6 @@ export default {
 
     //   }
     // }
-    console.log("开始处理每日病例数据");
-    console.log(foreData[0]);
-    console.log(foreData[0][0]);
-    console.log(foreData[0][0]["cityname"]);
 
     for (var i = 0; i < parseInt(this.params.Daynum); i++) {
       for (var j = 0; j < parseInt(this.params.citynum); j++) {
@@ -567,6 +565,8 @@ export default {
         );
       }
     }
+    
+    console.log("c1_inf：",this.ci1_population);
   },
 
   methods: {
@@ -592,12 +592,25 @@ export default {
     },
 
     formatTooltip(val) {
-      this.day = val / 5;
-      var d = val / 5 + 1;
+      this.day = parseInt(val / this.daily_step);
+      console.log("day：", this.day);
+      var d = parseInt(val / this.daily_step) + 1;
       var m = 1;
       if (d > 31) {
         m += 1;
         d -= 31;
+      }
+      if (d > 28) {
+        m += 1;
+        d -= 28;
+      }
+      if (d > 31) {
+        m += 1;
+        d -= 31;
+      }
+      if (d > 30) {
+        m += 1;
+        d -= 30;
       }
       var s = m + "月" + d + "日";
       return s;
@@ -654,7 +667,7 @@ export default {
       ll.style.top = (ttcy1 + ttcy2) / 2 + 50 + "px";
       ll.style.width = parseInt(dis) + "px";
       ll.style.transform = "rotate(" + rotang + "deg)";
-      this.linecnt += 1;
+      linecnt += 1;
     },
 
     getID(n) {
