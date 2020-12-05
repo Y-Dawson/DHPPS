@@ -858,9 +858,9 @@ export default {
         population: [
           { required: true, message: "请输入城市人数", trigger: "blur" },
           {
-            min: 1,
+            min: 1000,
             max: 15000,
-            message: "城市人数在0到15000之间",
+            message: "总人数在1000到15000之间",
             trigger: "blur",
           },
         ],
@@ -1321,7 +1321,7 @@ export default {
 
           var myFormData = new FormData();
 
-          myFormData.append("userid", 3);
+          myFormData.append("userid", this.userId);
 
           myFormData.append("casename", value);
 
