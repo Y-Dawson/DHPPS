@@ -16,7 +16,7 @@
                             <a class="" href="javascript:;" >信息管理</a>
                             <dl class="layui-nav-child">
                                 <dd><router-link :to="{path:'/caseManagement',query:{uI:this.userId}}">案例管理</router-link></dd>
-                                <dd><a href="javascript:;">模型查看</a></dd>
+                                <dd><router-link :to="{path:'/modelView',query:{uI:this.userId}}">模型查看</router-link></dd>
                             </dl>
                         </li>
                     </ul>
@@ -114,7 +114,6 @@ export default {
       this.params = JSON.parse(this.$route.query.params);
       console.log("用户ID：", this.params.userId);
       this.userId = this.params.userId;
-        alert(this.userId)
       //为了在内部函数能使用外部函数的this对象，要给它赋值了一个名叫self的变量。
       this.getContent()
     },
