@@ -539,11 +539,14 @@ def startSimulate(request):
                 cityCase = {}
                 cityCase["cityname"] = cityNameList[cityIdx]
                 cityCase["population"] = initPopList[cityIdx]
-                cityCase["dailyinfected"] = int(dailyInfectMatrix[cityIdx][dayCount])
+
                 if (dayCount == 0):
                     cityCase["infected"] = initInfectedList[cityIdx]
+                    cityCase["dailyinfected"] = int(dailyInfectMatrix[cityIdx][dayCount])
                 else:
-                    cityCase["infected"] = DailyforecastData[dayCount-1][cityIdx]["infected"] + cityCase["dailyinfected"]
+                    cityCase["infected"] = int(dailyInfectMatrix[cityIdx][dayCount])
+                    cityCase["dailyinfected"] = int(dailyInfectMatrix[cityIdx][dayCount]) - int(dailyInfectMatrix[cityIdx][dayCount-1])
+
                 dayCase.append(cityCase)
             DailyforecastData.append(dayCase)
         return JsonResponse({"DailyforecastData": DailyforecastData, "status": 200})
@@ -661,7 +664,7 @@ def getUserInfos(request):
     if request.method == "GET":
         pageSize = request.GET.get("pageSize")
         page = request.GET.get("page")
-        accountInfos = models.Accountinformation.objects.select_related("personalprofile").all().order_by('userid')
+        accountInfos = models.Accountinformation.objects.select_related("personalprofile").all().exclude(authority="超级管理员").order_by('userid')
         accountPaginator = paginator.Paginator(accountInfos, pageSize)
         if page == "":
             page = 1
