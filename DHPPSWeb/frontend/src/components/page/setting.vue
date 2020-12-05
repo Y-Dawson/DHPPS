@@ -255,7 +255,7 @@
               <el-form-item class="set_button">
                 <el-button
                   type="primary"
-                  @click="city_confirm"
+                  @click="city_confirm('ci1')"
                   :disabled="isdisabled1"
                   >确 认</el-button
                 >
@@ -303,7 +303,7 @@
               <el-form-item class="set_button">
                 <el-button
                   type="primary"
-                  @click="city_confirm"
+                  @click="city_confirm('ci2')"
                   :disabled="isdisabled2"
                   >确 认</el-button
                 >
@@ -344,7 +344,7 @@
               <el-form-item class="set_button">
                 <el-button
                   type="primary"
-                  @click="city_confirm"
+                  @click="city_confirm('ci3')"
                   :disabled="isdisabled3"
                   >确 认</el-button
                 >
@@ -385,7 +385,7 @@
               <el-form-item class="set_button">
                 <el-button
                   type="primary"
-                  @click="city_confirm"
+                  @click="city_confirm('ci4')"
                   :disabled="isdisabled4"
                   >确 认</el-button
                 >
@@ -426,7 +426,7 @@
               <el-form-item class="set_button">
                 <el-button
                   type="primary"
-                  @click="city_confirm"
+                  @click="city_confirm('ci5')"
                   :disabled="isdisabled5"
                   >确 认</el-button
                 >
@@ -467,7 +467,7 @@
               <el-form-item class="set_button">
                 <el-button
                   type="primary"
-                  @click="city_confirm"
+                  @click="city_confirm('ci6')"
                   :disabled="isdisabled6"
                   >确 认</el-button
                 >
@@ -508,7 +508,7 @@
               <el-form-item class="set_button">
                 <el-button
                   type="primary"
-                  @click="city_confirm"
+                  @click="city_confirm('ci7')"
                   :disabled="isdisabled7"
                   >确 认</el-button
                 >
@@ -549,7 +549,7 @@
               <el-form-item class="set_button">
                 <el-button
                   type="primary"
-                  @click="city_confirm"
+                  @click="city_confirm('ci8')"
                   :disabled="isdisabled8"
                   >确 认</el-button
                 >
@@ -590,7 +590,7 @@
               <el-form-item class="set_button">
                 <el-button
                   type="primary"
-                  @click="city_confirm"
+                  @click="city_confirm('ci9')"
                   :disabled="isdisabled9"
                   >确 认</el-button
                 >
@@ -631,7 +631,7 @@
               <el-form-item class="set_button">
                 <el-button
                   type="primary"
-                  @click="city_confirm"
+                  @click="city_confirm('ci10')"
                   :disabled="isdisabled10"
                   >确 认</el-button
                 >
@@ -1606,7 +1606,7 @@ export default {
             });
             concnt = 0;
             this.cp = false;
-            return ;
+            return;
           }
 
           var mc = document.getElementById("myCanvas");
@@ -1730,7 +1730,7 @@ export default {
             var dis = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
 
             for (var k in this.ri) {
-              console.log("lineID：",this.ri[k]);
+              console.log("lineID：", this.ri[k]);
               var tr = document.getElementById(this.ri[k]);
               var td = parseInt(dis);
               var wi = tr.style.width;
@@ -1815,22 +1815,58 @@ export default {
     //   return str.replace(/<br>/g, "\n");
     // },
 
-    city_confirm() {
+    city_confirm(e) {
       this.np = false;
+      var c=document.getElementById(e);
       // console.log("city_Name:" + this.cityForm.cityName);
       console.log("city_population:" + this.cityForm.population);
       console.log("city_Infected:" + this.cityForm.beginInfected);
       var cn = this.getName(citycnt);
 
       var cy = cn + ": 总人口:" + this.cityForm.population;
+      var ipp=parseInt(this.cityForm.population);
+      if ( ipp <100 || ipp>15000) {
+        this.$alert("城市人口应在100~15000内", "创建失败", {
+          confirmButtonText: "确定",
+          callback: (action) => {
+            this.$message({
+              type: "info",
+              message: `action: ${action}`,
+            });
+          },
+        });
+        this.cityForm.population="";
+        this.cityForm.beginInfected="";
+        c.style.left=10000+"px";
+        c.style.top=10000+"px";
+        return;
+      }
+
+      var cz = "初始感染人数:" + this.cityForm.beginInfected;
+      var ibi=parseInt(this.cityForm.beginInfected);
+      if ( ibi <0 || ibi>100) {
+        this.$alert("初始感染人数应在0~100内", "创建失败", {
+          confirmButtonText: "确定",
+          callback: (action) => {
+            this.$message({
+              type: "info",
+              message: `action: ${action}`,
+            });
+          },
+        });
+        this.cityForm.population="";
+        this.cityForm.beginInfected="";
+        c.style.left=10000+"px";
+        c.style.top=10000+"px";
+        return;
+      }
+
       this.city_po.push(cy);
-      cy = "初始感染人数:" + this.cityForm.beginInfected;
-      this.city_po.push(cy);
+      this.city_po.push(cz);
 
       this.setButton(citycnt);
 
       citycnt++;
-      this.disable = false;
       // console.log(typeof(this.city_po));
     },
 
