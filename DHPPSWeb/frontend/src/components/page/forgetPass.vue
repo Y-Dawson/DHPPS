@@ -73,11 +73,16 @@
           <!-- <div class="layui-form-mid layui-word-aux">请填写6到12位密码</div> -->
         </div>
       </div>
-
       <el-form-item class="btns">
+        <router-link to='/Login'><el-button type="return" >返 回</el-button></router-link>
         <el-button type="primary" @click="submitForm('forgetForm')">确 定</el-button>
-        <!-- <el-button type="info" @click="resetLoginForm">重 置</el-button> -->
       </el-form-item>
+
+      <!-- <el-form-item class="btns">
+        <el-button type="return"><router-link to='/Login'>返回</router-link></el-button> -->
+        <!-- <el-button type="info" @click="resetLoginForm">返回</el-button> -->
+        <!-- <el-button type="primary" @click="submitForm('forgetForm')">确 定</el-button>
+      </el-form-item> -->
      </el-form>
     </div>
   </div>
@@ -217,7 +222,10 @@ body {
   margin: 0;
   padding: 30px 30px;
 }
-
+/* .btns {
+  display: flex;
+  justify-content: center;
+} */
 .layui-form .layui-form-item {
   text-align: center;
 }
@@ -228,11 +236,17 @@ body {
   margin-left: 36px;
   margin-top: -38px;
 }
-
-.el-button--primary {
+.el-button--return {
+  /* background-color: rgba(109, 113, 116, 0.295); */
   position: absolute;
-  width: 150px;
+  width: 100px;
   height: 40px;
-  margin-left: -70px;
+  margin-left: -120px;
+}
+.el-button--primary{
+  position: absolute;
+  width: 100px;
+  height: 40px;
+  margin-left: 10px;
 }
 </style>
