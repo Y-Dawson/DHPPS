@@ -615,15 +615,24 @@ def getAllCaseInfos(request):
                 roadInfos = models.Initaroaddata.objects.filter(caseid=caseInfo)
 
                 cases = {}
+                cases["casename"] = caseInfo.casename
+                cases["citynum"] = len(cityInfos)
+                cases["roadnum"] = len(roadInfos)
+
                 cityList = []
+                cityPosList = []
                 for cityIdx in range(len(cityInfos)):
                     cityCase = {}
                     cityCase["cityname"] = cityInfos[cityIdx].cityname
                     cityCase["initpop"] = cityInfos[cityIdx].initpop
                     cityCase["initinfect"] = cityInfos[cityIdx].initinfect
-                    cityCase["x"] = cityInfos[cityIdx].cityposition.x
-                    cityCase["y"] = cityInfos[cityIdx].cityposition.y
                     cityList.append(cityCase)
+
+                    cityPosCase = {}
+                    cityPosCase["cityname"] = cityInfos[cityIdx].cityname
+                    cityPosCase["x"] = cityInfos[cityIdx].cityposition.x
+                    cityPosCase["y"] = cityInfos[cityIdx].cityposition.y
+                    cityPosList.append(cityPosCase)
 
                 roadList = []
                 for roadIdx in range(len(roadInfos)):
@@ -633,8 +642,10 @@ def getAllCaseInfos(request):
                     roadCase["volume"] = roadInfos[roadIdx].volume
                     roadList.append(roadCase)
 
-                cases["cities"] = cityList
-                cases["roads"] = roadList
+                cases["Initcitydata"] = cityList
+                cases["Initroaddata"] = roadList
+                cases["Cityposition"] = cityPosList
+
                 return JsonResponse({"message": "成功返回数据", "cases": cases, "status": 200})
             except Exception as e:
                 print('str(Exception):\t', str(Exception))
