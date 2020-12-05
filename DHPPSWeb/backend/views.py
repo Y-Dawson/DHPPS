@@ -605,8 +605,8 @@ class ImageCodeView(View):
 
 
 def getAllCaseInfos(request):
-    if request.method == "GET":
-        caseId = request.GET.get("caseid")
+    if request.method == "POST":
+        caseId = request.POST.get("caseid")
         if caseId:
             try:
                 caseInfo = models.Casedata.objects.filter(caseid=caseId).first()
