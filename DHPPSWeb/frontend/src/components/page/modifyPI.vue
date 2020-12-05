@@ -88,14 +88,14 @@
                       id="inputname"
                     ></el-input>
                   </el-form-item>
-                  <el-form-item label="手机号" prop="phone">
+                  <!-- <el-form-item label="手机号" prop="phone">
                     <el-input
                       size="small"
                       v-model="ruleForm.phone"
                       clearable
                       id="inputphone"
                     ></el-input>
-                  </el-form-item>
+                  </el-form-item> -->
                   <el-form-item label="性别" prop="sex">
                     <el-radio-group
                       v-model="ruleForm.radio"
@@ -230,7 +230,7 @@ export default {
       value1: "",
       ruleForm: {
         name: "",
-        phone: "",
+        // phone: "",
         email: "",
         radio: "男",
         delivery: false,
@@ -284,7 +284,7 @@ export default {
       axios
         .put("http://127.0.0.1:8000/backend/profile/" + userId + "/", {
           username: $("#inputname").val(),
-          phonenumber: $("#inputphone").val(),
+          // phonenumber: $("#inputphone").val(),
           birth: this.value1,
           sex: this.ruleForm.radio,
           email: $("#inputmail").val(),
