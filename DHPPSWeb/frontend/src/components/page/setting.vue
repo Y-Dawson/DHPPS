@@ -1194,7 +1194,7 @@ export default {
       console.log("画了这条线了：", linecnt);
     },
 
-    add_day(casename) {
+    begin_simulation() {
       this.$prompt("请输入模拟天数", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -1202,13 +1202,28 @@ export default {
         inputErrorMessage: "模拟天数格式不正确",
       })
         .then(({ value }) => {
+          var d=parseInt(value);
+          if (d < 5 || d > 100) {
+            this.$alert("模拟天数应在5~100内", "模拟失败", {
+              confirmButtonText: "确定",
+              callback: (action) => {
+                this.$message({
+                  type: "info",
+                  message: `action: ${action}`,
+                });
+              },
+            });
+            this.bs = false;
+            return ;
+          }
+
           this.sc = false;
 
           var myFormData = new FormData();
 
           myFormData.append("userid", this.userId);
 
-          myFormData.append("casename", casename);
+          myFormData.append("casename", 99);
 
           var city_infor = [];
           var cn = "Z";
@@ -1288,13 +1303,13 @@ export default {
             .post("http://127.0.0.1:8000/backend/startSimulate/", myFormData)
             .then((response) => {
               // alert(JSON.stringify(response));
-              // alert("保存案例");
+              // alert("开始模拟");
               this.$router.push({
                 path: "/simulation",
                 query: {
                   params: JSON.stringify({
                     userid: this.userId,
-                    casename: casename,
+                    casename: 99,
                     citynum: citycnt,
                     roadnum: roadcnt,
                     Initcitydata: city_infor,
@@ -1312,26 +1327,7 @@ export default {
             });
         })
         .catch(() => {
-          this.sc = false;
-          this.$message({
-            type: "info",
-            message: "取消输入",
-          });
-        });
-    },
-
-    begin_simulation() {
-      this.$prompt("请输入案例名称", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        inputPattern: /^[0-9]/,
-        inputErrorMessage: "案例名称格式不正确",
-      })
-        .then(({ value }) => {
-          this.add_day(value).then((response) => {});
-        })
-        .catch(() => {
-          this.sc = false;
+          this.bs = false;
           this.$message({
             type: "info",
             message: "取消输入",

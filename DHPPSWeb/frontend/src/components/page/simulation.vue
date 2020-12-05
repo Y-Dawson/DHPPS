@@ -7,7 +7,6 @@
         <!-- <div class="layui-logo">高传染性疾病预测系统</div> -->
         <!-- 头部区域（可配合layui已有的水平导航） -->
         <ul class="layui-nav layui-layout-right">
-
           <li class="layui-nav-item" style="line-height: 20px">
             <el-avatar
               shape="circle"
@@ -280,6 +279,136 @@
             </div>
           </div>
         </li>
+
+        <li>
+          <div
+            id="ci6"
+            class="city"
+            :style="{
+              left: cityForm.cityleft + 'px',
+              top: cityForm.citytop + 'px',
+            }"
+          >
+            <img src="../../assets/layui/images/city.png" alt="" />
+            <div class="city-infor">
+              <el-form-item prop="population">
+                <span>总人口：{{ ci6_population[day] }}</span>
+              </el-form-item>
+
+              <el-form-item prop="beginInfected">
+                <span>总感染人数：{{ ci6_totalInfected[day] }}</span>
+              </el-form-item>
+
+              <el-form-item>
+                <span>新增感染人数：{{ ci6_newInfected[day] }}</span>
+              </el-form-item>
+            </div>
+          </div>
+        </li>
+
+        <li>
+          <div
+            id="ci7"
+            class="city"
+            :style="{
+              left: cityForm.cityleft + 'px',
+              top: cityForm.citytop + 'px',
+            }"
+          >
+            <img src="../../assets/layui/images/city.png" alt="" />
+            <div class="city-infor">
+              <el-form-item prop="population">
+                <span>总人口：{{ ci7_population[day] }}</span>
+              </el-form-item>
+
+              <el-form-item prop="beginInfected">
+                <span>总感染人数：{{ ci7_totalInfected[day] }}</span>
+              </el-form-item>
+
+              <el-form-item>
+                <span>新增感染人数：{{ ci7_newInfected[day] }}</span>
+              </el-form-item>
+            </div>
+          </div>
+        </li>
+
+        <li>
+          <div
+            id="ci8"
+            class="city"
+            :style="{
+              left: cityForm.cityleft + 'px',
+              top: cityForm.citytop + 'px',
+            }"
+          >
+            <img src="../../assets/layui/images/city.png" alt="" />
+            <div class="city-infor">
+              <el-form-item prop="population">
+                <span>总人口：{{ ci8_population[day] }}</span>
+              </el-form-item>
+
+              <el-form-item prop="beginInfected">
+                <span>总感染人数：{{ ci8_totalInfected[day] }}</span>
+              </el-form-item>
+
+              <el-form-item>
+                <span>新增感染人数：{{ ci8_newInfected[day] }}</span>
+              </el-form-item>
+            </div>
+          </div>
+        </li>
+
+        <li>
+          <div
+            id="ci9"
+            class="city"
+            :style="{
+              left: cityForm.cityleft + 'px',
+              top: cityForm.citytop + 'px',
+            }"
+          >
+            <img src="../../assets/layui/images/city.png" alt="" />
+            <div class="city-infor">
+              <el-form-item prop="population">
+                <span>总人口：{{ ci9_population[day] }}</span>
+              </el-form-item>
+
+              <el-form-item prop="beginInfected">
+                <span>总感染人数：{{ ci9_totalInfected[day] }}</span>
+              </el-form-item>
+
+              <el-form-item>
+                <span>新增感染人数：{{ ci9_newInfected[day] }}</span>
+              </el-form-item>
+            </div>
+          </div>
+        </li>
+
+        <li>
+          <div
+            id="ci10"
+            class="city"
+            :style="{
+              left: cityForm.cityleft + 'px',
+              top: cityForm.citytop + 'px',
+            }"
+          >
+            <img src="../../assets/layui/images/city.png" alt="" />
+            <div class="city-infor">
+              <el-form-item prop="population">
+                <span>总人口：{{ ci10_population[day] }}</span>
+              </el-form-item>
+
+              <el-form-item prop="beginInfected">
+                <span>总感染人数：{{ ci10_totalInfected[day] }}</span>
+              </el-form-item>
+
+              <el-form-item>
+                <span>新增感染人数：{{ ci10_newInfected[day] }}</span>
+              </el-form-item>
+            </div>
+          </div>
+        </li>
       </ul>
 
       <ul class="line_list">
@@ -330,6 +459,83 @@
         <li>
           <div
             id="line5"
+            class="road_line"
+            :style="{
+              left: lineleft + 'px',
+              top: linetop + 'px',
+            }"
+          ></div>
+        </li>
+
+        <li>
+          <div
+            id="line6"
+            class="road_line"
+            :style="{
+              left: lineleft + 'px',
+              top: linetop + 'px',
+            }"
+          ></div>
+        </li>
+
+        <li>
+          <div
+            id="line7"
+            class="road_line"
+            :style="{
+              left: lineleft + 'px',
+              top: linetop + 'px',
+            }"
+          ></div>
+        </li>
+
+        <li>
+          <div
+            id="line8"
+            class="road_line"
+            :style="{
+              left: lineleft + 'px',
+              top: linetop + 'px',
+            }"
+          ></div>
+        </li>
+
+        <li>
+          <div
+            id="line9"
+            class="road_line"
+            :style="{
+              left: lineleft + 'px',
+              top: linetop + 'px',
+            }"
+          ></div>
+        </li>
+
+        <li>
+          <div
+            id="line10"
+            class="road_line"
+            :style="{
+              left: lineleft + 'px',
+              top: linetop + 'px',
+            }"
+          ></div>
+        </li>
+
+        <li>
+          <div
+            id="line11"
+            class="road_line"
+            :style="{
+              left: lineleft + 'px',
+              top: linetop + 'px',
+            }"
+          ></div>
+        </li>
+
+        <li>
+          <div
+            id="line12"
             class="road_line"
             :style="{
               left: lineleft + 'px',
@@ -415,13 +621,52 @@ export default {
       ci5_population: [],
       ci5_totalInfected: [],
       ci5_newInfected: [],
+      ci6_population: [],
+      ci6_totalInfected: [],
+      ci6_newInfected: [],
+      ci7_population: [],
+      ci7_totalInfected: [],
+      ci7_newInfected: [],
+      ci8_population: [],
+      ci8_totalInfected: [],
+      ci8_newInfected: [],
+      ci9_population: [],
+      ci9_totalInfected: [],
+      ci9_newInfected: [],
+      ci10_population: [],
+      ci10_totalInfected: [],
+      ci10_newInfected: [],
 
       city_po: [],
       road_di: [],
       road_c1: "",
       road_c2: "",
-      ci: ["ci1", "ci2", "ci3"],
-      ri: ["line1", "line2", "line3"],
+      ci: [
+        "ci1",
+        "ci2",
+        "ci3",
+        "ci4",
+        "ci5",
+        "ci6",
+        "ci7",
+        "ci8",
+        "ci9",
+        "ci10",
+      ],
+      ri: [
+        "line1",
+        "line2",
+        "line3",
+        "line4",
+        "line5",
+        "line6",
+        "line7",
+        "line8",
+        "line9",
+        "line10",
+        "line11",
+        "line12",
+      ],
       cityFormRule: {
         population: [
           { required: true, message: "请输入城市人数", trigger: "blur" },
@@ -558,8 +803,8 @@ export default {
         );
       }
     }
-    
-    console.log("c1_inf：",this.ci1_population);
+
+    console.log("c1_inf：", this.ci1_population);
   },
 
   methods: {
