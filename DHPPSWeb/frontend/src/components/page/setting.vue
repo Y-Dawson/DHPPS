@@ -1587,6 +1587,21 @@ export default {
             }
           }
 
+          if (this.cityx1 == this.cityx2 && this.cityy1 == this.cityy2) {
+            this.$alert("请选择两个不同的城市", "连接失败", {
+              confirmButtonText: "确定",
+              callback: (action) => {
+                this.$message({
+                  type: "info",
+                  message: `action: ${action}`,
+                });
+              },
+            });
+            concnt = 0;
+            this.cp = false;
+            return ;
+          }
+
           var mc = document.getElementById("myCanvas");
           var mctx = mc.getContext("2d");
 
