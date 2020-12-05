@@ -3,7 +3,7 @@
     <div id="app">
         <div class="layui-layout layui-layout-admin">
             <!-- 导航栏 -->
-            <topBar layoutName='后台管理系统'></topBar>
+            <topBar layoutName='后台管理系统' :userId="userId"></topBar>
             <div class="layui-side layui-bg-black">
                 <div class="layui-side-scroll">
                 <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
@@ -14,7 +14,7 @@
                             系统菜单
                         </div>
                         <dl class="layui-nav-child">
-                            <dd><router-link to='/userManagement'>信息管理</router-link></dd>
+                            <dd><router-link :to="{path:'/userManagement',query:{uI:this.userId}}">信息管理</router-link></dd>
                         </dl>
                         <a class="" href="javascript:;" >案例管理</a>
                         <dl class="layui-nav-child">
@@ -29,7 +29,7 @@
                 <div style="padding: 15px;">
                 <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
                   <ul class="layui-tab-title">
-                      <li class="layui-off"><router-link to='/caseManagement'>案例管理</router-link></li>
+                      <li class="layui-off"><router-link :to="{path:'/caseManagement',query:{uI:this.userId}}">案例管理</router-link></li>
                       <li class="layui-this" style="color: #55587e;">案例参数</li>
                   </ul>
                   <div class="layui-tab-content">
@@ -101,6 +101,7 @@ export default {
   data: function () {
     return {
       // 传参
+      userId:this.$route.query.userId,
       userid:this.$route.query.uI,
       contentList:[],
       isBackground:true,
@@ -121,6 +122,7 @@ export default {
   mounted: function () {
     // this.getcasenum(this.userid)
     this.getCaseContent()
+    alert(this.userId)
   },
   methods: {
         //上一页

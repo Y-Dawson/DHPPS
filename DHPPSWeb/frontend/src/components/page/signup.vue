@@ -1,5 +1,5 @@
 <template>
-  <div id="signup">
+  <div id="signup" :style="bgImg">
     <div class="ms-login">
       <div class="ms-title">高传染性疾病预测系统</div>
       <el-form :model="signupForm" :rules="signupFormRules" ref="signupForm" class="ms-content" action="">
@@ -137,20 +137,20 @@ export default {
           }
         });
       }
-    // var validatePass= (rule, value, callback) => {
-    //     if (!value) {
-    //       return callback(new Error('请输入密码'));
-    //     }
-    //     setTimeout(() => {
-    //       let reg =  /^[(a-zA-Z0-9\u4e00-\u9fa5){1}_#]{4,20}$/
-    //       if (value == '' || !reg.test(value)) {
-    //         callback(new Error('昵称限16个字符，支持中英文、数字、减号或下划线'));
-    //       }
-    //       else{
-    //         callback();
-    //       }
-    //     });
-    //   }
+    var validatePass= (rule, value, callback) => {
+        if (!value) {
+          return callback(new Error('请输入密码'));
+        }
+        setTimeout(() => {
+          let reg =  /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[._~!@#$^&*])[A-Za-z0-9._~!@#$^&*]{6,12}$/
+          if (value == '' || !reg.test(value)) {
+            callback(new Error('密码长度为6~12位，必须由字母、数字、特殊符号(._~!@#$^&*)组成'));
+          }
+          else{
+            callback();
+          }
+        });
+      }
     var validatePass2 = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请再次输入密码'));
@@ -189,6 +189,9 @@ export default {
         });
       };
     return {
+      bgImg:{ backgroundImage:"url(" + require("../../assets/img/background2.jpg") + ")",
+              height:'100vh',//这里一定要设置高度 否则背景图无法显示
+              backgroundRepeat: "no-repeat"},
       signupForm: {
         username: "",
         password: "",
@@ -199,18 +202,9 @@ export default {
       },
       returnmessage:"",
       signupFormRules: {
-        username: [
-          { required: true, validator:checkanme , trigger: "blur"},
-          { min: 1, max: 15, message: "长度在1到20个字符之间", trigger: "blur"}
-          ],
-        password: [
-          { required: true, message: "请输入密码", trigger: "blur"},
-          { min: 6, max: 12, message: "长度在6到12个字符之间", trigger: "blur"}          ],
-        password2: [
-          { required: true, message: "请再次输入密码", trigger: "blur"},
-          // { min: 6, max: 12, message: "长度在6到12个字符之间", trigger: "blur"},
-          { validator: validatePass2, trigger: 'blur', required: true }
-          ],
+        username: [{ required: true, validator:checkanme , trigger: "blur"}],
+        password: [{ required: true, validator:validatePass,trigger: "blur"}],
+        password2: [{ validator: validatePass2, trigger: 'blur', required: true }],
         email: [
           { required: true, validator:checkemail, trigger: "blur"},
           { min: 7, max: 20, message: "请输入正确的邮箱", trigger: "blur"}
@@ -270,13 +264,6 @@ export default {
   }
 };
 </script>
-<style>
-@import "../../assets/layui/css/layui.css";
-body {
-  background-image: url(../../assets/img/background2.jpg);
-  /* width: 1000px; */
-}
-</style>
 
 <style scoped>
 @import "../../assets/layui/css/layui.css";

@@ -3,7 +3,7 @@
     <div id="app">
         <div class="layui-layout layui-layout-admin">
             <!-- 导航栏 -->
-            <topBar layoutName='后台管理系统'></topBar>
+            <topBar layoutName='后台管理系统' :userId="userId"></topBar>
         
             <div class="layui-side layui-bg-black">
                 <div class="layui-side-scroll">
@@ -15,7 +15,7 @@
                                 系统菜单
                             </div>
                             <dl class="layui-nav-child">
-                                <dd><router-link to='/userManagement'>信息管理</router-link></dd>
+                                <dd><router-link :to="{path:'/userManagement',query:{uI:this.userId}}">信息管理</router-link></dd>
                             </dl>
                             <a class="" href="javascript:;" >案例管理</a>
                             <dl class="layui-nav-child">
@@ -61,7 +61,7 @@
                                     <td>{{item.casenumber}}</td>
                                     <td>{{item.createdate}}</td>
                                     <td>
-                                        <button class="buttonA"><router-link :to="{path:'/caseEdit',query:{uI:item.userid}}">案例编辑</router-link></button>
+                                        <button class="buttonA"><router-link :to="{path:'/caseEdit',query:{userId:userId,uI:item.userid}}">案例编辑</router-link></button>
                                         <button class="buttonA" type="danger" @click="handleDel(item.userid)">删 &nbsp;&nbsp; 除</button>
                                     </td>
                                 </tr>
@@ -100,6 +100,7 @@ export default {
     },
     data() {
       return {
+        userId:this.$route.query.uI,
         //分页
         totalPage: 3, // 统共页数，默认为1
         currentPage: 1, //当前页数 ，默认为1

@@ -3,7 +3,7 @@
     <div id="app">
         <div class="layui-layout layui-layout-admin">
             <!-- 导航栏 -->
-            <topBar layoutName='后台管理系统'></topBar>
+            <topBar layoutName='后台管理系统' :userId="userId"></topBar>
             <div class="layui-side layui-bg-black">
                 <div class="layui-side-scroll">
                 <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
@@ -15,7 +15,7 @@
                             </div>
                             <a class="" href="javascript:;" >信息管理</a>
                             <dl class="layui-nav-child">
-                                <dd><router-link to='/SPCaseManage'>案例管理</router-link></dd>
+                                <dd><router-link :to="{path:'/SPCaseManage',query:{uI:this.userId}}">案例管理</router-link></dd>
                                 <dd><a href="javascript:;">模型查看</a></dd>
                             </dl>
                         </li>
@@ -29,7 +29,7 @@
                     <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
                         <ul class="layui-tab-title">
                             <li class="layui-this" style="color: #55587e;">用户管理</li>
-                            <router-link to='/SPStaffManage'><li class="layui-off">员工管理</li></router-link>
+                            <router-link :to="{path:'/SPStaffManage',query:{uI:this.userId}}"><li class="layui-off">员工管理</li></router-link>
                             <li class="layui-off">编辑</li>
                         </ul>
                     <div class="layui-tab-content">
@@ -62,7 +62,7 @@
                                     <td>{{item.casenumber}}</td>
                                     <td>{{item.remark}}</td>
                                     <td>
-                                        <button class="buttonA"><router-link :to="{path:'/SPEdit',query:{uN:item.username,uT:item.phonenumber,uI:item.userid,uC:item.createdate}}">编辑</router-link></button>
+                                        <button class="buttonA"><router-link :to="{path:'/SPEdit',query:{uN:item.username,uT:item.phonenumber,uI:item.userid,uC:item.createdate,userId:userId}}">编辑</router-link></button>
                                         <button class="buttonA" type="danger" @click="handleDel(item.userid)">删除</button>
                                     </td>
                                 </tr>
@@ -96,12 +96,13 @@
 <script>
 import topBar from '../common/topBar.vue';
 export default {
-    name:'userManagement',
+    name:'SPUserManage',
     components:{
       topBar
     },
     data() {
       return {
+        userId:this.$route.query.uI,
         //分页
         totalPage: 3, // 统共页数，默认为1
         currentPage: 1, //当前页数 ，默认为1
@@ -111,6 +112,9 @@ export default {
       };
     },
     created: function () {
+      this.params = JSON.parse(this.$route.query.params);
+      console.log("用户ID：", this.params.userId);
+      this.userId = this.params.userId;
       //为了在内部函数能使用外部函数的this对象，要给它赋值了一个名叫self的变量。
       this.getContent()
     },

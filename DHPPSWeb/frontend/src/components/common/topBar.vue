@@ -49,19 +49,22 @@ export default {
   data() {
     return {
       content: [],
+      userId:0
     };
   },
-  props: ["layoutName"],
-
+  props:{
+      layoutName:String,
+      userId:Number
+    },
   created: function () {
     //为了在内部函数能使用外部函数的this对象，要给它赋值了一个名叫self的变量。
-    this.getContent();
+    this.getContent(this.userId);
   },
   methods: {
-    getContent: function () {
+    getContent: function (userId) {
       var self = this;
       axios
-        .get("http://127.0.0.1:8000/backend/profile/1/")
+        .get("http://127.0.0.1:8000/backend/profile/"+userId+"/")
         .then(
           (response) =>
             (self.content = response.data)
@@ -71,24 +74,7 @@ export default {
           // 请求失败处理
           alert("数据请求失败wdnmd");
         });
-    },
-    putContent: function () {
-      var self = this;
-      var date = $("#input1").val();
-      axios
-        .post("http://127.0.0.1:8000/backend/profile/", {
-          createdate: "2018-1-1",
-        })
-        .then(
-          (response) =>
-            (self.content = response)
-            // alert(JSON.stringify(response))
-        )
-        .catch(function (error) {
-          alert("数据发送失败");
-          console.log(error.response);
-        });
-    },
+    }
   },
 };
 </script>

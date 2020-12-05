@@ -3,7 +3,7 @@
     <div id="app">
         <div class="layui-layout layui-layout-admin">
             <!-- 导航栏 -->
-            <topBar layoutName='后台管理系统'></topBar>
+            <topBar layoutName='后台管理系统' :userId="userId"></topBar>
         
             <div class="layui-side layui-bg-black">
                 <div class="layui-side-scroll">
@@ -16,7 +16,7 @@
                             </div>
                             <a class="" href="javascript:;" >信息管理</a>
                             <dl class="layui-nav-child">
-                                <dd><router-link to='/SPCaseManage'>案例管理</router-link></dd>
+                                <dd><router-link :to="{path:'/SPCaseManage',query:{uI:this.userId}}">案例管理</router-link></dd>
                                 <dd><a href="javascript:;">模型查看</a></dd>
                             </dl>
                         </li>
@@ -30,8 +30,8 @@
                 <!-- 选项卡 -->
                     <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
                         <ul class="layui-tab-title">
-                            <li class="layui-off"><router-link to='/SPUserManage'>用户管理</router-link></li>
-                            <li class="layui-off"><router-link to='/SPStaffManage'>员工管理</router-link></li>
+                            <li class="layui-off"><router-link :to="{path:'/SPUserManage',query:{uI:this.userId}}">用户管理</router-link></li>
+                            <li class="layui-off"><router-link :to="{path:'/SPStaffManage',query:{uI:this.userId}}">员工管理</router-link></li>
                             <li class="layui-this" style="color: #55587e;">编辑</li>
                         </ul>
                     <div class="layui-tab-content">
@@ -89,6 +89,7 @@ export default {
     },
     data() {
       return {
+        userId:this.$route.query.userId,
         editTel:this.$route.query.uT,
         editName:this.$route.query.uN,
         userid:this.$route.query.uI,
@@ -96,12 +97,6 @@ export default {
     }
   },
   methods: {
-    getParams() {
-      let editTel=this.$router.query.uT;
-      let editName=this.$router.query.uN;
-      let userid=this.$router.query.uI;
-      let usercreate=this.$route.query.uC
-    },
     empty() {
       $("#desc").val("");
     },
