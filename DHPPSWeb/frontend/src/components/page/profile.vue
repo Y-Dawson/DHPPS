@@ -3,11 +3,10 @@
   <!-- 实现了生日日期选择，没有实现输入框校验！！！ -->
   <div id="app">
     <div class="layui-layout layui-layout-admin">
-      <div class="layui-header">
+      <profileTopBar layoutName='个人中心' :userId="userId"></profileTopBar>
+      <!-- <div class="layui-header">
         <div class="layui-logo">LOGO</div>
         <div class="layui-logotext">高传染性疾病预测系统</div>
-        <!-- <div class="layui-logo">高传染性疾病预测系统</div> -->
-        <!-- 头部区域（可配合layui已有的水平导航） -->
         <ul class="layui-nav layui-layout-left">
           <li class="layui-nav-item">个人中心</li>
         </ul>
@@ -24,8 +23,7 @@
                   }),
                 },
               }"
-              >回到首页</router-link
-            >
+              >回到首页</router-link>
           </li>
           <li class="layui-nav-item" style="line-height: 20px">
             <el-avatar
@@ -41,7 +39,7 @@
             </a>
           </li>
         </ul>
-      </div>
+      </div> -->
       <div class="layui-side layui-bg-black">
         <div class="layui-side-scroll">
           <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
@@ -155,8 +153,12 @@
 
 <script src="../assets/layui/layui.js"></script>
 <script>
+import profileTopBar from '../common/profileTopBar.vue';
 export default {
   name: "profile",
+  components:{
+      profileTopBar
+    },
   data: function () {
     return {
       userId: this.$route.query.userId,
