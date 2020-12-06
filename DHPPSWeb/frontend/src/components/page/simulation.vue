@@ -17,7 +17,7 @@
           </li>
           <li class="layui-nav-item">
             <a href="javascript:;">
-              <span>用户名</span>
+              <span>{{content.username}}</span>
             </a>
           </li>
         </ul>
@@ -565,6 +565,10 @@ var linecnt = 1;
 export default {
   data() {
     return {
+      content:[],
+      fits: ["fill"],
+      url:"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
+      
       ss: false,
       disable: true,
       value1: 0,
@@ -720,6 +724,7 @@ export default {
     console.log("每日病例：", this.params.DailyInfected.data.DailyforecastData);
     var foreData = this.params.DailyInfected.data.DailyforecastData;
 
+
     this.userId = this.params.userid;
     this.casename = this.params.casename;
     this.citycnt = this.params.citynum;
@@ -731,6 +736,8 @@ export default {
     this.daily_step = 100 / this.day_num;
     console.log("模拟天数：", this.params.Daynum);
     console.log("每日跨度：", this.daily_step);
+
+    this.getContent(this.userId);
 
     var cnt = 0;
     for (var j in this.params.Cityposition) {
@@ -808,6 +815,21 @@ export default {
   },
 
   methods: {
+    getContent: function (userId) {
+      var self = this;
+      axios
+        .get("http://127.0.0.1:8000/backend/profile/"+userId+"/")
+        .then(
+          (response) =>
+            (self.content = response.data)
+            //alert(JSON.stringify(response))
+        )
+        .catch(function (error) {
+          // 请求失败处理
+          alert("数据请求失败wdnmd");
+        });
+    },
+    
     sst(ss) {
       if (this.ss == true) {
         console.log("返回设置参数界面");
@@ -944,9 +966,9 @@ export default {
 <style scoped>
 @import "../../assets/layui/css/layui.css";
 
-/* body {
+body {
   overflow: hidden;
-} */
+}
 
 .layui-nav-tree .layui-nav-item a {
   font-weight: bold;
@@ -1144,6 +1166,7 @@ export default {
 
 .add-wrapper {
   position: absolute;
+  display: none;
   width: 70px;
   height: 100px;
   right: 240px;

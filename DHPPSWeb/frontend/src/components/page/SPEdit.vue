@@ -50,7 +50,7 @@
                           </div>
                           <!-- <div>{{desc}}</div> -->
                           <div style="margin-top:20px;">
-                            <button type="submit"  @click="putContent(userid)" >立即提交</button>
+                            <button type="submit"  @click="isEmpty(userid)" >立即提交</button>
                             <button type="reset"  @click="empty">重置</button>
                           </div>
                         </li>
@@ -60,7 +60,7 @@
                                 <option value="普通用户">普通用户</option>
                                 <option value="管理员">管理员</option>
                             </select>
-                            <button @click="putAuthority(userid)" >确定</button>
+                            <button @click="authorityIsEmpty(userid)" >确定</button>
                             <!-- </div> -->
                         </li>
                     </ul>
@@ -100,6 +100,10 @@ export default {
     empty() {
       $("#desc").val("");
     },
+    isEmpty(uI){
+      if($("#desc").val()=="") this.$message("请输入备注信息");
+      else this.putContent(uI);
+    },
     putContent(uI) {
         var self = this;
         axios
@@ -117,8 +121,12 @@ export default {
             alert("数据发送失败");
             console.log(error.response);
           });
-      },
-      putAuthority(uI) {
+    },
+    authorityIsEmpty(uI) {
+        if($("#selected").val()=="管理员"||$("#selected").val()=="普通用户") this.putAuthority(uI);
+        else this.$message("请选择权限");
+    },
+    putAuthority(uI) {
         var self = this;
         axios
           .put('http://127.0.0.1:8000/backend/accountInfo/'+uI+'/',{
