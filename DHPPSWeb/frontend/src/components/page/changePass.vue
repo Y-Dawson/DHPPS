@@ -234,7 +234,7 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          alert("this is submit")
+          // alert("this is submit")
           this.changePass();
           // this.putContent()
           // alert('submit!')

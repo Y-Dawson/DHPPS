@@ -29,7 +29,7 @@
           </li>
           <li class="layui-nav-item">
             <a href="javascript:;">
-              <span>用户名</span>
+              <span>{{content.username}}</span>
             </a>
           </li>
         </ul>
@@ -801,6 +801,7 @@ var cn = 0;
 export default {
   data() {
     return {
+      content:[],
       fits: ["fill"],
       url:"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
 
@@ -938,7 +939,7 @@ export default {
     console.log("道路信息：", this.params.Initroaddata);
     console.log("城市坐标：", this.params.Cityposition);
     this.userId = this.params.userId;
-
+    this.getContent(this.userId);
     citycnt = 1;
     linecnt = 1;
     if (this.params.casename != 999) {
@@ -1032,6 +1033,21 @@ export default {
   },
 
   methods: {
+    getContent: function (userId) {
+      var self = this;
+      axios
+        .get("http://127.0.0.1:8000/backend/profile/"+userId+"/")
+        .then(
+          (response) =>
+            (self.content = response.data)
+            //alert(JSON.stringify(response))
+        )
+        .catch(function (error) {
+          // 请求失败处理
+          alert("数据请求失败wdnmd");
+        });
+    },
+    
     npt(np) {
       this.cp = false;
       this.dp = false;
@@ -2114,6 +2130,7 @@ body {
 
 .add-wrapper {
   position: absolute;
+  display: none;
   width: 70px;
   height: 100px;
   right: 240px;
