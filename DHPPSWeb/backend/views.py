@@ -544,7 +544,7 @@ def startSimulate(request):
                     cityCase["infected"] = initInfectedList[cityIdx]
                     cityCase["dailyinfected"] = int(dailyInfectMatrix[cityIdx][dayCount])
                 else:
-                    cityCase["infected"] = int(dailyInfectMatrix[cityIdx][dayCount])
+                    cityCase["infected"] = int(dailyInfectMatrix[cityIdx][dayCount])+initInfectedList[cityIdx]
                     cityCase["dailyinfected"] = int(dailyInfectMatrix[cityIdx][dayCount]) - int(dailyInfectMatrix[cityIdx][dayCount-1])
 
                 dayCase.append(cityCase)
