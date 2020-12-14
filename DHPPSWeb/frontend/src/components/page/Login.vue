@@ -152,7 +152,7 @@ export default {
       data.append("phonenum",$("#loginPhone").val())
       data.append("password",$("#loginPass").val())
       axios
-        .post("http://127.0.0.1:8000/backend/signin/",data)
+        .post("/apis/backend/signin/",data)
         .then(response => (
             self.content = response.data,
             self.loginMassege=response.data.message,

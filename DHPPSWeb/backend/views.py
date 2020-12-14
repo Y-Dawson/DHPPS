@@ -5,6 +5,7 @@ from rest_framework.filters import OrderingFilter
 from backend import paginations
 from django.shortcuts import render, get_object_or_404
 from django.views import View
+from django.db.models import F
 from backend import models
 from backend import customSerializers
 from backend.sendSms import sendSms
@@ -82,16 +83,15 @@ def login_required(view_func):
 # 登录成功，返回消息和200状态码
 # 登录失败，返回消息和404状态码
 def signin(request):
-    '''
     # 若已经登录，直接进入已登录账号
     if request.session.get('isLogin', None):
+        request.session['isLogin'] = False
         return JsonResponse({"message": "你已经登录", "status": 404})
-    el
-    '''
-    if request.method == "POST":
+    elif request.method == "POST":
         # 从参数获取phonenum和password
         phonenum = request.POST.get('phonenum', None)
         password = request.POST.get('password', None)
+        print(request.headers)
         if phonenum and password:
             phonenum = phonenum.strip()
             try:
@@ -116,6 +116,9 @@ def signin(request):
                         "userId": accountInfo.userid,
                         "userAuthority": accountInfo.authority
                         })
+                    response["Access-Control-Allow-Credentials"] = "true"
+                    response["Access-Control-Allow-Methods"] = 'GET, POST, PATCH, PUT, OPTIONS'
+                    response["Access-Control-Allow-Headers"] = "Origin,Content-Type,Cookie,Accept,Token"
                     response.set_cookie('userId', accountInfo.userid)
                     return response
                 else:
@@ -354,14 +357,17 @@ def saveCase(request):
         newCaseId = 0
         try:
             # 新增案例
-            newCase = models.Casedata.objects.create(
-                userid=models.Accountinformation.objects.filter(userid=userId).first(),
-                casename=caseName,
-                citynumber=int(cityNum),
-                roadnumber=int(roadNum),
-                inittotal=initTotalNum,
-                inittotalinfected=initTotalInfectedNum
-            )
+            if (models.Accountinformation.objects.filter(userid=userId).exist()):
+                newCase = models.Casedata.objects.create(
+                    userid=models.Accountinformation.objects.filter(userid=userId).first(),
+                    casename=caseName,
+                    citynumber=int(cityNum),
+                    roadnumber=int(roadNum),
+                    inittotal=initTotalNum,
+                    inittotalinfected=initTotalInfectedNum
+                )
+            else:
+                return JsonResponse({"message": "目标用户不存在", "status": 404})
             # 新增城市信息
             cityCount = 0
             cityname = ""
@@ -410,6 +416,8 @@ def saveCase(request):
                         volume=volume
                     )
                 roadCount += 1
+            if (newCase):
+                models.Accountinformation.objects.filter(userid=userId).update(casenumber=F("casenumber") + 1)
             message = "保存案例成功"
             status = 200
             newCaseId = newCase.caseid
@@ -751,6 +759,12 @@ class CaseViewSet(viewsets.ModelViewSet):
     filter_class = filters.CaseFilter
     ordering_fields = ('casename', 'inittotal', 'inittotalinfected', 'citynumber', 'roadnumber',)
     ordering = ('caseid',)
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if (instance):
+            models.Accountinformation.objects.filter(userid=instance.userId).update(casenumber=F("casenumber") - 1)
+        return super(CaseViewSet, self).destroy(request, *args, **kwargs)
 
 
 class CityPosViewSet(viewsets.ModelViewSet):

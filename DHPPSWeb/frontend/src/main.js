@@ -11,15 +11,32 @@ import 'element-ui/lib/theme-chalk/index.css'
 // import VueCookies from 'vue-cookies'
 // Vue.use(VueCookies)
 
-axios.defaults.withCredentials = true;
-
 Vue.use(ElementUI)
 // Vue.use(VueResource)
 Vue.config.productionTip = false
 
-axios.defaults.baseURL = '/backend'
-Vue.prototype.$axios = axios
+
 axios.defaults.withCredentials = true;  //允许axios请求携带cookie等凭证
+axios.defaults.xsrfCookieName = 'csrftoken';
+axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+// 请求拦截
+axios.interceptors.request.use(
+  config => {
+    if (store.getters.token) { // 若存在token，则每个Http Header都加上token
+      config.headers.Authorization = `token ${store.getters.token}`
+    }
+    console.log('request请求配置', config)
+    console.log(`token is ${store.getters.token}`)
+    return config
+  },
+  err => {
+    return Promise.reject(err)
+  });
+
+const service = axios.create({
+  baseURL: '/backend',
+  withCredentials: true
+});
 
 /* eslint-disable no-new */
 new Vue({

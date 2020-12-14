@@ -14,6 +14,7 @@ from _datetime import date
 class Theme(models.Model):
     themeno = models.AutoField(db_column='themeNo', primary_key=True)  # Field name made lowercase.
     themename = models.CharField(db_column='themeName', max_length=50)  # Field name made lowercase.
+    themecolour = models.CharField(db_column='themeColour', max_length=7)
 
     class Meta:
         # managed = False
@@ -37,6 +38,7 @@ class Casedata(models.Model):
     caseid = models.AutoField(db_column='caseID', primary_key=True)  # Field name made lowercase.
     userid = models.ForeignKey(Accountinformation, models.CASCADE, db_column='userID')  # Field name made lowercase.
     casename = models.CharField(db_column='caseName', max_length=50, default='未命名')  # Field name made lowercase.
+    casemode = models.CharField(db_column='caseMode', max_length=10)
     citynumber = models.IntegerField(db_column='cityNumber')  # Field name made lowercase.
     roadnumber = models.IntegerField(db_column='roadNumber')  # Field name made lowercase.
     inittotal = models.BigIntegerField(db_column='initTotal')  # Field name made lowercase.

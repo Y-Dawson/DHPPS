@@ -3,7 +3,10 @@
 from random import randint
 from aliyunsdkcore.client import AcsClient
 from aliyunsdkcore.request import CommonRequest
-client = AcsClient('<accessKeyId>', '<accessSecret>', 'cn-hangzhou')
+import base64
+AK = 'TFRBSTRHMWNDTWsxektGYnQ2RjZMZnpY'
+AS = 'NHNWMTNqUTZ6RkJvYUZ6dnhkMEpTTkMwOUhERUd0'
+client = AcsClient(base64.b64decode(AK), base64.b64decode(AS), 'cn-hangzhou')
 
 
 def sendSms(iPhonenum):
