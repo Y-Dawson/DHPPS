@@ -17,7 +17,7 @@
           </li>
           <li class="layui-nav-item">
             <a href="javascript:;">
-              <span>{{ content.username }}</span>
+              <span>用户名</span>
             </a>
           </li>
         </ul>
@@ -77,7 +77,7 @@
               v-bind:class="{ active1: ss }"
               @click="
                 ss = !ss;
-                sst(ss);
+                StopSimulation(ss);
               "
             >
               <i class="layui-icon layui-icon-pause"></i>
@@ -548,7 +548,7 @@
       <div class="block">
         <el-slider
           v-model="value1"
-          :format-tooltip="formatTooltip"
+          :format-tooltip="FormatTooltip"
           :step="daily_step"
           show-stops
         ></el-slider>
@@ -560,16 +560,14 @@
 <script>
 import Global from "../../global_vue";
 
-var linecnt = 1;
+var g_linecnt = 1;
 
 export default {
   data() {
     return {
-      content: [],
       fits: ["fill"],
-      url:
-        "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-
+      url:"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
+      
       ss: false,
       disable: true,
       value1: 0,
@@ -737,8 +735,6 @@ export default {
     console.log("模拟天数：", this.params.Daynum);
     console.log("每日跨度：", this.daily_step);
 
-    this.getContent(this.userId);
-
     var cnt = 0;
     for (var j in this.params.Cityposition) {
       var te = this.params.Cityposition[j].split(",");
@@ -759,7 +755,7 @@ export default {
           y = tt[1];
         }
       }
-      cid = this.getID(ci);
+      cid = this.GetID(ci);
       var cityentity = document.getElementById(cid);
       cityentity.style.left = x + "px";
       cityentity.style.top = y + "px";
@@ -788,11 +784,11 @@ export default {
       }
       s = city1 + "-" + city2 + ":" + vol;
       this.road_di.push(s);
-      var cid1 = this.getID(city1);
-      var cid2 = this.getID(city2);
+      var cid1 = this.GetID(city1);
+      var cid2 = this.GetID(city2);
       console.log(cid1, cid2);
 
-      this.drawline(cid1, cid2);
+      this.DrawLine(cid1, cid2);
     }
     // for (var case in foreData) {
     //   for(var city in case){
@@ -802,7 +798,7 @@ export default {
 
     for (var i = 0; i < parseInt(this.params.Daynum); i++) {
       for (var j = 0; j < parseInt(this.params.citynum); j++) {
-        this.add_inf(
+        this.AddInformation(
           foreData[i][j]["cityname"],
           foreData[i][j]["population"],
           foreData[i][j]["dailyinfected"],
@@ -815,21 +811,7 @@ export default {
   },
 
   methods: {
-    getContent: function (userId) {
-      var self = this;
-      axios
-        .get("http://127.0.0.1:8000/backend/profile/" + userId + "/")
-        .then(
-          (response) => (self.content = response.data)
-          //alert(JSON.stringify(response))
-        )
-        .catch(function (error) {
-          // 请求失败处理
-          alert("数据请求失败wdnmd");
-        });
-    },
-
-    sst(ss) {
+    StopSimulation(ss) {
       if (this.ss == true) {
         console.log("返回设置参数界面");
         this.ss = false;
@@ -850,7 +832,7 @@ export default {
       }
     },
 
-    formatTooltip(val) {
+    FormatTooltip(val) {
       this.day = parseInt(val / this.daily_step);
       console.log("day：", this.day);
       var d = parseInt(val / this.daily_step) + 1;
@@ -875,7 +857,7 @@ export default {
       return s;
     },
 
-    drawline(ci1, ci2) {
+    DrawLine(ci1, ci2) {
       var c1 = document.getElementById(ci1);
       var c2 = document.getElementById(ci2);
 
@@ -921,29 +903,23 @@ export default {
         rotang = 180 - rotang;
       }
 
-      console.log("linecnt:",linecnt);
-      var ll = document.getElementById("line" + linecnt);
+      var ll = document.getElementById("line" + g_linecnt);
       ll.style.left = (ttcx1 + ttcx2) / 2 - parseInt(dis) / 2 + 20 + "px";
       ll.style.top = (ttcy1 + ttcy2) / 2 + 50 + "px";
+      ll.style.transition = "width 2s";
       ll.style.width = parseInt(dis) + "px";
       ll.style.transform = "rotate(" + rotang + "deg)";
-      linecnt += 1;
+      g_linecnt += 1;
     },
 
-    getID(n) {
+    GetID(n) {
       if (n == "A") return "ci1";
       if (n == "B") return "ci2";
       if (n == "C") return "ci3";
       if (n == "D") return "ci4";
-      if (n == "E") return "ci5";
-      if (n == "F") return "ci6";
-      if (n == "G") return "ci7";
-      if (n == "H") return "ci8";
-      if (n == "I") return "ci9";
-      if (n == "J") return "ci10";
     },
 
-    add_inf(n, popu, dinf, inf) {
+    AddInformation(n, popu, dinf, inf) {
       if (n == "A") {
         this.ci1_population.push(popu);
         this.ci1_totalInfected.push(inf);
@@ -960,39 +936,9 @@ export default {
         this.ci3_newInfected.push(dinf);
       }
       if (n == "D") {
-        this.ci4_population.push(popu);
-        this.ci4_totalInfected.push(inf);
-        this.ci4_newInfected.push(dinf);
-      }
-      if (n == "E") {
-        this.ci5_population.push(popu);
-        this.ci5_totalInfected.push(inf);
-        this.ci5_newInfected.push(dinf);
-      }
-      if (n == "F") {
-        this.ci6_population.push(popu);
-        this.ci6_totalInfected.push(inf);
-        this.ci6_newInfected.push(dinf);
-      }
-      if (n == "G") {
-        this.ci7_population.push(popu);
-        this.ci7_totalInfected.push(inf);
-        this.ci7_newInfected.push(dinf);
-      }
-      if (n == "H") {
-        this.ci8_population.push(popu);
-        this.ci8_totalInfected.push(inf);
-        this.ci8_newInfected.push(dinf);
-      }
-      if (n == "I") {
-        this.ci9_population.push(popu);
-        this.ci9_totalInfected.push(inf);
-        this.ci9_newInfected.push(dinf);
-      }
-      if (n == "J") {
-        this.ci10_population.push(popu);
-        this.ci10_totalInfected.push(inf);
-        this.ci10_newInfected.push(dinf);
+        this.ci3_population.push(popu);
+        this.ci3_totalInfected.push(inf);
+        this.ci3_newInfected.push(dinf);
       }
     },
   },
@@ -1002,9 +948,9 @@ export default {
 <style scoped>
 @import "../../assets/layui/css/layui.css";
 
-body {
+/* body {
   overflow: hidden;
-}
+} */
 
 .layui-nav-tree .layui-nav-item a {
   font-weight: bold;
@@ -1202,7 +1148,6 @@ body {
 
 .add-wrapper {
   position: absolute;
-  display: none;
   width: 70px;
   height: 100px;
   right: 240px;

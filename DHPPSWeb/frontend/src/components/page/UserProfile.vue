@@ -116,7 +116,7 @@
 
 <script src="../assets/layui/layui.js"></script>
 <script>
-import profileTopBar from '../common/profileTopBar.vue';
+import ProfileTopBar from '../common/ProfileTopBar.vue';
 export default {
   name: "profile",
   components:{
