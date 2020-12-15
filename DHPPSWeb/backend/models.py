@@ -59,17 +59,17 @@ class Initcitydata(models.Model):
         db_table = 'initcitydata'
 
 
-class Cityposition(models.Model):
+class CityPosition(models.Model):
     cityid = models.OneToOneField(Initcitydata, models.CASCADE, db_column='cityID', primary_key=True)  # Field name made lowercase.
     x = models.FloatField()
     y = models.FloatField()
 
     class Meta:
         # managed = False
-        db_table = 'cityposition'
+        db_table = 'CityPosition'
 
 
-class Dailyforecastdata(models.Model):
+class DailyForecastData(models.Model):
     date = models.DateField(primary_key=True)
     cityid = models.ForeignKey(Initcitydata, models.CASCADE, db_column='cityID')  # Field name made lowercase.
     population = models.BigIntegerField()
@@ -77,10 +77,10 @@ class Dailyforecastdata(models.Model):
 
     class Meta:
         # managed = False
-        db_table = 'dailyforecastdata'
+        db_table = 'DailyForecastData'
 
 
-class Initroaddata(models.Model):
+class InitRoadData(models.Model):
     roadid = models.AutoField(db_column='roadID', primary_key=True)  # Field name made lowercase.
     caseid = models.ForeignKey(Casedata, models.CASCADE, db_column='caseID')  # Field name made lowercase.
     departure = models.CharField(max_length=50)
@@ -89,30 +89,30 @@ class Initroaddata(models.Model):
 
     class Meta:
         # managed = False
-        db_table = 'initroaddata'
+        db_table = 'InitRoadData'
 
 
-class Logindata(models.Model):
+class LoginData(models.Model):
     userid = models.OneToOneField(Accountinformation, models.CASCADE, db_column='userID', primary_key=True)  # Field name made lowercase.
     userpassword = models.CharField(db_column='userPassword', max_length=32)  # Field name made lowercase.
     salt = models.CharField(max_length=20)
 
     class Meta:
         # managed = False
-        db_table = 'logindata'
+        db_table = 'LoginData'
 
 
-class Modeldata(models.Model):
+class ModelData(models.Model):
     layerid = models.AutoField(db_column='layerID', primary_key=True)  # Field name made lowercase.
     layername = models.CharField(db_column='layerName', max_length=20)  # Field name made lowercase.
     layerparm = models.CharField(db_column='layerParm', max_length=20)  # Field name made lowercase.
 
     class Meta:
         # managed = False
-        db_table = 'modeldata'
+        db_table = 'ModelData'
 
 
-def user_directory_path(instance, filename):
+def jUserDirectoryPath(instance, filename):
     ext = filename.split('.')[-1]
     filename = '{}.{}'.format(uuid.uuid4().hex[:10], ext)
     # return the whole path to the file
@@ -129,7 +129,7 @@ class Personalprofile(models.Model):
     email = models.CharField(db_column='Email', max_length=50, default='保密')  # Field name made lowercase.
     birth = models.DateField(default=date(1900, 1, 1))
 
-    def getAvatarUrl(self):
+    def GetAvatarUrl(self):
         return "http://localhost:8000/media/" + str(self.avatar)
 
     class Meta:
