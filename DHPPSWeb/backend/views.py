@@ -25,7 +25,7 @@ import datetime
 import secrets
 # Create your views here.
 
-logger = logging.getLogger("django")
+g_logger = logging.getLogger("django")
 
 '''
 @receiver(pre_delete, sender=models.Personalprofile)
@@ -35,17 +35,17 @@ def handle_camera_deleted(instance: models.Personalprofile, **_):
 
 
 # 返回渲染主页，其后由前端负责跳转逻辑
-def index(request):
+def Index(request):
     """
-    render index page
+    render Index page
     :param request: request object
     :return: page
     """
-    return render(request, 'index.html')
+    return render(request, 'Index.html')
 
 
 # 对传入的密码和salt进行md5加密，返回得到的加密密码
-def hash_pwd(pwd, salt):
+def HashPwd(pwd, salt):
     h = hashlib.md5()
     pwd = pwd + salt
     h.update(pwd.encode())
@@ -54,15 +54,15 @@ def hash_pwd(pwd, salt):
 
 # json序列化时对datetime处理的函数
 class DateEnconding(json.JSONEncoder):
-    def default(self, o):
+    def Default(self, o):
         if isinstance(o, datetime.date):
             return o.strftime('%Y/%m/%d')
 
 
 # 登录检测装饰器
-def login_required(view_func):
+def LoginRequired(view_func):
     # 登录判断装饰器
-    def wrapper(request, *view_args, **view_kwargs):
+    def Wrapper(request, *view_args, **view_kwargs):
         if request.COOKIES.get("userId", None):
             userId = request.COOKIES.get("userId", None)
             print('get cookie [{}]'.format(userId))
@@ -74,14 +74,14 @@ def login_required(view_func):
         else:
             # 用户未登录,返回信息
             return JsonResponse({"message": "还未登录", "status": 404})
-    return wrapper
+    return Wrapper
 
 
 # 登录函数视图
-# 从参数获取phonenum和password，取出对应salt加密，并判断是否和存储加密密码相同
+# 从参数获取phoneNum和password，取出对应salt加密，并判断是否和存储加密密码相同
 # 登录成功，返回消息和200状态码
 # 登录失败，返回消息和404状态码
-def signin(request):
+def SignIn(request):
     '''
     # 若已经登录，直接进入已登录账号
     if request.session.get('isLogin', None):
@@ -89,22 +89,22 @@ def signin(request):
     el
     '''
     if request.method == "POST":
-        # 从参数获取phonenum和password
-        phonenum = request.POST.get('phonenum', None)
+        # 从参数获取phoneNum和password
+        phoneNum = request.POST.get('phoneNum', None)
         password = request.POST.get('password', None)
-        if phonenum and password:
-            phonenum = phonenum.strip()
+        if phoneNum and password:
+            phoneNum = phoneNum.strip()
             try:
-                # 从数据库获取phonenum和对应userid，取出salt
+                # 从数据库获取phoneNum和对应userid，取出salt
                 # 获取失败则捕捉错误
-                profile = models.Personalprofile.objects.filter(phonenumber=int(phonenum))
+                profile = models.Personalprofile.objects.filter(phoneNumber=int(phoneNum))
                 if not profile.exists():
                     return JsonResponse({"message": "该账号不存在", "status": 404})
                 profile = profile.first()
                 accountInfo = models.Accountinformation.objects.get(userid=profile.userid.userid)
 
                 # 判断是否和存储加密密码相同
-                if (accountInfo.logindata.userpassword == hash_pwd(pwd=password, salt=accountInfo.logindata.salt)):
+                if (accountInfo.logindata.userpassword == HashPwd(pwd=password, salt=accountInfo.logindata.salt)):
                     # 若相同，设置登录状态为True，设置登录id为userid，登录权限为对应权限
                     request.session['isLogin'] = True
                     request.session['userId'] = accountInfo.userid
@@ -135,7 +135,7 @@ def signin(request):
 # 从缓存获取对应session
 # 登出成功，返回消息和200状态码
 # 登出失败，返回消息和404状态码
-def logout(request):
+def LogOut(request):
     message = "登出成功"
     status = 200
     if not request.session.get('isLogin', None):
@@ -145,7 +145,7 @@ def logout(request):
         request.session.flush()
         # del request.session['isLogin']
         # del request.session['userid']
-        # del request.session['username']
+        # del request.session['userName']
         response = JsonResponse({"message": message, "status": status})
         response.delete_cookie("userId")
         return response
@@ -157,15 +157,15 @@ def logout(request):
 # 发送失败，返回消息和404状态码
 def requestSmsCode(request):
     if request.method == "POST":
-        phonenum = request.POST.get('phonenum', None)
-        code, message, result = sendSms(phonenum)
+        phoneNum = request.POST.get('phoneNum', None)
+        code, message, result = sendSms(phoneNum)
         try:
             # 4.连接到redis
             redisClient = get_redis_connection('sms_code')
             # 5.生成redis管道
             pipeline = redisClient.pipeline()
             # 6.保存验证码，用于后续与用户输入值对比，设置过期时间
-            pipeline.setex(phonenum, 300, code)
+            pipeline.setex(phoneNum, 300, code)
             # 7.传递指令
             pipeline.execute()
         except Exception:
@@ -174,37 +174,37 @@ def requestSmsCode(request):
 
 
 # 注册函数视图
-# 从参数获取username，phonenum,email,password,verifyCode
+# 从参数获取userName，phoneNum,email,password,verifyCode
 # 登出成功，返回消息和200状态码
 # 登出失败，返回消息和404状态码
-def signup(request):
+def SignUp(request):
     if request.session.get('is_login', None):
         # 登录状态不允许注册。
         message = "登录状态，无法注册"
         status = 404
     elif request.method == "POST":
-        username = request.POST.get('username', None)
-        phonenum = request.POST.get('phonenum', None)
+        userName = request.POST.get('userName', None)
+        phoneNum = request.POST.get('phoneNum', None)
         email = request.POST.get('email', None)
         password = request.POST.get('password', None)
         verifyCode = request.POST.get('verifyCode', None)
         print({
-            "username": username,
-            'phonenum': phonenum,
+            "userName": userName,
+            'phoneNum': phoneNum,
             'email': email,
             "password": password,
             'verifyCode': verifyCode
         })
         message = "请检查填写的内容！"
         status = 404
-        if username and phonenum and email and password and verifyCode:  # 获取数据
-            same_name_user = models.Personalprofile.objects.filter(username=username)
-            if same_name_user:  # 用户名唯一
+        if userName and phoneNum and email and password and verifyCode:  # 获取数据
+            sameNameUser = models.Personalprofile.objects.filter(userName=userName)
+            if sameNameUser:  # 用户名唯一
                 message = '用户已经存在，请重新输入用户名！'
                 status = 404
             else:
-                same_phone_user = models.Personalprofile.objects.filter(phonenumber=phonenum)
-                if same_phone_user:  # 手机号码唯一
+                samePhoneUser = models.Personalprofile.objects.filter(phoneNumber=phoneNum)
+                if samePhoneUser:  # 手机号码唯一
                     message = '该手机号码已被注册，请使用别的手机号码！'
                     status = 404
                 else:
@@ -216,7 +216,7 @@ def signup(request):
                         )
 
                         salt = secrets.token_hex(4)
-                        encryPassword = hash_pwd(pwd=password, salt=salt)
+                        encryPassword = HashPwd(pwd=password, salt=salt)
                         newLoginData = models.Logindata.objects.create(
                             userid=newAccountInfo,
                             userpassword=encryPassword,
@@ -224,12 +224,12 @@ def signup(request):
                         )
                         newUser = models.Personalprofile.objects.create(
                             userid=newAccountInfo,
-                            username=username,
-                            phonenumber=phonenum,
+                            userName=userName,
+                            phoneNumber=phoneNum,
                             email=email
                         )
-                        logger.info(json.dumps(newLoginData, cls=DateEnconding))
-                        logger.info(json.dumps(newUser, cls=DateEnconding))
+                        g_logger.info(json.dumps(newLoginData, cls=DateEnconding))
+                        g_logger.info(json.dumps(newUser, cls=DateEnconding))
                         message = "注册成功"
                         status = 200
                     except Exception as e:
@@ -249,7 +249,7 @@ def signup(request):
 # 比对通过后，生成新的salt和密码，存入数据库
 # 修改成功，返回消息和200状态码
 # 修改失败，返回消息和404状态码
-def changePwd(request):
+def ChangePwd(request):
     '''
     if not request.session.get('isLogin', None):
         return JsonResponse({"message": "你还未登录", "status": 404})
@@ -266,9 +266,9 @@ def changePwd(request):
                 return JsonResponse({"message": "当前账号与浏览器记录不一致", "status": 404})
             account = account.first()
             # 检测账号原密码是否符合
-            if (account.logindata.userpassword == hash_pwd(pwd=oldPassword, salt=account.logindata.salt)):
+            if (account.logindata.userpassword == HashPwd(pwd=oldPassword, salt=account.logindata.salt)):
                 newSalt = secrets.token_hex(4)
-                encryPassword = hash_pwd(pwd=newPassword, salt=newSalt)
+                encryPassword = HashPwd(pwd=newPassword, salt=newSalt)
                 models.Logindata.objects.filter(userid=userId).update(userpassword=encryPassword, salt=newSalt)
                 return JsonResponse({"message": "修改成功", "status": 200})
             else:
@@ -282,21 +282,21 @@ def changePwd(request):
 # 验证码比对通过后，生成新的salt和密码，存入数据库
 # 修改成功，返回消息和200状态码
 # 修改失败，返回消息和404状态码
-def forgetPwd(request):
+def ForgetPwd(request):
     '''
     if request.session.get('isLogin', None):
         return JsonResponse({"message": "你已经登录，忘记密码需先退出", "status": 404})
     el
     '''
     if request.method == "POST":
-        # 从参数获取phonenum和password
-        phonenum = request.POST.get('phonenum', None)
+        # 从参数获取phoneNum和password
+        phoneNum = request.POST.get('phoneNum', None)
         verifyCode = request.POST.get('verifyCode', None)
         newPassword = request.POST.get('newPassword', None)
-        if phonenum and verifyCode and newPassword:
-            # 从数据库获取phonenum和对应userid，取出salt
+        if phoneNum and verifyCode and newPassword:
+            # 从数据库获取phoneNum和对应userid，取出salt
             # 获取失败则捕捉错误
-            profile = models.Personalprofile.objects.filter(phonenumber=int(phonenum))
+            profile = models.Personalprofile.objects.filter(phoneNumber=int(phoneNum))
             if not profile.exists():
                 return JsonResponse({"message": "该手机未注册", "status": 404})
             profile = profile.first()
@@ -304,7 +304,7 @@ def forgetPwd(request):
 
             # 缺少逻辑：检测短信验证码是否正确
             newSalt = secrets.token_hex(4)
-            encryPassword = hash_pwd(pwd=newPassword, salt=newSalt)
+            encryPassword = HashPwd(pwd=newPassword, salt=newSalt)
             models.Logindata.objects.filter(userid=account.userid).update(userpassword=encryPassword, salt=newSalt)
             return JsonResponse({"message": "修改成功", "status": 200})
     else:
@@ -316,7 +316,7 @@ def forgetPwd(request):
 # 解析表单数据生成对应models存入
 # 保存成功，返回消息和200状态码
 # 保存失败，返回消息和404状态码
-def saveCase(request):
+def SaveCase(request):
     '''
     if not request.session.get('isLogin', None):
         return JsonResponse({"message": "你还未登录，保存案例需要先登录", "status": 404})
@@ -425,7 +425,7 @@ def saveCase(request):
 
 
 # 解析前端发回数据并送入模型进行模拟，取得返回数据并输出
-def startSimulate(request):
+def StartSimulate(request):
     '''
     if not request.session.get('isLogin', None):
         return JsonResponse({"message": "你还未登录，保存案例需要先登录", "status": 404})
@@ -505,10 +505,10 @@ def startSimulate(request):
                 value = roadInfo.split(":")[1]
                 if roadCount % 3 == 0:
                     # 出发城市下标
-                    departure = cityNameList.index(value)
+                    departure = cityNameList.Index(value)
                 elif roadCount % 3 == 1:
                     # 到达城市下标
-                    destination = cityNameList.index(value)
+                    destination = cityNameList.Index(value)
                 elif roadCount % 3 == 2:
                     volume = float(value)
                     initRoadList[departure][destination] = volume
@@ -574,7 +574,7 @@ class ImageCodeView(View):
         except Exception:
             pass
         # 8.后台显示验证码信息
-        logger.info('verify_text:{}'.format(code))
+        g_logger.info('verify_text:{}'.format(code))
         # 9.响应：输出图片数据
         return JsonResponse(image, content_type='image/png')
 
@@ -607,7 +607,7 @@ class ImageCodeView(View):
         return JsonResponse({"message": message, "status": status})
 
 
-def getAllCaseInfos(request):
+def GetAllCaseInfos(request):
     if request.method == "POST":
         caseId = request.POST.get("caseid", None)
         if caseId:
@@ -660,7 +660,7 @@ def getAllCaseInfos(request):
     return JsonResponse({"message": "请求方法未注册", "status": 404})
 
 
-def getUserInfos(request):
+def GetUserInfos(request):
     if request.method == "GET":
         pageSize = request.GET.get("pageSize")
         page = request.GET.get("page")
@@ -682,11 +682,11 @@ def getUserInfos(request):
             'data': jsonRes,
             'pagination': accountPaginator.count,
             'pageSize': accountPaginator.per_page,
-            'page': pageInfos.start_index() // accountPaginator.per_page + 1
+            'page': pageInfos.start_Index() // accountPaginator.per_page + 1
         })
 
 
-def getGeneralUserInfos(request):
+def GetGeneralUserInfos(request):
     if request.method == "GET":
         pageSize = request.GET.get("pageSize")
         page = request.GET.get("page")
@@ -708,11 +708,11 @@ def getGeneralUserInfos(request):
             'data': jsonRes,
             'pagination': accountPaginator.count,
             'pageSize': accountPaginator.per_page,
-            'page': pageInfos.start_index() // accountPaginator.per_page + 1
+            'page': pageInfos.start_Index() // accountPaginator.per_page + 1
         })
 
 
-def getAdminInfos(request):
+def GetAdminInfos(request):
     if request.method == "GET":
         pageSize = request.GET.get("pageSize")
         page = request.GET.get("page")
@@ -734,7 +734,7 @@ def getAdminInfos(request):
             'data': jsonRes,
             'pagination': accountPaginator.count,
             'pageSize': accountPaginator.per_page,
-            'page': pageInfos.start_index() // accountPaginator.per_page + 1
+            'page': pageInfos.start_Index() // accountPaginator.per_page + 1
         })
 
 
