@@ -26,13 +26,13 @@
               <dl class="layui-nav-child">
                 <dd>
                   <router-link
-                    :to="{ path: '/SPCaseManage', query: { uI: this.BarUserId } }"
+                    :to="{ path: '/SuperCaseManage', query: { BarUserId: this.BarUserId } }"
                     >案例管理</router-link
                   >
                 </dd>
                 <dd>
                   <router-link
-                    :to="{ path: '/SPModelView', query: { uI: this.BarUserId } }"
+                    :to="{ path: '/SuperModelView', query: { BarUserId: this.BarUserId } }"
                     >模型查看</router-link
                   >
                 </dd>
@@ -49,7 +49,7 @@
             <ul class="layui-tab-title">
               <li class="layui-off">
                 <router-link
-                  :to="{ path: '/SPUserManage', query: { uI: this.BarUserId } }"
+                  :to="{ path: '/SuperUserManage', query: { BarUserId: this.BarUserId } }"
                   >用户管理</router-link
                 >
               </li>
@@ -99,7 +99,7 @@
                         <button class="buttonA">
                           <router-link
                             :to="{
-                              path: '/SPEdit',
+                              path: '/SuperEdit',
                               query: {
                                 uN: item.username,
                                 uT: item.phonenumber,
@@ -145,13 +145,13 @@
 <script>
   import TopBar from "../common/TopBar.vue";
   export default {
-    name: "userManagement",
+    name: "SuperStaffManage",
     components: {
       TopBar,
     },
     data() {
       return {
-        BarUserId: this.$route.query.uI,
+        BarUserId: this.$route.query.BarUserId,
         //分页
         TotalPage: 3, // 统共页数，默认为1
         CurrentPage: 1, //当前页数 ，默认为1
@@ -170,7 +170,7 @@
         axios
           .get("http://127.0.0.1:8000/backend/adminManage/", {
             params: {
-              PageSize: 10,
+              pageSize: 10,
               page: self.CurrentPage,
             },
           })
@@ -178,7 +178,7 @@
             (response) => (
               (self.Content = response.data.data),
               (self.Paginate = response.data.pagination),
-              (self.PageSize = response.data.PageSize),
+              (self.PageSize = response.data.pageSize),
               (self.TotalPage = Math.ceil(self.Paginate / self.PageSize)),
               this.TestPage()
               // alert(JSON.stringify(response))

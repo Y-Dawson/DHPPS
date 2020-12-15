@@ -53,7 +53,7 @@ export default {
   name: "topBar",
   data() {
     return {
-      adminUrl: '/UserManagement',
+      adminUrl: '/AdminUserManage',
       content: [],
       acontent:[],
       userId:0,

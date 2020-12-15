@@ -26,13 +26,13 @@
               <dl class="layui-nav-child">
                 <dd>
                   <router-link
-                    :to="{ path: '/SuperCaseManage', query: { uI: this.BarUserId } }"
+                    :to="{ path: '/SuperCaseManage', query: { BarUserId: this.BarUserId } }"
                     >案例管理</router-link
                   >
                 </dd>
                 <dd>
                   <router-link
-                    :to="{ path: '/SuperModelView', query: { uI: this.BarUserId } }"
+                    :to="{ path: '/SuperModelView', query: { BarUserId: this.BarUserId } }"
                     >模型查看</router-link
                   >
                 </dd>
@@ -49,7 +49,7 @@
             <ul class="layui-tab-title">
               <li class="layui-this" style="color: #55587e">用户管理</li>
               <router-link
-                :to="{ path: '/SuperStaffManage', query: { uI: this.BarUserId } }"
+                :to="{ path: '/SuperStaffManage', query: { BarUserId: this.BarUserId } }"
                 ><li class="layui-off">员工管理</li></router-link
               >
               <li class="layui-off">编辑</li>
@@ -149,7 +149,7 @@
     },
     data() {
       return {
-        BarUserId: this.$route.query.uI,
+        BarUserId: this.$route.query.BarUserId,
         //分页
         TotalPage: 1, // 统共页数，默认为1
         CurrentPage: 1, //当前页数 ，默认为1
@@ -161,8 +161,8 @@
     created: function () {
       this.GetContent();
       this.params = JSON.parse(this.$route.query.params);
-      console.log("用户ID：", this.params.BarUserId);
-      this.BarUserId = this.params.BarUserId;
+      console.log("用户ID：", this.params.userId);
+      this.BarUserId = this.params.userId;
       //为了在内部函数能使用外部函数的this对象，要给它赋值了一个名叫self的变量。
     },
     methods: {
@@ -171,7 +171,7 @@
         axios
           .get("http://127.0.0.1:8000/backend/generalUserManage/", {
             params: {
-              PageSize: 10,
+              pageSize: 10,
               page: self.CurrentPage,
             },
           })
@@ -179,7 +179,7 @@
             (response) => (
               (self.Content = response.data.data),
               (self.Paginate = response.data.pagination),
-              (self.PageSize = response.data.PageSize),
+              (self.PageSize = response.data.pageSize),
               (self.TotalPage = Math.ceil(self.Paginate / self.PageSize)),
               this.TestPage()
               // alert(JSON.stringify(response.data)),

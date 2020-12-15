@@ -15,12 +15,12 @@
               <a class="" href="javascript:;">信息管理</a>
               <dl class="layui-nav-child">
                 <dd>
-                  <router-link :to="{ path: '/SuperCaseManage', query: { uI: this.BarUserId } }">
+                  <router-link :to="{ path: '/SuperCaseManage', query: { BarUserId: this.BarUserId } }">
                     案例管理
                   </router-link>
                 </dd>
                 <dd>
-                  <router-link :to="{ path: '/SuperModelView', query: { uI: this.BarUserId } }">
+                  <router-link :to="{ path: '/SuperModelView', query: { BarUserId: this.BarUserId } }">
                     模型查看
                   </router-link>
                 </dd>
@@ -37,12 +37,12 @@
           <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
             <ul class="layui-tab-title">
               <li class="layui-off">
-                <router-link :to="{ path: '/SuperUserManage', query: { uI: this.BarUserId } }">
+                <router-link :to="{ path: '/SuperUserManage', query: { BarUserId: this.BarUserId } }">
                   用户管理
                 </router-link>
               </li>
               <li class="layui-off">
-                <router-link :to="{ path: '/SuperStaffManage', query: { uI: this.BarUserId } }">
+                <router-link :to="{ path: '/SuperStaffManage', query: { BarUserId: this.BarUserId } }">
                   员工管理
                 </router-link>
               </li>
@@ -104,13 +104,13 @@
 <script>
   import TopBar from "../common/TopBar.vue";
   export default {
-    name: "UserEdit",
+    name: "SuperEdit",
     components: {
       TopBar,
     },
     data() {
       return {
-        BarUserId: this.$route.query.uI,
+        BarUserId: this.$route.query.BarUserId,
         EditTel: this.$route.query.uT,
         EditName: this.$route.query.uN,
         UserId: this.$route.query.uI,

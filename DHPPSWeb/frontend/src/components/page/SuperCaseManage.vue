@@ -26,7 +26,7 @@
               <dl class="layui-nav-child">
                 <dd>
                   <router-link
-                    :to="{ path: '/SuperUserManage', query: { uI: this.BarUserId } }"
+                    :to="{ path: '/SuperUserManage', query: { BarUserId: this.BarUserId } }"
                     >信息管理</router-link
                   >
                 </dd>
@@ -35,7 +35,7 @@
               <dl class="layui-nav-child">
                 <dd>
                   <router-link
-                    :to="{ path: '/SuperModelView', query: { uI: this.BarUserId } }"
+                    :to="{ path: '/SuperModelView', query: { BarUserId: this.BarUserId } }"
                     >模型查看</router-link
                   >
                 </dd>
@@ -127,13 +127,13 @@
 <script>
   import TopBar from "../common/TopBar.vue";
   export default {
-    name: "CaseManagement",
+    name: "SuperCaseManage",
     components: {
       TopBar,
     },
     data() {
       return {
-        BarUserId: this.$route.query.uI,
+        BarUserId: this.$route.query.BarUserId,
         //分页
         TotalPage: 3, // 统共页数，默认为1
         CurrentPage: 1, //当前页数 ，默认为1
@@ -152,7 +152,7 @@
         axios
           .get("http://127.0.0.1:8000/backend/userManage/", {
             params: {
-              PageSize: 10,
+              pageSize: 10,
               page: self.CurrentPage,
             },
           })
@@ -160,7 +160,7 @@
             (response) => (
               (self.Content = response.data.data),
               (self.Paginate = response.data.pagination),
-              (self.PageSize = response.data.PageSize),
+              (self.PageSize = response.data.pageSize),
               (self.TotalPage = Math.ceil(self.Paginate / self.PageSize)),
               this.TestPage()
               // alert(JSON.stringify(response))

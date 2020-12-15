@@ -3,7 +3,6 @@
     <div class="layui-layout layui-layout-admin">
       <!-- 导航栏 -->
       <TopBar layoutName="后台管理系统" :BarUserId="BarUserId"></TopBar>
-
       <div class="layui-side layui-bg-black">
         <div class="layui-side-scroll">
           <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
@@ -23,22 +22,20 @@
                 ></i>
                 系统菜单
               </div>
+              <a class="" href="javascript:;">信息管理</a>
               <dl class="layui-nav-child">
                 <dd>
                   <router-link
                     :to="{
-                      path: '/UserManagement',
-                      query: { uI: this.BarUserId },
+                      path: '/AdminCaseManage',
+                      query: { BarUserId: this.BarUserId },
                     }"
-                    >信息管理</router-link
+                    >案例管理</router-link
                   >
                 </dd>
-              </dl>
-              <a class="" href="javascript:;">案例管理</a>
-              <dl class="layui-nav-child">
                 <dd>
                   <router-link
-                    :to="{ path: '/ModelView', query: { uI: this.BarUserId } }"
+                    :to="{ path: '/AdminModelView', query: { BarUserId: this.BarUserId } }"
                     >模型查看</router-link
                   >
                 </dd>
@@ -47,80 +44,95 @@
           </ul>
         </div>
       </div>
-
       <div class="layui-body">
         <!-- 内容主体区域 -->
         <div style="padding: 15px">
           <!-- 选项卡 -->
           <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
             <ul class="layui-tab-title">
-              <li class="layui-this" style="color: #55587e">案例管理</li>
-              <li class="layui-off">案例参数</li>
+              <li class="layui-this" style="color: #55587e">用户管理</li>
+              <li class="layui-off">用户编辑</li>
             </ul>
-          </div>
-          <div class="layui-tab-Content">
-            <!-- 列表 -->
-            <div class="list">
-              <table class="layui-table" lay-size="sm" lay-even lay-skin="row">
-                <colgroup>
-                  <col width="150" />
-                  <col width="200" />
-                  <col />
-                </colgroup>
-                <thead>
-                  <tr style="text-align: center">
-                    <th style="width: 15%; text-align: center">用户ID</th>
-                    <th style="width: 15%; text-align: center">用户昵称</th>
-                    <th style="width: 15%; text-align: center">案例数量</th>
-                    <th
-                      style="width: 15%; text-align: center"
-                      lay-data="{sort:true}"
-                    >
-                      创建时间
-                    </th>
-                    <th style="width: 15%; text-align: center">操作</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="item in Content" :key="item.userid">
-                    <td>{{ item.userid }}</td>
-                    <td>{{ item.username }}</td>
-                    <td>{{ item.casenumber }}</td>
-                    <td>{{ item.createdate }}</td>
-                    <td>
-                      <button class="buttonA">
-                        <router-link
-                          :to="{
-                            path: '/CaseEdit',
-                            query: { BarUserId: BarUserId, uI: item.userid },
-                          }"
-                          >案例编辑</router-link
-                        >
-                      </button>
-                      <button
-                        class="buttonA"
-                        type="danger"
-                        @click="HandleDel(item.userid)"
+            <div class="layui-tab-Content">
+              <!-- 列表 -->
+              <div class="list">
+                <table
+                  class="layui-table"
+                  lay-size="sm"
+                  lay-even
+                  lay-skin="row"
+                >
+                  <colgroup>
+                    <col width="150" />
+                    <col width="200" />
+                    <col />
+                  </colgroup>
+                  <thead>
+                    <tr>
+                      <th style="width: 10%; text-align: center">用户ID</th>
+                      <th style="width: 10%; text-align: center">用户昵称</th>
+                      <th
+                        style="width: 10%; text-align: center"
+                        lay-data="{sort:true}"
                       >
-                        删 &nbsp;&nbsp; 除
-                      </button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="paginate">
-              <button class="primaryb" @click="PrevPage()">上一页</button>
-              <span>第{{ CurrentPage }}页/共{{ TotalPage }}页</span>
-              <button class="primaryb" @click="NextPage()">下一页</button>
+                        创建时间
+                      </th>
+                      <th style="width: 20%; text-align: center">手机号</th>
+                      <th style="width: 10%; text-align: center">案例数量</th>
+                      <th style="width: 10%; text-align: center">备注</th>
+                      <th style="width: 20%; text-align: center">操作</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- <span>{{ Content }}</span> -->
+                    <tr v-for="item in Content" :key="item.userid">
+                      <td>{{ item.userid }}</td>
+                      <td>{{ item.username }}</td>
+                      <td>{{ item.createdate }}</td>
+                      <td>{{ item.phonenumber }}</td>
+                      <td>{{ item.casenumber }}</td>
+                      <td>{{ item.remark }}</td>
+                      <td>
+                        <button class="buttonA">
+                          <router-link
+                            :to="{
+                              path: '/AdminUserEdit',
+                              query: {
+                                uN: item.username,
+                                uT: item.phonenumber,
+                                uI: item.userid,
+                                uC: item.createdate,
+                                BarUserId: BarUserId,
+                              },
+                            }"
+                            >编辑</router-link
+                          >
+                        </button>
+                        <button
+                          class="buttonA"
+                          type="danger"
+                          @click="HandleDel(item.userid)"
+                        >
+                          删除
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <tfoot></tfoot>
+              </div>
             </div>
           </div>
+          <div class="paginate">
+            <button class="primaryb" @click="PrevPage()">上一页</button>
+            <span>第{{ CurrentPage }}页/共{{ TotalPage }}页</span>
+            <button class="primaryb" @click="NextPage()">下一页</button>
+          </div>
         </div>
-
-        <div class="layui-footer">
-          <!-- 底部固定区域 -->
-          © layui.com - 底部固定区域
-        </div>
+      </div>
+      <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
       </div>
     </div>
   </div>
@@ -130,15 +142,15 @@
 <script>
   import TopBar from "../common/TopBar.vue";
   export default {
-    name: "CaseManagement",
+    name: "AdminUserManage",
     components: {
       TopBar,
     },
     data() {
       return {
-        BarUserId: this.$route.query.uI,
+        BarUserId: this.$route.query.BarUserId,
         //分页
-        TotalPage: 3, // 统共页数，默认为1
+        TotalPage: 1, // 统共页数，默认为1
         CurrentPage: 1, //当前页数 ，默认为1
         PageSize: 4, // 每页显示数量
         Content: [], //当前页显示内容
@@ -147,14 +159,18 @@
     },
     created: function () {
       this.GetContent();
+      this.params = JSON.parse(this.$route.query.params);
+      console.log("用户ID：", this.params.userId);
+      this.BarUserId = this.params.userId;
+      //为了在内部函数能使用外部函数的this对象，要给它赋值了一个名叫self的变量。
     },
     methods: {
       GetContent: function () {
         var self = this;
         axios
-          .get("http://127.0.0.1:8000/backend/userManage/", {
+          .get("http://127.0.0.1:8000/backend/generalUserManage/", {
             params: {
-              PageSize: 10,
+              pageSize: 10,
               page: self.CurrentPage,
             },
           })
@@ -162,9 +178,10 @@
             (response) => (
               (self.Content = response.data.data),
               (self.Paginate = response.data.pagination),
-              (self.PageSize = response.data.PageSize),
+              (self.PageSize = response.data.pageSize),
               (self.TotalPage = Math.ceil(self.Paginate / self.PageSize)),
               this.TestPage()
+              // alert(JSON.stringify(response.data))
             )
           )
           .catch(function (error) {
@@ -194,7 +211,7 @@
       },
       DeleteContent: function (id) {
         var self = this;
-        var date = $("#input1").val();
+        // var date = $("#input1").val();
         axios
           .delete("http://127.0.0.1:8000/backend/accountInfo/" + id + "/", {})
           .then(
@@ -227,19 +244,6 @@
   };
 </script>
 
-// 修改elementui的样式
-<style>
-  .el-pagination.is-background .el-pager li:not(.disabled).active {
-    background-color: #55587e !important;
-  }
-  .el-pagination.is-background .el-pager li:not(.disabled).active:hover {
-    color: #fff !important;
-  }
-  .el-pagination.is-background .el-pager li:hover {
-    color: #55587e !important;
-  }
-</style>
-
 <style scoped>
   @import "../../assets/layui/css/layui.css";
 
@@ -267,7 +271,7 @@
   .buttonA {
     border: 5px;
     box-shadow: 3px 3px 5px #d6d6d6;
-    width: 60px;
+    width: 40px;
     height: 20px;
   }
   .buttonA:hover {

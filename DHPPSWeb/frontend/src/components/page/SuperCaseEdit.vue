@@ -25,7 +25,7 @@
               <dl class="layui-nav-child">
                 <dd>
                   <router-link
-                    :to="{ path: '/SuperUserManage', query: { uI: this.BarUserId } }"
+                    :to="{ path: '/SuperUserManage', query: { BarUserId: this.BarUserId } }"
                     >信息管理</router-link
                   >
                 </dd>
@@ -34,7 +34,7 @@
               <dl class="layui-nav-child">
                 <dd>
                   <router-link
-                    :to="{ path: '/SuperModelView', query: { uI: this.BarUserId } }"
+                    :to="{ path: '/SuperModelView', query: { BarUserId: this.BarUserId } }"
                     >模型查看</router-link
                   >
                 </dd>
@@ -50,7 +50,7 @@
             <ul class="layui-tab-title">
               <li class="layui-off">
                 <router-link
-                  :to="{ path: '/SuperCaseManage', query: { uI: this.BarUserId } }"
+                  :to="{ path: '/SuperCaseManage', query: { BarUserId: this.BarUserId } }"
                   >案例管理</router-link
                 >
               </li>
@@ -192,7 +192,7 @@
             (response) => (
               (self.CurrentPageData = response.data),
               (self.Paginate = response.data.pagination),
-              (self.PageSize = response.data.PageSize),
+              (self.PageSize = response.data.pageSize),
               (self.TotalPage = Math.ceil(self.Paginate / self.PageSize)),
               this.TestPage()
               // alert(JSON.stringify(this.CurrentPageData))

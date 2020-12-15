@@ -26,8 +26,8 @@
                 <dd>
                   <router-link
                     :to="{
-                      path: '/UserManagement',
-                      query: { uI: this.BarUserId },
+                      path: '/AdminUserManage',
+                      query: { BarUserId: this.BarUserId },
                     }"
                     >信息管理</router-link
                   >
@@ -37,7 +37,7 @@
               <dl class="layui-nav-child">
                 <dd>
                   <router-link
-                    :to="{ path: '/ModelView', query: { uI: this.BarUserId } }"
+                    :to="{ path: '/AdminModelView', query: { BarUserId: this.BarUserId } }"
                     >模型查看</router-link
                   >
                 </dd>
@@ -53,7 +53,7 @@
             <ul class="layui-tab-title">
               <li class="layui-off">
                 <router-link
-                  :to="{ path: '/CaseManagement', query: { uI: this.BarUserId } }"
+                  :to="{ path: '/AdminCaseManage', query: { BarUserId: this.BarUserId } }"
                   >案例管理</router-link
                 >
               </li>
@@ -139,7 +139,7 @@
 <script>
   import TopBar from "../common/TopBar.vue";
   export default {
-    name: "CaseEdit",
+    name: "AdminCaseEdit",
     components: {
       TopBar,
     },
@@ -195,7 +195,7 @@
             (response) => (
               (self.CurrentPageData = response.data),
               (self.Paginate = response.data.pagination),
-              (self.PageSize = response.data.PageSize),
+              (self.PageSize = response.data.pageSize),
               (self.TotalPage = Math.ceil(self.Paginate / self.PageSize)),
               this.TestPage()
               // alert(JSON.stringify(this.CurrentPageData))

@@ -26,13 +26,13 @@
               <dl class="layui-nav-child">
                 <dd>
                   <router-link
-                    :to="{path: '/UserManagement',query: { UserId: this.BarUserId }}">
+                    :to="{path: '/AdminUserManage',query: { BarUserId: this.BarUserId }}">
                       信息管理
                   </router-link>
                 </dd>
                 <dd>
                   <router-link
-                    :to="{path: '/CaseManagement',query: { UserId: this.BarUserId }}">
+                    :to="{path: '/AdminCaseManage',query: { BarUserId: this.BarUserId }}">
                       案例管理
                   </router-link>
                 </dd>
@@ -92,13 +92,13 @@
 <script>
   import TopBar from "../common/TopBar.vue";
   export default {
-    name: "ModelView",
+    name: "AdminModelView",
     components: {
       TopBar,
     },
     data() {
       return {
-        BarUserId: this.$route.query.UserId,
+        BarUserId: this.$route.query.BarUserId,
         //轮播图图片索引
         Mark: 0,
         //定时器

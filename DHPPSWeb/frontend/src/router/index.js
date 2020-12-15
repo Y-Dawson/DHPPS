@@ -6,10 +6,10 @@ import modifyPI from '@/components/page/modifyPI'
 import profile from '@/components/page/profile'
 import caseView from '@/components/page/caseView'
 import signup from '@/components/page/signup'
-import UserManagement from '@/components/page/UserManagement'
-import UserEdit from '@/components/page/UserEdit'
-import CaseManagement from '@/components/page/CaseManagement'
-import CaseEdit from '@/components/page/CaseEdit'
+import AdminUserManage from '@/components/page/AdminUserManage'
+import AdminUserEdit from '@/components/page/AdminUserEdit'
+import AdminCaseManage from '@/components/page/AdminCaseManage'
+import AdminCaseEdit from '@/components/page/AdminCaseEdit'
 import SuperUserManage from '@/components/page/SuperUserManage'
 import SuperStaffManage from '@/components/page/SuperStaffManage'
 import SuperEdit from '@/components/page/SuperEdit'
@@ -19,7 +19,7 @@ import setting from '@/components/page/setting'
 import changePass from '@/components/page/changePass'
 import forgetPass from '@/components/page/forgetPass'
 import simulation from '@/components/page/simulation'
-import ModelView from '@/components/page/ModelView'
+import AdminModelView from '@/components/page/AdminModelView'
 import SuperModelView from '@/components/page/SuperModelView'
 // import uploadTest from '@/components/page/uploadTest'
 
@@ -38,10 +38,10 @@ export default new Router({
     {path:'/Login', component: Login},
     {path:'/caseView', component: caseView},
     {path:'/signup', component: signup},
-    {path:'/UserManagement', component: UserManagement},
-    {path:'/UserEdit', component: UserEdit},
-    {path:'/CaseManagement', component: CaseManagement},
-    {path:'/CaseEdit', component: CaseEdit},
+    {path:'/AdminUserManage', component: AdminUserManage},
+    {path:'/AdminUserEdit', component: AdminUserEdit},
+    {path:'/AdminCaseManage', component: AdminCaseManage},
+    {path:'/AdminCaseEdit', component: AdminCaseEdit},
     {path:'/SuperUserManage', component: SuperUserManage},
     {path:'/SuperStaffManage', component: SuperStaffManage},
     {path:'/SuperEdit', component: SuperEdit},
@@ -51,7 +51,7 @@ export default new Router({
     {path:'/changePass',component:changePass},
     {path:'/forgetPass',component:forgetPass},
     {path:'/simulation',component:simulation},
-    {path:'/ModelView',component:ModelView},
+    {path:'/AdminModelView',component:AdminModelView},
     {path:'/SuperModelView',component:SuperModelView}
   ]
 })

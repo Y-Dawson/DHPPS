@@ -27,13 +27,13 @@
               <dl class="layui-nav-child">
                 <dd>
                   <router-link
-                    :to="{ path: '/CaseManagement', query: { uI: this.BarUserId }}">
+                    :to="{ path: '/AdminCaseManage', query: { BarUserId: this.BarUserId }}">
                     案例管理
                   </router-link>
                 </dd>
                 <dd>
                   <router-link
-                    :to="{ path: '/ModelView', query: { uI: this.BarUserId } }">
+                    :to="{ path: '/AdminModelView', query: { BarUserId: this.BarUserId } }">
                     模型查看
                   </router-link>
                 </dd>
@@ -51,7 +51,7 @@
             <ul class="layui-tab-title">
               <li>
                 <router-link
-                  :to="{ path: '/UserManagement', query: { uI: this.BarUserId } }">
+                  :to="{ path: '/AdminUserManage', query: { BarUserId: this.BarUserId } }">
                   用户管理
                 </router-link>
               </li>
@@ -112,13 +112,13 @@
 <script>
 import TopBar from "../common/TopBar.vue";
 export default {
-  name: "UserEdit",
+  name: "AdminUserEdit",
   components: {
     TopBar,
   },
   data() {
     return {
-      BarUserId: this.$route.query.uI,
+      BarUserId: this.$route.query.BarUserId,
       EditTel: this.$route.query.uT,
       EditName: this.$route.query.uN,
       UserId: this.$route.query.uI,
