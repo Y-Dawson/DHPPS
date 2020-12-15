@@ -17,7 +17,7 @@
           </li>
           <li class="layui-nav-item">
             <a href="javascript:;">
-              <span>{{content.username}}</span>
+              <span>{{ content.username }}</span>
             </a>
           </li>
         </ul>
@@ -565,10 +565,11 @@ var linecnt = 1;
 export default {
   data() {
     return {
-      content:[],
+      content: [],
       fits: ["fill"],
-      url:"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-      
+      url:
+        "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
+
       ss: false,
       disable: true,
       value1: 0,
@@ -724,7 +725,6 @@ export default {
     console.log("每日病例：", this.params.DailyInfected.data.DailyforecastData);
     var foreData = this.params.DailyInfected.data.DailyforecastData;
 
-
     this.userId = this.params.userid;
     this.casename = this.params.casename;
     this.citycnt = this.params.citynum;
@@ -818,18 +818,17 @@ export default {
     getContent: function (userId) {
       var self = this;
       axios
-        .get("http://127.0.0.1:8000/backend/profile/"+userId+"/")
+        .get("http://127.0.0.1:8000/backend/profile/" + userId + "/")
         .then(
-          (response) =>
-            (self.content = response.data)
-            //alert(JSON.stringify(response))
+          (response) => (self.content = response.data)
+          //alert(JSON.stringify(response))
         )
         .catch(function (error) {
           // 请求失败处理
           alert("数据请求失败wdnmd");
         });
     },
-    
+
     sst(ss) {
       if (this.ss == true) {
         console.log("返回设置参数界面");
@@ -922,6 +921,7 @@ export default {
         rotang = 180 - rotang;
       }
 
+      console.log("linecnt:",linecnt);
       var ll = document.getElementById("line" + linecnt);
       ll.style.left = (ttcx1 + ttcx2) / 2 - parseInt(dis) / 2 + 20 + "px";
       ll.style.top = (ttcy1 + ttcy2) / 2 + 50 + "px";
@@ -935,6 +935,12 @@ export default {
       if (n == "B") return "ci2";
       if (n == "C") return "ci3";
       if (n == "D") return "ci4";
+      if (n == "E") return "ci5";
+      if (n == "F") return "ci6";
+      if (n == "G") return "ci7";
+      if (n == "H") return "ci8";
+      if (n == "I") return "ci9";
+      if (n == "J") return "ci10";
     },
 
     add_inf(n, popu, dinf, inf) {
@@ -954,9 +960,39 @@ export default {
         this.ci3_newInfected.push(dinf);
       }
       if (n == "D") {
-        this.ci3_population.push(popu);
-        this.ci3_totalInfected.push(inf);
-        this.ci3_newInfected.push(dinf);
+        this.ci4_population.push(popu);
+        this.ci4_totalInfected.push(inf);
+        this.ci4_newInfected.push(dinf);
+      }
+      if (n == "E") {
+        this.ci5_population.push(popu);
+        this.ci5_totalInfected.push(inf);
+        this.ci5_newInfected.push(dinf);
+      }
+      if (n == "F") {
+        this.ci6_population.push(popu);
+        this.ci6_totalInfected.push(inf);
+        this.ci6_newInfected.push(dinf);
+      }
+      if (n == "G") {
+        this.ci7_population.push(popu);
+        this.ci7_totalInfected.push(inf);
+        this.ci7_newInfected.push(dinf);
+      }
+      if (n == "H") {
+        this.ci8_population.push(popu);
+        this.ci8_totalInfected.push(inf);
+        this.ci8_newInfected.push(dinf);
+      }
+      if (n == "I") {
+        this.ci9_population.push(popu);
+        this.ci9_totalInfected.push(inf);
+        this.ci9_newInfected.push(dinf);
+      }
+      if (n == "J") {
+        this.ci10_population.push(popu);
+        this.ci10_totalInfected.push(inf);
+        this.ci10_newInfected.push(dinf);
       }
     },
   },

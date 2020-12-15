@@ -4,42 +4,6 @@
   <div id="app">
     <div class="layui-layout layui-layout-admin">
       <profileTopBar layoutName='个人中心' :userId="userId"></profileTopBar>
-      <!-- <div class="layui-header">
-        <div class="layui-logo">LOGO</div>
-        <div class="layui-logotext">高传染性疾病预测系统</div>
-        <ul class="layui-nav layui-layout-left">
-          <li class="layui-nav-item">个人中心</li>
-        </ul>
-        <ul class="layui-nav layui-layout-right">
-          <li class="layui-nav-item" style="line-height: 40px">
-            <router-link
-              style="margin-left: 10px; float: left"
-              :to="{
-                path: '/setting',
-                query: {
-                  params: JSON.stringify({
-                    userId: this.userId,
-                    casename: 999,
-                  }),
-                },
-              }"
-              >回到首页</router-link>
-          </li>
-          <li class="layui-nav-item" style="line-height: 20px">
-            <el-avatar
-              shape="circle"
-              :size="30"
-              :fit="fit"
-              :src="url"
-            ></el-avatar>
-          </li>
-          <li class="layui-nav-item">
-            <a href="javascript:;">
-              <span>{{ content.username }}</span>
-            </a>
-          </li>
-        </ul>
-      </div> -->
       <div class="layui-side layui-bg-black">
         <div class="layui-side-scroll">
           <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
@@ -173,10 +137,10 @@ export default {
   },
   created: function () {
     //为了在内部函数能使用外部函数的this对象，要给它赋值了一个名叫self的变量。
-    this.getContent(this.userId);
+    this.GetContent(this.userId);
   },
   methods: {
-    getContent: function (userId) {
+    GetContent: function (userId) {
       var self = this;
       axios
         .get("http://127.0.0.1:8000/backend/profile/" + userId + "/")
@@ -189,7 +153,7 @@ export default {
           // alert("数据请求失败wdnmd");
         });
     },
-    putContent: function () {
+    PutContent: function () {
       var self = this;
       var date = $("#input1").val();
       axios
