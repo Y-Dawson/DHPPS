@@ -26,10 +26,7 @@
               <dl class="layui-nav-child">
                 <dd>
                   <router-link
-                    :to="{
-                      path: '/UserManagement',
-                      query: { uI: this.BarUserId },
-                    }"
+                    :to="{ path: '/SuperUserManage', query: { uI: this.BarUserId } }"
                     >信息管理</router-link
                   >
                 </dd>
@@ -38,7 +35,7 @@
               <dl class="layui-nav-child">
                 <dd>
                   <router-link
-                    :to="{ path: '/ModelView', query: { uI: this.BarUserId } }"
+                    :to="{ path: '/SuperModelView', query: { uI: this.BarUserId } }"
                     >模型查看</router-link
                   >
                 </dd>
@@ -91,8 +88,8 @@
                       <button class="buttonA">
                         <router-link
                           :to="{
-                            path: '/CaseEdit',
-                            query: { BarUserId: BarUserId, uI: item.userid },
+                            path: '/SuperCaseEdit',
+                            query: { uI: item.userid, BarUserId: BarUserId },
                           }"
                           >案例编辑</router-link
                         >
@@ -140,12 +137,13 @@
         //分页
         TotalPage: 3, // 统共页数，默认为1
         CurrentPage: 1, //当前页数 ，默认为1
-        PageSize: 4, // 每页显示数量
+        PageSize: 6, // 每页显示数量
         Content: [], //当前页显示内容
-        Paginate: 10,
+        Paginate: 10, //当前页显示内容
       };
     },
     created: function () {
+      //为了在内部函数能使用外部函数的this对象，要给它赋值了一个名叫self的变量。
       this.GetContent();
     },
     methods: {
@@ -165,6 +163,7 @@
               (self.PageSize = response.data.PageSize),
               (self.TotalPage = Math.ceil(self.Paginate / self.PageSize)),
               this.TestPage()
+              // alert(JSON.stringify(response))
             )
           )
           .catch(function (error) {
@@ -227,22 +226,8 @@
   };
 </script>
 
-// 修改elementui的样式
-<style>
-  .el-pagination.is-background .el-pager li:not(.disabled).active {
-    background-color: #55587e !important;
-  }
-  .el-pagination.is-background .el-pager li:not(.disabled).active:hover {
-    color: #fff !important;
-  }
-  .el-pagination.is-background .el-pager li:hover {
-    color: #55587e !important;
-  }
-</style>
-
 <style scoped>
   @import "../../assets/layui/css/layui.css";
-
   /* 列表大小 */
   .list {
     text-align: center;

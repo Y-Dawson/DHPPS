@@ -25,10 +25,7 @@
               <dl class="layui-nav-child">
                 <dd>
                   <router-link
-                    :to="{
-                      path: '/UserManagement',
-                      query: { uI: this.BarUserId },
-                    }"
+                    :to="{ path: '/SuperUserManage', query: { uI: this.BarUserId } }"
                     >信息管理</router-link
                   >
                 </dd>
@@ -37,7 +34,7 @@
               <dl class="layui-nav-child">
                 <dd>
                   <router-link
-                    :to="{ path: '/ModelView', query: { uI: this.BarUserId } }"
+                    :to="{ path: '/SuperModelView', query: { uI: this.BarUserId } }"
                     >模型查看</router-link
                   >
                 </dd>
@@ -53,7 +50,7 @@
             <ul class="layui-tab-title">
               <li class="layui-off">
                 <router-link
-                  :to="{ path: '/CaseManagement', query: { uI: this.BarUserId } }"
+                  :to="{ path: '/SuperCaseManage', query: { uI: this.BarUserId } }"
                   >案例管理</router-link
                 >
               </li>
@@ -139,7 +136,7 @@
 <script>
   import TopBar from "../common/TopBar.vue";
   export default {
-    name: "CaseEdit",
+    name: "SuperCaseEdit",
     components: {
       TopBar,
     },
@@ -212,19 +209,6 @@
     },
   };
 </script>
-
-// 修改elementui的样式
-<style>
-  .el-pagination.is-background .el-pager li:not(.disabled).active {
-    background-color: #55587e !important;
-  }
-  .el-pagination.is-background .el-pager li:not(.disabled).active:hover {
-    color: #fff !important;
-  }
-  .el-pagination.is-background .el-pager li:hover {
-    color: #55587e !important;
-  }
-</style>
 
 <style scoped>
   @import "../../assets/layui/css/layui.css";

@@ -18,7 +18,7 @@
             :to="{
               path: '/setting',
               query: {
-                params: JSON.stringify({ userId: this.userId, casename: 999 }),
+                params: JSON.stringify({ BarUserId: this.BarUserId, casename: 999 }),
               },
             }"
             >回到首页</router-link
@@ -49,7 +49,7 @@ export default {
   data() {
     return {
       content: [],
-      userId:0,
+      BarUserId:0,
       // 头像
       fits: ["fill"],
       url:
@@ -58,22 +58,22 @@ export default {
   },
   props:{
       layoutName:String,
-      userId:Number
+      BarUserId:Number
     },
   created: function () {
     //为了在内部函数能使用外部函数的this对象，要给它赋值了一个名叫self的变量。
-    this.getContent(this.userId);
+    this.getContent(this.BarUserId);
   },
   methods: {
-    getContent: function (userId) {
+    getContent: function (BarUserId) {
       var self = this;
       axios
-        .get("http://127.0.0.1:8000/backend/profile/"+userId+"/")
-        .then(
-          (response) =>
-            (self.content = response.data)
-            //alert(JSON.stringify(response))
-        )
+        .get("http://127.0.0.1:8000/backend/profile/"+BarUserId+"/")
+        .then(response => (
+            self.content = response.data,
+            this.url=self.content.avatar
+            // alert(JSON.stringify(response.data))
+          ))
         .catch(function (error) {
           // 请求失败处理
           alert("数据请求失败wdnmd");

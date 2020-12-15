@@ -55,7 +55,7 @@ export default {
   name: "topBar",
   data() {
     return {
-      adminUrl: '/userManagement',
+      adminUrl: '/UserManagement',
       content: [],
       acontent:[],
       userId:0,
@@ -81,11 +81,11 @@ export default {
       var self = this;
       axios
         .get("http://127.0.0.1:8000/backend/profile/"+userId+"/")
-        .then(
-          (response =>
-            self.content = response.data
-            //alert(JSON.stringify(response))
-        ))
+        .then(response => (
+            self.content = response.data,
+            this.url=self.content.avatar
+            // alert(JSON.stringify(response.data))
+          ))
         .catch(function (error) {
           // 请求失败处理
           alert("数据请求失败wdnmd");
@@ -98,7 +98,7 @@ export default {
       else{
         this.isbut ="进入后台"
         if(a=="超级管理员"){
-          this.adminUrl='/SPUserManage'
+          this.adminUrl='/SuperUserManage'
         }
       }
     },

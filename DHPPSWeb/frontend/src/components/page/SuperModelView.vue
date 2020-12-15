@@ -1,9 +1,10 @@
 <template>
-  <!-- 实现了生日日期选择，没有实现输入框校验！！！ -->
   <div id="app">
+
     <div class="layui-layout layui-layout-admin">
       <!-- 导航栏 -->
       <TopBar layoutName="后台管理系统" :BarUserId="BarUserId"></TopBar>
+
       <div class="layui-side layui-bg-black">
         <div class="layui-side-scroll">
           <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
@@ -17,22 +18,21 @@
                   color: rgb(132, 132, 136);
                 "
               >
-                <i
-                  class="layui-icon layui-icon-app"
-                  style="font-size: 20px; color: rgb(173, 173, 173)"
-                ></i>
+                <i class="layui-icon layui-icon-app"
+                   style="font-size: 20px; color: rgb(173, 173, 173)">
+                </i>
                 系统菜单
               </div>
               <dl class="layui-nav-child">
                 <dd>
                   <router-link
-                    :to="{path: '/UserManagement',query: { UserId: this.BarUserId }}">
+                    :to="{ path: '/SuperUserManage', query: { UserId: this.BarUserId } }">
                       信息管理
                   </router-link>
                 </dd>
                 <dd>
                   <router-link
-                    :to="{path: '/CaseManagement',query: { UserId: this.BarUserId }}">
+                    :to="{ path: '/SuperCaseManage', query: { UserId: this.BarUserId } }">
                       案例管理
                   </router-link>
                 </dd>
@@ -56,11 +56,7 @@
             <div class="slideshow">
               <ul>
                 <!-- <transition-group tag="ul" name="image"> -->
-                <li
-                  v-for="(img, index) in ImgArray"
-                  v-show="index === Mark"
-                  :key="index"
-                >
+                <li v-for="(img, index) in ImgArray" v-show="index === Mark" :key="index">
                   <a href="#">
                     <img :src="img" />
                   </a>
@@ -84,17 +80,17 @@
         <!-- 底部固定区域 -->
         © layui.com - 底部固定区域
       </div>
+
     </div>
   </div>
 </template>
-
 <script src="layui.js"></script>
 <script>
   import TopBar from "../common/TopBar.vue";
   export default {
     name: "ModelView",
     components: {
-      TopBar,
+      TopBar
     },
     data() {
       return {
@@ -141,8 +137,8 @@
 
 <style scoped>
   @import "../../assets/layui/css/layui.css";
-  /* 左侧导航栏 */
-  /* 第一个hover */
+  /* 左侧导航栏 
+  第一个hover  */
   .layui-nav-tree .layui-nav-item a {
     text-align: center;
     font-weight: bold;
