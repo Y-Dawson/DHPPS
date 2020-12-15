@@ -16,10 +16,10 @@ from PIL.ImageFont import truetype
 
 class Bezier:
     def __init__(self):
-        self.tsequence = tuple([t / 20.0 for t in range(21)])
-        self.beziers = {}
+        self.m_tsequence = tuple([t / 20.0 for t in range(21)])
+        self.m_beziers = {}
 
-    def pascal_row(self, n):
+    def rPascalRow(self, n):
         """ Returns n-th row of Pascal's triangle
         """
         result = [1]
@@ -35,22 +35,22 @@ class Bezier:
             result.extend(reversed(result))
         return result
 
-    def make_bezier(self, n):
+    def rMakeBezier(self, n):
         """ Bezier curves:
             http://en.wikipedia.org/wiki/B%C3%A9zier_curve#Generalization
         """
         try:
-            return self.beziers[n]
+            return self.m_beziers[n]
         except KeyError:
-            combinations = self.pascal_row(n - 1)
+            combinations = self.rPascalRow(n - 1)
             result = []
-            for t in self.tsequence:
+            for t in self.m_tsequence:
                 tpowers = (t ** i for i in range(n))
                 upowers = ((1 - t) ** i for i in range(n - 1, -1, -1))
                 coefs = [c * a * b for c, a, b in zip(combinations,
                                                       tpowers, upowers)]
                 result.append(coefs)
-            self.beziers[n] = result
+            self.m_beziers[n] = result
             return result
 
 
@@ -99,7 +99,7 @@ class Captcha(object):
         dx /= number
         path = [(dx * i, random.randint(0, height))
                 for i in range(1, number)]
-        bcoefs = self._bezier.make_bezier(number - 1)
+        bcoefs = self._bezier.rMakeBezier(number - 1)
         points = []
         for coefs in bcoefs:
             points.append(tuple(sum([coef * p for coef, p in zip(coefs, ps)])

@@ -499,7 +499,7 @@ def startSimulate(request):
                     cityPosList.append(posList)
                 cityCount += 1
 
-            # 新增道路信息
+            # 新增道路信
             roadCount = 0
             for roadInfo in initroaddataList:
                 value = roadInfo.split(":")[1]
