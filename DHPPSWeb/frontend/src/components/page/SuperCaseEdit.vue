@@ -184,7 +184,7 @@
           .get("http://127.0.0.1:8000/backend/case/", {
             params: {
               UserId: self.UserId,
-              page_size: 6,
+              pageSize: 6,
               page: self.CurrentPage,
             },
           })

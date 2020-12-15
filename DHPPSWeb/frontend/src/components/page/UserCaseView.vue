@@ -187,7 +187,7 @@ export default {
         .get("http://127.0.0.1:8000/backend/case/", {
           params: {
             userid: this.$route.query.userId,
-            page_size: 6,
+            pageSize: 6,
             page: self.currentPage,
           },
         })
