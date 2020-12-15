@@ -1447,6 +1447,7 @@ export default {
             .then((response) => {
               // alert(JSON.stringify(response));
               // alert("保存案例");
+              this.$message.success("保存成功！");
             })
             .catch(function (error) {
               // alert(JSON.stringify(response));

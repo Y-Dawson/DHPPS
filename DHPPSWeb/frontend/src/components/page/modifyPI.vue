@@ -1,51 +1,49 @@
 <template>
-  <!-- 实现了生日日期选择，没有实现输入框校验！！！ -->
   <div id="app">
     <div class="layui-layout layui-layout-admin">
       <topBar layoutName='个人中心' :userId="userId"></topBar>
-      <div class="layui-side layui-bg-black">
-        <div class="layui-side-scroll">
-          <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
-          <ul class="layui-nav layui-nav-tree" lay-filter="test">
-            <li class="layui-nav-item layui-nav-itemed">
-              <div
-                style="
-                  text-align: center;
-                  background-color: #fff;
-                  font-size: 16px;
-                  color: rgb(132, 132, 136);
-                "
-              >
-                <i
-                  class="layui-icon layui-icon-app"
-                  style="font-size: 20px; color: rgb(173, 173, 173)"
-                ></i>
-                系统菜单
-              </div>
-              <dl class="layui-nav-child">
-                <dd>
-                  <router-link
-                    :to="{ path: '/profile', query: { userId: userId } }"
-                    >个人资料</router-link
-                  >
-                </dd>
-              </dl>
-              <router-link
-                :to="{ path: '/modifyPI', query: { userId: userId } }"
-                >修改资料</router-link
-              >
-              <dl class="layui-nav-child">
-                <dd>
-                  <router-link
-                    :to="{ path: '/caseView', query: { userId: userId } }"
-                    >案例查看</router-link
-                  >
-                </dd>
-              </dl>
-            </li>
-          </ul>
+        <div class="layui-side layui-bg-black">
+          <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree" lay-filter="test">
+              <li class="layui-nav-item layui-nav-itemed">
+                <div
+                  style="
+                    text-align: center;
+                    background-color: #fff;
+                    font-size: 16px;
+                    color: rgb(132, 132, 136);
+                  ">
+                  <i
+                    class="layui-icon layui-icon-app"
+                    style="font-size: 20px; color: rgb(173, 173, 173)"
+                  ></i>
+                  系统菜单
+                </div>
+                <dl class="layui-nav-child">
+                  <dd>
+                    <router-link
+                      :to="{ path: '/profile', query: { userId: userId } }"
+                      >个人资料</router-link
+                    >
+                  </dd>
+                </dl>
+                <router-link
+                  :to="{ path: '/modifyPI', query: { userId: userId } }"
+                  >修改资料</router-link
+                >
+                <dl class="layui-nav-child">
+                  <dd>
+                    <router-link
+                      :to="{ path: '/caseView', query: { userId: userId } }"
+                      >案例查看</router-link
+                    >
+                  </dd>
+                </dl>
+              </li>
+            </ul>
+          </div>
         </div>
-      </div>
       <div class="layui-body">
         <!-- 内容主体区域 -->
         <div style="padding: 15px">
@@ -56,8 +54,7 @@
                 <router-link
                   :to="{ path: '/changePass', query: { userId: userId } }"
                   style="color: #55587e"
-                  >修改密码</router-link
-                >
+                  >修改密码</router-link>
               </li>
             </ul>
             <div class="layui-tab-content">
@@ -88,18 +85,10 @@
                       id="inputname"
                     ></el-input>
                   </el-form-item>
-                  <!-- <el-form-item label="手机号" prop="phone">
-                    <el-input
-                      size="small"
-                      v-model="ruleForm.phone"
-                      clearable
-                      id="inputphone"
-                    ></el-input>
-                  </el-form-item> -->
                   <el-form-item label="性别" prop="sex">
                     <el-radio-group
                       v-model="ruleForm.radio"
-                      @change="changeHandler"
+                      @change="ChangeHandler"
                       id="inputsex"
                     >
                       <el-radio label="男"></el-radio>
@@ -142,10 +131,10 @@
                     ></el-input>
                   </el-form-item>
                   <el-form-item>
-                    <el-button type="primary" @click="submitForm('ruleForm')"
+                    <el-button type="primary" @click="SubmitForm('ruleForm')"
                       >保存</el-button
                     >
-                    <el-button class="reset" @click="resetForm('ruleForm')"
+                    <el-button class="reset" @click="ResetForm('ruleForm')"
                       >重置</el-button
                     >
                   </el-form-item>
@@ -218,8 +207,7 @@ export default {
       input: "",
       // 头像
       fits: ["fill"],
-      url:
-        "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
+      url: "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
       // 设置单选默认值
       pickerOptions: {
         disabledDate(time) {
@@ -257,34 +245,31 @@ export default {
   },
   created: function () {
     //为了在内部函数能使用外部函数的this对象，要给它赋值了一个名叫self的变量。
-    // alert(this.userId)
-    this.getContent();
+    this.GetContent();
   },
   methods: {
-    changeHandler(value) {
+    ChangeHandler(value) {
       this.sex = value;
     },
-    getContent: function () {
+    GetContent: function () {
       var self = this;
       axios
         .get("http://127.0.0.1:8000/backend/profile/" + this.userId + "/")
         .then(
           (response) =>
             (self.content = response.data)
-            // alert(JSON.stringify(response))
         )
         .catch(function (error) {
-          // 请求失败处理.
-          // alert("数据请求失败wdnmd");
+          // 请求失败处理
+          alert("数据请求失败");
         });
     },
-    putContent: function (userId) {
+    PutContent: function (userId) {
       var self = this;
       var uname = $("#inputname").val();
       axios
         .put("http://127.0.0.1:8000/backend/profile/" + userId + "/", {
           username: $("#inputname").val(),
-          // phonenumber: $("#inputphone").val(),
           birth: this.value1,
           sex: this.ruleForm.radio,
           email: $("#inputmail").val(),
@@ -293,7 +278,6 @@ export default {
         .then(
           (response) => (
             (self.content = response),
-            // alert("数据发送"),
             this.$message.success("修改成功"),
             this.$router.push({
               path: "/profile",
@@ -304,23 +288,21 @@ export default {
           )
         )
         .catch(function (error) {
-          // alert(JSON.stringify(response))
-          // alert("数据发送失败")
+          alert("数据发送失败")
           console.log(error.response);
         });
     },
-    submitForm(formName) {
+    SubmitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.putContent(this.userId);
-          // alert('submit!')
+          this.PutContent(this.userId);
         } else {
           this.$message.error("修改失败");
           return false;
         }
       });
     },
-    resetForm(formName) {
+    ResetForm(formName) {
       this.$refs[formName].resetFields();
     },
   },

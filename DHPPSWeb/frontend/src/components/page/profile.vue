@@ -1,45 +1,8 @@
 
 <template>
-  <!-- 实现了生日日期选择，没有实现输入框校验！！！ -->
   <div id="app">
     <div class="layui-layout layui-layout-admin">
       <profileTopBar layoutName='个人中心' :userId="userId"></profileTopBar>
-      <!-- <div class="layui-header">
-        <div class="layui-logo">LOGO</div>
-        <div class="layui-logotext">高传染性疾病预测系统</div>
-        <ul class="layui-nav layui-layout-left">
-          <li class="layui-nav-item">个人中心</li>
-        </ul>
-        <ul class="layui-nav layui-layout-right">
-          <li class="layui-nav-item" style="line-height: 40px">
-            <router-link
-              style="margin-left: 10px; float: left"
-              :to="{
-                path: '/setting',
-                query: {
-                  params: JSON.stringify({
-                    userId: this.userId,
-                    casename: 999,
-                  }),
-                },
-              }"
-              >回到首页</router-link>
-          </li>
-          <li class="layui-nav-item" style="line-height: 20px">
-            <el-avatar
-              shape="circle"
-              :size="30"
-              :fit="fit"
-              :src="url"
-            ></el-avatar>
-          </li>
-          <li class="layui-nav-item">
-            <a href="javascript:;">
-              <span>{{ content.username }}</span>
-            </a>
-          </li>
-        </ul>
-      </div> -->
       <div class="layui-side layui-bg-black">
         <div class="layui-side-scroll">
           <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
@@ -162,34 +125,29 @@ export default {
   data: function () {
     return {
       userId: this.$route.query.userId,
-      // 传参
       content: [],
       // 头像
       fits: ["fill"],
-      url:
-        "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-      // 设置单选默认值
+      url: "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
     };
   },
   created: function () {
     //为了在内部函数能使用外部函数的this对象，要给它赋值了一个名叫self的变量。
-    this.getContent(this.userId);
+    this.GetContent(this.userId);
   },
   methods: {
-    getContent: function (userId) {
+    GetContent: function (userId) {
       var self = this;
       axios
         .get("http://127.0.0.1:8000/backend/profile/" + userId + "/")
         .then(
           (response) => (self.content = response.data)
-          // alert(JSON.stringify(response))
         )
         .catch(function (error) {
-          // 请求失败处理
-          // alert("数据请求失败wdnmd");
+          alert("数据请求失败");
         });
     },
-    putContent: function () {
+    PutContent: function () {
       var self = this;
       var date = $("#input1").val();
       axios
@@ -198,10 +156,9 @@ export default {
         })
         .then(
           (response) => (self.content = response)
-          // alert(JSON.stringify(response))
         )
         .catch(function (error) {
-          // alert("数据发送失败");
+          alert("数据发送失败");
           console.log(error.response);
         });
     },

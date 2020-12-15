@@ -1,5 +1,5 @@
 <template>
-  <div id="forgetPass">
+  <div id="ForgetPass">
     <div class="ms-login">
       <div class="ms-title">高传染性疾病预测系统</div>
       <el-form :model="forgetForm" :rules="forgetFormRules" ref="forgetForm" class="ms-content" action="">
@@ -52,7 +52,6 @@
               </el-input>
             </el-form-item>
           </div>
-          <!-- <div class="layui-form-mid layui-word-aux">请填写6到12位密码</div> -->
         </div>
       </div>
 
@@ -70,19 +69,12 @@
               </el-input>
             </el-form-item>
           </div>
-          <!-- <div class="layui-form-mid layui-word-aux">请填写6到12位密码</div> -->
         </div>
       </div>
       <el-form-item class="btns">
         <router-link to='/Login'><el-button type="return" >返 回</el-button></router-link>
-        <el-button type="primary" @click="submitForm('forgetForm')">确 定</el-button>
+        <el-button type="primary" @click="SubmitForm('forgetForm')">确 定</el-button>
       </el-form-item>
-
-      <!-- <el-form-item class="btns">
-        <el-button type="return"><router-link to='/Login'>返回</router-link></el-button> -->
-        <!-- <el-button type="info" @click="resetLoginForm">返回</el-button> -->
-        <!-- <el-button type="primary" @click="submitForm('forgetForm')">确 定</el-button>
-      </el-form-item> -->
      </el-form>
     </div>
   </div>
@@ -149,7 +141,7 @@ export default {
     };
   },
   methods:{
-    forgetPass: function () {
+    ForgetPass: function () {
       var self = this;
       let data = new FormData();
       data.append("phonenum",$("#phone").val());
@@ -160,25 +152,24 @@ export default {
         .then(response => (
           self.returnData = response.data,
           self.returnmessage=response.data.message,
-          // alert(self.returnmessage),
-          self.skip()
+          self.Skip()
         ))
         .catch(function (error) {
           alert(JSON.stringify(error.response));
           console.log(error.response);
         });
     },
-    submitForm(formName) {
+    SubmitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.forgetPass()
+          this.ForgetPass()
         } else {
           console.log('error submit!!')
           return false
         }
       });
     },
-    skip() {
+    Skip() {
       if(this.returnmessage=="修改成功") {
         this.$message(this.returnmessage);
         this.$router.push({path:'/Login'});
@@ -192,7 +183,6 @@ export default {
 @import "../../assets/layui/css/layui.css";
 body {
   background-image: url(../../assets/img/background2.jpg);
-  /* width: 1000px; */
 }
 </style>
 
@@ -222,10 +212,6 @@ body {
   margin: 0;
   padding: 30px 30px;
 }
-/* .btns {
-  display: flex;
-  justify-content: center;
-} */
 .layui-form .layui-form-item {
   text-align: center;
 }
@@ -237,7 +223,6 @@ body {
   margin-top: -38px;
 }
 .el-button--return {
-  /* background-color: rgba(109, 113, 116, 0.295); */
   position: absolute;
   width: 100px;
   height: 40px;

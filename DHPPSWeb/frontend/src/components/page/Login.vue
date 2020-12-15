@@ -30,11 +30,10 @@
 
       <el-form-item class="btns">
         <el-button type="primary" @click="login">登 录</el-button>
-        <el-button type="info" @click="resetLoginForm">重 置</el-button>
+        <el-button type="info" @click="ResetLoginForm">重 置</el-button>
       </el-form-item>
       <router-link to="/signup" class="create-account" style="font-size:14px;margin-left:10px; float:left;">创建账号</router-link>
       <router-link to="/forgetPass" class="forget-password" style="font-size:14px;margin-left:10px; float:right;">忘记密码</router-link>
-      <!-- <a class="forget-password" href="./forgetPass" style="margin-right:10px; float:right;">忘记密码</a> -->
      </el-form>
     </div>
   </div>
@@ -45,9 +44,11 @@
 export default {
   data() {
     return {
-      bgImg:{ backgroundImage:"url(" + require("../../assets/img/background2.jpg") + ")",
-              height:'100vh',//这里一定要设置高度 否则背景图无法显示
-              backgroundRepeat: "no-repeat"},
+      bgImg:{ 
+        backgroundImage:"url(" + require("../../assets/img/background2.jpg") + ")",
+        height:'100vh',//这里一定要设置高度 否则背景图无法显示
+        backgroundRepeat: "no-repeat"
+      },
       loginMassege:'',
       userId:'',
       userAuthority:"",
@@ -78,10 +79,8 @@ export default {
     };
   },
   methods: {
-    submitMessage(){
+    SubmitMessage(){
       if(this.loginMassege=="登录成功"){
-        // this.$cookies.get(keyName)
-        // alert(this.$cookies.get(sessionid))
         this.$message.success("登录成功！");
         if(this.userAuthority=="普通用户"){
           this.$router.push({
@@ -128,25 +127,23 @@ export default {
       }
     
     },
-    resetLoginForm() {
+    ResetLoginForm() {
       this.$refs.loginFormRef.resetFields();
     },
-    getLoginData: function () {
+    GetLoginData: function () {
       var self = this
       axios
         .get("http://127.0.0.1:8000/backend/logindata/")
         .then(response => (
             self.content = response.data
-            // alert(JSON.stringify(response))
           )
         )
         .catch(function (error) {
-          // alert(JSON.stringify(response));
           alert("数据获取失败");
           console.log(error.response);
         });
     },
-    postContent: function () {
+    PostContent: function () {
       var self = this
       let data = new FormData()
       data.append("phonenum",$("#loginPhone").val())
@@ -158,21 +155,18 @@ export default {
             self.loginMassege=response.data.message,
             self.userId=response.data.userId,
             self.userAuthority=response.data.userAuthority,
-            // alert("数据发送"),
-            // alert(JSON.stringify(response)),
-            self.submitMessage()
+            self.SubmitMessage()
           )
         )
         .catch(function (error) {
-          // alert(JSON.stringify(error.response.data.message));
           alert("数据发送失败");
           console.log(error.response);
         });
     },
-    login() {
+    Login() {
       this.$refs.loginFormRef.validate(async (valid) => {
         if (!valid) return
-        this.postContent()
+        this.PostContent()
       });
     },
   },
@@ -181,9 +175,7 @@ export default {
 
 <style scoped>
 @import "../../assets/layui/css/layui.css";
- /* body {
-  background-image: url(../../assets/img/background2.jpg)
-} */
+
 .ms-login {
     position: absolute;
     left: 50%;
