@@ -1,6 +1,5 @@
 
 <template>
-  <!-- 实现了生日日期选择，没有实现输入框校验！！！ -->
   <div id="app">
     <div class="layui-layout layui-layout-admin">
       <profileTopBar layoutName='个人中心' :userId="userId"></profileTopBar>
@@ -126,13 +125,10 @@ export default {
   data: function () {
     return {
       userId: this.$route.query.userId,
-      // 传参
       content: [],
       // 头像
       fits: ["fill"],
-      url:
-        "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-      // 设置单选默认值
+      url: "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
     };
   },
   created: function () {
@@ -146,11 +142,9 @@ export default {
         .get("http://127.0.0.1:8000/backend/profile/" + userId + "/")
         .then(
           (response) => (self.content = response.data)
-          // alert(JSON.stringify(response))
         )
         .catch(function (error) {
-          // 请求失败处理
-          // alert("数据请求失败wdnmd");
+          alert("数据请求失败");
         });
     },
     PutContent: function () {
@@ -162,10 +156,9 @@ export default {
         })
         .then(
           (response) => (self.content = response)
-          // alert(JSON.stringify(response))
         )
         .catch(function (error) {
-          // alert("数据发送失败");
+          alert("数据发送失败");
           console.log(error.response);
         });
     },

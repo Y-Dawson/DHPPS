@@ -1,8 +1,7 @@
 <template>
-  <!-- 实现了生日日期选择，没有实现输入框校验！！！ -->
   <div id="app">
     <div class="layui-layout layui-layout-admin">
-      <topBar layoutName='个人中心' :userId="userId"></topBar>
+      <topBar layoutName="个人中心" :userId="userId"></topBar>
       <div class="layui-side layui-bg-black">
         <div class="layui-side-scroll">
           <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
@@ -105,10 +104,10 @@
                     ></el-input>
                   </el-form-item>
                   <el-form-item>
-                    <el-button type="primary" @click="submitForm('ruleForm')"
+                    <el-button type="primary" @click="SubmitForm('ruleForm')"
                       >保存</el-button
                     >
-                    <el-button class="reset" @click="resetForm('ruleForm')"
+                    <el-button class="reset" @click="ResetForm('ruleForm')"
                       >重置</el-button
                     >
                   </el-form-item>
@@ -124,32 +123,35 @@
 
 <script src="layui.js"></script>
 <script>
-import topBar from '../common/topBar.vue';
+import topBar from "../common/topBar.vue";
 export default {
-  name: "changePass",
-  components:{
-      topBar
-    },
+  name: "ChangePass",
+  components: {
+    topBar,
+  },
   data() {
-    var validatePass= (rule, value, callback) => {
-        if (!value) {
-          return callback(new Error('请输入密码'));
-        }
-        setTimeout(() => {
-          let reg =  /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[._~!@#$^&*])[A-Za-z0-9._~!@#$^&*]{6,12}$/
-          if (value == '' || !reg.test(value)) {
-            callback(new Error('密码长度为6~12位，必须由字母、数字、特殊符号(._~!@#$^&*)组成'));
-          }
-          else{
-            callback();
-          }
-        });
+    var validatePass = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error("请输入密码"));
       }
+      setTimeout(() => {
+        let reg = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[._~!@#$^&*])[A-Za-z0-9._~!@#$^&*]{6,12}$/;
+        if (value == "" || !reg.test(value)) {
+          callback(
+            new Error(
+              "密码长度为6~12位，必须由字母、数字、特殊符号(._~!@#$^&*)组成"
+            )
+          );
+        } else {
+          callback();
+        }
+      });
+    };
     var validatePass2 = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error('请再次输入密码'));
+      if (value === "") {
+        callback(new Error("请再次输入密码"));
       } else if (value !== this.ruleForm.pass) {
-        callback(new Error('两次输入密码不一致!'));
+        callback(new Error("两次输入密码不一致!"));
       } else {
         callback();
       }
@@ -181,10 +183,10 @@ export default {
   },
   created: function () {
     //为了在内部函数能使用外部函数的this对象，要给它赋值了一个名叫self的变量。
-    this.getContent();
+    this.GetContent();
   },
   methods: {
-    submitMessage: function () {
+    SubmitMessage: function () {
       if (this.passMassege == "账号原密码错误") {
         this.$message.error("原密码错误");
       } else if (this.passMassege == "修改成功") {
@@ -193,22 +195,19 @@ export default {
         this.$message.error("修改失败");
       }
     },
-    changePass: function () {
+    ChangePass: function () {
       var self = this;
       let data = new FormData();
       data.append("userid", this.userId);
       data.append("oldPassword", $("#prepass").val());
       data.append("newPassword", $("#newpass").val());
-      // var prepass=$("#prepass").val()
       axios
         .post("http://127.0.0.1:8000/backend/changePwd/", data)
         .then(
           (response) => (
             (self.content = response.data),
             (self.passMassege = response.data.message),
-            // alert(JSON.stringify(response.data.message)),
-            // self.$message.success("修改密码成功")
-            self.submitMessage()
+            self.SubmitMessage()
           )
         )
         .catch(function (error) {
@@ -217,34 +216,30 @@ export default {
           alert("数据请求失败wdnmd");
         });
     },
-    getContent: function () {
+    GetContent: function () {
       var self = this;
       axios
         .get("http://127.0.0.1:8000/backend/profile/" + this.userId + "/")
         .then(
-          response =>(
+          (response) =>
             (self.content = response.data)
-            // alert(JSON.stringify(response))
-        )) 
+        )
         .catch(function (error) {
           // 请求失败处理
           alert("数据请求失败wdnmd");
         });
     },
-    submitForm(formName) {
+    SubmitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          // alert("this is submit")
-          this.changePass();
-          // this.putContent()
-          // alert('submit!')
+          this.ChangePass();
         } else {
           console.log("error submit!!");
           return false;
         }
       });
     },
-    resetForm(formName) {
+    ResetForm(formName) {
       this.$refs[formName].resetFields();
     },
   },

@@ -1,5 +1,4 @@
 <template>
-  <!-- 实现了生日日期选择，没有实现输入框校验！！！ -->
   <div id="app">
     <div class="layui-layout layui-layout-admin">
       <topBar layoutName='个人中心' :userId="userId"></topBar>
@@ -86,14 +85,6 @@
                       id="inputname"
                     ></el-input>
                   </el-form-item>
-                  <!-- <el-form-item label="手机号" prop="phone">
-                    <el-input
-                      size="small"
-                      v-model="ruleForm.phone"
-                      clearable
-                      id="inputphone"
-                    ></el-input>
-                  </el-form-item> -->
                   <el-form-item label="性别" prop="sex">
                     <el-radio-group
                       v-model="ruleForm.radio"
@@ -216,8 +207,7 @@ export default {
       input: "",
       // 头像
       fits: ["fill"],
-      url:
-        "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
+      url: "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
       // 设置单选默认值
       pickerOptions: {
         disabledDate(time) {
@@ -255,7 +245,6 @@ export default {
   },
   created: function () {
     //为了在内部函数能使用外部函数的this对象，要给它赋值了一个名叫self的变量。
-    // alert(this.userId)
     this.GetContent();
   },
   methods: {
@@ -269,11 +258,10 @@ export default {
         .then(
           (response) =>
             (self.content = response.data)
-            // alert(JSON.stringify(response))
         )
         .catch(function (error) {
-          // 请求失败处理.
-          // alert("数据请求失败wdnmd");
+          // 请求失败处理
+          alert("数据请求失败");
         });
     },
     PutContent: function (userId) {
@@ -282,7 +270,6 @@ export default {
       axios
         .put("http://127.0.0.1:8000/backend/profile/" + userId + "/", {
           username: $("#inputname").val(),
-          // phonenumber: $("#inputphone").val(),
           birth: this.value1,
           sex: this.ruleForm.radio,
           email: $("#inputmail").val(),
@@ -291,7 +278,6 @@ export default {
         .then(
           (response) => (
             (self.content = response),
-            // alert("数据发送"),
             this.$message.success("修改成功"),
             this.$router.push({
               path: "/profile",
@@ -302,8 +288,7 @@ export default {
           )
         )
         .catch(function (error) {
-          // alert(JSON.stringify(response))
-          // alert("数据发送失败")
+          alert("数据发送失败")
           console.log(error.response);
         });
     },
@@ -311,7 +296,6 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.PutContent(this.userId);
-          // alert('submit!')
         } else {
           this.$message.error("修改失败");
           return false;

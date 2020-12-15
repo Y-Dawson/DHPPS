@@ -89,7 +89,6 @@
                         </div>
                       </div>
                       <dl class="box-text">
-                        <!-- <span>{{casenum}}</span> -->
                         <span>初始城市数量：</span>
                         <span id="returnContent">{{ item.citynumber }}</span>
                         <br />
@@ -103,9 +102,6 @@
                         <span id="returnContent">{{
                           item.inittotalinfected
                         }}</span>
-                        <!-- <span id="returnContent" style="color:black;">{{ ccontent.themename }}</span> -->
-                        <!-- <span id="returnContent">{{ content }}</span> -->
-                        <!-- <span id="returnContent">{{ content.themeno }}</span> -->
                       </dl>
                     </el-card>
                   </el-col>
@@ -134,7 +130,6 @@ export default {
     },
   data: function () {
     return {
-      // 传参
       cases: [],
       content: [],
       userId: this.$route.query.userId,
@@ -144,8 +139,7 @@ export default {
       test: 0,
       // 头像
       fits: ["fill"],
-      url:
-        "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
+      url: "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
       //分页
       totalPage: 1, // 统共页数，默认为1
       currentPage: 1, //当前页数 ，默认为1
@@ -157,8 +151,6 @@ export default {
     this.GetContent(this.userId);
   },
   mounted: function () {
-    // this.getcasenum(this.userid)
-    // alert(this.userId)
     this.GetCaseContent();
     this.SetPages();
   },
@@ -202,18 +194,17 @@ export default {
         .then(
           (response) => (
             (self.currentPageData = response.data),
-            // alert(JSON.stringify(this.currentPageData))
             (self.totalPage = Math.ceil(
               self.currentPageData.pagination / self.pageSize
             ))
-            // 
           )
         )
         .catch(function (error) {
           // 请求失败处理
-          // alert('数据请求失败wdnmd')
+          alert('数据请求失败')
         });
     },
+    // 案例编辑
     Edit: function (id) {
       var self = this;
       let data = new FormData();
@@ -280,8 +271,6 @@ export default {
           });
         })
         .catch(function (error) {
-          // 请求失败处理
-          // alert(JSON.stringify(response));
           alert(JSON.stringify(error.response));
           alert("数据请求失败wdnmd");
         });
@@ -292,11 +281,9 @@ export default {
         .delete("http://127.0.0.1:8000/backend/case/" + id, {})
         .then(
           (response) => (self.currentPageData = response.data)
-          // alert(JSON.stringify(this.currentPageData))
         )
         .catch(function (error) {
-          // 请求失败处理
-          // alert('数据请求失败wdnmd')
+          alert('数据请求失败')
         });
     },
     Open(id) {
@@ -325,19 +312,6 @@ export default {
   },
 };
 </script>
-
-// 修改elementui的样式
-<style>
-.el-pagination.is-background .el-pager li:not(.disabled).active {
-  background-color: #55587e !important;
-}
-.el-pagination.is-background .el-pager li:not(.disabled).active:hover {
-  color: #fff !important;
-}
-.el-pagination.is-background .el-pager li:hover {
-  color: #55587e !important;
-}
-</style>
 
 <style scoped>
 @import "../../assets/layui/css/layui.css";
