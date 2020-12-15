@@ -187,7 +187,7 @@ class Captcha(object):
         return image.rotate(
             random.uniform(-angle, angle), Image.BILINEAR, expand=1)
 
-    def captcha(self, path=None, fmt='JPEG'):
+    def lCaptcha(self, path=None, fmt='JPEG'):
         """Create a iCaptCha.
 
         Args:
