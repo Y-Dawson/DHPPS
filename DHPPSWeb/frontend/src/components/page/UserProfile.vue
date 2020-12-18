@@ -72,11 +72,11 @@
                   </div>
                   <li style="margin-top: 30px">
                     <span class="userName">昵称：</span>
-                    <span id="returnContent">{{ content.username }}</span>
+                    <span id="returnContent">{{ content.userName }}</span>
                   </li>
                   <li style="margin-top: 30px">
                     <span class="phoneNumber">手机号：</span>
-                    <span id="returnContent">{{ content.phonenumber }}</span>
+                    <span id="returnContent">{{ content.phoneNumber }}</span>
                   </li>
                   <li style="margin-top: 30px">
                     <span class="sex">性别：</span>
@@ -152,7 +152,7 @@ export default {
       var date = $("#input1").val();
       axios
         .post("http://127.0.0.1:8000/backend/accountInfo/", {
-          createdate: "2018-1-1",
+          createDate: "2018-1-1",
         })
         .then(
           (response) => (self.content = response)

@@ -1,59 +1,59 @@
 from rest_framework import serializers
-from backend.models import Accountinformation, Casedata, Cityposition, Dailyforecastdata
-from backend.models import Initcitydata, Initroaddata, Logindata, Modeldata, Personalprofile, Theme
+from backend.models import AccountInformation, CaseData, CityPosition, DailyForecastData
+from backend.models import InitCityData, InitRoadData, LoginData, ModelData, PersonalProfile, Theme
 
 
-class AccountinformationSerializer(serializers.ModelSerializer):
+class AccountInformationSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Accountinformation
+        model = AccountInformation
         fields = '__all__'
 
 
-class CasedataSerializer(serializers.ModelSerializer):
+class CaseDataSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Casedata
+        model = CaseData
         fields = '__all__'
 
 
 class CitypositionSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Cityposition
+        model = CityPosition
         fields = '__all__'
 
 
 class DailyforecastdataSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Dailyforecastdata
+        model = DailyForecastData
         fields = '__all__'
 
 
 class InitcitydataSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Initcitydata
+        model = InitCityData
         fields = '__all__'
 
 
 class InitroaddataSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Initroaddata
+        model = InitRoadData
         fields = '__all__'
 
 
 class LogindataSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Logindata
+        model = LoginData
         fields = '__all__'
 
 
 class ModeldataSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Modeldata
+        model = ModelData
         fields = '__all__'
 
 
-class PersonalprofileSerializer(serializers.ModelSerializer):
+class PersonalProfileSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Personalprofile
+        model = PersonalProfile
         fields = '__all__'
 
 

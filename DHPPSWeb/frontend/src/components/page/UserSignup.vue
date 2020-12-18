@@ -5,12 +5,12 @@
       <el-form :model="signupForm" :rules="signupFormRules" ref="signupForm" class="ms-content" action="">
       <div class="layui-form-item">
         <div class="layui-inline">
-          <div class="username"  style="margin-bottom: 15px;">
-            <el-form-item prop="username">
+          <div class="userName"  style="margin-bottom: 15px;">
+            <el-form-item prop="userName">
               <el-input
-                v-model="signupForm.username"
+                v-model="signupForm.userName"
                 placeholder="用户名"
-                id="username"
+                id="userName"
               >
               <el-button slot="prepend" icon="el-icon-user"></el-button>
               </el-input>
@@ -193,7 +193,7 @@ export default {
               height:'100vh',//这里一定要设置高度 否则背景图无法显示
               backgroundRepeat: "no-repeat"},
       signupForm: {
-        username: "",
+        userName: "",
         password: "",
         password2: "",
         email:"",
@@ -202,7 +202,7 @@ export default {
       },
       returnmessage:"",
       signupFormRules: {
-        username: [{ required: true, validator:checkanme , trigger: "blur"}],
+        userName: [{ required: true, validator:checkanme , trigger: "blur"}],
         password: [{ required: true, validator:validatePass,trigger: "blur"}],
         password2: [{ validator: validatePass2, trigger: 'blur', required: true }],
         email: [
@@ -225,7 +225,7 @@ export default {
       var self = this;
       var self = this;
       let data = new FormData();
-      data.append("username",$("#username").val());
+      data.append("userName",$("#userName").val());
       data.append("phonenum",$("#phonenum").val());
       data.append("email",$("#email").val());
       data.append("password",$("#password").val());

@@ -18,7 +18,7 @@
             :to="{
               path: '/setting',
               query: {
-                params: JSON.stringify({ BarUserId: this.BarUserId, casename: 999 }),
+                params: JSON.stringify({ BaruserId: this.BaruserId, caseName: 999 }),
               },
             }"
             >回到首页</router-link
@@ -35,7 +35,7 @@
         <li class="layui-nav-item">
           <span>{{ list }}</span>
           <a href="javascript:;">
-            {{ content.username }}
+            {{ content.userName }}
           </a>
         </li>
       </ul>
@@ -49,7 +49,7 @@ export default {
   data() {
     return {
       content: [],
-      BarUserId:0,
+      BaruserId:0,
       // 头像
       fits: ["fill"],
       url:
@@ -58,17 +58,17 @@ export default {
   },
   props:{
       layoutName:String,
-      BarUserId:Number
+      BaruserId:Number
     },
   created: function () {
     //为了在内部函数能使用外部函数的this对象，要给它赋值了一个名叫self的变量。
-    this.getContent(this.BarUserId);
+    this.getContent(this.BaruserId);
   },
   methods: {
-    getContent: function (BarUserId) {
+    getContent: function (BaruserId) {
       var self = this;
       axios
-        .get("http://127.0.0.1:8000/backend/profile/"+BarUserId+"/")
+        .get("http://127.0.0.1:8000/backend/profile/"+BaruserId+"/")
         .then(response => (
             self.content = response.data,
             this.url=self.content.avatar

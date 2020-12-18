@@ -6,7 +6,7 @@ from aliyunsdkcore.request import CommonRequest
 client = AcsClient('<accessKeyId>', '<accessSecret>', 'cn-hangzhou')
 
 
-def sendSms(iPhonenum):
+def SendSms(iPhonenum):
     ranInt = randint(100000, 999999)
     sendString = '{\"code\":\"'+str(ranInt)+'\"}'
     request = CommonRequest()

@@ -2,7 +2,7 @@
   <div id="app">
     <div class="layui-layout layui-layout-admin">
       <!-- 导航栏 -->
-      <TopBar layoutName="后台管理系统" :BarUserId="BarUserId"></TopBar>
+      <TopBar layoutName="后台管理系统" :BaruserId="BaruserId"></TopBar>
       <div class="layui-side layui-bg-black">
         <div class="layui-side-scroll">
           <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
@@ -28,14 +28,14 @@
                   <router-link
                     :to="{
                       path: '/AdminCaseManage',
-                      query: { BarUserId: this.BarUserId },
+                      query: { BaruserId: this.BaruserId },
                     }"
                     >案例管理</router-link
                   >
                 </dd>
                 <dd>
                   <router-link
-                    :to="{ path: '/AdminModelView', query: { BarUserId: this.BarUserId } }"
+                    :to="{ path: '/AdminModelView', query: { BaruserId: this.BaruserId } }"
                     >模型查看</router-link
                   >
                 </dd>
@@ -85,12 +85,12 @@
                   </thead>
                   <tbody>
                     <!-- <span>{{ Content }}</span> -->
-                    <tr v-for="item in Content" :key="item.userid">
-                      <td>{{ item.userid }}</td>
-                      <td>{{ item.username }}</td>
-                      <td>{{ item.createdate }}</td>
-                      <td>{{ item.phonenumber }}</td>
-                      <td>{{ item.casenumber }}</td>
+                    <tr v-for="item in Content" :key="item.userId">
+                      <td>{{ item.userId }}</td>
+                      <td>{{ item.userName }}</td>
+                      <td>{{ item.createDate }}</td>
+                      <td>{{ item.phoneNumber }}</td>
+                      <td>{{ item.caseNumber }}</td>
                       <td>{{ item.remark }}</td>
                       <td>
                         <button class="buttonA">
@@ -98,11 +98,11 @@
                             :to="{
                               path: '/AdminUserEdit',
                               query: {
-                                uN: item.username,
-                                uT: item.phonenumber,
-                                uI: item.userid,
-                                uC: item.createdate,
-                                BarUserId: BarUserId,
+                                uN: item.userName,
+                                uT: item.phoneNumber,
+                                uI: item.userId,
+                                uC: item.createDate,
+                                BaruserId: BaruserId,
                               },
                             }"
                             >编辑</router-link
@@ -111,7 +111,7 @@
                         <button
                           class="buttonA"
                           type="danger"
-                          @click="HandleDel(item.userid)"
+                          @click="HandleDel(item.userId)"
                         >
                           删除
                         </button>
@@ -148,7 +148,7 @@
     },
     data() {
       return {
-        BarUserId: this.$route.query.BarUserId,
+        BaruserId: this.$route.query.BaruserId,
         //分页
         TotalPage: 1, // 统共页数，默认为1
         CurrentPage: 1, //当前页数 ，默认为1
@@ -161,7 +161,7 @@
       this.GetContent();
       this.params = JSON.parse(this.$route.query.params);
       console.log("用户ID：", this.params.userId);
-      this.BarUserId = this.params.userId;
+      this.BaruserId = this.params.userId;
       //为了在内部函数能使用外部函数的this对象，要给它赋值了一个名叫self的变量。
     },
     methods: {

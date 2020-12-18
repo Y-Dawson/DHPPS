@@ -269,7 +269,7 @@ export default {
       var uname = $("#inputname").val();
       axios
         .put("http://127.0.0.1:8000/backend/profile/" + userId + "/", {
-          username: $("#inputname").val(),
+          userName: $("#inputname").val(),
           birth: this.value1,
           sex: this.ruleForm.radio,
           email: $("#inputmail").val(),

@@ -2,7 +2,7 @@
   <div id="app">
     <div class="layui-layout layui-layout-admin">
       <!-- 导航栏 -->
-      <TopBar layoutName="后台管理系统" :BarUserId="BarUserId"></TopBar>
+      <TopBar layoutName="后台管理系统" :BaruserId="BaruserId"></TopBar>
       <div class="layui-side layui-bg-black">
         <div class="layui-side-scroll">
           <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
@@ -27,7 +27,7 @@
                   <router-link
                     :to="{
                       path: '/AdminUserManage',
-                      query: { BarUserId: this.BarUserId },
+                      query: { BaruserId: this.BaruserId },
                     }"
                     >信息管理</router-link
                   >
@@ -37,7 +37,7 @@
               <dl class="layui-nav-child">
                 <dd>
                   <router-link
-                    :to="{ path: '/AdminModelView', query: { BarUserId: this.BarUserId } }"
+                    :to="{ path: '/AdminModelView', query: { BaruserId: this.BaruserId } }"
                     >模型查看</router-link
                   >
                 </dd>
@@ -53,7 +53,7 @@
             <ul class="layui-tab-title">
               <li class="layui-off">
                 <router-link
-                  :to="{ path: '/AdminCaseManage', query: { BarUserId: this.BarUserId } }"
+                  :to="{ path: '/AdminCaseManage', query: { BaruserId: this.BaruserId } }"
                   >案例管理</router-link
                 >
               </li>
@@ -96,23 +96,23 @@
                             color: rgb(173, 173, 173);
                           "
                         ></i>
-                        <span id="returnContent">{{ item.casename }}</span>
+                        <span id="returnContent">{{ item.caseName }}</span>
                         <!-- <a href="javascript:;" style="font-size:8px;float:right;color:#8b9bbd">进入编辑</a> -->
                       </div>
                       <dl class="box-text">
                         <!-- <span>{{CaseNum}}</span> -->
                         <span>初始城市数量：</span>
-                        <span id="returnContent">{{ item.citynumber }}</span>
+                        <span id="returnContent">{{ item.cityNumber }}</span>
                         <br />
                         <span>初始道路数量：</span>
-                        <span id="returnContent">{{ item.roadnumber }}</span>
+                        <span id="returnContent">{{ item.roadNumber }}</span>
                         <br />
                         <span>初始总人口：</span>
-                        <span id="returnContent">{{ item.inittotal }}</span>
+                        <span id="returnContent">{{ item.initTotal }}</span>
                         <br />
                         <span>初始感染人口：</span>
                         <span id="returnContent">{{
-                          item.inittotalinfected
+                          item.initTotalInfected
                         }}</span>
                       </dl>
                     </el-card>
@@ -146,8 +146,8 @@
     data: function () {
       return {
         // 传参
-        BarUserId: this.$route.query.BarUserId,
-        UserId: this.$route.query.uI,
+        BaruserId: this.$route.query.BaruserId,
+        userId: this.$route.query.uI,
         CaseNum: 8,
         // 头像
         Fits: ["fill"],
@@ -163,7 +163,7 @@
     },
 
     mounted: function () {
-      // this.getCaseNum(this.UserId)
+      // this.getCaseNum(this.userId)
       this.GetCaseContent();
     },
     methods: {
@@ -182,11 +182,11 @@
       //获取案例内容
       GetCaseContent: function () {
         var self = this;
-        // alert(self.UserId);
+        // alert(self.userId);
         axios
           .get("http://127.0.0.1:8000/backend/case/", {
             params: {
-              UserId: self.UserId,
+              userId: self.userId,
               pageSize: 6,
               page: self.CurrentPage,
             },

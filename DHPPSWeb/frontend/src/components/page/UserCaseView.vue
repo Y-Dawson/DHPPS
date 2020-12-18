@@ -63,7 +63,7 @@
                             color: rgb(173, 173, 173);
                           "
                         ></i>
-                        <span id="returnContent">{{ item.casename }}</span>
+                        <span id="returnContent">{{ item.caseName }}</span>
                         <div
                           style="
                             font-size: 8px;
@@ -76,31 +76,31 @@
                             id="delete"
                             type="text"
                             style="font-size: 8px; color: #55587e"
-                            @click="Edit(item.caseid)"
+                            @click="Edit(item.caseId)"
                             >进入编辑</el-button
                           >
                           <el-button
                             id="delete"
                             type="text"
                             style="font-size: 8px; color: rgb(221, 0, 0)"
-                            @click="Open(item.caseid)"
+                            @click="Open(item.caseId)"
                             >删除</el-button
                           >
                         </div>
                       </div>
                       <dl class="box-text">
                         <span>初始城市数量：</span>
-                        <span id="returnContent">{{ item.citynumber }}</span>
+                        <span id="returnContent">{{ item.cityNumber }}</span>
                         <br />
                         <span>初始道路数量：</span>
-                        <span id="returnContent">{{ item.roadnumber }}</span>
+                        <span id="returnContent">{{ item.roadNumber }}</span>
                         <br />
                         <span>初始总人口：</span>
-                        <span id="returnContent">{{ item.inittotal }}</span>
+                        <span id="returnContent">{{ item.initTotal }}</span>
                         <br />
                         <span>初始感染人口：</span>
                         <span id="returnContent">{{
-                          item.inittotalinfected
+                          item.initTotalInfected
                         }}</span>
                       </dl>
                     </el-card>
@@ -186,7 +186,7 @@ export default {
       axios
         .get("http://127.0.0.1:8000/backend/case/", {
           params: {
-            userid: this.$route.query.userId,
+            userId: this.$route.query.userId,
             pageSize: 6,
             page: self.currentPage,
           },
@@ -208,49 +208,49 @@ export default {
     Edit: function (id) {
       var self = this;
       let data = new FormData();
-      data.append("caseid", id);
+      data.append("caseId", id);
       axios
         .post("http://127.0.0.1:8000/backend/getCaseInfo/", data)
         .then((response) => {
           self.cases = response.data.cases;
           console.log(JSON.stringify(self.cases));
 
-          console.log(self.cases.Initcitydata);
+          console.log(self.cases.InitCityData);
           var city_inf = [];
-          for (var j in self.cases.Initcitydata) {
+          for (var j in self.cases.InitCityData) {
             var s =
-              "cityname:" +
-              self.cases.Initcitydata[j].cityname +
-              ",initpop:" +
-              self.cases.Initcitydata[j].initpop +
-              ",initinfect:" +
-              self.cases.Initcitydata[j].initinfect;
+              "cityName:" +
+              self.cases.InitCityData[j].cityName +
+              ",initPop:" +
+              self.cases.InitCityData[j].initPop +
+              ",initInfect:" +
+              self.cases.InitCityData[j].initInfect;
             console.log("s:", s);
             city_inf.push(s);
           }
 
           var road_inf = [];
-          for (var j in self.cases.Initroaddata) {
+          for (var j in self.cases.InitRoadData) {
             var s =
               "departure:" +
-              self.cases.Initroaddata[j].departure +
+              self.cases.InitRoadData[j].departure +
               ",destination:" +
-              self.cases.Initroaddata[j].destination +
+              self.cases.InitRoadData[j].destination +
               ",volume:" +
-              self.cases.Initroaddata[j].volume;
+              self.cases.InitRoadData[j].volume;
             console.log("s:", s);
             road_inf.push(s);
           }
 
           var city_pos = [];
-          for (var j in self.cases.Cityposition) {
+          for (var j in self.cases.CityPosition) {
             var s =
-              "cityname:" +
-              self.cases.Cityposition[j].cityname +
+              "cityName:" +
+              self.cases.CityPosition[j].cityName +
               ",x:" +
-              self.cases.Cityposition[j].x +
+              self.cases.CityPosition[j].x +
               ",y:" +
-              self.cases.Cityposition[j].y;
+              self.cases.CityPosition[j].y;
             console.log("s:", s);
             city_pos.push(s);
           }
@@ -260,12 +260,12 @@ export default {
             query: {
               params: JSON.stringify({
                 userId: this.userId,
-                casename: this.cases.casename,
+                caseName: this.cases.caseName,
                 citynum: this.cases.citynum,
                 roadnum: this.cases.roadnum,
-                Initcitydata: city_inf,
-                Initroaddata: road_inf,
-                Cityposition: city_pos,
+                InitCityData: city_inf,
+                InitRoadData: road_inf,
+                CityPosition: city_pos,
               }),
             },
           });

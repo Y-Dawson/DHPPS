@@ -3,7 +3,7 @@
 
     <div class="layui-layout layui-layout-admin">
       <!-- 导航栏 -->
-      <TopBar layoutName="后台管理系统" :BarUserId="BarUserId"></TopBar>
+      <TopBar layoutName="后台管理系统" :BaruserId="BaruserId"></TopBar>
 
       <div class="layui-side layui-bg-black">
         <div class="layui-side-scroll">
@@ -26,13 +26,13 @@
               <dl class="layui-nav-child">
                 <dd>
                   <router-link
-                    :to="{ path: '/SuperUserManage', query: { BarUserId: this.BarUserId } }">
+                    :to="{ path: '/SuperUserManage', query: { BaruserId: this.BaruserId } }">
                       信息管理
                   </router-link>
                 </dd>
                 <dd>
                   <router-link
-                    :to="{ path: '/SuperCaseManage', query: { BarUserId: this.BarUserId } }">
+                    :to="{ path: '/SuperCaseManage', query: { BaruserId: this.BaruserId } }">
                       案例管理
                   </router-link>
                 </dd>
@@ -94,7 +94,7 @@
     },
     data() {
       return {
-        BarUserId: this.$route.query.BarUserId,
+        BaruserId: this.$route.query.BaruserId,
         //轮播图图片索引
         Mark: 0,
         //定时器

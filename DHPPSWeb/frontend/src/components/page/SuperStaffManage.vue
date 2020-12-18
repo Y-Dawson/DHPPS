@@ -2,7 +2,7 @@
   <div id="app">
     <div class="layui-layout layui-layout-admin">
       <!-- 导航栏 -->
-      <TopBar layoutName="后台管理系统" :BarUserId="BarUserId"></TopBar>
+      <TopBar layoutName="后台管理系统" :BaruserId="BaruserId"></TopBar>
       <div class="layui-side layui-bg-black">
         <div class="layui-side-scroll">
           <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
@@ -26,13 +26,13 @@
               <dl class="layui-nav-child">
                 <dd>
                   <router-link
-                    :to="{ path: '/SuperCaseManage', query: { BarUserId: this.BarUserId } }"
+                    :to="{ path: '/SuperCaseManage', query: { BaruserId: this.BaruserId } }"
                     >案例管理</router-link
                   >
                 </dd>
                 <dd>
                   <router-link
-                    :to="{ path: '/SuperModelView', query: { BarUserId: this.BarUserId } }"
+                    :to="{ path: '/SuperModelView', query: { BaruserId: this.BaruserId } }"
                     >模型查看</router-link
                   >
                 </dd>
@@ -49,7 +49,7 @@
             <ul class="layui-tab-title">
               <li class="layui-off">
                 <router-link
-                  :to="{ path: '/SuperUserManage', query: { BarUserId: this.BarUserId } }"
+                  :to="{ path: '/SuperUserManage', query: { BaruserId: this.BaruserId } }"
                   >用户管理</router-link
                 >
               </li>
@@ -88,10 +88,10 @@
                   </thead>
                   <tbody>
                     <!-- <span>{{ Content }}</span> -->
-                    <tr v-for="item in Content" :key="item.userid">
-                      <td>{{ item.userid }}</td>
-                      <td>{{ item.username }}</td>
-                      <td>{{ item.phonenumber }}</td>
+                    <tr v-for="item in Content" :key="item.userId">
+                      <td>{{ item.userId }}</td>
+                      <td>{{ item.userName }}</td>
+                      <td>{{ item.phoneNumber }}</td>
                       <td>{{ item.email }}</td>
                       <td>{{ item.address }}</td>
                       <td>{{ item.remark }}</td>
@@ -101,11 +101,11 @@
                             :to="{
                               path: '/SuperEdit',
                               query: {
-                                uN: item.username,
-                                uT: item.phonenumber,
-                                uI: item.userid,
-                                uC: item.createdate,
-                                BarUserId: BarUserId,
+                                uN: item.userName,
+                                uT: item.phoneNumber,
+                                uI: item.userId,
+                                uC: item.createDate,
+                                BaruserId: BaruserId,
                               },
                             }"
                             >编辑</router-link
@@ -114,7 +114,7 @@
                         <button
                           class="buttonA"
                           type="danger"
-                          @click="HandleDel(item.userid)"
+                          @click="HandleDel(item.userId)"
                         >
                           删除
                         </button>
@@ -151,7 +151,7 @@
     },
     data() {
       return {
-        BarUserId: this.$route.query.BarUserId,
+        BaruserId: this.$route.query.BaruserId,
         //分页
         TotalPage: 3, // 统共页数，默认为1
         CurrentPage: 1, //当前页数 ，默认为1

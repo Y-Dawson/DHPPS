@@ -16,7 +16,7 @@
             :to="{
               path: this.adminUrl,
               query: {
-                params: JSON.stringify({ userId: this.userId, casename: 999 }),
+                params: JSON.stringify({ userId: this.userId, caseName: 999 }),
               },
             }"
             >{{ isbut }}</router-link>
@@ -25,7 +25,7 @@
             :to="{
               path: '/setting',
               query: {
-                params: JSON.stringify({ userId: this.userId, casename: 999 }),
+                params: JSON.stringify({ userId: this.userId, caseName: 999 }),
               },
             }"
             >回到首页</router-link>
@@ -40,7 +40,7 @@
         </li>
         <li class="layui-nav-item">
           <a href="javascript:;">
-            {{ content.username }}
+            {{ content.userName }}
           </a>
         </li>
       </ul>

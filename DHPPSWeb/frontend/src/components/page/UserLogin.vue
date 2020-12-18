@@ -89,7 +89,7 @@ export default {
             query:{
               params:JSON.stringify({
                 userId:this.userId,
-                casename: 999,
+                caseName: 999,
                 userAuthority:this.userAuthority
               })
             },
@@ -134,7 +134,7 @@ export default {
     getLoginData: function () {
       var self = this
       axios
-        .get("http://127.0.0.1:8000/backend/logindata/")
+        .get("http://127.0.0.1:8000/backend/LoginData/")
         .then(response => (
             self.content = response.data
             // alert(JSON.stringify(response))

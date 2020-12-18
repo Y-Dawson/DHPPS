@@ -2,7 +2,7 @@
   <div id="app">
     <div class="layui-layout layui-layout-admin">
       <!-- 导航栏 -->
-      <TopBar layoutName="后台管理系统" :BarUserId="BarUserId"></TopBar>
+      <TopBar layoutName="后台管理系统" :BaruserId="BaruserId"></TopBar>
       <div class="layui-side layui-bg-black">
         <div class="layui-side-scroll">
           <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
@@ -15,12 +15,12 @@
               <a class="" href="javascript:;">信息管理</a>
               <dl class="layui-nav-child">
                 <dd>
-                  <router-link :to="{ path: '/SuperCaseManage', query: { BarUserId: this.BarUserId } }">
+                  <router-link :to="{ path: '/SuperCaseManage', query: { BaruserId: this.BaruserId } }">
                     案例管理
                   </router-link>
                 </dd>
                 <dd>
-                  <router-link :to="{ path: '/SuperModelView', query: { BarUserId: this.BarUserId } }">
+                  <router-link :to="{ path: '/SuperModelView', query: { BaruserId: this.BaruserId } }">
                     模型查看
                   </router-link>
                 </dd>
@@ -37,12 +37,12 @@
           <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
             <ul class="layui-tab-title">
               <li class="layui-off">
-                <router-link :to="{ path: '/SuperUserManage', query: { BarUserId: this.BarUserId } }">
+                <router-link :to="{ path: '/SuperUserManage', query: { BaruserId: this.BaruserId } }">
                   用户管理
                 </router-link>
               </li>
               <li class="layui-off">
-                <router-link :to="{ path: '/SuperStaffManage', query: { BarUserId: this.BarUserId } }">
+                <router-link :to="{ path: '/SuperStaffManage', query: { BaruserId: this.BaruserId } }">
                   员工管理
                 </router-link>
               </li>
@@ -70,7 +70,7 @@
                   </div>
                   <!-- <div>{{desc}}</div> -->
                   <div style="margin-top: 20px">
-                    <button type="submit" @click="RemarkIsEmpty(UserId)">
+                    <button type="submit" @click="RemarkIsEmpty(userId)">
                       立即提交
                     </button>
                     <button type="reset" @click="RemarkEmpty">重置</button>
@@ -82,7 +82,7 @@
                     <option value="普通用户">普通用户</option>
                     <option value="管理员">管理员</option>
                   </select>
-                  <button @click="AuthorityIsEmpty(UserId)">确定</button>
+                  <button @click="AuthorityIsEmpty(userId)">确定</button>
                   <!-- </div> -->
                 </li>
               </ul>
@@ -110,10 +110,10 @@
     },
     data() {
       return {
-        BarUserId: this.$route.query.BarUserId,
+        BaruserId: this.$route.query.BaruserId,
         EditTel: this.$route.query.uT,
         EditName: this.$route.query.uN,
-        UserId: this.$route.query.uI,
+        userId: this.$route.query.uI,
         UserCreate: this.$route.query.uC,
       };
     },
@@ -154,7 +154,7 @@
         axios
           .put("http://127.0.0.1:8000/backend/accountInfo/" + Id + "/", {
             authority: $("#selected").val(),
-            themeno: 1,
+            themeNo: 1,
           })
           .then(
             (response) => (

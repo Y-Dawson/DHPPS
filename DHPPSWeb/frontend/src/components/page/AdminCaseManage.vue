@@ -2,7 +2,7 @@
   <div id="app">
     <div class="layui-layout layui-layout-admin">
       <!-- 导航栏 -->
-      <TopBar layoutName="后台管理系统" :BarUserId="BarUserId"></TopBar>
+      <TopBar layoutName="后台管理系统" :BaruserId="BaruserId"></TopBar>
 
       <div class="layui-side layui-bg-black">
         <div class="layui-side-scroll">
@@ -28,7 +28,7 @@
                   <router-link
                     :to="{
                       path: '/AdminUserManage',
-                      query: { BarUserId: this.BarUserId },
+                      query: { BaruserId: this.BaruserId },
                     }"
                     >信息管理</router-link
                   >
@@ -38,7 +38,7 @@
               <dl class="layui-nav-child">
                 <dd>
                   <router-link
-                    :to="{ path: '/AdminModelView', query: { BarUserId: this.BarUserId } }"
+                    :to="{ path: '/AdminModelView', query: { BaruserId: this.BaruserId } }"
                     >模型查看</router-link
                   >
                 </dd>
@@ -82,17 +82,17 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="item in Content" :key="item.userid">
-                    <td>{{ item.userid }}</td>
-                    <td>{{ item.username }}</td>
-                    <td>{{ item.casenumber }}</td>
-                    <td>{{ item.createdate }}</td>
+                  <tr v-for="item in Content" :key="item.userId">
+                    <td>{{ item.userId }}</td>
+                    <td>{{ item.userName }}</td>
+                    <td>{{ item.caseNumber }}</td>
+                    <td>{{ item.createDate }}</td>
                     <td>
                       <button class="buttonA">
                         <router-link
                           :to="{
                             path: '/AdminCaseEdit',
-                            query: { BarUserId: BarUserId, uI: item.userid },
+                            query: { BaruserId: BaruserId, uI: item.userId },
                           }"
                           >案例编辑</router-link
                         >
@@ -100,7 +100,7 @@
                       <button
                         class="buttonA"
                         type="danger"
-                        @click="HandleDel(item.userid)"
+                        @click="HandleDel(item.userId)"
                       >
                         删 &nbsp;&nbsp; 除
                       </button>
@@ -136,7 +136,7 @@
     },
     data() {
       return {
-        BarUserId: this.$route.query.BarUserId,
+        BaruserId: this.$route.query.BaruserId,
         //分页
         TotalPage: 3, // 统共页数，默认为1
         CurrentPage: 1, //当前页数 ，默认为1

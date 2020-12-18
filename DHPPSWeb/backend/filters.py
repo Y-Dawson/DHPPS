@@ -1,17 +1,17 @@
 import django_filters
 
-from backend.models import Casedata, Accountinformation
+from backend.models import CaseData, AccountInformation
 
 
 class CaseFilter(django_filters.rest_framework.FilterSet):
     """
     案例过滤器
     """
-    userid = django_filters.NumberFilter(field_name='userid')
+    userId = django_filters.NumberFilter(field_name='userId')
 
     class Meta:
-        model = Casedata
-        fields = ['userid']
+        model = CaseData
+        fields = ['userId']
 
 
 class AccountInfoFilter(django_filters.rest_framework.FilterSet):
@@ -21,5 +21,5 @@ class AccountInfoFilter(django_filters.rest_framework.FilterSet):
     authority = django_filters.CharFilter(field_name='authority')
 
     class Meta:
-        model = Accountinformation
+        model = AccountInformation
         fields = ['authority']

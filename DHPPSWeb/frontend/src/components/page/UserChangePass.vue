@@ -198,7 +198,7 @@ export default {
     ChangePass: function () {
       var self = this;
       let data = new FormData();
-      data.append("userid", this.userId);
+      data.append("userId", this.userId);
       data.append("oldPassword", $("#prepass").val());
       data.append("newPassword", $("#newpass").val());
       axios

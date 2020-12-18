@@ -930,24 +930,24 @@ export default {
   mounted: function () {
     this.params = JSON.parse(this.$route.query.params);
     console.log("用户ID：", this.params.userId);
-    console.log("案例名：", this.params.casename);
-    // console.log("类型：", typeof this.params.casename);
+    console.log("案例名：", this.params.caseName);
+    // console.log("类型：", typeof this.params.caseName);
     console.log("城市数目：", this.params.citynum);
     console.log("道路数目：", this.params.roadnum);
-    console.log("初始城市信息：", this.params.Initcitydata);
-    console.log("道路信息：", this.params.Initroaddata);
-    console.log("城市坐标：", this.params.Cityposition);
+    console.log("初始城市信息：", this.params.InitCityData);
+    console.log("道路信息：", this.params.InitRoadData);
+    console.log("城市坐标：", this.params.CityPosition);
     this.userId = this.params.userId;
 
     g_citycnt = 1;
     g_linecnt = 1;
-    if (this.params.casename != 999) {
+    if (this.params.caseName != 999) {
       console.log("从模拟界面返回");
       g_citycnt = this.params.citynum + 1;
       g_linecnt = 1;
       var cnt = 0;
-      for (var j in this.params.Cityposition) {
-        var te = this.params.Cityposition[j].split(",");
+      for (var j in this.params.CityPosition) {
+        var te = this.params.CityPosition[j].split(",");
         var tt, ci, x, y, cid;
         cnt = 0;
         for (var k in te) {
@@ -974,9 +974,9 @@ export default {
         this.SetButton(nu);
       }
 
-      for (var j in this.params.Initroaddata) {
-        console.log(this.params.Initroaddata[j]);
-        var ri = this.params.Initroaddata[j].split(",");
+      for (var j in this.params.InitRoadData) {
+        console.log(this.params.InitRoadData[j]);
+        var ri = this.params.InitRoadData[j].split(",");
         console.log(ri);
         var city1, city2, vol, tt, s;
         cnt = 0;
@@ -1004,8 +1004,8 @@ export default {
         this.DrawLine(cid1, cid2);
       }
 
-      for (var j in this.params.Initcitydata) {
-        var ci = this.params.Initcitydata[j].split(",");
+      for (var j in this.params.InitCityData) {
+        var ci = this.params.InitCityData[j].split(",");
         var tt, cityna, initpo, initIn;
         cnt = 0;
         for (var k in ci) {
@@ -1224,32 +1224,32 @@ export default {
 
           var myFormData = new FormData();
 
-          myFormData.append("userid", this.userId);
+          myFormData.append("userId", this.userId);
 
-          myFormData.append("casename", 99);
+          myFormData.append("caseName", 99);
 
           var city_infor = [];
           var g_cn = "Z";
-          var initpop = 0;
-          var initinfect = 0;
+          var initPop = 0;
+          var initInfect = 0;
           var loopcnt = 0;
           var g_citycnt = 0;
           for (var cid in this.city_po) {
             loopcnt += 1;
             if (loopcnt == 1) {
               g_cn = this.city_po[cid].substring(0, 1);
-              initpop = this.city_po[cid].substring(7);
+              initPop = this.city_po[cid].substring(7);
             }
             if (loopcnt == 2) {
-              initinfect = this.city_po[cid].substring(7);
+              initInfect = this.city_po[cid].substring(7);
               g_citycnt += 1;
               var s =
-                "cityname:" +
+                "cityName:" +
                 g_cn +
-                ",initpop:" +
-                initpop +
-                ",initinfect:" +
-                initinfect;
+                ",initPop:" +
+                initPop +
+                ",initInfect:" +
+                initInfect;
               city_infor.push(s);
               loopcnt = 0;
             }
@@ -1274,8 +1274,8 @@ export default {
           }
           myFormData.append("roadnum", roadcnt);
 
-          myFormData.append("Initcitydata", city_infor);
-          myFormData.append("Initroaddata", road_inf);
+          myFormData.append("InitCityData", city_infor);
+          myFormData.append("InitRoadData", road_inf);
 
           var city_position = [];
           loopcnt = 0;
@@ -1283,18 +1283,18 @@ export default {
             loopcnt += 1;
             if (loopcnt % 2 == 1) {
               var cityName = this.city_po[cid].substring(0, 1);
-              var cityID = this.GetID(cityName);
+              var cityId = this.GetID(cityName);
 
-              console.log("cityName:" + cityName + " cityID:" + cityID);
+              console.log("cityName:" + cityName + " cityId:" + cityId);
 
-              var c = document.getElementById(cityID);
+              var c = document.getElementById(cityId);
               var x = c.style.left.substring(0, c.style.left.length - 2);
               var y = c.style.top.substring(0, c.style.top.length - 2);
-              var s = "cityname:" + cityName + ",x:" + x + ",y:" + y;
+              var s = "cityName:" + cityName + ",x:" + x + ",y:" + y;
               city_position.push(s);
             }
           }
-          myFormData.append("Cityposition", city_position);
+          myFormData.append("CityPosition", city_position);
 
           myFormData.append("daynum", parseInt(value) + 1);
 
@@ -1311,13 +1311,13 @@ export default {
                 path: "/simulation",
                 query: {
                   params: JSON.stringify({
-                    userid: this.userId,
-                    casename: 99,
+                    userId: this.userId,
+                    caseName: 99,
                     citynum: g_citycnt,
                     roadnum: roadcnt,
-                    Initcitydata: city_infor,
-                    Initroaddata: road_inf,
-                    Cityposition: city_position,
+                    InitCityData: city_infor,
+                    InitRoadData: road_inf,
+                    CityPosition: city_position,
                     Daynum: value,
                     DailyInfected: response,
                   }),
@@ -1350,32 +1350,32 @@ export default {
 
           var myFormData = new FormData();
 
-          myFormData.append("userid", this.userId);
+          myFormData.append("userId", this.userId);
 
-          myFormData.append("casename", value);
+          myFormData.append("caseName", value);
 
           var city_infor = [];
           var g_cn = "Z";
-          var initpop = 0;
-          var initinfect = 0;
+          var initPop = 0;
+          var initInfect = 0;
           var loopcnt = 0;
           var g_citycnt = 0;
           for (var cid in this.city_po) {
             loopcnt += 1;
             if (loopcnt == 1) {
               g_cn = this.city_po[cid].substring(0, 1);
-              initpop = this.city_po[cid].substring(7);
+              initPop = this.city_po[cid].substring(7);
             }
             if (loopcnt == 2) {
-              initinfect = this.city_po[cid].substring(7);
+              initInfect = this.city_po[cid].substring(7);
               g_citycnt += 1;
               var s =
-                "cityname:" +
+                "cityName:" +
                 g_cn +
-                ",initpop:" +
-                initpop +
-                ",initinfect:" +
-                initinfect;
+                ",initPop:" +
+                initPop +
+                ",initInfect:" +
+                initInfect;
               city_infor.push(s);
               loopcnt = 0;
             }
@@ -1400,8 +1400,8 @@ export default {
           }
           myFormData.append("roadnum", roadcnt);
 
-          myFormData.append("Initcitydata", city_infor);
-          myFormData.append("Initroaddata", road_inf);
+          myFormData.append("InitCityData", city_infor);
+          myFormData.append("InitRoadData", road_inf);
 
           var city_position = [];
           loopcnt = 0;
@@ -1409,18 +1409,18 @@ export default {
             loopcnt += 1;
             if (loopcnt % 2 == 1) {
               var cityName = this.city_po[cid].substring(0, 1);
-              var cityID = this.GetID(cityName);
+              var cityId = this.GetID(cityName);
 
-              console.log("cityName:" + cityName + " cityID:" + cityID);
+              console.log("cityName:" + cityName + " cityId:" + cityId);
 
-              var c = document.getElementById(cityID);
+              var c = document.getElementById(cityId);
               var x = c.style.left.substring(0, c.style.left.length - 2);
               var y = c.style.top.substring(0, c.style.top.length - 2);
-              var s = "cityname:" + cityName + ",x:" + x + ",y:" + y;
+              var s = "cityName:" + cityName + ",x:" + x + ",y:" + y;
               city_position.push(s);
             }
           }
-          myFormData.append("Cityposition", city_position);
+          myFormData.append("CityPosition", city_position);
 
           for (var value of myFormData.values()) {
             console.log(value);
