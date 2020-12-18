@@ -1,13 +1,13 @@
 from django.urls import path
-from rest_framework.routers import DefaultRouter
+from rest_framework.g_routers import DefaultRouter
 
 from backend import views
 
 
-router = DefaultRouter()
-router.register('AccountInfos', views.AccountViewSet)
+g_router = DefaultRouter()
+g_router.register('AccountInfos', views.AccountViewSet)
 
-urlpatterns = [
+g_urlpatterns = [
     # 渲染首页，其后的页面跳转由前端负责
     path('', views.Index, name="index"),
 

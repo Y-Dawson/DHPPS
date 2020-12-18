@@ -25,7 +25,7 @@ import datetime
 import secrets
 # Create your views here.
 
-logger = logging.getLogger("django")
+g_logger = logging.getLogger("django")
 
 '''
 @receiver(pre_delete, sender=models.PersonalProfile)
@@ -37,11 +37,11 @@ def handle_camera_deleted(instance: models.PersonalProfile, **_):
 # 返回渲染主页，其后由前端负责跳转逻辑
 def Index(request):
     """
-    render index page
+    render Index page
     :param request: request object
     :return: page
     """
-    return render(request, 'index.html')
+    return render(request, 'Index.html')
 
 
 # 对传入的密码和salt进行md5加密，返回得到的加密密码
@@ -54,7 +54,7 @@ def HashPwd(pwd, salt):
 
 # json序列化时对datetime处理的函数
 class DateEnconding(json.JSONEncoder):
-    def default(self, o):
+    def Default(self, o):
         if isinstance(o, datetime.date):
             return o.strftime('%Y/%m/%d')
 
@@ -78,7 +78,7 @@ def LoginRequired(view_func):
 
 
 # 登录函数视图
-# 从参数获取phonenum和password，取出对应salt加密，并判断是否和存储加密密码相同
+# 从参数获取phoneNum和password，取出对应salt加密，并判断是否和存储加密密码相同
 # 登录成功，返回消息和200状态码
 # 登录失败，返回消息和404状态码
 def Signin(request):
@@ -89,15 +89,15 @@ def Signin(request):
     el
     '''
     if request.method == "POST":
-        # 从参数获取phonenum和password
-        phonenum = request.POST.get('phonenum', None)
+        # 从参数获取phoneNum和password
+        phoneNum = request.POST.get('phoneNum', None)
         password = request.POST.get('password', None)
-        if phonenum and password:
-            phonenum = phonenum.strip()
+        if phoneNum and password:
+            phoneNum = phoneNum.strip()
             try:
                 # 从数据库获取phonenum和对应userId，取出salt
                 # 获取失败则捕捉错误
-                profile = models.PersonalProfile.objects.filter(phoneNumber=int(phonenum))
+                profile = models.PersonalProfile.objects.filter(phoneNumber=int(phoneNum))
                 if not profile.exists():
                     return JsonResponse({"message": "该账号不存在", "status": 404})
                 profile = profile.first()
@@ -157,15 +157,15 @@ def Logout(request):
 # 发送失败，返回消息和404状态码
 def RequestSmsCode(request):
     if request.method == "POST":
-        phonenum = request.POST.get('phonenum', None)
-        code, message, result = SendSms(phonenum)
+        phoneNum = request.POST.get('phonenum', None)
+        code, message, result = SendSms(phoneNum)
         try:
             # 4.连接到redis
             redisClient = get_redis_connection('sms_code')
             # 5.生成redis管道
             pipeline = redisClient.pipeline()
             # 6.保存验证码，用于后续与用户输入值对比，设置过期时间
-            pipeline.setex(phonenum, 300, code)
+            pipeline.setex(phoneNum, 300, code)
             # 7.传递指令
             pipeline.execute()
         except Exception:
@@ -228,8 +228,8 @@ def Signup(request):
                             phoneNumber=phonenum,
                             email=email
                         )
-                        logger.info(json.dumps(newLoginData, cls=DateEnconding))
-                        logger.info(json.dumps(newUser, cls=DateEnconding))
+                        g_logger.info(json.dumps(newLoginData, cls=DateEnconding))
+                        g_logger.info(json.dumps(newUser, cls=DateEnconding))
                         message = "注册成功"
                         status = 200
                     except Exception as e:
@@ -289,14 +289,14 @@ def ForgetPwd(request):
     el
     '''
     if request.method == "POST":
-        # 从参数获取phonenum和password
-        phonenum = request.POST.get('phonenum', None)
+        # 从参数获取phoneNum和password
+        phoneNum = request.POST.get('phonenum', None)
         verifyCode = request.POST.get('verifyCode', None)
         newPassword = request.POST.get('newPassword', None)
-        if phonenum and verifyCode and newPassword:
+        if phoneNum and verifyCode and newPassword:
             # 从数据库获取phonenum和对应userId，取出salt
             # 获取失败则捕捉错误
-            profile = models.PersonalProfile.objects.filter(phoneNumber=int(phonenum))
+            profile = models.PersonalProfile.objects.filter(phoneNumber=int(phoneNum))
             if not profile.exists():
                 return JsonResponse({"message": "该手机未注册", "status": 404})
             profile = profile.first()
@@ -505,10 +505,10 @@ def StartSimulate(request):
                 value = roadInfo.split(":")[1]
                 if roadCount % 3 == 0:
                     # 出发城市下标
-                    departure = cityNameList.index(value)
+                    departure = cityNameList.Index(value)
                 elif roadCount % 3 == 1:
                     # 到达城市下标
-                    destination = cityNameList.index(value)
+                    destination = cityNameList.Index(value)
                 elif roadCount % 3 == 2:
                     volume = float(value)
                     initRoadList[departure][destination] = volume
@@ -575,9 +575,10 @@ class ImageCodeView(View):
         except Exception:
             pass
         # 8.后台显示验证码信息
-        logger.info('verify_text:{}'.format(code))
+        g_logger.info('verify_text:{}'.format(code))
         # 9.响应：输出图片数据
         return JsonResponse(image, content_type='image/png')
+
     # 该函数为view中函数重写，函数名不可更改
     def post(self, request):
         # 1.接受uuid
@@ -683,7 +684,7 @@ def GetUserInfos(request):
             'data': jsonRes,
             'pagination': accountPaginator.count,
             'pageSize': accountPaginator.per_page,
-            'page': pageInfos.start_index() // accountPaginator.per_page + 1
+            'page': pageInfos.start_Index() // accountPaginator.per_page + 1
         })
 
 
@@ -709,7 +710,7 @@ def GetGeneralUserInfos(request):
             'data': jsonRes,
             'pagination': accountPaginator.count,
             'pageSize': accountPaginator.per_page,
-            'page': pageInfos.start_index() // accountPaginator.per_page + 1
+            'page': pageInfos.start_Index() // accountPaginator.per_page + 1
         })
 
 
@@ -735,7 +736,7 @@ def GetAdminInfos(request):
             'data': jsonRes,
             'pagination': accountPaginator.count,
             'pageSize': accountPaginator.per_page,
-            'page': pageInfos.start_index() // accountPaginator.per_page + 1
+            'page': pageInfos.start_Index() // accountPaginator.per_page + 1
         })
 
 

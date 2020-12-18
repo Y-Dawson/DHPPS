@@ -1,9 +1,9 @@
 # !/usr/bin/env python
 # coding=utf-8
 from random import randint
-from aliyunsdkcore.client import AcsClient
+from aliyunsdkcore.g_client import AcsClient
 from aliyunsdkcore.request import CommonRequest
-client = AcsClient('<accessKeyId>', '<accessSecret>', 'cn-hangzhou')
+g_client = AcsClient('<accessKeyId>', '<accessSecret>', 'cn-hangzhou')
 
 
 def SendSms(iPhonenum):
@@ -23,7 +23,7 @@ def SendSms(iPhonenum):
     request.add_query_param('SignName', "请填写")
     request.add_query_param('TemplateParam', sendString)
 
-    response = client.do_action(request)
+    response = g_client.do_action(request)
     # python2:  print(response)
     print(str(response, encoding='utf-8'))
     return str(ranInt), response["message"], response["Code"]
