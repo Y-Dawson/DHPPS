@@ -101,7 +101,7 @@
         </div>
 
         <el-form-item>
-          <el-button type="info" >获取验证码</el-button>
+          <el-button type="info" @click="getVerifyCode()">获取验证码</el-button>
         </el-form-item>
       </div>
 
@@ -221,8 +221,28 @@ export default {
     };
   },
   methods:{
-    postAccount: function () {
+    getVerifyCode:function () {
       var self = this;
+      let data = new FormData();
+      alert($("#phonenum").val()),
+      data.append("phoneNum",$("#phonenum").val());
+      alert(data.phoneNum);
+      axios
+        .post('/apis/backend/requestSmsCode/', data)
+        .then(response => (
+          self.content = response.data,
+          alert(JSON.stringify(response.data))
+          // self.returnmessage=response.data.message,
+          // alert(self.returnmessage),
+          // self.skip()
+          // alert(JSON.stringify(response.data.message))
+        ))
+        .catch(function (error) {
+          alert("数据发送失败");
+          console.log(error.response);
+        });
+    },
+    postAccount: function () {
       var self = this;
       let data = new FormData();
       data.append("username",$("#username").val());
@@ -230,8 +250,9 @@ export default {
       data.append("email",$("#email").val());
       data.append("password",$("#password").val());
       data.append("verifyCode",$("#securitt_code").val());
+      
       axios
-        .post('http://127.0.0.1:8000/backend/signup/', data)
+        .post('/apis/backend/signup/', data)
         .then(response => (
           self.content = response.data,
           self.returnmessage=response.data.message,
