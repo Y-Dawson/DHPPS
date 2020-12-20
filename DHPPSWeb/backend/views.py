@@ -5,10 +5,10 @@ from rest_framework.filters import OrderingFilter
 from backend import paginations
 from django.shortcuts import render, get_object_or_404
 from django.views import View
-from django.db.models import F
+from django.db.models import F, Avg, Max, Min, Count, Sum
 from backend import models
 from backend import customSerializers
-from backend.sendSms import sendSms
+from backend.sendSms import SendSms
 from backend.returnDataSimulator import model
 from django.http import HttpResponseForbidden, JsonResponse
 from backend.captcha.captcha import captcha
@@ -36,17 +36,17 @@ def handle_camera_deleted(instance: models.Personalprofile, **_):
 
 
 # 返回渲染主页，其后由前端负责跳转逻辑
-def index(request):
+def Index(request):
     """
-    render index page
+    render Index page
     :param request: request object
     :return: page
     """
-    return render(request, 'index.html')
+    return render(request, 'Index.html')
 
 
 # 对传入的密码和salt进行md5加密，返回得到的加密密码
-def hash_pwd(pwd, salt):
+def HashPwd(pwd, salt):
     h = hashlib.md5()
     pwd = pwd + salt
     h.update(pwd.encode())
@@ -61,7 +61,7 @@ class DateEnconding(json.JSONEncoder):
 
 
 # 登录检测装饰器
-def login_required(view_func):
+def LoginRequired(view_func):
     # 登录判断装饰器
     def wrapper(request, *view_args, **view_kwargs):
         if request.COOKIES.get("userId", None):
@@ -79,47 +79,46 @@ def login_required(view_func):
 
 
 # 登录函数视图
-# 从参数获取phonenum和password，取出对应salt加密，并判断是否和存储加密密码相同
+# 从参数获取phoneNum和password，取出对应salt加密，并判断是否和存储加密密码相同
 # 登录成功，返回消息和200状态码
 # 登录失败，返回消息和404状态码
-def signin(request):
+def Signin(request):
     # 若已经登录，直接进入已登录账号
     if request.session.get('isLogin', None):
         request.session['isLogin'] = False
         return JsonResponse({"message": "你已经登录", "status": 404})
     elif request.method == "POST":
-        # 从参数获取phonenum和password
-        phonenum = request.POST.get('phonenum', None)
+        # 从参数获取phoneNum和password
+        phoneNum = request.POST.get('phoneNum', None)
         password = request.POST.get('password', None)
-        print(request.headers)
-        if phonenum and password:
-            phonenum = phonenum.strip()
+        if phoneNum and password:
+            phoneNum = phoneNum.strip()
             try:
-                # 从数据库获取phonenum和对应userid，取出salt
+                # 从数据库获取phonenum和对应userId，取出salt
                 # 获取失败则捕捉错误
-                profile = models.Personalprofile.objects.filter(phonenumber=int(phonenum))
+                profile = models.PersonalProfile.objects.filter(phoneNumber=int(phoneNum))
                 if not profile.exists():
                     return JsonResponse({"message": "该账号不存在", "status": 404})
                 profile = profile.first()
-                accountInfo = models.Accountinformation.objects.get(userid=profile.userid.userid)
+                accountInfo = models.AccountInformation.objects.get(userId=profile.userId.userId)
 
                 # 判断是否和存储加密密码相同
-                if (accountInfo.logindata.userpassword == hash_pwd(pwd=password, salt=accountInfo.logindata.salt)):
-                    # 若相同，设置登录状态为True，设置登录id为userid，登录权限为对应权限
+                if (accountInfo.LoginData.userPassword == HashPwd(pwd=password, salt=accountInfo.LoginData.salt)):
+                    # 若相同，设置登录状态为True，设置登录id为userId，登录权限为对应权限
                     request.session['isLogin'] = True
-                    request.session['userId'] = accountInfo.userid
+                    request.session['userId'] = accountInfo.userId
                     request.session['userAuthority'] = accountInfo.authority
                     print(request.session.get('userId', None))
                     response = JsonResponse({
                         "message": "登录成功",
                         "status": 200,
-                        "userId": accountInfo.userid,
+                        "userId": accountInfo.userId,
                         "userAuthority": accountInfo.authority
                         })
-                    response["Access-Control-Allow-Credentials"] = "true"
-                    response["Access-Control-Allow-Methods"] = 'GET, POST, PATCH, PUT, OPTIONS'
-                    response["Access-Control-Allow-Headers"] = "Origin,Content-Type,Cookie,Accept,Token"
-                    response.set_cookie('userId', accountInfo.userid)
+                    response.set_cookie('userId', accountInfo.userId)
+                    # response["Access-Control-Allow-Credentials"] = "true"
+                    # response["Access-Control-Allow-Methods"] = 'GET, POST, PATCH, PUT, OPTIONS'
+                    # response["Access-Control-Allow-Headers"] = "Origin,Content-Type,Cookie,Accept,Token"
                     return response
                 else:
                     return JsonResponse({"message": "密码错误", "status": 404})
@@ -138,18 +137,16 @@ def signin(request):
 # 从缓存获取对应session
 # 登出成功，返回消息和200状态码
 # 登出失败，返回消息和404状态码
-def logout(request):
-    message = "登出成功"
-    status = 200
+def Logout(request):
     if not request.session.get('isLogin', None):
         # 如果本来就未登录，也就没有登出一说
         return JsonResponse({"message": "未登录，无法登出", "status": 404})
     else:
         request.session.flush()
         # del request.session['isLogin']
-        # del request.session['userid']
-        # del request.session['username']
-        response = JsonResponse({"message": message, "status": status})
+        # del request.session['userId']
+        # del request.session['userName']
+        response = JsonResponse({"message": "登出成功", "status": 200})
         response.delete_cookie("userId")
         return response
 
@@ -158,121 +155,130 @@ def logout(request):
 # 通过阿里云短信服务发送验证码，并保存验证码到redis缓存
 # 发送成功，返回消息和200状态码
 # 发送失败，返回消息和404状态码
-def requestSmsCode(request):
+def RequestSmsCode(request):
     if request.method == "POST":
-        phonenum = request.POST.get('phonenum', None)
-        code, message, result = sendSms(phonenum)
+        phoneNum = request.POST.get('phoneNum', None)
+        redisClient = get_redis_connection('smsCode')
+        if (redisClient.get(phoneNum+"Flag") is not None):
+            return JsonResponse({"message": "冷却中，请60秒后重新申请", "status": 404})
+        code, message, result = SendSms(phoneNum)
         try:
             # 4.连接到redis
-            redisClient = get_redis_connection('sms_code')
+            redisClient = get_redis_connection('smsCode')
             # 5.生成redis管道
             pipeline = redisClient.pipeline()
             # 6.保存验证码，用于后续与用户输入值对比，设置过期时间
-            pipeline.setex(phonenum, 300, code)
+            pipeline.setex(phoneNum, 300, code)
+            pipeline.setex(phoneNum+"Flag", 60, code)
             # 7.传递指令
             pipeline.execute()
         except Exception:
-            JsonResponse({"message": "保存到redis失败", "status": 404})
-        JsonResponse({"message": "验证码已发送", "status": 200})
+            return JsonResponse({"message": "保存到redis失败", "status": 404})
+        return JsonResponse({"message": "验证码已发送", "status": 200})
 
 
 # 注册函数视图
-# 从参数获取username，phonenum,email,password,verifyCode
+# 从参数获取userName，phonenum,email,password,verifyCode
 # 登出成功，返回消息和200状态码
 # 登出失败，返回消息和404状态码
-def signup(request):
-    if request.session.get('is_login', None):
+def Signup(request):
+    if request.session.get('isLogin', None):
         # 登录状态不允许注册。
         message = "登录状态，无法注册"
         status = 404
     elif request.method == "POST":
-        username = request.POST.get('username', None)
-        phonenum = request.POST.get('phonenum', None)
+        userName = request.POST.get('userName', None)
+        phoneNum = request.POST.get('phoneNum', None)
         email = request.POST.get('email', None)
         password = request.POST.get('password', None)
         verifyCode = request.POST.get('verifyCode', None)
         print({
-            "username": username,
-            'phonenum': phonenum,
+            "userName": userName,
+            'phoneNum': phoneNum,
             'email': email,
             "password": password,
             'verifyCode': verifyCode
         })
         message = "请检查填写的内容！"
         status = 404
-        if username and phonenum and email and password and verifyCode:  # 获取数据
-            same_name_user = models.Personalprofile.objects.filter(username=username)
-            if same_name_user:  # 用户名唯一
-                message = '用户已经存在，请重新输入用户名！'
-                status = 404
-            else:
-                same_phone_user = models.Personalprofile.objects.filter(phonenumber=phonenum)
-                if same_phone_user:  # 手机号码唯一
-                    message = '该手机号码已被注册，请使用别的手机号码！'
-                    status = 404
-                else:
-                    # 当一切都OK的情况下，创建新用户
-                    try:
-                        newAccountInfo = models.Accountinformation.objects.create(
-                            themeno=models.Theme.objects.filter(themeno=1).first(),
-                            createdate=timezone.now()
-                        )
 
-                        salt = secrets.token_hex(4)
-                        encryPassword = hash_pwd(pwd=password, salt=salt)
-                        newLoginData = models.Logindata.objects.create(
-                            userid=newAccountInfo,
-                            userpassword=encryPassword,
-                            salt=salt
-                        )
-                        newUser = models.Personalprofile.objects.create(
-                            userid=newAccountInfo,
-                            username=username,
-                            phonenumber=phonenum,
-                            email=email
-                        )
-                        logger.info(json.dumps(newLoginData, cls=DateEnconding))
-                        logger.info(json.dumps(newUser, cls=DateEnconding))
-                        message = "注册成功"
-                        status = 200
-                    except Exception as e:
-                        print('str(Exception):\t', str(Exception))
-                        print('str(e):\t\t', str(e))
-                        print('repr(e):\t', repr(e))
-                        print('e.message:\t', e.message)
-                        print('########################################################')
-                        message = "注册失败"
-                        status = 404
+        redisClient = get_redis_connection('smsCode')
+        verifyCodeInCache = redisClient.get("phoneNum")
+        if userName and phoneNum and email and password and verifyCode:  # 获取数据
+            if verifyCodeInCache is None:
+                return JsonResponse({"message": "尚未申请短信验证码", "status": 404})
+
+            if verifyCodeInCache != verifyCode:
+                return JsonResponse({"message": "短信验证码错误，请检查重试", "status": 404})
+            redisClient.delete(phoneNum)
+            redisClient.delete(phoneNum+"Flag")
+
+            sameNameUser = models.PersonalProfile.objects.filter(userName=userName)
+            if sameNameUser:  # 用户名唯一
+                return JsonResponse({"message": "用户已经存在，请重新输入用户名！", "status": 404})
+
+            samePhoneUser = models.PersonalProfile.objects.filter(phoneNumber=phoneNum)
+            if samePhoneUser:  # 手机号码唯一
+                return JsonResponse({"message": "该手机号码已被注册，请使用别的手机号码！", "status": 404})
+
+            # 当一切都OK的情况下，创建新用户
+            try:
+                newAccountInfo = models.AccountInformation.objects.create(
+                    themeNo=models.Theme.objects.filter(themeNo=1).first()
+                )
+
+                salt = secrets.token_hex(4)
+                encryPassword = HashPwd(pwd=password, salt=salt)
+                newLoginData = models.LoginData.objects.create(
+                    userId=newAccountInfo,
+                    userPassword=encryPassword,
+                    salt=salt
+                )
+                newUser = models.PersonalProfile.objects.create(
+                    userId=newAccountInfo,
+                    userName=userName,
+                    phoneNumber=phoneNum,
+                    email=email
+                )
+                logger.info(json.dumps(newLoginData, cls=DateEnconding))
+                logger.info(json.dumps(newUser, cls=DateEnconding))
+                message = "注册成功"
+                status = 200
+            except Exception as e:
+                print('str(Exception):\t', str(Exception))
+                print('str(e):\t\t', str(e))
+                print('repr(e):\t', repr(e))
+                print('e.message:\t', e.message)
+                print('########################################################')
+                message = "注册失败"
+                status = 404
     return JsonResponse({"message": message, "status": status})
 
 
 # 修改密码函数视图
-# 从参数获取原密码和userid
-# 根据userid查找对应用户的logindata的密码
+# 从参数获取原密码和userId
+# 根据userId查找对应用户的LoginData的密码
 # 比对通过后，生成新的salt和密码，存入数据库
 # 修改成功，返回消息和200状态码
 # 修改失败，返回消息和404状态码
-def changePwd(request):
-    '''
+def ChangePwd(request):
     if not request.session.get('isLogin', None):
         return JsonResponse({"message": "你还未登录", "status": 404})
-    el
-    '''
-    if request.method == "POST":
+    elif request.method == "POST":
         # 从参数获取oldPassword和password
-        userId = request.POST.get("userid", None)
+        userId = request.session.get("userId", None)
         oldPassword = request.POST.get('oldPassword', None)
         newPassword = request.POST.get('newPassword', None)
         if userId and oldPassword and newPassword:
-            account = models.Accountinformation.objects.filter(userid=userId)
+            account = models.AccountInformation.objects.filter(userId=userId)
             if not account.exists():
                 return JsonResponse({"message": "当前账号与浏览器记录不一致", "status": 404})
             account = account.first()
             # 检测账号原密码是否符合
-            if (account.logindata.userpassword == hash_pwd(pwd=oldPassword, salt=account.logindata.salt)):
+            if (account.LoginData.userPassword == HashPwd(pwd=oldPassword, salt=account.LoginData.salt)):
                 newSalt = secrets.token_hex(4)
-                encryPassword = hash_pwd(pwd=newPassword, salt=newSalt)
-                models.Logindata.objects.filter(userid=userId).update(userpassword=encryPassword, salt=newSalt)
+                encryPassword = HashPwd(pwd=newPassword, salt=newSalt)
+                models.LoginData.objects.filter(userId=userId).update(userPassword=encryPassword, salt=newSalt)
                 return JsonResponse({"message": "修改成功", "status": 200})
             else:
                 return JsonResponse({"message": "账号原密码错误", "status": 404})
@@ -285,30 +291,38 @@ def changePwd(request):
 # 验证码比对通过后，生成新的salt和密码，存入数据库
 # 修改成功，返回消息和200状态码
 # 修改失败，返回消息和404状态码
-def forgetPwd(request):
-    '''
+def ForgetPwd(request):
     if request.session.get('isLogin', None):
         return JsonResponse({"message": "你已经登录，忘记密码需先退出", "status": 404})
-    el
-    '''
-    if request.method == "POST":
-        # 从参数获取phonenum和password
-        phonenum = request.POST.get('phonenum', None)
+    elif request.method == "POST":
+        # 从参数获取phoneNum和password
+        phoneNum = request.POST.get('phonenum', None)
         verifyCode = request.POST.get('verifyCode', None)
         newPassword = request.POST.get('newPassword', None)
-        if phonenum and verifyCode and newPassword:
-            # 从数据库获取phonenum和对应userid，取出salt
+        if phoneNum and verifyCode and newPassword:
+            # 从数据库获取phonenum和对应userId，取出salt
             # 获取失败则捕捉错误
-            profile = models.Personalprofile.objects.filter(phonenumber=int(phonenum))
+
+            redisClient = get_redis_connection('smsCode')
+            verifyCodeInCache = redisClient.get("phoneNum")
+            if verifyCodeInCache is None:
+                return JsonResponse({"message": "尚未申请短信验证码", "status": 404})
+
+            if verifyCode and verifyCodeInCache != verifyCode:
+                return JsonResponse({"message": "短信验证码错误，请检查重试", "status": 404})
+            redisClient.delete(phoneNum)
+            redisClient.delete(phoneNum+"Flag")
+
+            profile = models.PersonalProfile.objects.filter(phoneNumber=int(phoneNum))
             if not profile.exists():
                 return JsonResponse({"message": "该手机未注册", "status": 404})
             profile = profile.first()
-            account = models.Accountinformation.objects.get(userid=profile.userid.userid)
+            account = models.AccountInformation.objects.get(userId=profile.userId.userId)
 
             # 缺少逻辑：检测短信验证码是否正确
             newSalt = secrets.token_hex(4)
-            encryPassword = hash_pwd(pwd=newPassword, salt=newSalt)
-            models.Logindata.objects.filter(userid=account.userid).update(userpassword=encryPassword, salt=newSalt)
+            encryPassword = HashPwd(pwd=newPassword, salt=newSalt)
+            models.LoginData.objects.filter(userId=account.userId).update(userPassword=encryPassword, salt=newSalt)
             return JsonResponse({"message": "修改成功", "status": 200})
     else:
         return JsonResponse({"message": "参数传递方式有误", "status": 404})
@@ -319,153 +333,150 @@ def forgetPwd(request):
 # 解析表单数据生成对应models存入
 # 保存成功，返回消息和200状态码
 # 保存失败，返回消息和404状态码
-def saveCase(request):
-    '''
+def SaveCase(request):
     if not request.session.get('isLogin', None):
         return JsonResponse({"message": "你还未登录，保存案例需要先登录", "status": 404})
-    el
-    '''
-    if request.method == "POST":
-        userId = request.POST.get('userid', None)
-        caseName = request.POST.get('casename', None)
+    elif request.method == "POST":
+        userId = request.POST.get('userId', None)
+        caseName = request.POST.get('caseName', None)
         cityNum = request.POST.get('citynum', None)
         roadNum = request.POST.get('roadnum', None)
-        initcitydata = request.POST.get('Initcitydata', None)
-        initroaddata = request.POST.get('Initroaddata', None)
-        cityposition = request.POST.get('Cityposition', None)
-        if not(userId and caseName and cityNum and roadNum and initcitydata and initroaddata and cityposition):
+        caseMode = request.POST.get('caseMode', None)
+        InitCityData = request.POST.get('InitCityData', None)
+        InitRoadData = request.POST.get('InitRoadData', None)
+        CityPosition = request.POST.get('CityPosition', None)
+        if not(userId and caseName and cityNum and roadNum and InitCityData and InitRoadData and CityPosition):
             return JsonResponse({"message": "表单未填写完整", "status": 404})
         # 案例计数：初始人口与初始感染人口
-        initTotalNum = 0
-        initTotalInfectedNum = 0
-        initcitydataList = initcitydata.split(",")
-        initroaddataList = initroaddata.split(",")
-        citypositionList = cityposition.split(",")
 
-        cityCount = 0
-        for cityInfo in initcitydataList:
-            value = cityInfo.split(":")[1]
-            if cityCount % 3 == 1:
-                initpop = int(value)
-                initTotalNum += initpop
-            elif cityCount % 3 == 2:
-                initinfect = int(value)
-                initTotalInfectedNum += initinfect
-            cityCount += 1
-        message = "开始进行案例保存"
-        status = 200
-        newCaseId = 0
-        try:
-            # 新增案例
-            if (models.Accountinformation.objects.filter(userid=userId).exist()):
-                newCase = models.Casedata.objects.create(
-                    userid=models.Accountinformation.objects.filter(userid=userId).first(),
-                    casename=caseName,
-                    citynumber=int(cityNum),
-                    roadnumber=int(roadNum),
-                    inittotal=initTotalNum,
-                    inittotalinfected=initTotalInfectedNum
-                )
-            else:
-                return JsonResponse({"message": "目标用户不存在", "status": 404})
-            # 新增城市信息
+        if (caseMode == "自定模式"):
+            initTotalNum = 0
+            initTotalInfectedNum = 0
+            initcitydataList = InitCityData.split(",")
+            initroaddataList = InitRoadData.split(",")
+            citypositionList = CityPosition.split(",")
+
             cityCount = 0
-            cityname = ""
-            initpop = ""
-            initinfect = ""
-            x = 0.0
-            y = 0.0
             for cityInfo in initcitydataList:
                 value = cityInfo.split(":")[1]
-                posValue = citypositionList[cityCount].split(":")[1]
-                if cityCount % 3 == 0:
-                    cityname = value
-                elif cityCount % 3 == 1:
-                    initpop = int(value)
-                    x = float(posValue)
+                if cityCount % 3 == 1:
+                    initPop = int(value)
+                    initTotalNum += initPop
                 elif cityCount % 3 == 2:
-                    initinfect = int(value)
-                    y = float(posValue)
-                    newCity = models.Initcitydata.objects.create(
-                        caseid=newCase,
-                        cityname=cityname,
-                        initpop=initpop,
-                        initinfect=initinfect
-                    )
-                    models.Cityposition.objects.create(
-                        cityid=newCity,
-                        x=x,
-                        y=y
-                    )
+                    initInfect = int(value)
+                    initTotalInfectedNum += initInfect
                 cityCount += 1
-
-            # 新增道路信息
-            roadCount = 0
-            for roadInfo in initroaddataList:
-                value = roadInfo.split(":")[1]
-                if roadCount % 3 == 0:
-                    departure = value
-                elif roadCount % 3 == 1:
-                    destination = value
-                elif roadCount % 3 == 2:
-                    volume = float(value)
-                    models.Initroaddata.objects.create(
-                        caseid=newCase,
-                        departure=departure,
-                        destination=destination,
-                        volume=volume
-                    )
-                roadCount += 1
-            if (newCase):
-                models.Accountinformation.objects.filter(userid=userId).update(casenumber=F("casenumber") + 1)
-            message = "保存案例成功"
+            message = "开始进行案例保存"
             status = 200
-            newCaseId = newCase.caseid
-        except Exception as e:
-            print('str(Exception):\t', str(Exception))
-            print('str(e):\t\t', str(e))
-            print('repr(e):\t', repr(e))
-            # print('e.message:\t', e.message)
-            print('########################################################')
-            message = "注册失败"
-            status = 404
-        return JsonResponse({"message": message, "status": status, "caseId": newCaseId})
+            newcaseId = 0
+            try:
+                # 新增案例
+                if (models.Accountinformation.objects.filter(userId=userId).exist()):
+                    newCase = models.CaseData.objects.create(
+                        userId=models.Accountinformation.objects.filter(userId=userId).first(),
+                        caseName=caseName,
+                        cityNumber=int(cityNum),
+                        roadNumber=int(roadNum),
+                        initTotal=initTotalNum,
+                        initTotalInfected=initTotalInfectedNum
+                    )
+                else:
+                    return JsonResponse({"message": "目标用户不存在", "status": 404})
+                # 新增城市信息
+                cityCount = 0
+                cityName = ""
+                initPop = ""
+                initInfect = ""
+                x = 0.0
+                y = 0.0
+                for cityInfo in initcitydataList:
+                    value = cityInfo.split(":")[1]
+                    posValue = citypositionList[cityCount].split(":")[1]
+                    if cityCount % 3 == 0:
+                        cityName = value
+                    elif cityCount % 3 == 1:
+                        initPop = int(value)
+                        x = float(posValue)
+                    elif cityCount % 3 == 2:
+                        initInfect = int(value)
+                        y = float(posValue)
+                        newCity = models.InitCityData.objects.create(
+                            caseId=newCase,
+                            cityName=cityName,
+                            initPop=initPop,
+                            initInfect=initInfect
+                        )
+                        models.CityPosition.objects.create(
+                            cityId=newCity,
+                            x=x,
+                            y=y
+                        )
+                    cityCount += 1
+
+                # 新增道路信息
+                roadCount = 0
+                for roadInfo in initroaddataList:
+                    value = roadInfo.split(":")[1]
+                    if roadCount % 3 == 0:
+                        departure = value
+                    elif roadCount % 3 == 1:
+                        destination = value
+                    elif roadCount % 3 == 2:
+                        volume = float(value)
+                        models.InitRoadData.objects.create(
+                            caseId=newCase,
+                            departure=departure,
+                            destination=destination,
+                            volume=volume
+                        )
+                    roadCount += 1
+                if (newCase):
+                    models.Accountinformation.objects.filter(userId=userId).update(caseNumber=F("caseNumber") + 1)
+                message = "保存案例成功"
+                status = 200
+                newcaseId = newCase.caseId
+            except Exception as e:
+                print('str(Exception):\t', str(Exception))
+                print('str(e):\t\t', str(e))
+                print('repr(e):\t', repr(e))
+                # print('e.message:\t', e.message)
+                print('########################################################')
+                message = "保存案例失败"
+                status = 404
+        return JsonResponse({"message": message, "status": status, "caseId": newcaseId})
 
 
 # 解析前端发回数据并送入模型进行模拟，取得返回数据并输出
-def startSimulate(request):
-    '''
+def StartSimulate(request):
     if not request.session.get('isLogin', None):
         return JsonResponse({"message": "你还未登录，保存案例需要先登录", "status": 404})
-    el
-    '''
-    if request.method == "POST":
+    elif request.method == "POST":
         # 获取post提交数据
-        userId = request.POST.get('userid', None)
-        caseName = request.POST.get('casename', None)
+        userId = request.POST.get('userId', None)
+        caseName = request.POST.get('caseName', None)
         cityNum = request.POST.get('citynum', None)
         roadNum = request.POST.get('roadnum', None)
-        initcitydata = request.POST.get('Initcitydata', None)
-        initroaddata = request.POST.get('Initroaddata', None)
-        cityposition = request.POST.get('Cityposition', None)
+        InitCityData = request.POST.get('InitCityData', None)
+        InitRoadData = request.POST.get('InitRoadData', None)
+        CityPosition = request.POST.get('CityPosition', None)
         dayNum = request.POST.get('daynum', None)
-        if not(userId and caseName and cityNum and roadNum and initcitydata and initroaddata and cityposition and dayNum):
+        if not(userId and caseName and cityNum and roadNum and InitCityData and InitRoadData and CityPosition and dayNum):
             return JsonResponse({"message": "表单未填写完整", "status": 404})
         # 案例计数：初始人口与初始感染人口
         initTotalNum = 0
         initTotalInfectedNum = 0
-        initcitydataList = initcitydata.split(",")
-        initroaddataList = initroaddata.split(",")
-        citypositionList = cityposition.split(",")
+        initcitydataList = InitCityData.split(",")
+        initroaddataList = InitRoadData.split(",")
+        citypositionList = CityPosition.split(",")
         cityCount = 0
         for cityInfo in initcitydataList:
             value = cityInfo.split(":")[1]
             if cityCount % 3 == 1:
-                initpop = int(value)
-                initTotalNum += initpop
+                initPop = int(value)
+                initTotalNum += initPop
             elif cityCount % 3 == 2:
-                initinfect = int(value)
-                initTotalInfectedNum += initinfect
+                initInfect = int(value)
+                initTotalInfectedNum += initInfect
             cityCount += 1
         # 案例解析：从获取数据分别解析
         # 各城市人数 = 一维List
@@ -483,8 +494,8 @@ def startSimulate(request):
         try:
             # 新增城市信息
             cityCount = 0
-            initpop = ""
-            initinfect = ""
+            initPop = ""
+            initInfect = ""
             x = 0.0
             y = 0.0
             for cityInfo in initcitydataList:
@@ -513,10 +524,10 @@ def startSimulate(request):
                 value = roadInfo.split(":")[1]
                 if roadCount % 3 == 0:
                     # 出发城市下标
-                    departure = cityNameList.index(value)
+                    departure = cityNameList.Index(value)
                 elif roadCount % 3 == 1:
                     # 到达城市下标
-                    destination = cityNameList.index(value)
+                    destination = cityNameList.Index(value)
                 elif roadCount % 3 == 2:
                     volume = float(value)
                     initRoadList[departure][destination] = volume
@@ -540,12 +551,12 @@ def startSimulate(request):
         #     dailyInfectMatrix.append(dayNewInfect)
 
         # 构造发回数据
-        DailyforecastData = []
+        DailyForecastData = []
         for dayCount in range(dayNum):
             dayCase = []
             for cityIdx in range(cityNum):
                 cityCase = {}
-                cityCase["cityname"] = cityNameList[cityIdx]
+                cityCase["cityName"] = cityNameList[cityIdx]
                 cityCase["population"] = initPopList[cityIdx]
 
                 if (dayCount == 0):
@@ -556,12 +567,14 @@ def startSimulate(request):
                     cityCase["dailyinfected"] = int(dailyInfectMatrix[cityIdx][dayCount]) - int(dailyInfectMatrix[cityIdx][dayCount-1])
 
                 dayCase.append(cityCase)
-            DailyforecastData.append(dayCase)
-        return JsonResponse({"DailyforecastData": DailyforecastData, "status": 200})
+            DailyForecastData.append(dayCase)
+        return JsonResponse({"DailyForecastData": DailyForecastData, "status": 200})
     return JsonResponse({"message": "该接口不支持此方法", "status": 404})
 
 
+# 图形验证码生成类
 class ImageCodeView(View):
+    # 该函数为view中函数重写，函数名不可更改
     def get(self, request):
         # 1.接受uuid
         uuid = request.GET.get('uuid')
@@ -572,7 +585,7 @@ class ImageCodeView(View):
         code, image = captcha.generate_captcha()
         try:
             # 4.连接到redis
-            redisClient = get_redis_connection('image_code')
+            redisClient = get_redis_connection('verifyCode')
             # 5.生成redis管道
             pipeline = redisClient.pipeline()
             # 6.保存图片文本，用于后续与用户输入值对比，设置过期时间
@@ -582,10 +595,11 @@ class ImageCodeView(View):
         except Exception:
             pass
         # 8.后台显示验证码信息
-        logger.info('verify_text:{}'.format(code))
+        logger.info('verifyText:{}'.format(code))
         # 9.响应：输出图片数据
         return JsonResponse(image, content_type='image/png')
 
+    # 该函数为view中函数重写，函数名不可更改
     def post(self, request):
         # 1.接受uuid
         uuid = request.POST.get('uuid')
@@ -597,7 +611,7 @@ class ImageCodeView(View):
         status = 404
         try:
             # 3.连接到redis
-            redisClient = get_redis_connection('image_code')
+            redisClient = get_redis_connection('verifyCode')
             # 4.生成redis管道
             pipeline = redisClient.pipeline()
             # 5.获得验证码
@@ -615,33 +629,38 @@ class ImageCodeView(View):
         return JsonResponse({"message": message, "status": status})
 
 
-def getAllCaseInfos(request):
+# 返回所有管理员信息
+# 获取分页信息
+# 获取所有管理员信息，分页器处理后发出
+# 发送成功，返回消息和200状态码
+# 发送失败，返回消息和404状态码
+def GetAllCaseInfos(request):
     if request.method == "POST":
-        caseId = request.POST.get("caseid", None)
+        caseId = request.POST.get("caseId", None)
         if caseId:
             try:
-                caseInfo = models.Casedata.objects.filter(caseid=caseId).first()
-                cityInfos = models.Initcitydata.objects.filter(caseid=caseInfo)
-                roadInfos = models.Initroaddata.objects.filter(caseid=caseInfo)
+                caseInfo = models.CaseData.objects.filter(caseId=caseId).first()
+                cityInfos = models.InitCityData.objects.filter(caseId=caseInfo)
+                roadInfos = models.InitRoadData.objects.filter(caseId=caseInfo)
 
                 cases = {}
-                cases["casename"] = caseInfo.casename
-                cases["citynum"] = len(cityInfos)
-                cases["roadnum"] = len(roadInfos)
+                cases["caseName"] = caseInfo.caseName
+                cases["cityNum"] = len(cityInfos)
+                cases["roadNum"] = len(roadInfos)
 
                 cityList = []
                 cityPosList = []
                 for cityIdx in range(len(cityInfos)):
                     cityCase = {}
-                    cityCase["cityname"] = cityInfos[cityIdx].cityname
-                    cityCase["initpop"] = cityInfos[cityIdx].initpop
-                    cityCase["initinfect"] = cityInfos[cityIdx].initinfect
+                    cityCase["cityName"] = cityInfos[cityIdx].cityName
+                    cityCase["initPop"] = cityInfos[cityIdx].initPop
+                    cityCase["initInfect"] = cityInfos[cityIdx].initInfect
                     cityList.append(cityCase)
 
                     cityPosCase = {}
-                    cityPosCase["cityname"] = cityInfos[cityIdx].cityname
-                    cityPosCase["x"] = cityInfos[cityIdx].cityposition.x
-                    cityPosCase["y"] = cityInfos[cityIdx].cityposition.y
+                    cityPosCase["cityName"] = cityInfos[cityIdx].cityName
+                    cityPosCase["x"] = cityInfos[cityIdx].CityPosition.x
+                    cityPosCase["y"] = cityInfos[cityIdx].CityPosition.y
                     cityPosList.append(cityPosCase)
 
                 roadList = []
@@ -652,9 +671,9 @@ def getAllCaseInfos(request):
                     roadCase["volume"] = roadInfos[roadIdx].volume
                     roadList.append(roadCase)
 
-                cases["Initcitydata"] = cityList
-                cases["Initroaddata"] = roadList
-                cases["Cityposition"] = cityPosList
+                cases["InitCityData"] = cityList
+                cases["InitRoadData"] = roadList
+                cases["CityPosition"] = cityPosList
 
                 return JsonResponse({"message": "成功返回数据", "cases": cases, "status": 200})
             except Exception as e:
@@ -668,11 +687,16 @@ def getAllCaseInfos(request):
     return JsonResponse({"message": "请求方法未注册", "status": 404})
 
 
-def getUserInfos(request):
+# 返回所有管理员信息
+# 获取分页信息
+# 获取所有管理员信息，分页器处理后发出
+# 发送成功，返回消息和200状态码
+# 发送失败，返回消息和404状态码
+def GetUserInfos(request):
     if request.method == "GET":
         pageSize = request.GET.get("pageSize")
         page = request.GET.get("page")
-        accountInfos = models.Accountinformation.objects.select_related("personalprofile").all().exclude(authority="超级管理员").order_by('userid')
+        accountInfos = models.AccountInformation.objects.select_related("PersonalProfile").all().exclude(authority="超级管理员").order_by('userId')
         accountPaginator = paginator.Paginator(accountInfos, pageSize)
         if page == "":
             page = 1
@@ -682,7 +706,7 @@ def getUserInfos(request):
         jsonList = []
         for accountInfo in pageInfos:
             accountInfoDict = model_to_dict(accountInfo)
-            profileDict = model_to_dict(accountInfo.personalprofile)
+            profileDict = model_to_dict(accountInfo.PersonalProfile)
             jsonList.append({**accountInfoDict, **profileDict})
         jsonRes = json.loads(json.dumps(jsonList, cls=DateEnconding))
         print(jsonRes)
@@ -690,15 +714,20 @@ def getUserInfos(request):
             'data': jsonRes,
             'pagination': accountPaginator.count,
             'pageSize': accountPaginator.per_page,
-            'page': pageInfos.start_index() // accountPaginator.per_page + 1
+            'page': pageInfos.start_Index() // accountPaginator.per_page + 1
         })
 
 
-def getGeneralUserInfos(request):
+# 返回所有管理员信息
+# 获取分页信息
+# 获取所有管理员信息，分页器处理后发出
+# 发送成功，返回消息和200状态码
+# 发送失败，返回消息和404状态码
+def GetGeneralUserInfos(request):
     if request.method == "GET":
         pageSize = request.GET.get("pageSize")
         page = request.GET.get("page")
-        generalUserInfos = models.Accountinformation.objects.select_related("personalprofile").filter(authority="普通用户").order_by('userid')
+        generalUserInfos = models.AccountInformation.objects.select_related("PersonalProfile").filter(authority="普通用户").order_by('userId')
         accountPaginator = paginator.Paginator(generalUserInfos, pageSize)
         if page == "":
             page = 1
@@ -708,7 +737,7 @@ def getGeneralUserInfos(request):
         jsonList = []
         for accountInfo in pageInfos:
             accountInfoDict = model_to_dict(accountInfo)
-            profileDict = model_to_dict(accountInfo.personalprofile)
+            profileDict = model_to_dict(accountInfo.PersonalProfile)
             jsonList.append({**accountInfoDict, **profileDict})
         jsonRes = json.loads(json.dumps(jsonList, cls=DateEnconding))
         print(jsonRes)
@@ -716,15 +745,20 @@ def getGeneralUserInfos(request):
             'data': jsonRes,
             'pagination': accountPaginator.count,
             'pageSize': accountPaginator.per_page,
-            'page': pageInfos.start_index() // accountPaginator.per_page + 1
+            'page': pageInfos.start_Index() // accountPaginator.per_page + 1
         })
 
 
-def getAdminInfos(request):
+# 返回所有管理员信息
+# 获取分页信息
+# 获取所有管理员信息，分页器处理后发出
+# 发送成功，返回消息和200状态码
+# 发送失败，返回消息和404状态码
+def GetAdminInfos(request):
     if request.method == "GET":
         pageSize = request.GET.get("pageSize")
         page = request.GET.get("page")
-        adminUserInfos = models.Accountinformation.objects.select_related("personalprofile").filter(authority="管理员").order_by('userid')
+        adminUserInfos = models.AccountInformation.objects.select_related("PersonalProfile").filter(authority="管理员").order_by('userId')
         accountPaginator = paginator.Paginator(adminUserInfos, pageSize)
         if page == "":
             page = 1
@@ -734,7 +768,7 @@ def getAdminInfos(request):
         jsonList = []
         for accountInfo in pageInfos:
             accountInfoDict = model_to_dict(accountInfo)
-            profileDict = model_to_dict(accountInfo.personalprofile)
+            profileDict = model_to_dict(accountInfo.PersonalProfile)
             jsonList.append({**accountInfoDict, **profileDict})
         jsonRes = json.loads(json.dumps(jsonList, cls=DateEnconding))
         print(jsonRes)
@@ -742,64 +776,117 @@ def getAdminInfos(request):
             'data': jsonRes,
             'pagination': accountPaginator.count,
             'pageSize': accountPaginator.per_page,
-            'page': pageInfos.start_index() // accountPaginator.per_page + 1
+            'page': pageInfos.start_Index() // accountPaginator.per_page + 1
         })
 
 
+# 返回高频城市信息
+# 发送成功，返回消息和200状态码
+# 发送失败，返回消息和404状态码
+def GetTopCityInfos(request):
+    if not request.session.get('isLogin', None):
+        return JsonResponse({"message": "你还未登录，获取高频城市需要先登录", "status": 404})
+    elif request.method == "GET":
+        # 该接口无提交数据
+        # 获取统计信息
+        try:
+            cityInfos = models.InitCityData.objects\
+                        .filter(caseId__caseMode="地图模式")\
+                        .values("cityName")\
+                        .annotate(cityCount=Count("cityId"))\
+                        .order_by('cityName')[:6]
+        except Exception as e:
+            print('str(Exception):\t', str(Exception))
+            print('str(e):\t\t', str(e))
+            print('repr(e):\t', repr(e))
+            # print('e.message:\t', e.message)
+            print('########################################################')
+            return JsonResponse({"message": "案例保存失败，数据库出错", "status": 404})
+        return JsonResponse({"TopcityInfos": serializers.serialize("json", cityInfos), "status": 200})
+    return JsonResponse({"message": "该接口不支持此方法", "status": 404})
+
+
+# 返回各性别人数
+# 发送成功，返回消息和200状态码
+# 发送失败，返回消息和404状态码
+def GetSexNum(request):
+    '''if not request.session.get('isLogin', None):
+        return JsonResponse({"message": "你还未登录，获取高频城市需要先登录", "status": 404})
+    el'''
+    if request.method == "GET":
+        # 该接口无提交数据
+        # 获取统计信息
+        try:
+            sexInfos = models.PersonalProfile.objects\
+                        .values("sex")\
+                        .annotate(cityCount=Count("userId__userId"))\
+                        .order_by('sex')
+        except Exception as e:
+            print('str(Exception):\t', str(Exception))
+            print('str(e):\t\t', str(e))
+            print('repr(e):\t', repr(e))
+            # print('e.message:\t', e.message)
+            print('########################################################')
+            return JsonResponse({"message": "案例保存失败，数据库出错", "status": 404})
+        return JsonResponse({"TopcityInfos": serializers.serialize("json", sexInfos), "status": 200})
+    return JsonResponse({"message": "该接口不支持此方法", "status": 404})
+
+
+# 以下类均为继承ModelViewSet类的视图集类，其中成员变量均为继承而来
 class AccountViewSet(viewsets.ModelViewSet):
-    queryset = models.Accountinformation.objects.all()
-    serializer_class = customSerializers.AccountinformationSerializer
+    queryset = models.AccountInformation.objects.all()
+    serializer_class = customSerializers.AccountInformationSerializer
 
 
 class CaseViewSet(viewsets.ModelViewSet):
-    queryset = models.Casedata.objects.all()
-    serializer_class = customSerializers.CasedataSerializer
+    queryset = models.CaseData.objects.all()
+    serializer_class = customSerializers.CaseDataSerializer
     pagination_class = paginations.MyFormatResultsSetPagination
     filter_backends = (OrderingFilter, DjangoFilterBackend)
     filter_class = filters.CaseFilter
-    ordering_fields = ('casename', 'inittotal', 'inittotalinfected', 'citynumber', 'roadnumber',)
-    ordering = ('caseid',)
+    ordering_fields = ('caseName', 'initTotal', 'initTotalInfected', 'cityNumber', 'roadNumber',)
+    ordering = ('caseId',)
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         if (instance):
-            models.Accountinformation.objects.filter(userid=instance.userId).update(casenumber=F("casenumber") - 1)
+            models.Accountinformation.objects.filter(userId=instance.userId).update(caseNumber=F("caseNumber") - 1)
         return super(CaseViewSet, self).destroy(request, *args, **kwargs)
 
 
 class CityPosViewSet(viewsets.ModelViewSet):
-    queryset = models.Cityposition.objects.all()
+    queryset = models.CityPosition.objects.all()
     serializer_class = customSerializers.CitypositionSerializer
 
 
 class DailyForeViewSet(viewsets.ModelViewSet):
-    queryset = models.Dailyforecastdata.objects.all()
+    queryset = models.DailyForecastData.objects.all()
     serializer_class = customSerializers.DailyforecastdataSerializer
 
 
 class InitCityViewSet(viewsets.ModelViewSet):
-    queryset = models.Initcitydata.objects.all()
+    queryset = models.InitCityData.objects.all()
     serializer_class = customSerializers.InitcitydataSerializer
 
 
 class InitRoadViewSet(viewsets.ModelViewSet):
-    queryset = models.Initroaddata.objects.all()
+    queryset = models.InitRoadData.objects.all()
     serializer_class = customSerializers.InitroaddataSerializer
 
 
 class LoginViewSet(viewsets.ModelViewSet):
-    queryset = models.Logindata.objects.all()
+    queryset = models.LoginData.objects.all()
     serializer_class = customSerializers.LogindataSerializer
 
 
 class ModelViewSet(viewsets.ModelViewSet):
-    queryset = models.Modeldata.objects.all()
+    queryset = models.ModelData.objects.all()
     serializer_class = customSerializers.ModeldataSerializer
 
 
 class PersonalProfileViewSet(viewsets.ModelViewSet):
-    queryset = models.Personalprofile.objects.all()
-    serializer_class = customSerializers.PersonalprofileSerializer
+    queryset = models.PersonalProfile.objects.all()
+    serializer_class = customSerializers.PersonalProfileSerializer
 
 
 class ThemeViewSet(viewsets.ModelViewSet):

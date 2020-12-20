@@ -1,0 +1,10 @@
+[
+    {
+       "model":"backend.Theme",
+       "pk":1,
+       "fields":{
+          "themeName":"默认主题",
+          "themeColour":"#FFFFFF"
+       }
+    }
+ ]

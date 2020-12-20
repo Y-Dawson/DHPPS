@@ -19,7 +19,7 @@ class Bezier:
         self.tsequence = tuple([t / 20.0 for t in range(21)])
         self.beziers = {}
 
-    def pascal_row(self, n):
+    def PascalRow(self, n):
         """ Returns n-th row of Pascal's triangle
         """
         result = [1]
@@ -35,14 +35,14 @@ class Bezier:
             result.extend(reversed(result))
         return result
 
-    def make_bezier(self, n):
-        """ Bezier curves:
-            http://en.wikipedia.org/wiki/B%C3%A9zier_curve#Generalization
+    def MakeBezier(self, n):
+        """ Bezier Curves:
+            http://en.wikipedia.org/wiki/B%C3%A9zier_Curve#Generalization
         """
         try:
             return self.beziers[n]
         except KeyError:
-            combinations = self.pascal_row(n - 1)
+            combinations = self.PascalRow(n - 1)
             result = []
             for t in self.tsequence:
                 tpowers = (t ** i for i in range(n))
@@ -61,22 +61,22 @@ class Captcha(object):
         # self._captcha_path = os.path.join(self._dir, '..', 'static', 'captcha')
 
     @staticmethod
-    def instance():
-        if not hasattr(Captcha, "_instance"):
-            Captcha._instance = Captcha()
-        return Captcha._instance
+    def Instance():
+        if not hasattr(Captcha, "_Instance"):
+            Captcha._Instance = Captcha()
+        return Captcha._Instance
 
-    def initialize(self, width=200, height=75, color=None, text=None, fonts=None):
+    def Initialize(self, width=200, height=75, color=None, Text=None, fonts=None):
         # self.image = Image.new('RGB', (width, height), (255, 255, 255))
-        self._text = text if text else random.sample(string.ascii_uppercase + string.ascii_uppercase + '3456789', 4)
+        self._Text = Text if Text else random.sample(string.ascii_uppercase + string.ascii_uppercase + '3456789', 4)
         self.fonts = fonts if fonts else \
             [os.path.join(self._dir, 'fonts', font) for font in ['Arial.ttf', 'Georgia.ttf', 'actionj.ttf']]
         self.width = width
         self.height = height
-        self._color = color if color else self.random_color(0, 200, random.randint(220, 255))
+        self._color = color if color else self.RandomColor(0, 200, random.randint(220, 255))
 
     @staticmethod
-    def random_color(start, end, opacity=None):
+    def RandomColor(start, end, opacity=None):
         red = random.randint(start, end)
         green = random.randint(start, end)
         blue = random.randint(start, end)
@@ -86,20 +86,20 @@ class Captcha(object):
 
     # draw image
 
-    def background(self, image):
-        Draw(image).rectangle([(0, 0), image.size], fill=self.random_color(238, 255))
+    def Background(self, image):
+        Draw(image).rectangle([(0, 0), image.size], fill=self.RandomColor(238, 255))
         return image
 
     @staticmethod
-    def smooth(image):
+    def Smooth(image):
         return image.filter(ImageFilter.SMOOTH)
 
-    def curve(self, image, width=4, number=6, color=None):
+    def Curve(self, image, width=4, number=6, color=None):
         dx, height = image.size
         dx /= number
         path = [(dx * i, random.randint(0, height))
                 for i in range(1, number)]
-        bcoefs = self._bezier.make_bezier(number - 1)
+        bcoefs = self._bezier.MakeBezier(number - 1)
         points = []
         for coefs in bcoefs:
             points.append(tuple(sum([coef * p for coef, p in zip(coefs, ps)])
@@ -107,7 +107,7 @@ class Captcha(object):
         Draw(image).line(points, fill=color if color else self._color, width=width)
         return image
 
-    def noise(self, image, number=50, level=2, color=None):
+    def Noise(self, image, number=50, level=2, color=None):
         width, height = image.size
         dx = width / 10
         width -= dx
@@ -120,40 +120,40 @@ class Captcha(object):
             draw.line(((x, y), (x + level, y)), fill=color if color else self._color, width=level)
         return image
 
-    def text(self, image, fonts, font_sizes=None, drawings=None, squeeze_factor=0.75, color=None):
+    def Text(self, image, fonts, font_sizes=None, drawings=None, squeeze_factor=0.75, color=None):
         color = color if color else self._color
         fonts = tuple([truetype(name, size)
                        for name in fonts
                        for size in font_sizes or (65, 70, 75)])
         draw = Draw(image)
         char_images = []
-        for c in self._text:
+        for c in self._Text:
             font = random.choice(fonts)
-            c_width, c_height = draw.textsize(c, font=font)
+            c_width, c_height = draw.Textsize(c, font=font)
             char_image = Image.new('RGB', (c_width, c_height), (0, 0, 0))
             char_draw = Draw(char_image)
-            char_draw.text((0, 0), c, font=font, fill=color)
+            char_draw.Text((0, 0), c, font=font, fill=color)
             char_image = char_image.crop(char_image.getbbox())
             for drawing in drawings:
                 d = getattr(self, drawing)
                 char_image = d(char_image)
             char_images.append(char_image)
         width, height = image.size
-        offset = int((width - sum(int(i.size[0] * squeeze_factor)
+        Offset = int((width - sum(int(i.size[0] * squeeze_factor)
                                   for i in char_images[:-1]) -
                       char_images[-1].size[0]) / 2)
         for char_image in char_images:
             c_width, c_height = char_image.size
             mask = char_image.convert('L').point(lambda i: i * 1.97)
             image.paste(char_image,
-                        (offset, int((height - c_height) / 2)),
+                        (Offset, int((height - c_height) / 2)),
                         mask)
-            offset += int(c_width * squeeze_factor)
+            Offset += int(c_width * squeeze_factor)
         return image
 
-    # draw text
+    # draw Text
     @staticmethod
-    def warp(image, dx_factor=0.27, dy_factor=0.21):
+    def Warp(image, dx_factor=0.27, dy_factor=0.21):
         width, height = image.size
         dx = width * dx_factor
         dy = height * dy_factor
@@ -174,7 +174,7 @@ class Captcha(object):
              width2 - x2, -y1))
 
     @staticmethod
-    def offset(image, dx_factor=0.1, dy_factor=0.2):
+    def Offset(image, dx_factor=0.1, dy_factor=0.2):
         width, height = image.size
         dx = int(random.random() * width * dx_factor)
         dy = int(random.random() * height * dy_factor)
@@ -183,39 +183,39 @@ class Captcha(object):
         return image2
 
     @staticmethod
-    def rotate(image, angle=25):
-        return image.rotate(
+    def Rotate(image, angle=25):
+        return image.Rotate(
             random.uniform(-angle, angle), Image.BILINEAR, expand=1)
 
-    def captcha(self, path=None, fmt='JPEG'):
+    def Captcha(self, path=None, fmt='JPEG'):
         """Create a captcha.
 
         Args:
             path: save path, default None.
             fmt: image format, PNG / JPEG.
         Returns:
-            A tuple, (text, StringIO.value).
+            A tuple, (Text, StringIO.value).
             For example:
                 ('JGW9', b'\x89PNG\r\n\x1a\n\x00\x00\x00\r...')
 
         """
         image = Image.new('RGB', (self.width, self.height), (255, 255, 255))
-        image = self.background(image)
-        image = self.text(image, self.fonts, drawings=['warp', 'rotate', 'offset'])
-        image = self.curve(image)
-        image = self.noise(image)
-        image = self.smooth(image)
-        text = "".join(self._text)
+        image = self.Background(image)
+        image = self.Text(image, self.fonts, drawings=['Warp', 'Rotate', 'Offset'])
+        image = self.Curve(image)
+        image = self.Noise(image)
+        image = self.Smooth(image)
+        Text = "".join(self._Text)
         out = BytesIO()
         image.save(out, format=fmt)
-        return text, out.getvalue()
+        return Text, out.getvalue()
 
-    def generate_captcha(self):
-        self.initialize()
-        return self.captcha("")
+    def GenerateCaptcha(self):
+        self.Initialize()
+        return self.Captcha("")
 
 
-captcha = Captcha.instance()
+captcha = Captcha.Instance()
 
 if __name__ == '__main__':
-    print(captcha.generate_captcha())
+    print(captcha.GenerateCaptcha())

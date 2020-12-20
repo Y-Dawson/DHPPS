@@ -13,12 +13,12 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterField(
-            model_name='personalprofile',
+            model_name='PersonalProfile',
             name='avatar',
-            field=models.ImageField(default='defaultFiles/defaultAvatar.png', upload_to=backend.models.user_directory_path, verbose_name='头像'),
+            field=models.ImageField(default='defaultFiles/defaultAvatar.png', upload_to=backend.models.UserDirectoryPath, verbose_name='头像'),
         ),
         migrations.AlterField(
-            model_name='personalprofile',
+            model_name='PersonalProfile',
             name='birth',
             field=models.DateField(default=datetime.date(1900, 1, 1)),
         ),

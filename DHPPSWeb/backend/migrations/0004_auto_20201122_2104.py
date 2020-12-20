@@ -11,7 +11,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterField(
-            model_name='personalprofile',
+            model_name='PersonalProfile',
             name='avatar',
             field=models.ImageField(default='defaultFiles/defaultAvatar.png', upload_to='avatar', verbose_name='头像'),
         ),

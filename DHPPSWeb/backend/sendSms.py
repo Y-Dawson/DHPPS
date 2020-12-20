@@ -4,12 +4,12 @@ from random import randint
 from aliyunsdkcore.client import AcsClient
 from aliyunsdkcore.request import CommonRequest
 import base64
-AK = 'TFRBSTRHMWNDTWsxektGYnQ2RjZMZnpY'
-AS = 'NHNWMTNqUTZ6RkJvYUZ6dnhkMEpTTkMwOUhERUd0'
+AK = 'TFRBSTRHRng0TnJISldzOFd0VUxEVE1a'
+AS = 'a2JUN2tQR0Y2OG52RlBaQW5YSHVxREtyME80SlhmCg=='
 client = AcsClient(base64.b64decode(AK), base64.b64decode(AS), 'cn-hangzhou')
 
 
-def sendSms(iPhonenum):
+def SendSms(phoneNum):
     ranInt = randint(100000, 999999)
     sendString = '{\"code\":\"'+str(ranInt)+'\"}'
     request = CommonRequest()
@@ -21,9 +21,9 @@ def sendSms(iPhonenum):
     request.set_action_name('SendSms')
 
     request.add_query_param('RegionId', "cn-hangzhou")
-    request.add_query_param('TemplateCode', "SMS_204111380")
-    request.add_query_param('PhoneNumbers', iPhonenum)
-    request.add_query_param('SignName', "请填写")
+    request.add_query_param('TemplateCode', "SMS_206550187")
+    request.add_query_param('PhoneNumbers', phoneNum)
+    request.add_query_param('SignName', "DHPPS系统")
     request.add_query_param('TemplateParam', sendString)
 
     response = client.do_action(request)

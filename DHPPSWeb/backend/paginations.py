@@ -3,6 +3,9 @@ from rest_framework.response import Response
 
 
 class MyFormatResultsSetPagination(PageNumberPagination):
+    '''
+    分页器：继承PageNumberPagination，使用相关属性并重写函数。
+    '''
     page_size_query_param = "pageSize"
     page_query_param = 'page'
     page_size = 6
