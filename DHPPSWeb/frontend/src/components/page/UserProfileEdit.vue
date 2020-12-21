@@ -14,7 +14,7 @@
                   class="iq-waves-effect"
                   :to="{
                     path: '/UserProfile',
-                    query: { uI: this.AdminUserId },
+                    query: { uI: this.AdminId },
                   }"
                   ><i class="ri-profile-line"></i
                   ><span>个人资料</span></router-link
@@ -30,7 +30,7 @@
                   class="iq-waves-effect"
                   :to="{
                     path: '/',
-                    query: { uI: this.AdminUserId },
+                    query: { uI: this.AdminId },
                   }"
                   ><i class="ri-file-list-line"></i
                   ><span>我的案例</span></router-link

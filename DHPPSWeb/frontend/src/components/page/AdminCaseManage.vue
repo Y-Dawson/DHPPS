@@ -14,7 +14,7 @@
                   class="iq-waves-effect"
                   :to="{
                     path: '/AdminIndex',
-                    query: { uI: this.AdminUserId },
+                    query: { uI: this.AdminId },
                   }"
                   ><i class="ri-home-4-line"></i><span>首页</span></router-link
                 >
@@ -31,7 +31,7 @@
                   class="iq-waves-effect"
                   :to="{
                     path: '/AdminUserManage',
-                    query: { uI: this.AdminUserId },
+                    query: { uI: this.AdminId },
                   }"
                   ><i class="ri-user-line"></i
                   ><span>信息管理</span></router-link
@@ -42,7 +42,7 @@
                   class="iq-waves-effect"
                   :to="{
                     path: '/SuperCaseManage',
-                    query: { uI: this.AdminUserId },
+                    query: { uI: this.AdminId },
                   }"
                   ><i class="ri-home-4-line"></i><span>案例管理</span></router-link
                 >
@@ -88,13 +88,12 @@
                   class="search-toggle iq-waves-effect d-flex align-items-center"
                 >
                   <img
-                    :fit="fit"
                     :src="AdminUrl"
                     class="img-fluid rounded mr-3"
                     alt="user"
                   />
                   <div class="caption">
-                    <h6 class="mb-0 line-height">{{ MyContent.username }}</h6>
+                    <h6 class="mb-0 line-height">{{ MyContent.userName }}</h6>
                   </div>
                 </a>
               </li>
@@ -152,12 +151,12 @@
                           :key="item.userid"
                           style="text-align: center"
                         >
-                          <td>{{ item.userid }}</td>
-                          <td>{{ item.username }}</td>
-                          <td>{{ item.phonenumber }}</td>
+                          <td>{{ item.userId }}</td>
+                          <td>{{ item.userName }}</td>
+                          <td>{{ item.phoneNumber }}</td>
                           <td>
                             <span class="badge iq-bg-primary">{{
-                              item.casenumber
+                              item.caseNumber
                             }}</span>
                           </td>
                           <td>{{ item.remark }}</td>
@@ -172,7 +171,7 @@
                                 data-placement="top"
                                 title=""
                                 data-original-title="Edit"
-                                @click="SwitchPage(item.userid)"
+                                @click="SwitchPage(item.userId)"
                               >
                                 查看案例
                               </a>
@@ -263,8 +262,8 @@
                             color: rgb(173, 173, 173);
                           "
                         ></i>
-                        <span id="returnContent">{{ item.casename }}</span>
-                        <div
+                        <span id="returnContent">{{ item.caseName }}</span>
+                        <!-- <div
                           style="
                             font-size: 8px;
                             line-height: 20px;
@@ -276,7 +275,7 @@
                             id="delete"
                             type="text"
                             style="font-size: 8px; color: #55587e"
-                            @click="edit(item.caseid)"
+                            @click="edit(item.caseId)"
                             >进入编辑</el-button
                           >
                           <br />
@@ -284,21 +283,21 @@
                             id="delete"
                             type="text"
                             style="font-size: 8px; color: rgb(221, 0, 0)"
-                            @click="open(item.caseid)"
+                            @click="open(item.caseId)"
                             >删除</el-button
                           >
-                        </div>
+                        </div> -->
                       </div>
                       <dl class="box-text">
                         <!-- <span>{{casenum}}</span> -->
                         <span>初始城市数量：</span>
-                        <span id="returnContent">{{ item.citynumber }}</span>
+                        <span id="returnContent">{{ item.cityNumber }}</span>
                         <br />
                         <span>初始道路数量：</span>
-                        <span id="returnContent">{{ item.roadnumber }}</span>
+                        <span id="returnContent">{{ item.roadNumber }}</span>
                         <br />
                         <span>初始总人口：</span>
-                        <span id="returnContent">{{ item.inittotal }}</span>
+                        <span id="returnContent">{{ item.initTotal }}</span>
                         <br />
                         <span>初始感染人口：</span>
                         <span id="returnContent">{{
@@ -312,9 +311,9 @@
                   </el-col>
                 </div>
                 <div class="paginate">
-                  <button class="primaryb" @click="prevPage()">上一页</button>
+                  <button class="primaryb" @click="prevCasePage(UI)">上一页</button>
                   <span>第{{ currentPage }}页/共{{ totalPage }}页</span>
-                  <button class="primaryb" @click="nextPage()">下一页</button>
+                  <button class="primaryb" @click="nextCasePage(UI)">下一页</button>
                 </div>
               </div>
             </div>
@@ -370,6 +369,11 @@ export default {
       currentPage: 1, //当前页数 ，默认为1
       pageSize: 4, // 每页显示数量
       paginate: 10,
+      //case分页
+      totalCasePage: 1, // 统共页数，默认为1
+      currentCasePage: 1, //当前页数 ，默认为1
+      pageCaseSize: 6, // 每页显示数量
+      paginateCase: '',
       //用户编辑的id和昵称
       UserId: "",
       UserName: "",
@@ -397,7 +401,7 @@ export default {
     },
     getUserContent: function () {
       axios
-        .get("/apis/backend/generalUserManage/", {
+        .get("/apis/backend/userManage/", {
           params: {
             pageSize: 10,
             page: this.currentPage,
@@ -417,64 +421,44 @@ export default {
           alert("数据请求失败wdnmd");
         });
     },
-    PostUserMessage: function (UI) {
-      var self = this;
-      alert($("#RemarkMessage").val()),
-        alert(UI),
-        alert($("#selected").val()),
-        axios
-          .put("/apis/backend/accountInfo/" + UI + "/", {
-            remark: $("#RemarkMessage").val(),
-            authority: $("#selected").val(),
-          })
-          .then(
-            (response) => (
-              alert(26),
-              this.$message("修改权限成功"),
-              alert(JSON.stringify(response))
-            )
-          )
-          .catch(function (error) {
-            alert("数据发送失败");
-          });
-    },
     SwitchPage: function (UI) {
       (this.UserId = UI), (this.show = true);
-      getCaseContent(UI);
+      this.getCaseContent(UI);
     },
     ClosePage: function () {
       this.show = false;
+      this.getUserContent();
     },
     //获取案例内容
-    getCaseContent: function () {
+    getCaseContent: function (UI) {
       var self = this;
       axios
         .get("/apis/backend/case/", {
           params: {
-            userid: this.$route.query.userId,
-            page_size: 6,
-            page: self.currentPage,
+            userId: UI,
+            pageCaseSize: 6,
+            page: self.currentCasePage,
           },
         })
         .then(
           (response) => (
             (self.currentPageData = response.data),
-            // alert(JSON.stringify(this.currentPageData))
-            (self.totalPage = Math.ceil(
-              self.currentPageData.pagination / self.pageSize
-            ))
+            (self.totalCasePage = Math.ceil(
+              self.currentPageData.paginationCase / self.pageCaseSize
+            )),
+            this.testCasePage()
             //
           )
         )
         .catch(function (error) {
           // 请求失败处理
-          // alert('数据请求失败wdnmd')
+          alert('数据请求失败wdnmd')
         });
     },
     edit: function (id) {
       var self = this;
       let data = new FormData();
-      data.append("caseid", id);
+      data.append("caseId", id);
       axios
         .post("/apis/backend/getCaseInfo/", data)
         .then((response) => {
@@ -559,6 +543,23 @@ export default {
     testPage: function () {
       if (this.totalPage == 0) this.totalPage = 1;
     },
+
+    //上一页
+    prevCasePage(UI) {
+      if (this.currentCasePage == 1) return;
+      this.currentCasePage--;
+      this.getCaseContent(UI);
+    },
+    // 下一页
+    nextCasePage(UI) {
+      if (this.currentCasePage == this.totalCasePage) return;
+      this.currentCasePage++;
+      this.getCaseContent(UI);
+    },
+    testCasePage: function () {
+      if (this.totalCasePage == 0) this.totalCasePage = 1;
+    },
+
     handleDel(UI) {
       this.$confirm("确认删除该用户吗？", "系统提示", {
         confirmButtonText: "确定",

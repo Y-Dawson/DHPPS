@@ -14,7 +14,7 @@
                   class="iq-waves-effect"
                   :to="{
                     path: '/SuperIndex',
-                    query: { uI: this.AdminUserId },
+                    query: { uI: this.AdminId },
                   }"
                   ><i class="ri-home-4-line"></i><span>首页</span></router-link
                 >
@@ -31,7 +31,7 @@
                   class="iq-waves-effect"
                   :to="{
                     path: '/SuperUserManage',
-                    query: { uI: this.AdminUserId },
+                    query: { uI: this.AdminId },
                   }"
                   ><i class="ri-user-line"></i
                   ><span>信息管理</span></router-link
