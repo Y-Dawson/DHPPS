@@ -85,7 +85,6 @@ def LoginRequired(view_func):
 def Signin(request):
     # 若已经登录，直接进入已登录账号
     if request.session.get('isLogin', None):
-        request.session['isLogin'] = False
         return JsonResponse({"message": "你已经登录", "status": 404})
     elif request.method == "POST":
         # 从参数获取phoneNum和password
