@@ -215,7 +215,7 @@ export default {
           ],
         securitt_code: [
           { required: true, message: "请输入验证码", trigger: "blur"},
-          { min: 4, max: 4, message: "请输入4位验证码", trigger: "blur"}
+          { min: 6, max: 6, message: "请输入6位验证码", trigger: "blur"}
           ],
       }
     };
@@ -245,8 +245,8 @@ export default {
     postAccount: function () {
       var self = this;
       let data = new FormData();
-      data.append("username",$("#username").val());
-      data.append("phonenum",$("#phonenum").val());
+      data.append("userName",$("#username").val());
+      data.append("phoneNum",$("#phonenum").val());
       data.append("email",$("#email").val());
       data.append("password",$("#password").val());
       data.append("verifyCode",$("#securitt_code").val());
