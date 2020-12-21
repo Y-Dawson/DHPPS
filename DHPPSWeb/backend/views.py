@@ -42,7 +42,7 @@ def Index(request):
     :param request: request object
     :return: page
     """
-    return render(request, 'Index.html')
+    return render(request, 'index.html')
 
 
 # 对传入的密码和salt进行md5加密，返回得到的加密密码
@@ -210,10 +210,11 @@ def Signup(request):
         status = 404
 
         redisClient = get_redis_connection('smsCode')
-        verifyCodeInCache = redisClient.get(phoneNum).decode('ascii')
+        verifyCodeInCache = redisClient.get(phoneNum)
         print(verifyCodeInCache)
         if verifyCodeInCache is None:
             return JsonResponse({"message": "尚未申请短信验证码", "status": 404})
+        verifyCodeInCache = verifyCodeInCache.decode('ascii')
 
         if userName and phoneNum and email and password and verifyCode:  # 获取数据
             if verifyCodeInCache != verifyCode:
@@ -312,9 +313,11 @@ def ForgetPwd(request):
             # 获取失败则捕捉错误
 
             redisClient = get_redis_connection('smsCode')
-            verifyCodeInCache = redisClient.get(phoneNum).decode('ascii')
+            verifyCodeInCache = redisClient.get(phoneNum)
+            print(verifyCodeInCache)
             if verifyCodeInCache is None:
                 return JsonResponse({"message": "尚未申请短信验证码", "status": 404})
+            verifyCodeInCache = verifyCodeInCache.decode('ascii')
 
             if verifyCode and verifyCodeInCache != verifyCode:
                 return JsonResponse({"message": "短信验证码错误，请检查重试", "status": 404})
@@ -383,6 +386,7 @@ def SaveCase(request):
                     newCase = models.CaseData.objects.create(
                         userId=models.Accountinformation.objects.filter(userId=userId).first(),
                         caseName=caseName,
+                        caseMode=caseMode,
                         cityNumber=int(cityNum),
                         roadNumber=int(roadNum),
                         initTotal=initTotalNum,
@@ -451,6 +455,94 @@ def SaveCase(request):
                 print('########################################################')
                 message = "保存案例失败"
                 status = 404
+        elif (caseMode == "地图模式"):
+            initTotalNum = 0
+            initTotalInfectedNum = 0
+            initcitydataList = InitCityData.split(",")
+            initroaddataList = InitRoadData.split(",")
+
+            cityCount = 0
+            for cityInfo in initcitydataList:
+                value = cityInfo.split(":")[1]
+                if cityCount % 3 == 1:
+                    initPop = int(value)
+                    initTotalNum += initPop
+                elif cityCount % 3 == 2:
+                    initInfect = int(value)
+                    initTotalInfectedNum += initInfect
+                cityCount += 1
+            message = "开始进行案例保存"
+            status = 200
+            newcaseId = 0
+            try:
+                # 新增案例
+                if (models.Accountinformation.objects.filter(userId=userId).exist()):
+                    newCase = models.CaseData.objects.create(
+                        userId=models.Accountinformation.objects.filter(userId=userId).first(),
+                        caseName=caseName,
+                        caseMode=caseMode,
+                        cityNumber=int(cityNum),
+                        roadNumber=int(roadNum),
+                        initTotal=initTotalNum,
+                        initTotalInfected=initTotalInfectedNum
+                    )
+                else:
+                    return JsonResponse({"message": "目标用户不存在", "status": 404})
+                # 新增城市信息
+                cityCount = 0
+                cityName = ""
+                initPop = ""
+                initInfect = ""
+                x = 0.0
+                y = 0.0
+                for cityInfo in initcitydataList:
+                    value = cityInfo.split(":")[1]
+                    if cityCount % 3 == 0:
+                        cityName = value
+                    elif cityCount % 3 == 1:
+                        initPop = int(value)
+                    elif cityCount % 3 == 2:
+                        initInfect = int(value)
+                        newCity = models.InitCityData.objects.create(
+                            caseId=newCase,
+                            cityName=cityName,
+                            initPop=initPop,
+                            initInfect=initInfect
+                        )
+                    cityCount += 1
+
+                # 新增道路信息
+                roadCount = 0
+                for roadInfo in initroaddataList:
+                    value = roadInfo.split(":")[1]
+                    if roadCount % 3 == 0:
+                        departure = value
+                    elif roadCount % 3 == 1:
+                        destination = value
+                    elif roadCount % 3 == 2:
+                        volume = float(value)
+                        models.InitRoadData.objects.create(
+                            caseId=newCase,
+                            departure=departure,
+                            destination=destination,
+                            volume=volume
+                        )
+                    roadCount += 1
+                if (newCase):
+                    models.Accountinformation.objects.filter(userId=userId).update(caseNumber=F("caseNumber") + 1)
+                message = "保存案例成功"
+                status = 200
+                newcaseId = newCase.caseId
+            except Exception as e:
+                print('str(Exception):\t', str(Exception))
+                print('str(e):\t\t', str(e))
+                print('repr(e):\t', repr(e))
+                # print('e.message:\t', e.message)
+                print('########################################################')
+                message = "保存案例失败"
+                status = 404
+        else:
+            return JsonResponse({"message": "检测到未知的地图模式", "status": 404})
         return JsonResponse({"message": message, "status": status, "caseId": newcaseId})
 
 
