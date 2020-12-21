@@ -91,7 +91,7 @@ def GetIdentity(request):
             "authority": authority,
             "message": "返回数据成功",
             "status": 200})
-        return response 
+        return response
 
 
 # 登录函数视图

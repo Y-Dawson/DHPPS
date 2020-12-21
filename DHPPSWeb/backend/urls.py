@@ -11,8 +11,8 @@ urlpatterns = [
     # 渲染首页，其后的页面跳转由前端负责
     path('', views.Index, name="index"),
 
-    # 图形验证码请求
-    path('imageCode/', views.ImageCodeView.as_view()),
+    # 身份验证请求
+    path('getIdentity/', views.GetIdentity, name="getIdentity"),
 
     # 登录请求
     path('signin/', views.Signin, name="signin"),
@@ -22,9 +22,6 @@ urlpatterns = [
 
     # 请求短信验证码
     path('requestSmsCode/', views.RequestSmsCode, name="requestSmsCode"),
-
-    # 请求对应caseId的案例信息
-    path('getCaseInfo/', views.GetCaseInfos, name="getCaseInfo"),
 
     # 注册请求
     path('signup/', views.Signup, name="signup"),
@@ -40,6 +37,13 @@ urlpatterns = [
 
     # 开始模拟请求
     path('startSimulate/', views.StartSimulate, name="startSimulate"),
+
+    # 图形验证码请求
+    path('imageCode/', views.ImageCodeView.as_view()),
+
+    # 请求对应caseId的案例信息
+    path('getCaseInfo/', views.GetCaseInfos, name="getCaseInfo"),
+
     # 用户管理数据请求
     path('userManage/', views.GetUserInfos, name="userManage"),
     path('generalUserManage/', views.GetGeneralUserInfos, name="generalUserManage"),
