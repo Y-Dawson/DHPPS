@@ -103,7 +103,7 @@ def Signin(request):
                 accountInfo = models.AccountInformation.objects.get(userId=profile.userId.userId)
 
                 # 判断是否和存储加密密码相同
-                if (accountInfo.LoginData.userPassword == HashPwd(pwd=password, salt=accountInfo.loginData.salt)):
+                if (accountInfo.logindata.userPassword == HashPwd(pwd=password, salt=accountInfo.logindata.salt)):
                     # 若相同，设置登录状态为True，设置登录id为userId，登录权限为对应权限
                     request.session['isLogin'] = True
                     request.session['userId'] = accountInfo.userId
@@ -126,7 +126,6 @@ def Signin(request):
                 print('str(Exception):\t', str(Exception))
                 print('str(e):\t\t', str(e))
                 print('repr(e):\t', repr(e))
-                print('e.message:\t', e.message)
                 print('########################################################')
                 return JsonResponse({"message": "数据库错误", "status": 404})
         else:
