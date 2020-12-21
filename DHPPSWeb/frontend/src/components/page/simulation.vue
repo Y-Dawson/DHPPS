@@ -8,16 +8,11 @@
         <!-- 头部区域（可配合layui已有的水平导航） -->
         <ul class="layui-nav layui-layout-right">
           <li class="layui-nav-item" style="line-height: 20px">
-            <el-avatar
-              shape="circle"
-              :size="30"
-              :fit="fit"
-              :src="url"
-            ></el-avatar>
+            <el-avatar shape="circle" :size="30" :fit="fit" :src="url"></el-avatar>
           </li>
           <li class="layui-nav-item">
             <a href="javascript:;">
-              <span>{{content.username}}</span>
+              <span>用户名</span>
             </a>
           </li>
         </ul>
@@ -77,7 +72,7 @@
               v-bind:class="{ active1: ss }"
               @click="
                 ss = !ss;
-                sst(ss);
+                StopSimulation(ss);
               "
             >
               <i class="layui-icon layui-icon-pause"></i>
@@ -141,15 +136,15 @@
         <li>
           <div>
             <span class="little-title">城市列表：</span>
-            <li id="city_inf" v-for="city in city_po" :key="city">
-              {{ city }}
+            <li id="city_inf" v-for="city in city_inf" :key="city">
+              {{ city[day] }}
             </li>
           </div>
         </li>
         <li>
           <div>
             <span class="little-title">道路列表：</span>
-            <li id="city_inf" v-for="road in road_di" :key="road">
+            <li id="road_inf" v-for="road in road_di" :key="road">
               {{ road }}
             </li>
           </div>
@@ -157,9 +152,29 @@
       </ul>
 
       <ul class="img-list">
-        <li>
+        <li v-for="o in citycnt" :key="o">
+          <div :id="'ci' + o" class="city" style="left: 10000px; top: 10000px">
+            <img
+              src="../../assets/layui/images/city.gif"
+              alt=""
+              @click="outp('ci' + o)"
+            />
+            <div class="city-infor">
+              <div v-for="j in row_cnt[o]" :key="j">
+                <span v-for="k in people_cnt[o][j]" :key="k" class="text item">
+                  <i
+                    :id="'i' + o + j + k"
+                    class="layui-icon layui-icon-template-1 cityicon"
+                  ></i>
+                </span>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <!-- <li>
           <div id="ci1" class="city" style="left: 300px; top: 300px">
-            <img src="../../assets/layui/images/city.png" alt="" />
+            <img src="../../assets/layui/images/city.gif" alt="" />
             <div class="city-infor">
               <el-form-item prop="population">
                 <span>总人口：{{ ci1_population[day] }}</span>
@@ -185,7 +200,7 @@
               top: cityForm.citytop + 'px',
             }"
           >
-            <img src="../../assets/layui/images/city.png" alt="" />
+            <img src="../../assets/layui/images/city.gif" alt="" />
             <div class="city-infor">
               <el-form-item prop="population">
                 <span>总人口：{{ ci2_population[day] }}</span>
@@ -211,7 +226,7 @@
               top: cityForm.citytop + 'px',
             }"
           >
-            <img src="../../assets/layui/images/city.png" alt="" />
+            <img src="../../assets/layui/images/city.gif" alt="" />
             <div class="city-infor">
               <el-form-item prop="population">
                 <span>总人口：{{ ci3_population[day] }}</span>
@@ -237,7 +252,7 @@
               top: cityForm.citytop + 'px',
             }"
           >
-            <img src="../../assets/layui/images/city.png" alt="" />
+            <img src="../../assets/layui/images/city.gif" alt="" />
             <div class="city-infor">
               <el-form-item prop="population">
                 <span>总人口：{{ ci4_population[day] }}</span>
@@ -263,7 +278,7 @@
               top: cityForm.citytop + 'px',
             }"
           >
-            <img src="../../assets/layui/images/city.png" alt="" />
+            <img src="../../assets/layui/images/city.gif" alt="" />
             <div class="city-infor">
               <el-form-item prop="population">
                 <span>总人口：{{ ci5_population[day] }}</span>
@@ -289,7 +304,7 @@
               top: cityForm.citytop + 'px',
             }"
           >
-            <img src="../../assets/layui/images/city.png" alt="" />
+            <img src="../../assets/layui/images/city.gif" alt="" />
             <div class="city-infor">
               <el-form-item prop="population">
                 <span>总人口：{{ ci6_population[day] }}</span>
@@ -315,7 +330,7 @@
               top: cityForm.citytop + 'px',
             }"
           >
-            <img src="../../assets/layui/images/city.png" alt="" />
+            <img src="../../assets/layui/images/city.gif" alt="" />
             <div class="city-infor">
               <el-form-item prop="population">
                 <span>总人口：{{ ci7_population[day] }}</span>
@@ -341,7 +356,7 @@
               top: cityForm.citytop + 'px',
             }"
           >
-            <img src="../../assets/layui/images/city.png" alt="" />
+            <img src="../../assets/layui/images/city.gif" alt="" />
             <div class="city-infor">
               <el-form-item prop="population">
                 <span>总人口：{{ ci8_population[day] }}</span>
@@ -367,7 +382,7 @@
               top: cityForm.citytop + 'px',
             }"
           >
-            <img src="../../assets/layui/images/city.png" alt="" />
+            <img src="../../assets/layui/images/city.gif" alt="" />
             <div class="city-infor">
               <el-form-item prop="population">
                 <span>总人口：{{ ci9_population[day] }}</span>
@@ -393,7 +408,7 @@
               top: cityForm.citytop + 'px',
             }"
           >
-            <img src="../../assets/layui/images/city.png" alt="" />
+            <img src="../../assets/layui/images/city.gif" alt="" />
             <div class="city-infor">
               <el-form-item prop="population">
                 <span>总人口：{{ ci10_population[day] }}</span>
@@ -408,7 +423,7 @@
               </el-form-item>
             </div>
           </div>
-        </li>
+        </li> -->
       </ul>
 
       <ul class="line_list">
@@ -420,7 +435,10 @@
               left: lineleft + 'px',
               top: linetop + 'px',
             }"
-          ></div>
+          >
+            <span></span>
+            <span></span>
+          </div>
         </li>
 
         <li>
@@ -548,7 +566,7 @@
       <div class="block">
         <el-slider
           v-model="value1"
-          :format-tooltip="formatTooltip"
+          :format-tooltip="FormatTooltip"
           :step="daily_step"
           show-stops
         ></el-slider>
@@ -565,10 +583,9 @@ var linecnt = 1;
 export default {
   data() {
     return {
-      content:[],
       fits: ["fill"],
-      url:"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-      
+      url: "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
+
       ss: false,
       disable: true,
       value1: 0,
@@ -604,9 +621,14 @@ export default {
 
       userId: "",
       casename: "",
-      citycnt: 1,
-      linecnt: 1,
+      citycnt: 100,
+      linecnt: 100,
+
+      people_cnt: [[]],
+      row_cnt: [],
+
       city_inf: [],
+      city_information: [], //初始信息
       road_inf: [],
       city_position: [],
 
@@ -645,18 +667,7 @@ export default {
       road_di: [],
       road_c1: "",
       road_c2: "",
-      ci: [
-        "ci1",
-        "ci2",
-        "ci3",
-        "ci4",
-        "ci5",
-        "ci6",
-        "ci7",
-        "ci8",
-        "ci9",
-        "ci10",
-      ],
+      ci: ["ci1", "ci2", "ci3", "ci4", "ci5", "ci6", "ci7", "ci8", "ci9", "ci10"],
       ri: [
         "line1",
         "line2",
@@ -724,12 +735,11 @@ export default {
     console.log("每日病例：", this.params.DailyInfected.data.DailyforecastData);
     var foreData = this.params.DailyInfected.data.DailyforecastData;
 
-
     this.userId = this.params.userid;
     this.casename = this.params.casename;
     this.citycnt = this.params.citynum;
     this.linecnt = this.params.roadnum;
-    this.city_inf = this.params.Initcitydata;
+    this.city_information = this.params.Initcitydata;
     this.road_inf = this.params.Initroaddata;
     this.city_position = this.params.Cityposition;
     this.day_num = parseInt(this.params.Daynum);
@@ -737,11 +747,66 @@ export default {
     console.log("模拟天数：", this.params.Daynum);
     console.log("每日跨度：", this.daily_step);
 
-    this.getContent(this.userId);
+    for (var i = 0; i < parseInt(this.params.Daynum); i++) {
+      for (var j = 0; j < parseInt(this.params.citynum); j++) {
+        this.AddInformation(
+          foreData[i][j]["cityname"],
+          foreData[i][j]["population"],
+          foreData[i][j]["dailyinfected"],
+          foreData[i][j]["infected"]
+        );
+      }
+    }
+
+    for (var i = 0; i < parseInt(this.params.citynum); i++) {
+      var newa = new Array();
+      for (var j = 0; j < parseInt(this.params.Daynum); j++) {
+        var s =
+          foreData[j][i]["cityname"] +
+          ":" +
+          foreData[j][i]["population"] +
+          "," +
+          foreData[j][i]["dailyinfected"] +
+          "," +
+          foreData[j][i]["infected"];
+        newa.push(s);
+      }
+      this.city_inf.push(newa);
+    }
+
+    this.row_cnt.push(1);
+
+    console.log("citynum", this.citycnt);
+
+    for (var i = 0; i < parseInt(this.params.citynum); i++) {
+      var pop = parseInt(foreData[0][i]["population"]);
+      pop = parseInt(pop / 100);
+      var temp = parseInt(pop / 8);
+      if (pop % 8 != 0) {
+        temp += 1;
+      }
+      this.row_cnt.push(temp);
+      var newb = new Array();
+      newb.push(1);
+      for (var j = 1; j <= temp; j++) {
+        if (j < temp) {
+          newb.push(8);
+        } else {
+          var le = pop - (temp - 1) * 8;
+          newb.push(le);
+        }
+      }
+      this.people_cnt.push(newb);
+    }
+
+    this.row_cnt.push(0);
+    console.log("rc", this.row_cnt);
 
     var cnt = 0;
     for (var j in this.params.Cityposition) {
       var te = this.params.Cityposition[j].split(",");
+      console.log("te", te);
+      console.log("j", j);
       var tt, ci, x, y, cid;
       cnt = 0;
       for (var k in te) {
@@ -759,10 +824,16 @@ export default {
           y = tt[1];
         }
       }
-      cid = this.getID(ci);
+      cid = this.GetID(ci);
       var cityentity = document.getElementById(cid);
+
+      console.log("cityID", cid);
+      console.log("cityentity", cityentity);
+
       cityentity.style.left = x + "px";
       cityentity.style.top = y + "px";
+
+      console.log("cityID", cid);
     }
 
     for (var j in this.params.Initroaddata) {
@@ -788,49 +859,18 @@ export default {
       }
       s = city1 + "-" + city2 + ":" + vol;
       this.road_di.push(s);
-      var cid1 = this.getID(city1);
-      var cid2 = this.getID(city2);
+      var cid1 = this.GetID(city1);
+      var cid2 = this.GetID(city2);
       console.log(cid1, cid2);
 
-      this.drawline(cid1, cid2);
-    }
-    // for (var case in foreData) {
-    //   for(var city in case){
-
-    //   }
-    // }
-
-    for (var i = 0; i < parseInt(this.params.Daynum); i++) {
-      for (var j = 0; j < parseInt(this.params.citynum); j++) {
-        this.add_inf(
-          foreData[i][j]["cityname"],
-          foreData[i][j]["population"],
-          foreData[i][j]["dailyinfected"],
-          foreData[i][j]["infected"]
-        );
-      }
+      this.DrawLine(cid1, cid2);
     }
 
     console.log("c1_inf：", this.ci1_population);
   },
 
   methods: {
-    getContent: function (userId) {
-      var self = this;
-      axios
-        .get("http://127.0.0.1:8000/backend/profile/"+userId+"/")
-        .then(
-          (response) =>
-            (self.content = response.data)
-            //alert(JSON.stringify(response))
-        )
-        .catch(function (error) {
-          // 请求失败处理
-          alert("数据请求失败wdnmd");
-        });
-    },
-    
-    sst(ss) {
+    StopSimulation(ss) {
       if (this.ss == true) {
         console.log("返回设置参数界面");
         this.ss = false;
@@ -842,7 +882,7 @@ export default {
               casename: this.casename,
               citynum: this.citycnt,
               roadnum: this.linecnt,
-              Initcitydata: this.city_inf,
+              Initcitydata: this.city_information,
               Initroaddata: this.road_inf,
               Cityposition: this.city_position,
             }),
@@ -851,9 +891,10 @@ export default {
       }
     },
 
-    formatTooltip(val) {
+    FormatTooltip(val) {
       this.day = parseInt(val / this.daily_step);
       console.log("day：", this.day);
+      this.changeColor(this.day);
       var d = parseInt(val / this.daily_step) + 1;
       var m = 1;
       if (d > 31) {
@@ -876,7 +917,7 @@ export default {
       return s;
     },
 
-    drawline(ci1, ci2) {
+    DrawLine(ci1, ci2) {
       var c1 = document.getElementById(ci1);
       var c2 = document.getElementById(ci2);
 
@@ -906,17 +947,11 @@ export default {
       var ttcy2 = parseInt(tcy2);
 
       var rotang = 0;
-      if (
-        (ttcx1 <= ttcx2 && ttcy1 <= ttcy2) ||
-        (ttcx1 >= ttcx2 && ttcy1 >= ttcy2)
-      ) {
+      if ((ttcx1 <= ttcx2 && ttcy1 <= ttcy2) || (ttcx1 >= ttcx2 && ttcy1 >= ttcy2)) {
         rotang = Math.asin(parseFloat(dy / dis));
         rotang = (rotang / Math.PI) * 180;
       }
-      if (
-        (ttcx1 <= ttcx2 && ttcy1 >= ttcy2) ||
-        (ttcx1 >= ttcx2 && ttcy1 <= ttcy2)
-      ) {
+      if ((ttcx1 <= ttcx2 && ttcy1 >= ttcy2) || (ttcx1 >= ttcx2 && ttcy1 <= ttcy2)) {
         rotang = Math.asin(parseFloat(dy / dis));
         rotang = (rotang / Math.PI) * 180;
         rotang = 180 - rotang;
@@ -925,19 +960,28 @@ export default {
       var ll = document.getElementById("line" + linecnt);
       ll.style.left = (ttcx1 + ttcx2) / 2 - parseInt(dis) / 2 + 20 + "px";
       ll.style.top = (ttcy1 + ttcy2) / 2 + 50 + "px";
+      ll.style.transition = "width 2s";
       ll.style.width = parseInt(dis) + "px";
       ll.style.transform = "rotate(" + rotang + "deg)";
       linecnt += 1;
     },
 
-    getID(n) {
+    GetID(n) {
       if (n == "A") return "ci1";
       if (n == "B") return "ci2";
       if (n == "C") return "ci3";
       if (n == "D") return "ci4";
+      if (n == "E") return "ci5";
+      if (n == "F") return "ci6";
+      if (n == "G") return "ci7";
+      if (n == "H") return "ci8";
+      if (n == "I") return "ci9";
+      if (n == "G") return "ci10";
+      if (n == "K") return "ci11";
+      if (n == "L") return "ci12";
     },
 
-    add_inf(n, popu, dinf, inf) {
+    AddInformation(n, popu, dinf, inf) {
       if (n == "A") {
         this.ci1_population.push(popu);
         this.ci1_totalInfected.push(inf);
@@ -959,6 +1003,119 @@ export default {
         this.ci3_newInfected.push(dinf);
       }
     },
+
+    changeColor(index) {
+      // console.log("动起来");
+      // console.log(this.citycnt);
+      for (var i = 1; i <= this.citycnt; i++) {
+        // console.log("row", this.row_cnt[i]);
+        for (var j = 1; j <= this.row_cnt[i]; j++) {
+          if (j < this.row_cnt[i]) {
+            for (var k = 1; k <= 8; k++) {
+              var iid = "i" + i + j + k;
+              var iidentity = document.getElementById(iid);
+              // console.log("iidentity", iidentity);
+              iidentity.style.color = "green";
+              // console.log("iid", iid);
+            }
+          } else {
+            // console.log("换行");
+            for (var k = 1; k <= this.people_cnt[i][j]; k++) {
+              var iid = "i" + i + j + k;
+              var iidentity = document.getElementById(iid);
+              // console.log("iidentity", iidentity);
+              iidentity.style.color = "green";
+              // console.log("iid", iid);
+            }
+          }
+        }
+
+        if (i == 1) {
+          var inf_cnt = parseInt(this.ci1_totalInfected[index]);
+          inf_cnt = parseInt(inf_cnt / 100);
+          console.log("tot", this.ci1_totalInfected[index]);
+          console.log("inf_cnt", inf_cnt);
+
+          for (var j = 1; j <= this.row_cnt[i]; j++) {
+            if (inf_cnt > 8) {
+              for (var k = 1; k <= 8; k++) {
+                var iid = "i" + i + j + k;
+                var iidentity = document.getElementById(iid);
+                console.log("iidentity", iidentity);
+                iidentity.style.color = "red";
+              }
+              inf_cnt -= 8;
+            } else {
+              for (var k = 1; k <= inf_cnt; k++) {
+                var iid = "i" + i + j + k;
+                var iidentity = document.getElementById(iid);
+                console.log("iidentity", iidentity);
+                iidentity.style.color = "red";
+              }
+              break;
+            }
+          }
+        }
+
+        if (i == 2) {
+          var inf_cnt = parseInt(this.ci2_totalInfected[index]);
+          inf_cnt = parseInt(inf_cnt / 100);
+          console.log("tot", this.ci2_totalInfected[index]);
+          console.log("inf_cnt", inf_cnt);
+
+          for (var j = 1; j <= this.row_cnt[i]; j++) {
+            if (inf_cnt > 8) {
+              for (var k = 1; k <= 8; k++) {
+                var iid = "i" + i + j + k;
+                var iidentity = document.getElementById(iid);
+                console.log("iidentity", iidentity);
+                iidentity.style.color = "red";
+              }
+              inf_cnt -= 8;
+            } else {
+              for (var k = 1; k <= inf_cnt; k++) {
+                var iid = "i" + i + j + k;
+                var iidentity = document.getElementById(iid);
+                console.log("iidentity", iidentity);
+                iidentity.style.color = "red";
+              }
+              break;
+            }
+          }
+        }
+
+        if (i == 3) {
+          var inf_cnt = parseInt(this.ci3_totalInfected[index]);
+          inf_cnt = parseInt(inf_cnt / 100);
+          console.log("tot", this.ci3_totalInfected[index]);
+          console.log("inf_cnt", inf_cnt);
+
+          for (var j = 1; j <= this.row_cnt[i]; j++) {
+            if (inf_cnt > 8) {
+              for (var k = 1; k <= 8; k++) {
+                var iid = "i" + i + j + k;
+                var iidentity = document.getElementById(iid);
+                console.log("iidentity", iidentity);
+                iidentity.style.color = "red";
+              }
+              inf_cnt -= 8;
+            } else {
+              for (var k = 1; k <= inf_cnt; k++) {
+                var iid = "i" + i + j + k;
+                var iidentity = document.getElementById(iid);
+                console.log("iidentity", iidentity);
+                iidentity.style.color = "red";
+              }
+              break;
+            }
+          }
+        }
+      }
+    },
+
+    outp(data) {
+      alert(data);
+    },
   },
 };
 </script>
@@ -966,9 +1123,9 @@ export default {
 <style scoped>
 @import "../../assets/layui/css/layui.css";
 
-body {
+/* body {
   overflow: hidden;
-}
+} */
 
 .layui-nav-tree .layui-nav-item a {
   font-weight: bold;
@@ -1166,7 +1323,6 @@ body {
 
 .add-wrapper {
   position: absolute;
-  display: none;
   width: 70px;
   height: 100px;
   right: 240px;
@@ -1292,37 +1448,12 @@ canvas {
   width: 75px;
 }
 
-.img-list .city:hover .city-infor {
-  display: block;
-  z-index: 9999;
-}
-
-.city-infor .el-form-item {
-  margin-bottom: 15px;
-}
-
-.city-infor input.el-input__inner {
-  border-radius: 10px;
-  width: 150px;
-  margin-left: 20px;
-  margin-top: 10px;
-  /* margin-bottom: 10px; */
-}
-
-.city-infor .el-button--primary,
-.city-infor .el-button--info {
-  display: inline;
-  margin-top: 10px;
-  margin-left: 100px;
-}
-
 .line_list .road_line {
   display: block;
   position: absolute;
   height: 5px;
   background-color: #000;
-  /* margin-left: 5000px;
-  margin-top: 5000px; */
+  overflow: hidden;
 }
 
 .block {
@@ -1330,5 +1461,56 @@ canvas {
   width: 800px;
   margin-left: 325px;
   margin-top: 550px;
+}
+
+.cityicon {
+  margin-right: 8px;
+}
+
+.road_line span {
+  position: absolute;
+  display: block;
+}
+
+.road_line span:nth-child(1) {
+  height: 2px;
+  width: 200px;
+  top: 0px;
+  left: -200px;
+  background: linear-gradient(to right, rgba(0, 0, 0, 0), #f6e58d);
+  border-top-right-radius: 1px;
+  border-bottom-right-radius: 1px;
+  animation: span1 2s linear infinite;
+  animation-delay: 1s;
+}
+
+.road_line span:nth-child(2) {
+  height: 2px;
+  width: 200px;
+  right: -200px;
+  bottom: 0px;
+  background: linear-gradient(to left, rgba(0, 0, 0, 0), #f6e58d);
+  border-top-left-radius: 1px;
+  border-bottom-left-radius: 1px;
+  animation: span3 2s linear infinite;
+  animation-delay: 3s;
+}
+
+@keyframes span1 {
+  0% {
+    left: -300px;
+  }
+  100% {
+    left: 300px;
+  }
+}
+
+@keyframes span3 {
+  0% {
+    right: -300px;
+  }
+  100% {
+    right: 300px;
+  }
 }
 </style>

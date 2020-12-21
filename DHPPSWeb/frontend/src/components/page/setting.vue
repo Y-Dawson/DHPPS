@@ -20,16 +20,11 @@
             >
           </li>
           <li class="layui-nav-item" style="line-height: 20px">
-            <el-avatar
-              shape="circle"
-              :size="30"
-              :fit="fit"
-              :src="url"
-            ></el-avatar>
+            <el-avatar shape="circle" :size="30" :fit="fit" :src="url"></el-avatar>
           </li>
           <li class="layui-nav-item">
             <a href="javascript:;">
-              <span>{{content.username}}</span>
+              <span>用户名</span>
             </a>
           </li>
         </ul>
@@ -42,7 +37,7 @@
       height="660"
       style="border: 1px solid #c3c3c3"
       ref="canvas"
-      @click="show"
+      @click="ShowCity"
     ></canvas>
 
     <el-form ref="cityFormRef" :model="cityForm" :rules="cityFormRule">
@@ -54,7 +49,7 @@
               v-bind:class="{ active1: np }"
               @click="
                 np = !np;
-                npt(np);
+                NewPointer(np);
               "
             >
               <i class="layui-icon layui-icon-add-circle"></i>
@@ -70,7 +65,7 @@
               v-bind:class="{ active1: cp }"
               @click="
                 cp = !cp;
-                cpt(cp);
+                ConnectPointer(cp);
               "
             >
               <i class="layui-icon layui-icon-release"></i>
@@ -86,7 +81,7 @@
               v-bind:class="{ active1: dp }"
               @click="
                 dp = !dp;
-                dpt(dp);
+                DeletePointer(dp);
               "
             >
               <i class="layui-icon layui-icon-delete"></i>
@@ -102,7 +97,7 @@
               v-bind:class="{ active1: dr }"
               @click="
                 dr = !dr;
-                drt(dr);
+                DeleteRoad(dr);
               "
             >
               <i class="layui-icon layui-icon-fonts-clear"></i>
@@ -118,7 +113,7 @@
               v-bind:class="{ active1: bs }"
               @click="
                 bs = !bs;
-                bst(bs);
+                BeginSimulation(bs);
               "
             >
               <i class="layui-icon layui-icon-play"></i>
@@ -134,7 +129,7 @@
               v-bind:class="{ active1: sc }"
               @click="
                 sc = !sc;
-                sct(sc);
+                SaveCase(sc);
               "
             >
               <i class="layui-icon layui-icon-log"></i>
@@ -150,7 +145,7 @@
               v-bind:class="{ active1: mc }"
               @click="
                 mc = !mc;
-                mct(mc);
+                MyCase(mc);
               "
             >
               <i class="layui-icon layui-icon-user"></i>
@@ -225,8 +220,8 @@
               top: cityForm.citytop + 'px',
             }"
             @click="
-              connect_city('ci1');
-              delete_city('ci1');
+              ConnectCity('ci1');
+              DeleteCity('ci1');
             "
           >
             <img src="../../assets/layui/images/city.png" alt="" />
@@ -239,10 +234,7 @@
               </el-form-item> -->
 
               <el-form-item prop="population" class="set_input">
-                <el-input
-                  v-model="cityForm.population"
-                  placeholder="城市人口"
-                ></el-input>
+                <el-input v-model="cityForm.population" placeholder="城市人口"></el-input>
               </el-form-item>
 
               <el-form-item prop="beginInfected" class="set_input">
@@ -255,7 +247,7 @@
               <el-form-item class="set_button">
                 <el-button
                   type="primary"
-                  @click="city_confirm('ci1')"
+                  @click="ConfirmCity('ci1')"
                   :disabled="isdisabled1"
                   >确 认</el-button
                 >
@@ -273,8 +265,8 @@
               top: cityForm.citytop + 'px',
             }"
             @click="
-              connect_city('ci2');
-              delete_city('ci2');
+              ConnectCity('ci2');
+              DeleteCity('ci2');
             "
           >
             <img src="../../assets/layui/images/city.png" alt="" />
@@ -287,10 +279,7 @@
               </el-form-item> -->
 
               <el-form-item prop="population" class="set_input">
-                <el-input
-                  v-model="cityForm.population"
-                  placeholder="城市人口"
-                ></el-input>
+                <el-input v-model="cityForm.population" placeholder="城市人口"></el-input>
               </el-form-item>
 
               <el-form-item prop="beginInfected" class="set_input">
@@ -303,7 +292,7 @@
               <el-form-item class="set_button">
                 <el-button
                   type="primary"
-                  @click="city_confirm('ci2')"
+                  @click="ConfirmCity('ci2')"
                   :disabled="isdisabled2"
                   >确 认</el-button
                 >
@@ -321,17 +310,14 @@
               top: cityForm.citytop + 'px',
             }"
             @click="
-              connect_city('ci3');
-              delete_city('ci3');
+              ConnectCity('ci3');
+              DeleteCity('ci3');
             "
           >
             <img src="../../assets/layui/images/city.png" alt="" />
             <div class="city-infor">
               <el-form-item prop="population" class="set_input">
-                <el-input
-                  v-model="cityForm.population"
-                  placeholder="城市人口"
-                ></el-input>
+                <el-input v-model="cityForm.population" placeholder="城市人口"></el-input>
               </el-form-item>
 
               <el-form-item prop="beginInfected" class="set_input">
@@ -344,7 +330,7 @@
               <el-form-item class="set_button">
                 <el-button
                   type="primary"
-                  @click="city_confirm('ci3')"
+                  @click="ConfirmCity('ci3')"
                   :disabled="isdisabled3"
                   >确 认</el-button
                 >
@@ -362,17 +348,14 @@
               top: cityForm.citytop + 'px',
             }"
             @click="
-              connect_city('ci4');
-              delete_city('ci4');
+              ConnectCity('ci4');
+              DeleteCity('ci4');
             "
           >
             <img src="../../assets/layui/images/city.png" alt="" />
             <div class="city-infor">
               <el-form-item prop="population" class="set_input">
-                <el-input
-                  v-model="cityForm.population"
-                  placeholder="城市人口"
-                ></el-input>
+                <el-input v-model="cityForm.population" placeholder="城市人口"></el-input>
               </el-form-item>
 
               <el-form-item prop="beginInfected" class="set_input">
@@ -385,7 +368,7 @@
               <el-form-item class="set_button">
                 <el-button
                   type="primary"
-                  @click="city_confirm('ci4')"
+                  @click="ConfirmCity('ci4')"
                   :disabled="isdisabled4"
                   >确 认</el-button
                 >
@@ -403,17 +386,14 @@
               top: cityForm.citytop + 'px',
             }"
             @click="
-              connect_city('ci5');
-              delete_city('ci5');
+              ConnectCity('ci5');
+              DeleteCity('ci5');
             "
           >
             <img src="../../assets/layui/images/city.png" alt="" />
             <div class="city-infor">
               <el-form-item prop="population" class="set_input">
-                <el-input
-                  v-model="cityForm.population"
-                  placeholder="城市人口"
-                ></el-input>
+                <el-input v-model="cityForm.population" placeholder="城市人口"></el-input>
               </el-form-item>
 
               <el-form-item prop="beginInfected" class="set_input">
@@ -426,7 +406,7 @@
               <el-form-item class="set_button">
                 <el-button
                   type="primary"
-                  @click="city_confirm('ci5')"
+                  @click="ConfirmCity('ci5')"
                   :disabled="isdisabled5"
                   >确 认</el-button
                 >
@@ -444,17 +424,14 @@
               top: cityForm.citytop + 'px',
             }"
             @click="
-              connect_city('ci6');
-              delete_city('ci6');
+              ConnectCity('ci6');
+              DeleteCity('ci6');
             "
           >
             <img src="../../assets/layui/images/city.png" alt="" />
             <div class="city-infor">
               <el-form-item prop="population" class="set_input">
-                <el-input
-                  v-model="cityForm.population"
-                  placeholder="城市人口"
-                ></el-input>
+                <el-input v-model="cityForm.population" placeholder="城市人口"></el-input>
               </el-form-item>
 
               <el-form-item prop="beginInfected" class="set_input">
@@ -467,7 +444,7 @@
               <el-form-item class="set_button">
                 <el-button
                   type="primary"
-                  @click="city_confirm('ci6')"
+                  @click="ConfirmCity('ci6')"
                   :disabled="isdisabled6"
                   >确 认</el-button
                 >
@@ -485,17 +462,14 @@
               top: cityForm.citytop + 'px',
             }"
             @click="
-              connect_city('ci7');
-              delete_city('ci7');
+              ConnectCity('ci7');
+              DeleteCity('ci7');
             "
           >
             <img src="../../assets/layui/images/city.png" alt="" />
             <div class="city-infor">
               <el-form-item prop="population" class="set_input">
-                <el-input
-                  v-model="cityForm.population"
-                  placeholder="城市人口"
-                ></el-input>
+                <el-input v-model="cityForm.population" placeholder="城市人口"></el-input>
               </el-form-item>
 
               <el-form-item prop="beginInfected" class="set_input">
@@ -508,7 +482,7 @@
               <el-form-item class="set_button">
                 <el-button
                   type="primary"
-                  @click="city_confirm('ci7')"
+                  @click="ConfirmCity('ci7')"
                   :disabled="isdisabled7"
                   >确 认</el-button
                 >
@@ -526,17 +500,14 @@
               top: cityForm.citytop + 'px',
             }"
             @click="
-              connect_city('ci8');
-              delete_city('ci8');
+              ConnectCity('ci8');
+              DeleteCity('ci8');
             "
           >
             <img src="../../assets/layui/images/city.png" alt="" />
             <div class="city-infor">
               <el-form-item prop="population" class="set_input">
-                <el-input
-                  v-model="cityForm.population"
-                  placeholder="城市人口"
-                ></el-input>
+                <el-input v-model="cityForm.population" placeholder="城市人口"></el-input>
               </el-form-item>
 
               <el-form-item prop="beginInfected" class="set_input">
@@ -549,7 +520,7 @@
               <el-form-item class="set_button">
                 <el-button
                   type="primary"
-                  @click="city_confirm('ci8')"
+                  @click="ConfirmCity('ci8')"
                   :disabled="isdisabled8"
                   >确 认</el-button
                 >
@@ -567,17 +538,14 @@
               top: cityForm.citytop + 'px',
             }"
             @click="
-              connect_city('ci9');
-              delete_city('ci9');
+              ConnectCity('ci9');
+              DeleteCity('ci9');
             "
           >
             <img src="../../assets/layui/images/city.png" alt="" />
             <div class="city-infor">
               <el-form-item prop="population" class="set_input">
-                <el-input
-                  v-model="cityForm.population"
-                  placeholder="城市人口"
-                ></el-input>
+                <el-input v-model="cityForm.population" placeholder="城市人口"></el-input>
               </el-form-item>
 
               <el-form-item prop="beginInfected" class="set_input">
@@ -590,7 +558,7 @@
               <el-form-item class="set_button">
                 <el-button
                   type="primary"
-                  @click="city_confirm('ci9')"
+                  @click="ConfirmCity('ci9')"
                   :disabled="isdisabled9"
                   >确 认</el-button
                 >
@@ -608,17 +576,14 @@
               top: cityForm.citytop + 'px',
             }"
             @click="
-              connect_city('ci10');
-              delete_city('ci10');
+              ConnectCity('ci10');
+              DeleteCity('ci10');
             "
           >
             <img src="../../assets/layui/images/city.png" alt="" />
             <div class="city-infor">
               <el-form-item prop="population" class="set_input">
-                <el-input
-                  v-model="cityForm.population"
-                  placeholder="城市人口"
-                ></el-input>
+                <el-input v-model="cityForm.population" placeholder="城市人口"></el-input>
               </el-form-item>
 
               <el-form-item prop="beginInfected" class="set_input">
@@ -631,7 +596,7 @@
               <el-form-item class="set_button">
                 <el-button
                   type="primary"
-                  @click="city_confirm('ci10')"
+                  @click="ConfirmCity('ci10')"
                   :disabled="isdisabled10"
                   >确 认</el-button
                 >
@@ -650,7 +615,7 @@
               left: lineleft + 'px',
               top: linetop + 'px',
             }"
-            @click="delete_road('line1')"
+            @click="DeleteRoad('line1')"
           ></div>
         </li>
 
@@ -662,7 +627,7 @@
               left: lineleft + 'px',
               top: linetop + 'px',
             }"
-            @click="delete_road('line2')"
+            @click="DeleteRoad('line2')"
           ></div>
         </li>
 
@@ -674,7 +639,7 @@
               left: lineleft + 'px',
               top: linetop + 'px',
             }"
-            @click="delete_road('line3')"
+            @click="DeleteRoad('line3')"
           ></div>
         </li>
 
@@ -686,7 +651,7 @@
               left: lineleft + 'px',
               top: linetop + 'px',
             }"
-            @click="delete_road('line4')"
+            @click="DeleteRoad('line4')"
           ></div>
         </li>
 
@@ -698,7 +663,7 @@
               left: lineleft + 'px',
               top: linetop + 'px',
             }"
-            @click="delete_road('line5')"
+            @click="DeleteRoad('line5')"
           ></div>
         </li>
 
@@ -710,7 +675,7 @@
               left: lineleft + 'px',
               top: linetop + 'px',
             }"
-            @click="delete_road('line6')"
+            @click="DeleteRoad('line6')"
           ></div>
         </li>
 
@@ -722,7 +687,7 @@
               left: lineleft + 'px',
               top: linetop + 'px',
             }"
-            @click="delete_road('line7')"
+            @click="DeleteRoad('line7')"
           ></div>
         </li>
 
@@ -734,7 +699,7 @@
               left: lineleft + 'px',
               top: linetop + 'px',
             }"
-            @click="delete_road('line8')"
+            @click="DeleteRoad('line8')"
           ></div>
         </li>
 
@@ -746,7 +711,7 @@
               left: lineleft + 'px',
               top: linetop + 'px',
             }"
-            @click="delete_road('line9')"
+            @click="DeleteRoad('line9')"
           ></div>
         </li>
 
@@ -758,7 +723,7 @@
               left: lineleft + 'px',
               top: linetop + 'px',
             }"
-            @click="delete_road('line10')"
+            @click="DeleteRoad('line10')"
           ></div>
         </li>
 
@@ -770,7 +735,7 @@
               left: lineleft + 'px',
               top: linetop + 'px',
             }"
-            @click="delete_road('line11')"
+            @click="DeleteRoad('line11')"
           ></div>
         </li>
 
@@ -782,7 +747,7 @@
               left: lineleft + 'px',
               top: linetop + 'px',
             }"
-            @click="delete_road('line12')"
+            @click="DeleteRoad('line12')"
           ></div>
         </li>
       </ul>
@@ -791,7 +756,7 @@
 </template>
 
 <script>
-import Global from "../../global_vue.js";
+import g_Global from "../../global_vue.js";
 
 var citycnt = 1;
 var linecnt = 1;
@@ -801,9 +766,8 @@ var cn = 0;
 export default {
   data() {
     return {
-      content:[],
       fits: ["fill"],
-      url:"https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
+      url: "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
 
       userId: "",
 
@@ -831,10 +795,10 @@ export default {
       isdisabled9: false,
       isdisabled10: false,
       showed: true,
-      // cityleft: Global.cityleft,
-      // citytop: Global.citytop,
-      lineleft: Global.lineleft,
-      linetop: Global.linetop,
+      // cityleft: g_Global.cityleft,
+      // citytop: g_Global.citytop,
+      lineleft: g_Global.lineleft,
+      linetop: g_Global.linetop,
 
       cityForm: {
         // cityName: "",
@@ -842,29 +806,18 @@ export default {
         beginInfected: "",
         distance: "",
         traffic: "",
-        // cityleft: Global.cityleft,
-        // citytop: Global.citytop,
+        // cityleft: g_Global.cityleft,
+        // citytop: g_Global.citytop,
         // cityleft: this.$root.cityleft,
         // citytop: this.$root.citytop
-        cityleft: Global.cityleft,
-        citytop: Global.citytop,
+        cityleft: g_Global.cityleft,
+        citytop: g_Global.citytop,
       },
       city_po: [],
       road_di: [],
       road_c1: "",
       road_c2: "",
-      ci: [
-        "ci1",
-        "ci2",
-        "ci3",
-        "ci4",
-        "ci5",
-        "ci6",
-        "ci7",
-        "ci8",
-        "ci9",
-        "ci10",
-      ],
+      ci: ["ci1", "ci2", "ci3", "ci4", "ci5", "ci6", "ci7", "ci8", "ci9", "ci10"],
       ri: [
         "line1",
         "line2",
@@ -939,7 +892,7 @@ export default {
     console.log("道路信息：", this.params.Initroaddata);
     console.log("城市坐标：", this.params.Cityposition);
     this.userId = this.params.userId;
-    this.getContent(this.userId);
+
     citycnt = 1;
     linecnt = 1;
     if (this.params.casename != 999) {
@@ -966,19 +919,19 @@ export default {
             y = tt[1];
           }
         }
-        cid = this.getID(ci);
+        cid = this.GetID(ci);
         var cityentity = document.getElementById(cid);
         cityentity.style.left = x + "px";
         cityentity.style.top = y + "px";
-        var nu = this.getNum(cid);
+        var nu = this.GetNum(cid);
         nu = parseInt(nu);
-        this.setButton(nu);
+        this.SetButton(nu);
       }
 
       for (var j in this.params.Initroaddata) {
-        console.log(this.params.Initroaddata[j]);
+        // console.log(this.params.Initroaddata[j]);
         var ri = this.params.Initroaddata[j].split(",");
-        console.log(ri);
+        // console.log(ri);
         var city1, city2, vol, tt, s;
         cnt = 0;
         for (var k in ri) {
@@ -998,11 +951,11 @@ export default {
         }
         s = city1 + "-" + city2 + ":" + vol;
         this.road_di.push(s);
-        var cid1 = this.getID(city1);
-        var cid2 = this.getID(city2);
-        console.log(cid1, cid2);
+        var cid1 = this.GetID(city1);
+        var cid2 = this.GetID(city2);
+        // console.log(cid1, cid2);
 
-        this.drawline(cid1, cid2);
+        this.DrawLine(cid1, cid2);
       }
 
       for (var j in this.params.Initcitydata) {
@@ -1033,22 +986,7 @@ export default {
   },
 
   methods: {
-    getContent: function (userId) {
-      var self = this;
-      axios
-        .get("http://127.0.0.1:8000/backend/profile/"+userId+"/")
-        .then(
-          (response) =>
-            (self.content = response.data)
-            //alert(JSON.stringify(response))
-        )
-        .catch(function (error) {
-          // 请求失败处理
-          alert("数据请求失败wdnmd");
-        });
-    },
-    
-    npt(np) {
+    NewPointer(np) {
       this.cp = false;
       this.dp = false;
       this.dr = false;
@@ -1060,7 +998,7 @@ export default {
       }
     },
 
-    cpt(cp) {
+    ConnectPointer(cp) {
       console.log("点了");
       this.np = false;
       this.dp = false;
@@ -1070,7 +1008,7 @@ export default {
       this.mc = false;
     },
 
-    dpt(dp) {
+    DeletePointer(dp) {
       console.log("可以删除节点了");
       this.np = false;
       this.cp = false;
@@ -1080,7 +1018,7 @@ export default {
       this.mc = false;
     },
 
-    drt(dr) {
+    DeleteRoad(dr) {
       console.log("可以删除边了");
       this.np = false;
       this.cp = false;
@@ -1090,7 +1028,7 @@ export default {
       this.mc = false;
     },
 
-    bst(bs) {
+    BeginSimulation(bs) {
       console.log("开始模拟");
       this.np = false;
       this.cp = false;
@@ -1099,10 +1037,10 @@ export default {
       this.sc = false;
       this.mc = false;
 
-      this.begin_simulation().then((response) => {});
+      this.BeginToSimulation().then((response) => {});
     },
 
-    sct(sc) {
+    SaveCase(sc) {
       console.log("保存案例");
 
       this.np = false;
@@ -1112,10 +1050,10 @@ export default {
       this.bs = false;
       this.mc = false;
 
-      this.save_confirm().then((response) => {});
+      this.SaveConfirm().then((response) => {});
     },
 
-    mct(mc) {
+    MyCase(mc) {
       console.log("我的案例");
       this.np = false;
       this.cp = false;
@@ -1128,36 +1066,7 @@ export default {
         query: { userId: this.userId },
       });
     },
-    // canvas() {
-    //   var canvas = this.$refs.canvas;
-    //   if (!canvas) {
-    //     return false;
-    //   } else {
-    //     var context = canvas.getContext("2d");
-    //     var width = canvas.width;
-    //     var height = canvas.height;
-    //     var bgimg = document.getElementById("testing");
-    //     bgimg.style.width = width;
-    //     bgimg.style.height = height;
-    //     // var pattern=context.create
-    //     addEventListener("click", function (event) {
-    //       getMousePos(canvas, event);
-    //     });
-    //   }
-    // },
-    // getMousePos(canvas, event) {
-    //   var rect = canvas.getBoundingClientRect();
-    //   Global.cityleft = event.clientX - rect.left * (canvas.width / rect.width);
-    //   Global.cityForm.citytop =
-    //     event.clientY - rect.top * (canvas.height / rect.height);
-    //   console.log(
-    //     "cityleft:" +
-    //       Global.cityForm.cityleft +
-    //       ", citytop:" +
-    //       Global.cityForm.citytop
-    //   );
-    // },
-    drawline(ci1, ci2) {
+    DrawLine(ci1, ci2) {
       var c1 = document.getElementById(ci1);
       var c2 = document.getElementById(ci2);
 
@@ -1187,17 +1096,11 @@ export default {
       var ttcy2 = parseInt(tcy2);
 
       var rotang = 0;
-      if (
-        (ttcx1 <= ttcx2 && ttcy1 <= ttcy2) ||
-        (ttcx1 >= ttcx2 && ttcy1 >= ttcy2)
-      ) {
+      if ((ttcx1 <= ttcx2 && ttcy1 <= ttcy2) || (ttcx1 >= ttcx2 && ttcy1 >= ttcy2)) {
         rotang = Math.asin(parseFloat(dy / dis));
         rotang = (rotang / Math.PI) * 180;
       }
-      if (
-        (ttcx1 <= ttcx2 && ttcy1 >= ttcy2) ||
-        (ttcx1 >= ttcx2 && ttcy1 <= ttcy2)
-      ) {
+      if ((ttcx1 <= ttcx2 && ttcy1 >= ttcy2) || (ttcx1 >= ttcx2 && ttcy1 <= ttcy2)) {
         rotang = Math.asin(parseFloat(dy / dis));
         rotang = (rotang / Math.PI) * 180;
         rotang = 180 - rotang;
@@ -1213,7 +1116,7 @@ export default {
       console.log("画了这条线了：", linecnt);
     },
 
-    begin_simulation() {
+    BeginToSimulation() {
       this.$prompt("请输入模拟天数", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -1221,7 +1124,7 @@ export default {
         inputErrorMessage: "模拟天数格式不正确",
       })
         .then(({ value }) => {
-          var d=parseInt(value);
+          var d = parseInt(value);
           if (d < 5 || d > 100) {
             this.$alert("模拟天数应在5~100内", "模拟失败", {
               confirmButtonText: "确定",
@@ -1233,7 +1136,7 @@ export default {
               },
             });
             this.bs = false;
-            return ;
+            return;
           }
 
           this.sc = false;
@@ -1260,12 +1163,7 @@ export default {
               initinfect = this.city_po[cid].substring(7);
               citycnt += 1;
               var s =
-                "cityname:" +
-                cn +
-                ",initpop:" +
-                initpop +
-                ",initinfect:" +
-                initinfect;
+                "cityname:" + cn + ",initpop:" + initpop + ",initinfect:" + initinfect;
               city_infor.push(s);
               loopcnt = 0;
             }
@@ -1299,7 +1197,7 @@ export default {
             loopcnt += 1;
             if (loopcnt % 2 == 1) {
               var cityName = this.city_po[cid].substring(0, 1);
-              var cityID = this.getID(cityName);
+              var cityID = this.GetID(cityName);
 
               console.log("cityName:" + cityName + " cityID:" + cityID);
 
@@ -1354,7 +1252,7 @@ export default {
         });
     },
 
-    save_confirm() {
+    SaveConfirm() {
       this.$prompt("请输入此案例名称", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -1386,12 +1284,7 @@ export default {
               initinfect = this.city_po[cid].substring(7);
               citycnt += 1;
               var s =
-                "cityname:" +
-                cn +
-                ",initpop:" +
-                initpop +
-                ",initinfect:" +
-                initinfect;
+                "cityname:" + cn + ",initpop:" + initpop + ",initinfect:" + initinfect;
               city_infor.push(s);
               loopcnt = 0;
             }
@@ -1425,7 +1318,7 @@ export default {
             loopcnt += 1;
             if (loopcnt % 2 == 1) {
               var cityName = this.city_po[cid].substring(0, 1);
-              var cityID = this.getID(cityName);
+              var cityID = this.GetID(cityName);
 
               console.log("cityName:" + cityName + " cityID:" + cityID);
 
@@ -1443,7 +1336,7 @@ export default {
           }
 
           axios
-            .post("http://127.0.0.1:8000/backend/saveCase/", myFormData)
+            .post("http://127.0.0.1:8000/backend/SaveCase/", myFormData)
             .then((response) => {
               // alert(JSON.stringify(response));
               // alert("保存案例");
@@ -1462,13 +1355,13 @@ export default {
         });
     },
 
-    show(e) {
+    ShowCity(e) {
       window.cityleft = e.pageX;
       window.citytop = e.pageY;
-      // Global.cityleft = e.pageX;
-      // Global.citytop = e.pageY;
-      this.$set(Global, cityleft, e.pageX);
-      this.$set(Global, citytop, e.pageY);
+      // g_Global.cityleft = e.pageX;
+      // g_Global.citytop = e.pageY;
+      this.$set(g_Global, cityleft, e.pageX);
+      this.$set(g_Global, citytop, e.pageY);
       if (this.np == true) {
         var c = "ci" + citycnt;
         console.log(c);
@@ -1479,7 +1372,7 @@ export default {
         ci.style.top = ct + "px";
       }
       if (this.cp == true && concnt == 2) {
-        console.log("concnt：" + concnt);
+        console.log("g_concnt：" + concnt);
 
         var mc = document.getElementById("myCanvas");
         var mctx = mc.getContext("2d");
@@ -1494,14 +1387,12 @@ export default {
       }
       this.set(data.cityForm, "cityleft", e.pageX + "px");
       this.set(data.cityForm, "citytop", e.pageY + "px");
-      this.cityForm.showCity = true;
-      console.log(
-        "cityleft:" + Global.cityleft + ", citytop:" + Global.citytop
-      );
+      this.cityForm.ShowCity = true;
+      console.log("cityleft:" + g_Global.cityleft + ", citytop:" + g_Global.citytop);
       console.log("cityleft:" + this.cityleft + ", citytop:" + this.citytop);
     },
 
-    road_confirm(tcx1, tcy1, tcx2, tcy2, dx, dy, dis) {
+    ConfirmRoad(tcx1, tcy1, tcx2, tcy2, dx, dy, dis) {
       var tra = 0;
       this.$prompt("请输入此路人流量", "提示", {
         confirmButtonText: "确定",
@@ -1521,17 +1412,11 @@ export default {
           var ttcy2 = parseInt(tcy2);
 
           var rotang = 0;
-          if (
-            (ttcx1 <= ttcx2 && ttcy1 <= ttcy2) ||
-            (ttcx1 >= ttcx2 && ttcy1 >= ttcy2)
-          ) {
+          if ((ttcx1 <= ttcx2 && ttcy1 <= ttcy2) || (ttcx1 >= ttcx2 && ttcy1 >= ttcy2)) {
             rotang = Math.asin(parseFloat(dy / dis));
             rotang = (rotang / Math.PI) * 180;
           }
-          if (
-            (ttcx1 <= ttcx2 && ttcy1 >= ttcy2) ||
-            (ttcx1 >= ttcx2 && ttcy1 <= ttcy2)
-          ) {
+          if ((ttcx1 <= ttcx2 && ttcy1 >= ttcy2) || (ttcx1 >= ttcx2 && ttcy1 <= ttcy2)) {
             rotang = Math.asin(parseFloat(dy / dis));
             rotang = (rotang / Math.PI) * 180;
             rotang = 180 - rotang;
@@ -1570,7 +1455,7 @@ export default {
       return tra;
     },
 
-    connect_city(e) {
+    ConnectCity(e) {
       if (this.cp == true) {
         console.log(e);
         concnt += 1;
@@ -1584,7 +1469,7 @@ export default {
             var k1 = parseInt(k);
             var tc = document.getElementById(this.ci[k1]);
             if (tc.style.left == c.style.left && tc.style.top == c.style.top) {
-              this.road_c1 = this.getName(k1 + 1);
+              this.road_c1 = this.GetName(k1 + 1);
               break;
             }
           }
@@ -1604,7 +1489,7 @@ export default {
             var k1 = parseInt(k);
             var tc = document.getElementById(this.ci[k1]);
             if (tc.style.left == c.style.left && tc.style.top == c.style.top) {
-              this.road_c2 = this.getName(k1 + 1);
+              this.road_c2 = this.GetName(k1 + 1);
               break;
             }
           }
@@ -1655,26 +1540,19 @@ export default {
 
           // var pu=document.getElementById("dpu");
           // pu.style.visibility="visible";
-          this.road_confirm(
-            tcx1,
-            tcy1,
-            tcx2,
-            tcy2,
-            dx,
-            dy,
-            dis
-          ).then((response) => {});
+          this.ConfirmRoad(tcx1, tcy1, tcx2, tcy2, dx, dy, dis).then((response) => {});
         }
       }
     },
 
-    confirm_delete_city(e) {
+    ConfirmDeleteCity(e) {
       this.$confirm("此操作将删除该城市及其相邻的道路, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",
       })
         .then(() => {
+          console.log("e", e);
           var c = document.getElementById(e);
 
           cn = 0;
@@ -1699,7 +1577,7 @@ export default {
           var city_no = e.substring(2, 3);
           var city_tno = parseInt(city_no);
           console.log("city：" + e);
-          var ce = this.getName(city_tno);
+          var ce = this.GetName(city_tno);
           var cid;
 
           for (var j in this.road_di) {
@@ -1717,44 +1595,48 @@ export default {
             console.log("ce：" + ce + " ce.type：" + typeof ce);
             console.log("j：" + j);
             if (c1 == ce) {
-              cid = this.getID(c2);
+              cid = this.GetID(c2);
               // this.road_di.splice(j, 1);
               wait_delete.push(j);
             }
             if (c2 == ce) {
-              cid = this.getID(c1);
+              cid = this.GetID(c1);
               wait_delete.push(j);
               // this.road_di.splice(j, 1);
             }
-            var dc = document.getElementById(cid);
 
-            var dcx1 = dc.style.left;
-            dcx1 = dcx1.substring(0, dcx1.length - 2);
-            var dcx2 = c.style.left;
-            dcx2 = dcx2.substring(0, dcx2.length - 2);
-            var dcy1 = dc.style.top;
-            dcy1 = dcy1.substring(0, dcy1.length - 2);
-            var dcy2 = c.style.top;
-            dcy2 = dcy2.substring(0, dcy2.length - 2);
+            if (c1 == ce || c2 == ce) {
+              console.log("cid", cid);
+              var dc = document.getElementById(cid);
 
-            console.log("dcx1：" + dcx1 + " dcy1：" + dcy1);
-            console.log("dcx2：" + dcx2 + " dcy2：" + dcy2);
+              var dcx1 = dc.style.left;
+              dcx1 = dcx1.substring(0, dcx1.length - 2);
+              var dcx2 = c.style.left;
+              dcx2 = dcx2.substring(0, dcx2.length - 2);
+              var dcy1 = dc.style.top;
+              dcy1 = dcy1.substring(0, dcy1.length - 2);
+              var dcy2 = c.style.top;
+              dcy2 = dcy2.substring(0, dcy2.length - 2);
 
-            const dx = Math.abs(dcx1 - dcx2);
-            const dy = Math.abs(dcy1 - dcy2);
-            var dis = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+              console.log("dcx1：" + dcx1 + " dcy1：" + dcy1);
+              console.log("dcx2：" + dcx2 + " dcy2：" + dcy2);
 
-            for (var k in this.ri) {
-              console.log("lineID：", this.ri[k]);
-              var tr = document.getElementById(this.ri[k]);
-              var td = parseInt(dis);
-              var wi = tr.style.width;
-              var tw = wi.substring(0, wi.length - 2);
-              var ttw = parseInt(tw);
-              console.log("dis：" + td + " width：" + ttw);
-              if (td == ttw) {
-                tr.style.left = 10000 + "px";
-                tr.style.top = 10000 + "px";
+              const dx = Math.abs(dcx1 - dcx2);
+              const dy = Math.abs(dcy1 - dcy2);
+              var dis = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+
+              for (var k in this.ri) {
+                console.log("lineID：", this.ri[k]);
+                var tr = document.getElementById(this.ri[k]);
+                var td = parseInt(dis);
+                var wi = tr.style.width;
+                var tw = wi.substring(0, wi.length - 2);
+                var ttw = parseInt(tw);
+                console.log("dis：" + td + " width：" + ttw);
+                if (td == ttw) {
+                  tr.style.left = 10000 + "px";
+                  tr.style.top = 10000 + "px";
+                }
               }
             }
           }
@@ -1763,6 +1645,8 @@ export default {
           for (var j in twd) {
             this.road_di.splice(twd[j], 1);
           }
+
+          console.log("c", c);
 
           c.style.left = 10000 + "px";
           c.style.top = 10000 + "px";
@@ -1781,20 +1665,20 @@ export default {
         });
     },
 
-    delete_city(e) {
+    DeleteCity(e) {
       if (this.dp == true) {
-        this.confirm_delete_city(e).then((response) => {});
+        this.ConfirmDeleteCity(e).then((response) => {});
       }
     },
 
-    delete_road(e) {
+    DeleteRoad(e) {
       if (this.dr == true) {
         var r = document.getElementById(e);
         for (var j in this.road_di) {
           var c1 = this.road_di[j].substring(0, 1);
           var c2 = this.road_di[j].substring(2, 3);
-          var cid1 = this.getID(c1);
-          var cid2 = this.getID(c2);
+          var cid1 = this.GetID(c1);
+          var cid2 = this.GetID(c2);
           var tc1 = document.getElementById(cid1);
           var tc2 = document.getElementById(cid2);
 
@@ -1830,17 +1714,17 @@ export default {
     //   return str.replace(/<br>/g, "\n");
     // },
 
-    city_confirm(e) {
+    ConfirmCity(e) {
       this.np = false;
-      var c=document.getElementById(e);
+      var c = document.getElementById(e);
       // console.log("city_Name:" + this.cityForm.cityName);
       console.log("city_population:" + this.cityForm.population);
       console.log("city_Infected:" + this.cityForm.beginInfected);
-      var cn = this.getName(citycnt);
+      var cn = this.GetName(citycnt);
 
       var cy = cn + ": 总人口:" + this.cityForm.population;
-      var ipp=parseInt(this.cityForm.population);
-      if ( ipp <100 || ipp>15000) {
+      var ipp = parseInt(this.cityForm.population);
+      if (ipp < 100 || ipp > 15000) {
         this.$alert("城市人口应在100~15000内", "创建失败", {
           confirmButtonText: "确定",
           callback: (action) => {
@@ -1850,16 +1734,16 @@ export default {
             });
           },
         });
-        this.cityForm.population="";
-        this.cityForm.beginInfected="";
-        c.style.left=10000+"px";
-        c.style.top=10000+"px";
+        this.cityForm.population = "";
+        this.cityForm.beginInfected = "";
+        c.style.left = 10000 + "px";
+        c.style.top = 10000 + "px";
         return;
       }
 
       var cz = "初始感染人数:" + this.cityForm.beginInfected;
-      var ibi=parseInt(this.cityForm.beginInfected);
-      if ( ibi <0 || ibi>100) {
+      var ibi = parseInt(this.cityForm.beginInfected);
+      if (ibi < 0 || ibi > 100) {
         this.$alert("初始感染人数应在0~100内", "创建失败", {
           confirmButtonText: "确定",
           callback: (action) => {
@@ -1869,23 +1753,23 @@ export default {
             });
           },
         });
-        this.cityForm.population="";
-        this.cityForm.beginInfected="";
-        c.style.left=10000+"px";
-        c.style.top=10000+"px";
+        this.cityForm.population = "";
+        this.cityForm.beginInfected = "";
+        c.style.left = 10000 + "px";
+        c.style.top = 10000 + "px";
         return;
       }
 
       this.city_po.push(cy);
       this.city_po.push(cz);
 
-      this.setButton(citycnt);
+      this.SetButton(citycnt);
 
       citycnt++;
       // console.log(typeof(this.city_po));
     },
 
-    getName(n) {
+    GetName(n) {
       if (n == 1) return "A";
       if (n == 2) return "B";
       if (n == 3) return "C";
@@ -1898,7 +1782,8 @@ export default {
       if (n == 10) return "J";
     },
 
-    getID(n) {
+    GetID(n) {
+      console.log("n", n);
       if (n == "A") return "ci1";
       if (n == "B") return "ci2";
       if (n == "C") return "ci3";
@@ -1911,7 +1796,7 @@ export default {
       if (n == "J") return "ci10";
     },
 
-    getNum(n) {
+    GetNum(n) {
       if (n == "ci1") return 1;
       if (n == "ci2") return 2;
       if (n == "ci3") return 3;
@@ -1924,7 +1809,7 @@ export default {
       if (n == "ci10") return 10;
     },
 
-    setButton(n) {
+    SetButton(n) {
       if (n == 1) this.isdisabled1 = true;
       if (n == 2) this.isdisabled2 = true;
       if (n == 3) this.isdisabled3 = true;
@@ -1942,6 +1827,7 @@ export default {
 
 <style scoped>
 @import "../../assets/layui/css/layui.css";
+/* @import "../../assets/layui/css/remixicon.css"; */
 
 body {
   overflow: hidden;
@@ -2130,7 +2016,6 @@ body {
 
 .add-wrapper {
   position: absolute;
-  display: none;
   width: 70px;
   height: 100px;
   right: 240px;
