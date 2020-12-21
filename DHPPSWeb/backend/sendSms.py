@@ -3,10 +3,11 @@
 from random import randint
 from aliyunsdkcore.client import AcsClient
 from aliyunsdkcore.request import CommonRequest
+import json
 import base64
 AK = 'TFRBSTRHRng0TnJISldzOFd0VUxEVE1a'
-AS = 'a2JUN2tQR0Y2OG52RlBaQW5YSHVxREtyME80SlhmCg=='
-client = AcsClient(base64.b64decode(AK), base64.b64decode(AS), 'cn-hangzhou')
+AS = 'a2JUN2tQR0Y2OG52RlBaQW5YSHVxREtyME80Slhm'
+client = AcsClient(str(base64.b64decode(AK).decode('ascii')), str(base64.b64decode(AS).decode('ascii')), 'cn-hangzhou')
 
 
 def SendSms(phoneNum):
@@ -29,4 +30,5 @@ def SendSms(phoneNum):
     response = client.do_action(request)
     # python2:  print(response)
     print(str(response, encoding='utf-8'))
-    return str(ranInt), response["message"], response["Code"]
+    result = json.loads(str(response, encoding='utf-8'))
+    return str(ranInt), result["Message"], result["Code"]

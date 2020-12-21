@@ -158,22 +158,30 @@ def Logout(request):
 def RequestSmsCode(request):
     if request.method == "POST":
         phoneNum = request.POST.get('phoneNum', None)
+        if phoneNum is None:
+            return JsonResponse({"message": "电话号码不能为空", "status": 404})
+
         redisClient = get_redis_connection('smsCode')
         if (redisClient.get(phoneNum+"Flag") is not None):
             return JsonResponse({"message": "冷却中，请60秒后重新申请", "status": 404})
         code, message, result = SendSms(phoneNum)
-        try:
-            # 4.连接到redis
-            redisClient = get_redis_connection('smsCode')
-            # 5.生成redis管道
-            pipeline = redisClient.pipeline()
-            # 6.保存验证码，用于后续与用户输入值对比，设置过期时间
-            pipeline.setex(phoneNum, 300, code)
-            pipeline.setex(phoneNum+"Flag", 60, code)
-            # 7.传递指令
-            pipeline.execute()
-        except Exception:
-            return JsonResponse({"message": "保存到redis失败", "status": 404})
+        print(phoneNum, "result is", message)
+        if str(result) == "OK":
+            try:
+                # 4.连接到redis
+                redisClient = get_redis_connection('smsCode')
+                # 5.生成redis管道
+                # pipeline = redisClient.pipeline()
+                # 6.保存验证码，用于后续与用户输入值对比，设置过期时间
+                redisClient.setex(phoneNum, 300, code)
+                redisClient.setex(phoneNum+"Flag", 60, code)
+                # 7.传递指令
+                # pipeline.execute()
+                redisClient.get(phoneNum)
+            except Exception:
+                return JsonResponse({"message": "保存到redis失败", "status": 404})
+        else:
+            return JsonResponse({"message": "验证码发送失败", "status": 404})
         return JsonResponse({"message": "验证码已发送", "status": 200})
 
 
@@ -204,10 +212,11 @@ def Signup(request):
 
         redisClient = get_redis_connection('smsCode')
         verifyCodeInCache = redisClient.get("phoneNum")
-        if userName and phoneNum and email and password and verifyCode:  # 获取数据
-            if verifyCodeInCache is None:
-                return JsonResponse({"message": "尚未申请短信验证码", "status": 404})
+        print(verifyCodeInCache)
+        if verifyCodeInCache is None:
+            return JsonResponse({"message": "尚未申请短信验证码", "status": 404})
 
+        if userName and phoneNum and email and password and verifyCode:  # 获取数据
             if verifyCodeInCache != verifyCode:
                 return JsonResponse({"message": "短信验证码错误，请检查重试", "status": 404})
             redisClient.delete(phoneNum)
@@ -696,7 +705,7 @@ def GetUserInfos(request):
     if request.method == "GET":
         pageSize = request.GET.get("pageSize")
         page = request.GET.get("page")
-        accountInfos = models.AccountInformation.objects.select_related("PersonalProfile").all().exclude(authority="超级管理员").order_by('userId')
+        accountInfos = models.AccountInformation.objects.select_related("personalprofile").all().exclude(authority="超级管理员").order_by('userId')
         accountPaginator = paginator.Paginator(accountInfos, pageSize)
         if page == "":
             page = 1
@@ -727,7 +736,7 @@ def GetGeneralUserInfos(request):
     if request.method == "GET":
         pageSize = request.GET.get("pageSize")
         page = request.GET.get("page")
-        generalUserInfos = models.AccountInformation.objects.select_related("PersonalProfile").filter(authority="普通用户").order_by('userId')
+        generalUserInfos = models.AccountInformation.objects.select_related("personalprofile").filter(authority="普通用户").order_by('userId')
         accountPaginator = paginator.Paginator(generalUserInfos, pageSize)
         if page == "":
             page = 1
@@ -758,7 +767,7 @@ def GetAdminInfos(request):
     if request.method == "GET":
         pageSize = request.GET.get("pageSize")
         page = request.GET.get("page")
-        adminUserInfos = models.AccountInformation.objects.select_related("PersonalProfile").filter(authority="管理员").order_by('userId')
+        adminUserInfos = models.AccountInformation.objects.select_related("personalprofile").filter(authority="管理员").order_by('userId')
         accountPaginator = paginator.Paginator(adminUserInfos, pageSize)
         if page == "":
             page = 1
