@@ -29,8 +29,8 @@
                 <router-link
                   class="iq-waves-effect"
                   :to="{
-                    path: '/',
-                    query: { uI: this.AdminId },
+                    path: '/UserCase',
+                    query: { uI: this.AdminUserId },
                   }"
                   ><i class="ri-file-list-line"></i
                   ><span>我的案例</span></router-link
