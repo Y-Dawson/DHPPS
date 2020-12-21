@@ -40,6 +40,7 @@ class CaseData(models.Model):
     userId = models.ForeignKey(AccountInformation, models.CASCADE, db_column='userId')  # Field name made lowercase.
     caseName = models.CharField(db_column='caseName', max_length=50, default='未命名')  # Field name made lowercase.
     caseMode = models.CharField(db_column='caseMode', max_length=10)
+    caseCreateDate = models.DateField(db_column='caseCreateDate', default=timezone.now)  # Field name made lowercase.
     cityNumber = models.IntegerField(db_column='cityNumber')  # Field name made lowercase.
     roadNumber = models.IntegerField(db_column='roadNumber')  # Field name made lowercase.
     initTotal = models.BigIntegerField(db_column='initTotal')  # Field name made lowercase.
