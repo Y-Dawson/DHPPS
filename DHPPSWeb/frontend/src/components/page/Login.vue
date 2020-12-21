@@ -1,6 +1,6 @@
 <template>
   <div class="login" >
-    <vue-particles
+    <!-- <vue-particles
         color="#fff"
         :particleOpacity="0.7"
         :particlesNumber="60"
@@ -17,7 +17,7 @@
         :clickEffect="true"
         clickMode="push"
       >
-      </vue-particles>
+      </vue-particles> -->
     <div class="ms-login">
       <div class="ms-title">高传染性疾病预测系统</div>
         <el-form :model="loginForm" :rules="loginFormRules" ref="loginFormRef" class="ms-content" action="">

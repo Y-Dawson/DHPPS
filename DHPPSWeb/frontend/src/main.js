@@ -7,8 +7,8 @@ import router from './router'
 import ElementUI from 'element-ui'
 // import VueResource from 'vue-resource'
 import 'element-ui/lib/theme-chalk/index.css'
-import VueParticles from 'vue-particles'
-Vue.use(VueParticles)
+// import VueParticles from 'vue-particles'
+// Vue.use(VueParticles)
 
 // import VueCookies from 'vue-cookies'
 // Vue.use(VueCookies)

@@ -78,6 +78,22 @@ def LoginRequired(view_func):
     return wrapper
 
 
+def GetIdentity(request):
+    if not request.session.get('isLogin', None):
+        # 如果本来就未登录，也就没有登出一说
+        return JsonResponse({"message": "未登录", "status": 404})
+    else:
+        userId = request.session.get('userId', None)
+        authority = request.session.get('userAuthority', None)
+
+        response = JsonResponse({
+            "userId": userId,
+            "authority": authority,
+            "message": "返回数据成功",
+            "status": 200})
+        return response 
+
+
 # 登录函数视图
 # 从参数获取phoneNum和password，取出对应salt加密，并判断是否和存储加密密码相同
 # 登录成功，返回消息和200状态码
@@ -114,7 +130,6 @@ def Signin(request):
                         "userId": accountInfo.userId,
                         "userAuthority": accountInfo.authority
                         })
-                    response.set_cookie('userId', accountInfo.userId)
                     # response["Access-Control-Allow-Credentials"] = "true"
                     # response["Access-Control-Allow-Methods"] = 'GET, POST, PATCH, PUT, OPTIONS'
                     # response["Access-Control-Allow-Headers"] = "Origin,Content-Type,Cookie,Accept,Token"
@@ -145,7 +160,6 @@ def Logout(request):
         # del request.session['userId']
         # del request.session['userName']
         response = JsonResponse({"message": "登出成功", "status": 200})
-        response.delete_cookie("userId")
         return response
 
 
@@ -255,7 +269,6 @@ def Signup(request):
                 print('str(Exception):\t', str(Exception))
                 print('str(e):\t\t', str(e))
                 print('repr(e):\t', repr(e))
-                print('e.message:\t', e.message)
                 print('########################################################')
                 message = "注册失败"
                 status = 404
