@@ -1264,9 +1264,9 @@ export default {
 
           var myFormData = new FormData();
 
-          myFormData.append("userid", this.userId);
+          myFormData.append("userId", this.userId);
 
-          myFormData.append("casename", value);
+          myFormData.append("caseName", value);
 
           var city_infor = [];
           var cn = "Z";
@@ -1308,9 +1308,10 @@ export default {
             road_inf.push(s);
           }
           myFormData.append("roadnum", roadcnt);
+          myFormData.append("caseMode",1);
 
-          myFormData.append("Initcitydata", city_infor);
-          myFormData.append("Initroaddata", road_inf);
+          myFormData.append("InitCityData", city_infor);
+          myFormData.append("InitRoadData", road_inf);
 
           var city_position = [];
           loopcnt = 0;
@@ -1329,7 +1330,7 @@ export default {
               city_position.push(s);
             }
           }
-          myFormData.append("Cityposition", city_position);
+          myFormData.append("CityPosition", city_position);
 
           for (var value of myFormData.values()) {
             console.log(value);
