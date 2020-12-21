@@ -533,10 +533,10 @@ def StartSimulate(request):
                 value = roadInfo.split(":")[1]
                 if roadCount % 3 == 0:
                     # 出发城市下标
-                    departure = cityNameList.Index(value)
+                    departure = cityNameList.index(value)
                 elif roadCount % 3 == 1:
                     # 到达城市下标
-                    destination = cityNameList.Index(value)
+                    destination = cityNameList.index(value)
                 elif roadCount % 3 == 2:
                     volume = float(value)
                     initRoadList[departure][destination] = volume
@@ -715,7 +715,7 @@ def GetUserInfos(request):
         jsonList = []
         for accountInfo in pageInfos:
             accountInfoDict = model_to_dict(accountInfo)
-            profileDict = model_to_dict(accountInfo.PersonalProfile)
+            profileDict = model_to_dict(accountInfo.personalprofile)
             jsonList.append({**accountInfoDict, **profileDict})
         jsonRes = json.loads(json.dumps(jsonList, cls=DateEnconding))
         print(jsonRes)
@@ -723,7 +723,7 @@ def GetUserInfos(request):
             'data': jsonRes,
             'pagination': accountPaginator.count,
             'pageSize': accountPaginator.per_page,
-            'page': pageInfos.start_Index() // accountPaginator.per_page + 1
+            'page': pageInfos.start_index() // accountPaginator.per_page + 1
         })
 
 
@@ -746,7 +746,7 @@ def GetGeneralUserInfos(request):
         jsonList = []
         for accountInfo in pageInfos:
             accountInfoDict = model_to_dict(accountInfo)
-            profileDict = model_to_dict(accountInfo.PersonalProfile)
+            profileDict = model_to_dict(accountInfo.personalprofile)
             jsonList.append({**accountInfoDict, **profileDict})
         jsonRes = json.loads(json.dumps(jsonList, cls=DateEnconding))
         print(jsonRes)
@@ -754,7 +754,7 @@ def GetGeneralUserInfos(request):
             'data': jsonRes,
             'pagination': accountPaginator.count,
             'pageSize': accountPaginator.per_page,
-            'page': pageInfos.start_Index() // accountPaginator.per_page + 1
+            'page': pageInfos.start_index() // accountPaginator.per_page + 1
         })
 
 
@@ -777,7 +777,7 @@ def GetAdminInfos(request):
         jsonList = []
         for accountInfo in pageInfos:
             accountInfoDict = model_to_dict(accountInfo)
-            profileDict = model_to_dict(accountInfo.PersonalProfile)
+            profileDict = model_to_dict(accountInfo.personalprofile)
             jsonList.append({**accountInfoDict, **profileDict})
         jsonRes = json.loads(json.dumps(jsonList, cls=DateEnconding))
         print(jsonRes)
@@ -785,7 +785,7 @@ def GetAdminInfos(request):
             'data': jsonRes,
             'pagination': accountPaginator.count,
             'pageSize': accountPaginator.per_page,
-            'page': pageInfos.start_Index() // accountPaginator.per_page + 1
+            'page': pageInfos.start_index() // accountPaginator.per_page + 1
         })
 
 
