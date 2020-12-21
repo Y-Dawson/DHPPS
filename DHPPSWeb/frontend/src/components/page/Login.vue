@@ -1,5 +1,23 @@
 <template>
-  <div calss="login" :style="bgImg" >
+  <div class="login" >
+    <vue-particles
+        color="#fff"
+        :particleOpacity="0.7"
+        :particlesNumber="60"
+        shapeType="star"
+        :particleSize="4"
+        linesColor="#fff"
+        :linesWidth="1"
+        :lineLinked="true"
+        :lineOpacity="0.4"
+        :linesDistance="150"
+        :moveSpeed="2"
+        :hoverEffect="true"
+        hoverMode="grab"
+        :clickEffect="true"
+        clickMode="push"
+      >
+      </vue-particles>
     <div class="ms-login">
       <div class="ms-title">高传染性疾病预测系统</div>
         <el-form :model="loginForm" :rules="loginFormRules" ref="loginFormRef" class="ms-content" action="">
@@ -9,8 +27,10 @@
                     v-model="loginForm.account"
                     placeholder="用户名/手机号"
                     id="loginPhone"
+                    clearable
+                    class="MyInput"
                   >
-                  <el-button slot="prepend" icon="el-icon-user"></el-button>
+                  <i slot="prefix" class="el-input__icon el-icon-user"></i>
                   </el-input>
                 </el-form-item>
               </div>
@@ -22,8 +42,9 @@
                     placeholder="请填写6到12位密码"
                     type="password"
                     id="loginPass"
+                    class="MyInput"
                   >
-                  <el-button slot="prepend" icon="el-icon-lock"></el-button>
+                  <i slot="prefix" class="el-input__icon el-icon-lock"></i>
                   </el-input>
                 </el-form-item>
               </div>
@@ -32,7 +53,7 @@
         <el-button type="primary" @click="login">登 录</el-button>
         <el-button type="info" @click="resetLoginForm">重 置</el-button>
       </el-form-item>
-      <router-link to="/signup" class="create-account" style="font-size:14px;margin-left:10px; float:left;">创建账号</router-link>
+      <router-link to="/signup" class="create-account">创建账号</router-link>
       <router-link to="/forgetPass" class="forget-password" style="font-size:14px;margin-left:10px; float:right;">忘记密码</router-link>
       <!-- <a class="forget-password" href="./forgetPass" style="margin-right:10px; float:right;">忘记密码</a> -->
      </el-form>
@@ -45,9 +66,9 @@
 export default {
   data() {
     return {
-      bgImg:{ backgroundImage:"url(" + require("../../assets/img/background2.jpg") + ")",
-              height:'100vh',//这里一定要设置高度 否则背景图无法显示
-              backgroundRepeat: "no-repeat"},
+      // bgImg:{ backgroundImage:"url(" + require("../../assets/img/background2.jpg") + ")",
+      //         height:'100vh',//这里一定要设置高度 否则背景图无法显示
+      //         backgroundRepeat: "no-repeat"},
       loginMassege:'',
       userId:'',
       userAuthority:"",
@@ -163,12 +184,49 @@ export default {
   },
 };
 </script>
-
+<style>
+.MyInput .el-input__inner{
+  background-color: transparent;
+  border-radius: 0px;
+  border:0px;
+  border-bottom: 1px white solid;
+  color: #fff;
+  /* border:0px 0px 2px 0px black solid; */
+}
+.MyInput .el-input__inner:hover{
+  background-color: transparent;
+  border-radius: 0px;
+  border:0px;
+  border-bottom: 1px white solid;
+}
+.MyInput .el-input__inner:focus-within{
+  background-color: transparent;
+  border-radius: 0px;
+  border:0px;
+  border-bottom: 1px white solid;
+}
+/* .MyInput .el-input__inner::-webkit-input-placeholder{
+  background-color: transparent;
+  border-radius: 0px;
+  border:0px;
+  border-bottom: 1px white solid;
+} */
+</style>
 <style scoped>
 @import "../../assets/layui/css/layui.css";
  /* body {
   background-image: url(../../assets/img/background2.jpg)
 } */
+
+.login{
+  width: 100%;
+  height: 100%;
+  background-image: url(../../assets/img/3.jpg);
+  background-size: cover;
+  position: absolute;
+  z-index: -1;
+  background-repeat: no-repeat;
+}
 .ms-login {
     position: absolute;
     left: 50%;
@@ -176,7 +234,7 @@ export default {
     width: 350px;
     margin: -190px 0 0 -175px;
     border-radius: 5px;
-    background: rgba(255, 255, 255, 0.5);
+    background: rgba(24, 26, 37, 0.5);
     overflow: hidden;
 }
 .ms-title {
@@ -201,15 +259,33 @@ export default {
 .el-input{
   width: 270px;
   height: 20px;
+  font-size: 12px;
+}
+.create-account{
+  font-size:14px;
+  font-weight: lighter;
+  margin: 10px;
+  float:left;
+  color: #fff;
+}
+.forget-password{
+  font-size:14px;
+  font-weight: lighter;
+  margin: 10px;
+  float:right;
+  color:#fff;
 }
 .btns {
   display: flex;
   justify-content: center;
 }
-
+.el-button--primary{
+  background-color: #5D5EB4;
+}
 .el-button--primary,
 .el-button--info {
   width: 100px;
   height: 35px;
+  border: 0px;
 }
 </style>

@@ -29,8 +29,8 @@
                 <router-link
                   class="iq-waves-effect"
                   :to="{
-                    path: '/',
-                    query: { uI: this.AdminId },
+                    path: '/UserCase',
+                    query: { uI: this.AdminUserId },
                   }"
                   ><i class="ri-file-list-line"></i
                   ><span>我的案例</span></router-link
@@ -450,7 +450,7 @@ export default {
     getMyContent: function () {
       var self = this;
       axios
-        .get("/apis/backend/profile/46/")
+        .get("/apis/backend/profile/25/")
         .then(
           (response) => (
             (self.MyContent = response.data),
@@ -467,7 +467,7 @@ export default {
       var uname = $("#inputname").val();
       alert($("#inputname").val());
       axios
-        .put("/apis/backend/profile/46/", {
+        .put("/apis/backend/profile/25/", {
           userName: $("#inputname").val(),
           // phonenumber: $("#inputphone").val(),
           birth: this.value1,
