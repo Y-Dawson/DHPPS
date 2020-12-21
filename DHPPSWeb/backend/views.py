@@ -174,10 +174,9 @@ def RequestSmsCode(request):
                 # pipeline = redisClient.pipeline()
                 # 6.保存验证码，用于后续与用户输入值对比，设置过期时间
                 redisClient.setex(phoneNum, 300, code)
-                redisClient.setex(phoneNum+"Flag", 60, code)
+                redisClient.setex(phoneNum+"Flag", 60, 1)
                 # 7.传递指令
                 # pipeline.execute()
-                redisClient.get(phoneNum)
             except Exception:
                 return JsonResponse({"message": "保存到redis失败", "status": 404})
         else:
@@ -211,7 +210,7 @@ def Signup(request):
         status = 404
 
         redisClient = get_redis_connection('smsCode')
-        verifyCodeInCache = redisClient.get("phoneNum")
+        verifyCodeInCache = redisClient.get(phoneNum).decode('ascii')
         print(verifyCodeInCache)
         if verifyCodeInCache is None:
             return JsonResponse({"message": "尚未申请短信验证码", "status": 404})
@@ -219,8 +218,6 @@ def Signup(request):
         if userName and phoneNum and email and password and verifyCode:  # 获取数据
             if verifyCodeInCache != verifyCode:
                 return JsonResponse({"message": "短信验证码错误，请检查重试", "status": 404})
-            redisClient.delete(phoneNum)
-            redisClient.delete(phoneNum+"Flag")
 
             sameNameUser = models.PersonalProfile.objects.filter(userName=userName)
             if sameNameUser:  # 用户名唯一
@@ -251,6 +248,8 @@ def Signup(request):
                 )
                 logger.info(json.dumps(newLoginData, cls=DateEnconding))
                 logger.info(json.dumps(newUser, cls=DateEnconding))
+                redisClient.delete(phoneNum)
+                redisClient.delete(phoneNum+"Flag")
                 message = "注册成功"
                 status = 200
             except Exception as e:
@@ -313,14 +312,12 @@ def ForgetPwd(request):
             # 获取失败则捕捉错误
 
             redisClient = get_redis_connection('smsCode')
-            verifyCodeInCache = redisClient.get("phoneNum")
+            verifyCodeInCache = redisClient.get(phoneNum).decode('ascii')
             if verifyCodeInCache is None:
                 return JsonResponse({"message": "尚未申请短信验证码", "status": 404})
 
             if verifyCode and verifyCodeInCache != verifyCode:
                 return JsonResponse({"message": "短信验证码错误，请检查重试", "status": 404})
-            redisClient.delete(phoneNum)
-            redisClient.delete(phoneNum+"Flag")
 
             profile = models.PersonalProfile.objects.filter(phoneNumber=int(phoneNum))
             if not profile.exists():
@@ -332,6 +329,8 @@ def ForgetPwd(request):
             newSalt = secrets.token_hex(4)
             encryPassword = HashPwd(pwd=newPassword, salt=newSalt)
             models.LoginData.objects.filter(userId=account.userId).update(userPassword=encryPassword, salt=newSalt)
+            redisClient.delete(phoneNum)
+            redisClient.delete(phoneNum+"Flag")
             return JsonResponse({"message": "修改成功", "status": 200})
     else:
         return JsonResponse({"message": "参数传递方式有误", "status": 404})
