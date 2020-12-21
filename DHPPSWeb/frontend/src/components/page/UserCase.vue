@@ -101,8 +101,12 @@
                     height: 450px;
                     text-align: left;
                   ">
-                  <el-col>
-                    <!-- <el-card class="box-card">
+                  <el-col
+                    :span="7"
+                    v-for="(item, index) in currentPageData.data"
+                    :key="index"
+                  >
+                    <el-card class="box-card">
                       <div slot="header" class="clearfix">
                         <i
                           class="layui-icon layui-icon-template-1"
@@ -152,7 +156,7 @@
                           item.inittotalinfected
                         }}</span>
                       </dl>
-                    </el-card> -->
+                    </el-card>
                   </el-col>
                 </div>
                 <div class="paginate">
@@ -213,7 +217,7 @@ export default {
     getMyContent: function () {
       var self = this;
       axios
-        .get("/apis/backend/profile/25/")
+        .get("/apis/backend/profile/1/")
         .then(
           (response) => (
             (self.MyContent = response.data),
@@ -232,7 +236,7 @@ export default {
       axios
         .get("/apis/backend/case/", {
           params: {
-            userId: 25,
+            userId: 1,
             pageSize: 6,
             page: self.currentPage,
           },

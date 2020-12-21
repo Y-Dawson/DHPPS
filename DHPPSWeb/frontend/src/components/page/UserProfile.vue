@@ -166,7 +166,7 @@
 "
                               ></i>
                               <span style="font-size:18px">
-                              邮箱 {{ MyContent.email }}
+                              邮箱： {{ MyContent.email }}
                               </span>
                               </h5>
                             </li>
@@ -176,7 +176,7 @@
                                 class="ri-checkbox-blank-circle-fill text-dark"
                               ></i>
                               <span style="font-size:18px">
-                              住址 {{ MyContent.address }}
+                              住址： {{ MyContent.address }}
                               </span>
                               </h5>
                             </li>
@@ -205,7 +205,7 @@ export default {
       Url:
         "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
       MyContent: [],
-      AdminId: "25",
+      AdminId: "1",
     };
   },
   created: function () {
@@ -215,7 +215,7 @@ export default {
     getMyContent: function () {
       var self = this;
       axios
-        .get("/apis/backend/profile/25/")
+        .get("/apis/backend/profile/1/")
         .then(
           (response) => (
             (self.MyContent = response.data),

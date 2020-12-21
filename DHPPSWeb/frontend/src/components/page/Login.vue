@@ -66,6 +66,7 @@
 export default {
   data() {
     return {
+      ifLogin:'',
       loginMassege:'',
       userId:'',
       userAuthority:"",
@@ -95,9 +96,13 @@ export default {
       },
     };
   },
+  mounted:function(){
+    this.GetUserIdentity();
+    // this.JumpPage();
+  },
   methods: {
     submitMessage(){
-      if(this.loginMassege=="登陆成功"){
+      if(this.loginMassege=="登录成功"){
         // this.$cookies.get(keyName)
         // alert(this.$cookies.get(sessionid))
         this.$message.success("登录成功！");
@@ -137,18 +142,18 @@ export default {
         }
       }
       else{
-        if(this.loginMassege=="你已经登录"){
-        this.$message("你已经登录")
-        this.$router.push({
-            path:'/setting',
-            query:{
-              params:JSON.stringify({
-                userId:this.userId,
-                userAuthority:this.userAuthority
-              })
-            },
-          });
-        }
+        // if(this.loginMassege=="你已经登录"){
+        // this.$message("你已经登录")
+        // this.$router.push({
+        //     path:'/setting',
+        //     query:{
+        //       params:JSON.stringify({
+        //         userId:this.userId,
+        //         userAuthority:this.userAuthority
+        //       })
+        //     },
+        //   });
+        // }
         if(this.loginMassege=="密码错误"){
           this.$message.error("密码错误")
         }
@@ -160,6 +165,42 @@ export default {
     },
     resetLoginForm() {
       this.$refs.loginFormRef.resetFields();
+    },
+    //获取用户登陆状态
+    GetUserIdentity(){
+      var self=this
+      axios
+        .post("/apis/backend/getIdentity/")
+        .then(response => (
+          //  alert(JSON.stringify(response)),
+           self.userId=response.data.userId,
+           self.ifLogin=response.data.message,
+           self.JumpPage()
+          //  alert(self.ifLogin)
+          )
+        )
+        .catch(function (error) {
+          // alert(JSON.stringify(error.response.data.message));
+          alert("数据发送失败");
+          console.log(error.response);
+        });
+    },
+    //判断用户是否需要再次登陆
+    JumpPage:function(){
+      // alert(this.ifLogin)
+      if(this.ifLogin=="返回数据成功"){
+        this.$message("你已经登陆")
+        this.$router.push({
+            path:'/setting',
+            query:{
+              params:JSON.stringify({
+                userId:this.userId,
+                userAuthority:this.userAuthority,
+                casename: 999
+              })
+            },
+          });
+      }
     },
     postContent: function () {
       var self = this
@@ -200,7 +241,6 @@ export default {
   border:0px;
   border-bottom: 1px white solid;
   color: #fff;
-  /* border:0px 0px 2px 0px black solid; */
 }
 .MyInput .el-input__inner:hover{
   background-color: transparent;
@@ -214,19 +254,9 @@ export default {
   border:0px;
   border-bottom: 1px white solid;
 }
-/* .MyInput .el-input__inner::-webkit-input-placeholder{
-  background-color: transparent;
-  border-radius: 0px;
-  border:0px;
-  border-bottom: 1px white solid;
-} */
 </style>
 <style scoped>
 @import "../../assets/layui/css/layui.css";
- /* body {
-  background-image: url(../../assets/img/background2.jpg)
-} */
-
 .login{
   width: 100%;
   height: 100%;
