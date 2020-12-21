@@ -82,7 +82,6 @@
                   class="search-toggle iq-waves-effect d-flex align-items-center"
                 >
                   <img
-                    :fit="fit"
                     :src="AdminUrl"
                     class="img-fluid rounded mr-3"
                     alt="user"
@@ -332,7 +331,6 @@
                           <td class="text-center">
                             <div class="avatar avatar-md">
                               <img
-                                :fit="fit"
                                 :src="item.avatar"
                                 class="img-fluid rounded mr-3"
                               />
@@ -615,6 +613,7 @@ export default {
         "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
       AdminUrl: "",
       content: [],
+      contentStaff: [],
       MyContent: [],
       AdminId: "25",
       //分页
@@ -770,6 +769,7 @@ export default {
 
     getStaffContent: function () {
         var self = this;
+        alert(this.AdminId)
         axios
           .get("/apis/backend/adminManage/",{
             params:{

@@ -180,7 +180,7 @@
                               </span>
                               </h5>
                             </li>
-                            <button style="margin-top: 40px" type="button" class="btn btn-primary btn-block">注销</button>
+                            <button style="margin-top: 40px" type="button" class="btn btn-primary btn-block" @click="handleLogout()">注销</button>
                           </ul>
                         </div>
                       </div>
@@ -228,6 +228,37 @@ export default {
           alert("数据请求失败wdnmd");
         });
     },
+    handleLogout: function() {
+        this.$confirm("确认退出吗？","系统提示",{
+          confirmButtonText:"确定",
+          cancelButtonText:"取消",
+          type:"warning"
+        })
+          .then(()=>{
+            this.logout();
+            this.$message({
+              type:"success",
+              message:"退出成功！"
+            });
+            this.$router.push({
+              path:'/Login'
+            });
+          })
+          .catch(()=>{
+            this.$message({
+              type:"info",
+              message:"取消退出！"
+            });
+          })
+      },
+      logout: function() {
+        var self = this;
+      axios
+        .get("/apis/backend/logout/")
+        .catch(function (error) {
+          alert("数据请求失败wdnmd");
+        });
+      }
   },
 };
 </script>
