@@ -383,7 +383,7 @@ export default {
     getMyContent: function () {
       var self = this;
       axios
-        .get("http://127.0.0.1:8000/backend/profile/25/")
+        .get("/apis/backend/profile/25/")
         .then(
           (response) => (
             (self.MyContent = response.data),
@@ -397,7 +397,7 @@ export default {
     },
     getUserContent: function () {
       axios
-        .get("http://127.0.0.1:8000/backend/generalUserManage/", {
+        .get("/apis/backend/generalUserManage/", {
           params: {
             pageSize: 10,
             page: this.currentPage,
@@ -423,7 +423,7 @@ export default {
         alert(UI),
         alert($("#selected").val()),
         axios
-          .put("http://127.0.0.1:8000/backend/accountInfo/" + UI + "/", {
+          .put("/apis/backend/accountInfo/" + UI + "/", {
             remark: $("#RemarkMessage").val(),
             authority: $("#selected").val(),
           })
@@ -449,7 +449,7 @@ export default {
     getCaseContent: function () {
       var self = this;
       axios
-        .get("http://127.0.0.1:8000/backend/case/", {
+        .get("/apis/backend/case/", {
           params: {
             userid: this.$route.query.userId,
             page_size: 6,
@@ -476,7 +476,7 @@ export default {
       let data = new FormData();
       data.append("caseid", id);
       axios
-        .post("http://127.0.0.1:8000/backend/getCaseInfo/", data)
+        .post("/apis/backend/getCaseInfo/", data)
         .then((response) => {
           self.cases = response.data.cases;
           console.log(JSON.stringify(self.cases));
@@ -583,7 +583,7 @@ export default {
       var self = this;
       // var date = $("#input1").val();
       axios
-        .delete("http://127.0.0.1:8000/backend/accountInfo/" + UI + "/", {})
+        .delete("/apis/backend/accountInfo/" + UI + "/", {})
         .then(
           (response) => (
             (self.content = response), self.getUserContent()
