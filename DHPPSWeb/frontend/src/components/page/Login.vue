@@ -97,7 +97,7 @@ export default {
         }
         else if(this.userAuthority=="管理员"){
           this.$router.push({
-            path:'/userManagement',
+            path:'/AdminUserManage',
             query:{
               params:JSON.stringify({
                 userId:this.userId,
@@ -108,7 +108,7 @@ export default {
         }
         else if(this.userAuthority=="超级管理员"){
           this.$router.push({
-            path:'/SPUserManage',
+            path:'/SuperUserManage',
             query:{
               params:JSON.stringify({
                 userId:this.userId,
