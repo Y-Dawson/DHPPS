@@ -9,6 +9,7 @@ from django.db import models
 import uuid
 import os
 from _datetime import date
+from django.utils import timezone
 
 
 class Theme(models.Model):
@@ -24,7 +25,7 @@ class Theme(models.Model):
 class AccountInformation(models.Model):
     userId = models.AutoField(db_column='userId', primary_key=True)  # Field name made lowercase.
     themeNo = models.ForeignKey(Theme, models.DO_NOTHING, db_column='themeNo')  # Field name made lowercase.
-    createDate = models.DateField(auto_now_add=True, db_column='createDate')  # Field name made lowercase.
+    createDate = models.DateField(db_column='createDate', default=timezone.now)  # Field name made lowercase.
     remark = models.CharField(max_length=200, default='无备注')
     caseNumber = models.IntegerField(db_column='caseNumber', default=0)  # Field name made lowercase.
     authority = models.CharField(max_length=50, default='普通用户')
