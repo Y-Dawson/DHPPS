@@ -79,7 +79,7 @@
                     alt="user"
                   />
                   <div class="caption">
-                    <h6 class="mb-0 line-height">{{ MyContent.username }}</h6>
+                    <h6 class="mb-0 line-height">{{ MyContent.userName }}</h6>
                   </div>
                 </a>
               </li>
@@ -126,7 +126,7 @@
                               <h5>
                                 <i class="ri-checkbox-blank-circle-fill text-success"></i>
                               <span style="font-size:18px">
-                                昵称： {{ MyContent.username }}
+                                昵称： {{ MyContent.userName }}
                               </span>
                               </h5>
                             </li>
@@ -155,7 +155,7 @@
                               <i
                                 class="ri-checkbox-blank-circle-fill text-primary"
                               ></i><span style="font-size:18px">
-                              手机号： {{ MyContent.phonenumber }}
+                              手机号： {{ MyContent.phoneNumber }}
                               </span>
                               </h5>
                             </li>
@@ -215,7 +215,7 @@ export default {
     getMyContent: function () {
       var self = this;
       axios
-        .get("http://127.0.0.1:8000/backend/profile/25/")
+        .get("/apis/backend/profile/25/")
         .then(
           (response) => (
             (self.MyContent = response.data),

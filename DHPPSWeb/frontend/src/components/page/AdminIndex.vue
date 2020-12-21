@@ -26,7 +26,7 @@
                   class="iq-waves-effect"
                   :to="{
                     path: '/AdminUserManage',
-                    query: { uI: this.AdminUserId },
+                    query: { uI: this.AdminId },
                   }"
                   ><i class="ri-user-line"></i
                   ><span>信息管理</span></router-link
@@ -37,7 +37,7 @@
                   class="iq-waves-effect"
                   :to="{
                     path: '/AdminCaseManage',
-                    query: { uI: this.AdminUserId },
+                    query: { uI: this.AdminId },
                   }"
                   ><i class="ri-home-4-line"></i><span>案例管理</span></router-link
                 >
@@ -296,13 +296,13 @@ export default {
     };
   },
   created: function () {
-    this.getMyContent(), this.getUserContent();
+    this.getMyContent();
   },
   methods: {
     getMyContent: function () {
       var self = this;
       axios
-        .get("http://127.0.0.1:8000/backend/profile/25/")
+        .get("/apis/backend/profile/25/")
         .then(
           (response) => (
             (self.MyContent = response.data),

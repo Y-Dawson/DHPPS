@@ -79,7 +79,7 @@
                     alt="user"
                   />
                   <div class="caption">
-                    <h6 class="mb-0 line-height">{{ MyContent.username }}</h6>
+                    <h6 class="mb-0 line-height">{{ MyContent.userName }}</h6>
                   </div>
                 </a>
               </li>
@@ -450,7 +450,7 @@ export default {
     getMyContent: function () {
       var self = this;
       axios
-        .get("http://127.0.0.1:8000/backend/profile/46/")
+        .get("/apis/backend/profile/46/")
         .then(
           (response) => (
             (self.MyContent = response.data),
@@ -467,8 +467,8 @@ export default {
       var uname = $("#inputname").val();
       alert($("#inputname").val());
       axios
-        .put("http://127.0.0.1:8000/backend/profile/46/", {
-          username: $("#inputname").val(),
+        .put("/apis/backend/profile/46/", {
+          userName: $("#inputname").val(),
           // phonenumber: $("#inputphone").val(),
           birth: this.value1,
           sex: this.ruleForm.radio,
@@ -513,12 +513,12 @@ export default {
     changePass: function () {
       var self = this;
       let data = new FormData();
-      data.append("userid", 46);
+      data.append("userId", 46);
       data.append("oldPassword", $("#prepass").val());
       data.append("newPassword", $("#newpass").val());
       // var prepass=$("#prepass").val()
       axios
-        .post("http://127.0.0.1:8000/backend/changePwd/", data)
+        .post("/apis/backend/changePwd/", data)
         .then(
           (response) => (
             (self.content = response.data),
