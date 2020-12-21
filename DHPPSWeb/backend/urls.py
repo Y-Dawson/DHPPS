@@ -24,7 +24,7 @@ urlpatterns = [
     path('requestSmsCode/', views.RequestSmsCode, name="requestSmsCode"),
 
     # 请求对应caseId的案例信息
-    path('getCaseInfo/', views.GetAllCaseInfos, name="getCaseInfo"),
+    path('getCaseInfo/', views.GetCaseInfos, name="getCaseInfo"),
 
     # 注册请求
     path('signup/', views.Signup, name="signup"),

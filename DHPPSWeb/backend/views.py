@@ -283,7 +283,7 @@ def ChangePwd(request):
                 return JsonResponse({"message": "当前账号与浏览器记录不一致", "status": 404})
             account = account.first()
             # 检测账号原密码是否符合
-            if (account.LoginData.userPassword == HashPwd(pwd=oldPassword, salt=account.LoginData.salt)):
+            if (account.logindata.userPassword == HashPwd(pwd=oldPassword, salt=account.logindata.salt)):
                 newSalt = secrets.token_hex(4)
                 encryPassword = HashPwd(pwd=newPassword, salt=newSalt)
                 models.LoginData.objects.filter(userId=userId).update(userPassword=encryPassword, salt=newSalt)
@@ -728,12 +728,11 @@ class ImageCodeView(View):
         return JsonResponse({"message": message, "status": status})
 
 
-# 返回所有管理员信息
-# 获取分页信息
+# 返回所有案例信息
 # 获取所有管理员信息，分页器处理后发出
 # 发送成功，返回消息和200状态码
 # 发送失败，返回消息和404状态码
-def GetAllCaseInfos(request):
+def GetCaseInfos(request):
     if request.method == "POST":
         caseId = request.POST.get("caseId", None)
         if caseId:
