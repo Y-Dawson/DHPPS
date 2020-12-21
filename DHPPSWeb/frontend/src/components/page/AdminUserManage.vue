@@ -14,7 +14,7 @@
                   class="iq-waves-effect"
                   :to="{
                     path: '/AdminIndex',
-                    query: { uI: this.AdminUserId },
+                    query: { uI: this.AdminId },
                   }"
                   ><i class="ri-home-4-line"></i><span>首页</span></router-link
                 >
@@ -36,7 +36,7 @@
                   class="iq-waves-effect"
                   :to="{
                     path: '/AdminCaseManage',
-                    query: { uI: this.AdminUserId },
+                    query: { uI: this.AdminId },
                   }"
                   ><i class="ri-home-4-line"></i><span>案例管理</span></router-link
                 >
@@ -88,7 +88,7 @@
                     alt="user"
                   />
                   <div class="caption">
-                    <h6 class="mb-0 line-height">{{ MyContent.username }}</h6>
+                    <h6 class="mb-0 line-height">{{ MyContent.userName }}</h6>
                   </div>
                 </a>
               </li>
@@ -141,10 +141,10 @@
                       <tbody>
                         <tr
                           v-for="item in content"
-                          :key="item.userid"
+                          :key="item.userId"
                           style="text-align: center"
                         >
-                          <td>{{ item.userid }}</td>
+                          <td>{{ item.userId }}</td>
                           <td class="text-center">
                             <div class="avatar avatar-md">
                               <img
@@ -162,16 +162,16 @@
                               :src="item.avatar"
                            ></el-avatar>
                            </td> -->
-                          <td>{{ item.username }}</td>
-                          <td>{{ item.phonenumber }}</td>
+                          <td>{{ item.userName }}</td>
+                          <td>{{ item.phoneNumber }}</td>
                           <td>{{ item.email }}</td>
                           <td>
                             <span class="badge iq-bg-primary">{{
-                              item.casenumber
+                              item.caseNumber
                             }}</span>
                           </td>
                           <td>{{ item.remark }}</td>
-                          <td>{{ item.createdate }}</td>
+                          <td>{{ item.createDate }}</td>
                           <td>
                             <div
                               class="flex align-items-center list-user-action"
@@ -183,7 +183,7 @@
                                 title=""
                                 data-original-title="Edit"
                                 @click="
-                                  UserEdit(item.userid, item.username, true)
+                                  UserEdit(item.userId, item.userName, true)
                                 "
                               >
                                 <i class="ri-pencil-line"></i>
@@ -194,7 +194,7 @@
                                 data-placement="top"
                                 title=""
                                 data-original-title="Delete"
-                                @click="handleDel(item.userid)"
+                                @click="handleDel(item.userId)"
                                 ><i class="ri-delete-bin-line"></i
                               ></a>
                             </div>

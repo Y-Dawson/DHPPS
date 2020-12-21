@@ -131,25 +131,10 @@ export default {
     resetLoginForm() {
       this.$refs.loginFormRef.resetFields();
     },
-    getLoginData: function () {
-      var self = this
-      axios
-        .get("http://127.0.0.1:8000/backend/logindata/")
-        .then(response => (
-            self.content = response.data
-            // alert(JSON.stringify(response))
-          )
-        )
-        .catch(function (error) {
-          // alert(JSON.stringify(response));
-          alert("数据获取失败");
-          console.log(error.response);
-        });
-    },
     postContent: function () {
       var self = this
       let data = new FormData()
-      data.append("phonenum",$("#loginPhone").val())
+      data.append("phoneNum",$("#loginPhone").val())
       data.append("password",$("#loginPass").val())
       axios
         .post("/apis/backend/signin/",data)
@@ -159,7 +144,7 @@ export default {
             self.userId=response.data.userId,
             self.userAuthority=response.data.userAuthority,
             // alert("数据发送"),
-            // alert(JSON.stringify(response)),
+            alert(JSON.stringify(response)),
             self.submitMessage()
           )
         )

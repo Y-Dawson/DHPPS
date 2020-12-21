@@ -26,7 +26,7 @@
                   class="iq-waves-effect"
                   :to="{
                     path: '/SuperUserManage',
-                    query: { uI: this.AdminUserId },
+                    query: { uI: this.AdminId },
                   }"
                   ><i class="ri-user-line"></i
                   ><span>信息管理</span></router-link

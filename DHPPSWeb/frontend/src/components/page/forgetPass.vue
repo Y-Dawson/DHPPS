@@ -32,7 +32,7 @@
               </el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="info" >获取验证码</el-button>
+              <el-button type="info" :disabled="disabled" @click="checkPhone()">{{valiBtn}}</el-button>
             </el-form-item>
           </div>
         </div>
@@ -129,6 +129,8 @@ export default {
         });
       };
     return {
+      valiBtn: "获取验证码",
+      disabled: false,
       forgetForm: {
         password: "",
         password2: "",
@@ -143,20 +145,74 @@ export default {
         phone: [{ required: true, validator:checkphone, trigger: "blur"}],
         securitt_code: [
           { required: true, message: "请输入验证码", trigger: "blur"},
-          { min: 4, max: 4, message: "请输入4位验证码", trigger: "blur"}
+          { min: 6, max: 6, message: "请输入6位验证码", trigger: "blur"}
           ],
       }
     };
   },
   methods:{
+    checkPhone: function () {
+      this.$refs["forgetForm"].validateField("phone", (err) => {
+        if (err) {
+          console.log("未通过");
+          return;
+        } else {
+          console.log("已通过");
+          this.getVerifyCode();
+        }
+      });
+    },
+    tackBtn: function () {
+      let time = 60;
+      let timer = setInterval(() => {
+        if (time == 0) {
+          clearInterval(timer);
+          this.valiBtn = "获取验证码";
+          this.disabled = false;
+        } else {
+          this.disabled = true;
+          this.valiBtn = time + "秒后重试";
+          time--;
+        }
+      }, 1000);
+    },
+    phoneIsValid: function() {
+      if(this.returnmessage=="验证码已发送") {
+            this.$message(this.returnmessage);
+            this.tackBtn(); //验证码倒数60秒
+          }
+          else this.$message(this.returnmessage);
+    },
+    getVerifyCode: function () {
+      var self = this;
+      let data = new FormData();
+        data.append("phoneNum", $("#phonenum").val());
+      axios
+        .post("/apis/backend/requestSmsCode/", data)
+        .then(
+          (response) => (
+            (self.content = response.data),
+            alert(JSON.stringify(response.data)),
+            self.returnmessage=response.data.message,
+            self.phoneIsValid()            
+            // alert(self.returnmessage),
+            // self.skip()
+            // alert(JSON.stringify(response.data.message))
+          )
+        )
+        .catch(function (error) {
+          alert("数据发送失败");
+          console.log(error.response);
+        });
+    },
     forgetPass: function () {
       var self = this;
       let data = new FormData();
-      data.append("phonenum",$("#phone").val());
+      data.append("phoneNum",$("#phone").val());
       data.append("verifyCode",$("#securitt_code").val());
       data.append("newPassword",$("#password").val());
       axios
-        .post('http://127.0.0.1:8000/backend/forgetPwd/', data)
+        .post('/apis/backend/forgetPwd/', data)
         .then(response => (
           self.returnData = response.data,
           self.returnmessage=response.data.message,
