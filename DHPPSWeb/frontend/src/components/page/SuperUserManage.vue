@@ -88,7 +88,7 @@
                     alt="user"
                   />
                   <div class="caption">
-                    <h6 class="mb-0 line-height">{{ MyContent.username }}</h6>
+                    <h6 class="mb-0 line-height">{{ MyContent.userName }}</h6>
                   </div>
                 </a>
               </li>
@@ -162,14 +162,13 @@
                       <tbody>
                         <tr
                           v-for="item in content"
-                          :key="item.userid"
+                          :key="item.userId"
                           style="text-align: center"
                         >
-                          <td>{{ item.userid }}</td>
+                          <td>{{ item.userId }}</td>
                           <td class="text-center">
                             <div class="avatar avatar-md">
                               <img
-                                :fit="fit"
                                 :src="item.avatar"
                                 class="img-fluid rounded mr-3"
                               />
@@ -183,16 +182,16 @@
                               :src="item.avatar"
                            ></el-avatar>
                            </td> -->
-                          <td>{{ item.username }}</td>
-                          <td>{{ item.phonenumber }}</td>
+                          <td>{{ item.userName }}</td>
+                          <td>{{ item.phoneNumber }}</td>
                           <td>{{ item.email }}</td>
                           <td>
                             <span class="badge iq-bg-primary">{{
-                              item.casenumber
+                              item.caseNumber
                             }}</span>
                           </td>
                           <td>{{ item.remark }}</td>
-                          <td>{{ item.createdate }}</td>
+                          <td>{{ item.createDate }}</td>
                           <td>
                             <div
                               class="flex align-items-center list-user-action"
@@ -204,7 +203,7 @@
                                 title=""
                                 data-original-title="Edit"
                                 @click="
-                                  UserEdit(item.userid, item.username, true)
+                                  UserEdit(item.userId, item.userName, true)
                                 "
                               >
                                 <i class="ri-pencil-line"></i>
@@ -215,7 +214,7 @@
                                 data-placement="top"
                                 title=""
                                 data-original-title="Delete"
-                                @click="handleDel(item.userid)"
+                                @click="handleDel(item.userId)"
                                 ><i class="ri-delete-bin-line"></i
                               ></a>
                             </div>
@@ -325,11 +324,11 @@
                       </thead>
                       <tbody>
                         <tr
-                          v-for="item in content"
-                          :key="item.userid"
+                          v-for="item in contentStaff"
+                          :key="item.userId"
                           style="text-align: center"
                         >
-                          <td>{{ item.userid }}</td>
+                          <td>{{ item.userId }}</td>
                           <td class="text-center">
                             <div class="avatar avatar-md">
                               <img
@@ -347,16 +346,16 @@
                               :src="item.avatar"
                            ></el-avatar>
                            </td> -->
-                          <td>{{ item.username }}</td>
-                          <td>{{ item.phonenumber }}</td>
+                          <td>{{ item.userName }}</td>
+                          <td>{{ item.phoneNumber }}</td>
                           <td>{{ item.email }}</td>
                           <td>
                             <span class="badge iq-bg-primary">{{
-                              item.casenumber
+                              item.caseNumber
                             }}</span>
                           </td>
                           <td>{{ item.remark }}</td>
-                          <td>{{ item.createdate }}</td>
+                          <td>{{ item.createDate }}</td>
                           <td>
                             <div
                               class="flex align-items-center list-user-action"
@@ -368,7 +367,7 @@
                                 title=""
                                 data-original-title="Edit"
                                 @click="
-                                  UserEdit(item.userid, item.username, true)
+                                  StaffEdit(item.StaffId, item.StaffName, true)
                                 "
                               >
                                 <i class="ri-pencil-line"></i>
@@ -379,7 +378,7 @@
                                 data-placement="top"
                                 title=""
                                 data-original-title="Delete"
-                                @click="handleDel(item.userid)"
+                                @click="handleStaffDel(item.StaffId)"
                                 ><i class="ri-delete-bin-line"></i
                               ></a>
                             </div>
@@ -410,17 +409,17 @@
                               class="page-link"
                               tabindex="-1"
                               aria-disabled="true"
-                              @click="prevPage()"
+                              @click="prevStaffPage()"
                               >Previous</a
                             >
                           </li>
                           <li class="page-item">
                             <a class="page-link"
-                              >第{{ currentPage }}页/共{{ totalPage }}页</a
+                              >第{{ currentStaffPage }}页/共{{ totalStaffPage }}页</a
                             >
                           </li>
                           <li class="page-item">
-                            <a class="page-link" @click="nextPage()">Next</a>
+                            <a class="page-link" @click="nextStaffPage()">Next</a>
                           </li>
                         </ul>
                       </nav>
@@ -525,6 +524,75 @@
       </div>
     </div>
     <!-- </div> -->
+    <div class="mask" v-if="showStaff" @click="showStaff = false"></div>
+    <!-- <div class="pop" v-if="true"> -->
+    <div
+      id="item1"
+      v-if="showStaff"
+      class="iq-card"
+      style="
+        background-color: #fff;
+        position: fixed;
+        top: 50px;
+        left: 400px;
+        width: calc(100% - 800px);
+        height: calc(100%-200px);
+        z-index: 999;
+      "
+    >
+      <div class="container-fluid">
+        <div class="iq-card-header d-flex justify-content-between">
+          <div class="iq-header-title">
+            <h4 class="card-title">编辑</h4>
+          </div>
+        </div>
+        <div class="iq-card-body">
+          <form>
+            <div class="form-group">
+              <label for="exampleInputDisabled1">员工昵称</label>
+              <input
+                type="text"
+                class="form-control"
+                id="exampleInputDisabled1"
+                disabled=""
+                :value="StaffName"
+              />
+            </div>
+            <div class="form-group">
+              <label for="exampleFormControlTextarea1">备注</label>
+              <textarea
+                class="form-control"
+                id="RemarkMessage"
+                rows="4"
+              ></textarea>
+            </div>
+            <div class="form-group">
+              <label for="exampleFormControlTextarea1">权限</label>
+              <select id="selected" v-model="selected" name="authority">
+                <option value="普通用户">普通用户</option>
+                <option value="管理员">管理员</option>
+              </select>
+            </div>
+            <div style="text-align: right">
+              <button
+                type="submit"
+                class="btn btn-primary"
+                @click="PostStaffMessage(StaffId)"
+              >
+                提交
+              </button>
+              <button
+                type="submit"
+                class="btn iq-bg-danger"
+                @click="CloseStaffEdit(false)"
+              >
+                取消
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -554,12 +622,20 @@ export default {
       currentPage: 1, //当前页数 ，默认为1
       pageSize: 4, // 每页显示数量
       paginate: 10,
+      //staff分页
+      totalStaffPage: 1, // 统共页数，默认为1
+      currentStaffPage: 1, //当前页数 ，默认为1
+      pageStaffSize: 4, // 每页显示数量
+      paginateStaff: 10,
       //用户编辑的id和昵称
       UserId: "",
       UserName: "",
+      StaffId: "",
+      StaffName: "",
       showModal: false,
       radioVal: "普通用户",
       show: false,
+      showStaff:false
     };
   },
   created: function () {
@@ -569,7 +645,7 @@ export default {
     getMyContent: function () {
       var self = this;
       axios
-        .get("http://127.0.0.1:8000/backend/profile/25/")
+        .get("/apis/backend/profile/25/")
         .then(
           (response) => (
             (self.MyContent = response.data),
@@ -583,7 +659,7 @@ export default {
     },
     getUserContent: function () {
       axios
-        .get("http://127.0.0.1:8000/backend/generalUserManage/", {
+        .get("/apis/backend/generalUserManage/", {
           params: {
             pageSize: 10,
             page: this.currentPage,
@@ -609,7 +685,7 @@ export default {
         alert(UI),
         alert($("#selected").val()),
         axios
-          .put("http://127.0.0.1:8000/backend/accountInfo/" + UI + "/", {
+          .put("/apis/backend/accountInfo/" + UI + "/", {
             remark: $("#RemarkMessage").val(),
             authority: $("#selected").val(),
           })
@@ -669,7 +745,7 @@ export default {
       var self = this;
       // var date = $("#input1").val();
       axios
-        .delete("http://127.0.0.1:8000/backend/accountInfo/" + UI + "/", {})
+        .delete("/apis/backend/accountInfo/" + UI + "/", {})
         .then(
           (response) => (
             (self.content = response), self.getUserContent()
@@ -681,12 +757,117 @@ export default {
           console.log(error.response);
         });
     },
+
     ShowPage(){
       this.show=true;
+      this.getStaffContent();
     },
     ClosePage() {
       this.show=false;
-    }
+      this.getUserContent();
+    },
+
+
+    getStaffContent: function () {
+        var self = this;
+        axios
+          .get("/apis/backend/adminManage/",{
+            params:{
+              pageStaffSize: 10,
+              page: self.currentStaffPage
+            }
+          })
+          .then(response => (
+            self.contentStaff = response.data.data,
+            self.paginateStaff=response.data.pagination,
+            self.pageStaffSize=response.data.pageSize,
+            self.totalStaffPage=Math.ceil(self.paginateStaff / self.pageStaffSize),
+            this.testStaffPage()
+            // alert(JSON.stringify(response))
+          ))
+          .catch(function (error) { // 请求失败处理
+            alert("数据请求失败wdnmd");
+          });
+      },
+    PostStaffMessage: function (UI) {
+      var self = this;
+      alert($("#RemarkMessage").val()),
+        alert($("#selected").val()),
+        axios
+          .put("/apis/backend/accountInfo/" + UI + "/", {
+            remark: $("#RemarkMessage").val(),
+            authority: $("#selected").val(),
+          })
+          .then(
+            (response) => (
+              this.$message("修改权限成功"),
+              alert(JSON.stringify(response))
+            )
+          )
+          .catch(function (error) {
+            alert("数据发送失败");
+          });
+    },
+      handleStaffDel(id) {
+        this.$confirm("确认删除该用户吗？","系统提示",{
+          confirmButtonText:"确定",
+          cancelButtonText:"取消",
+          type:"warning"
+        })
+          .then(()=>{
+            this.deleteStaffContent(id);
+            this.$message({
+              type:"success",
+              message:"删除成功！"
+            });
+          })
+          .catch(()=>{
+            this.$message({
+              type:"info",
+              message:"取消删除！"
+            });
+          })
+      },
+      deleteStaffContent: function (id) {
+        var self = this;
+        // var date = $("#input1").val();
+        axios
+          .delete('/apis/backend/accountInfo/'+id+'/',{
+              
+          })
+          .then(response => (
+            self.contentStaff = response,
+            self.getStaffContent()
+            // alert(JSON.stringify(response))
+          ))
+          .catch(function (error) {
+            alert("数据发送失败");
+            console.log(error.response);
+          });
+        },
+        //上一页
+        prevStaffPage() {
+            if (this.currentStaffPage == 1) return;
+             this.currentStaffPage--;
+             this.getStaffContent();
+            
+        },
+        // 下一页
+        nextStaffPage() {
+            if (this.currentStaffPage == this.totalStaffPage) return ;
+             this.currentStaffPage++;
+             this.getStaffContent();
+            
+        },
+      testStaffPage:function(){
+        if(this.totalStaffPage==0) this.totalStaffPage=1;
+      },
+    StaffEdit: function (UI, UN, show) {
+      (this.StaffId = UI), (this.StaffName = UN), (this.showStaff = show);
+    },
+    CloseStaffEdit: function (show) {
+      this.showStaff = show;
+    },
   },
 };
 </script>

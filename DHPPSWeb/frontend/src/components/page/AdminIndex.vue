@@ -83,7 +83,6 @@
                   class="search-toggle iq-waves-effect d-flex align-items-center"
                 >
                   <img
-                    :fit="fit"
                     :src="AdminUrl"
                     class="img-fluid rounded mr-3"
                     alt="user"

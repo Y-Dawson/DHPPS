@@ -10,7 +10,7 @@
               <el-input
                 v-model="forgetForm.phone"
                 placeholder="请输入11位手机号"
-                id="phone"
+                id="phonenum"
               >
               <el-button slot="prepend" icon="el-icon-user"></el-button>
               </el-input>
@@ -187,6 +187,7 @@ export default {
       var self = this;
       let data = new FormData();
         data.append("phoneNum", $("#phonenum").val());
+        alert($("#phonenum").val())
       axios
         .post("/apis/backend/requestSmsCode/", data)
         .then(

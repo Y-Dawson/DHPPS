@@ -78,13 +78,12 @@
                   class="search-toggle iq-waves-effect d-flex align-items-center"
                 >
                   <img
-                    :fit="fit"
                     :src="AdminUrl"
                     class="img-fluid rounded mr-3"
                     alt="user"
                   />
                   <div class="caption">
-                    <h6 class="mb-0 line-height">{{ MyContent.username }}</h6>
+                    <h6 class="mb-0 line-height">{{ MyContent.userName }}</h6>
                   </div>
                 </a>
               </li>
@@ -297,7 +296,7 @@ export default {
     getMyContent: function () {
       var self = this;
       axios
-        .get("http://127.0.0.1:8000/backend/profile/25/")
+        .get("/apis/backend/profile/25/")
         .then(
           (response) => (
             (self.MyContent = response.data),
