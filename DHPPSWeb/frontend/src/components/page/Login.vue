@@ -66,9 +66,6 @@
 export default {
   data() {
     return {
-      // bgImg:{ backgroundImage:"url(" + require("../../assets/img/background2.jpg") + ")",
-      //         height:'100vh',//这里一定要设置高度 否则背景图无法显示
-      //         backgroundRepeat: "no-repeat"},
       loginMassege:'',
       userId:'',
       userAuthority:"",
@@ -100,7 +97,7 @@ export default {
   },
   methods: {
     submitMessage(){
-      if(this.loginMassege=="登录成功"){
+      if(this.loginMassege=="登陆成功"){
         // this.$cookies.get(keyName)
         // alert(this.$cookies.get(sessionid))
         this.$message.success("登录成功！");
@@ -140,10 +137,22 @@ export default {
         }
       }
       else{
+        if(this.loginMassege=="你已经登录"){
+        this.$message("你已经登录")
+        this.$router.push({
+            path:'/setting',
+            query:{
+              params:JSON.stringify({
+                userId:this.userId,
+                userAuthority:this.userAuthority
+              })
+            },
+          });
+        }
         if(this.loginMassege=="密码错误"){
           this.$message.error("密码错误")
         }
-        else{
+        if(this.loginMassege=="账号不存在"){
           this.$message.error("账号不存在")
         }
       }
@@ -165,7 +174,7 @@ export default {
             self.userId=response.data.userId,
             self.userAuthority=response.data.userAuthority,
             // alert("数据发送"),
-            alert(JSON.stringify(response)),
+            alert(JSON.stringify(response.data.message)),
             self.submitMessage()
           )
         )

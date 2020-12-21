@@ -14,7 +14,7 @@
 
           <li class="layui-nav-item" style="line-height: 40px">
             <router-link
-              :to="{ path: '/profile', query: { userId: userId } }"
+              :to="{ path: '/UserProfile', query: { userId: userId } }"
               style="margin-left: 10px; float: left"
               >个人中心</router-link
             >
