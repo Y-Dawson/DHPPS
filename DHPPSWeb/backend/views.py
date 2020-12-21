@@ -103,7 +103,7 @@ def Signin(request):
                 accountInfo = models.AccountInformation.objects.get(userId=profile.userId.userId)
 
                 # 判断是否和存储加密密码相同
-                if (accountInfo.LoginData.userPassword == HashPwd(pwd=password, salt=accountInfo.LoginData.salt)):
+                if (accountInfo.LoginData.userPassword == HashPwd(pwd=password, salt=accountInfo.loginData.salt)):
                     # 若相同，设置登录状态为True，设置登录id为userId，登录权限为对应权限
                     request.session['isLogin'] = True
                     request.session['userId'] = accountInfo.userId
