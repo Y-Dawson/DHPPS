@@ -1,5 +1,5 @@
 <template>
-  <div id="signup" :style="bgImg">
+  <div id="signup">
     <div class="ms-login">
       <div class="ms-title">高传染性疾病预测系统</div>
       <el-form
@@ -17,8 +17,9 @@
                   v-model="signupForm.username"
                   placeholder="用户名"
                   id="username"
+                  class="MyInput"
                 >
-                  <el-button slot="prepend" icon="el-icon-user"></el-button>
+                  <i slot="prefix" class="el-input__icon el-icon-user"></i>
                 </el-input>
               </el-form-item>
             </div>
@@ -34,8 +35,9 @@
                   placeholder="输入密码"
                   type="password"
                   id="password"
+                  class="MyInput"
                 >
-                  <el-button slot="prepend" icon="el-icon-user"></el-button>
+                <i slot="prefix" class="el-input__icon el-icon-user"></i>
                 </el-input>
               </el-form-item>
             </div>
@@ -51,8 +53,9 @@
                   placeholder="确认密码"
                   type="password"
                   id="password2"
+                  class="MyInput"
                 >
-                  <el-button slot="prepend" icon="el-icon-user"></el-button>
+                  <i slot="prefix" class="el-input__icon el-icon-user"></i>
                 </el-input>
               </el-form-item>
             </div>
@@ -67,8 +70,9 @@
                   v-model="signupForm.email"
                   placeholder="邮箱"
                   id="email"
+                  class="MyInput"
                 >
-                  <el-button slot="prepend" icon="el-icon-user"></el-button>
+                  <i slot="prefix" class="el-input__icon el-icon-user"></i>
                 </el-input>
               </el-form-item>
             </div>
@@ -83,8 +87,9 @@
                   v-model="signupForm.phone"
                   placeholder="11位手机号"
                   id="phonenum"
+                  class="MyInput"
                 >
-                  <el-button slot="prepend" icon="el-icon-user"></el-button>
+                  <i slot="prefix" class="el-input__icon el-icon-user"></i>
                 </el-input>
               </el-form-item>
             </div>
@@ -99,8 +104,9 @@
                   v-model="signupForm.securitt_code"
                   placeholder="请输入验证码"
                   id="securitt_code"
+                  class="MyInput"
                 >
-                  <el-button slot="prepend" icon="el-icon-user"></el-button>
+                  <i slot="prefix" class="el-input__icon el-icon-user"></i>
                 </el-input>
               </el-form-item>
             </div>
@@ -119,7 +125,7 @@
           </el-form-item>
         </div>
         <div class="layui-form-item">
-          <el-form-item>
+          <el-form-item style="color:#fff">
             <router-link class="use-account" to="/Login"
               >使用已有账号登录</router-link
             >
@@ -201,12 +207,6 @@ export default {
     return {
       valiBtn: "获取验证码",
       disabled: false,
-      bgImg: {
-        backgroundImage:
-          "url(" + require("../../assets/img/background2.jpg") + ")",
-        height: "100vh", //这里一定要设置高度 否则背景图无法显示
-        backgroundRepeat: "no-repeat",
-      },
       signupForm: {
         username: "",
         password: "",
@@ -337,18 +337,47 @@ export default {
   },
 };
 </script>
-
+<style>
+.MyInput .el-input__inner{
+  background-color: transparent;
+  border-radius: 0px;
+  border:0px;
+  border-bottom: 1px white solid;
+  color: #fff;
+}
+.MyInput .el-input__inner:hover{
+  background-color: transparent;
+  border-radius: 0px;
+  border:0px;
+  border-bottom: 1px white solid;
+}
+.MyInput .el-input__inner:focus-within{
+  background-color: transparent;
+  border-radius: 0px;
+  border:0px;
+  border-bottom: 1px white solid;
+}
+</style>
 <style scoped>
 @import "../../assets/layui/css/layui.css";
-.ms-login {
+#signup{
+  width: 100%;
+  height: 100%;
+  background-image: url(../../assets/img/3.jpg);
+  background-size: cover;
   position: absolute;
-  left: 50%;
-  top: 35%;
-  width: 350px;
-  margin: -190px 0 0 -175px;
-  border-radius: 5px;
-  background: rgba(255, 255, 255, 0.5);
-  overflow: hidden;
+  z-index: -1;
+  background-repeat: no-repeat;
+}
+.ms-login {
+    position: absolute;
+    left: 50%;
+    top: 40%;
+    width: 350px;
+    margin: -190px 0 0 -175px;
+    border-radius: 5px;
+    background: rgba(24, 26, 37, 0.5);
+    overflow: hidden;
 }
 .ms-title {
   width: 100%;
