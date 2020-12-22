@@ -206,24 +206,15 @@ export default {
       AdminUrl: "",
       MyContent: [],
       AdminId: "25",
+      sexData:[],
+      cityData: [],
       chartRingData: {
         columns: ["性别", "用户数量"],
-        rows: [
-          { 性别: "男", 用户数量: 1393 },
-          { 性别: "女", 用户数量: 3530 },
-          { 性别: "保密", 用户数量: 2923 },
-        ],
+        rows: [],
       },
       chartCityData: {
         columns: ["城市", "使用数量"],
-        rows: [
-          { 城市: "长沙", 使用数量: 1393 },
-          { 城市: "重庆", 使用数量: 3530 },
-          { 城市: "上海", 使用数量: 2923 },
-          { 城市: "成都", 使用数量: 1823 },
-          { 城市: "北京", 使用数量: 3945 },
-          { 城市: "广州", 使用数量: 1234 },
-        ],
+        rows: [],
       },
       chartHistogramData: {
           columns: ['日期', '用户数量', '案例数量', ],
@@ -237,17 +228,6 @@ export default {
         },
       chartRingSettings: {
         radius: ["60px", "80px"],
-        label: {
-          formatter: (params) => {
-            if (params.dataIndex === 0) {
-              return `男${params.percent}%`;
-            } else if (params.dataIndex === 1) {
-              return `女${params.percent}%`;
-            } else {
-              return `保密${params.percent}%`;
-            }
-          },
-        },
         itemStyle: {
           //这里是更添加阴影
           emphasis: {
@@ -296,6 +276,8 @@ export default {
   },
   created: function () {
     this.getMyContent();
+    this.getSexData();
+    this.getCityData();
   },
   methods: {
     getMyContent: function () {
@@ -313,6 +295,54 @@ export default {
           alert("数据请求失败wdnmd");
         });
     },
+    getSexData: function() {
+      var self = this;
+      axios
+        .get("/apis/backend/sexNum/")
+        .then(
+          (response) => {
+            alert(JSON.stringify(response.data.TopcityInfos))
+          this.sexData = response.data.TopcityInfos;
+          //通过遍历DataShow分别给columns 中的维度和指标 赋值；
+          for (var i = 0; i < this.sexData.length; i++) {
+            this.chartRingData.rows.push({
+         //注意，由于我后端createTime该字段直接返回是一个时间戳，所以此处用到了 一个时间转换插件moment.js
+              "性别": this.sexData[i].sex,
+              "用户数量": this.sexData[i].sexCount,
+            });
+
+          }
+          }
+        )
+        .catch(function (error) {
+          // 请求失败处理
+          alert("数据请求失败wdnmd");
+        });
+    },
+    getCityData:function(){
+      var self = this;
+      axios
+        .get("/apis/backend/topCity/")
+        .then(
+          (response) => {
+            alert(JSON.stringify(response.data))
+          this.cityData = response.data;
+          //通过遍历DataShow分别给columns 中的维度和指标 赋值；
+          for (var i = 0; i < this.sexData.length; i++) {
+            this.chartRingData.rows.push({
+         //注意，由于我后端createTime该字段直接返回是一个时间戳，所以此处用到了 一个时间转换插件moment.js
+              "城市": this.sexData[i].sex,
+              "使用数量": this.sexData[i].sexCount,
+            });
+
+          }
+          }
+        )
+        .catch(function (error) {
+          // 请求失败处理
+          alert("数据请求失败wdnmd");
+        });
+    }
   },
 };
 </script>

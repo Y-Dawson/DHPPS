@@ -93,156 +93,31 @@
         <div class="container-fluid">
           <div class="row">
             <div class="col-lg-12" v-if="!show">
-                     <div class="iq-card">
-                        <div class="iq-card-body p-0">
-                           <div class="iq-edit-list">
-                              <ul class="iq-edit-profile d-flex nav nav-pills">
-                                 <li class="col-md-6 p-0">
-                                    <a class="nav-link active" data-toggle="pill">
-                                       修改资料
-                                    </a>
-                                 </li>
-                                 <li class="col-md-6 p-0">
-                                    <a class="nav-link" data-toggle="pill" @click="ShowEditPWD()">
-                                       修改密码
-                                    </a>
-                                 </li>
-                              </ul>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-
-            <div class="col-lg-6" style="left:25%" v-if="!show">
-              <div class="iq-edit-list-data">
-                <div class="tab-content">
-                  <div
-                    class="tab-pane fade active show"
-                    id="personal-information"
-                    role="tabpanel"
-                  >
-                    <div class="iq-card">
-                      <div
-                        class="iq-card-body"
-                        style="padding-right: 30px; padding-left: 30px"
-                      >
-<el-form
-                  :model="ruleForm"
-                  :rules="rules"
-                  :label-position="labelPosition"
-                  ref="ruleForm"
-                  label-width="100px"
-                  class="demo-ruleForm"
-                >
-                  <div class="demo-fit" style="text-align: center">
-                    <div class="block">
-                      <el-avatar
-                        shape="circle"
-                        :size="70"
-                        :fit="fill"
-                        :src="Url"
-                      ></el-avatar>
-                    </div>
-                  </div>
-                  <el-form-item label="昵称" prop="name">
-                    <el-input
-                      size="small"
-                      v-model="ruleForm.name"
-                      clearable
-                      id="inputname"
-                    ></el-input>
-                  </el-form-item>
-                  <!-- <el-form-item label="手机号" prop="phone">
-                    <el-input
-                      size="small"
-                      v-model="ruleForm.phone"
-                      clearable
-                      id="inputphone"
-                    ></el-input>
-                  </el-form-item> -->
-                  <el-form-item label="性别" prop="sex">
-                    <el-radio-group
-                      v-model="ruleForm.radio"
-                      @change="changeHandler"
-                      id="inputsex"
-                    >
-                      <el-radio label="男"></el-radio>
-                      <el-radio label="女"></el-radio>
-                      <el-radio label="保密"></el-radio>
-                    </el-radio-group>
-                  </el-form-item>
-                  <el-form-item label="生日">
-                    <el-date-picker
-                      clearable
-                      v-model="value1"
-                      type="date"
-                      value-format="yyyy-MM-dd"
-                      placeholder="选择日期"
-                      size="small"
-                      style="
-                        margin-left: 0;
-                        align: left;
-                        display: block;
-                        float: left;
-                      "
-                      id="inputdate"
-                    >
-                    </el-date-picker>
-                  </el-form-item>
-                  <el-form-item label="邮箱" prop="email">
-                    <el-input
-                      size="small"
-                      v-model="ruleForm.email"
-                      clearable
-                      id="inputmail"
-                    ></el-input>
-                  </el-form-item>
-                  <el-form-item label="住址" prop="addr">
-                    <el-input
-                      size="small"
-                      v-model="ruleForm.addr"
-                      clearable
-                      id="inputaddr"
-                    ></el-input>
-                  </el-form-item>
-                  <el-form-item>
-                    <el-button class="btn btn-primary mr-2" @click="submitForm('ruleForm')"
-                      >保存</el-button
-                    >
-                    <el-button class="btn iq-bg-danger" @click="resetForm('ruleForm')"
-                      >重置</el-button
-                    >
-                  </el-form-item>
-                </el-form>
-
-                      </div>
-                    </div>
+              <div class="iq-card">
+                <div class="iq-card-body p-0">
+                  <div class="iq-edit-list">
+                    <ul class="iq-edit-profile d-flex nav nav-pills">
+                      <li class="col-md-6 p-0">
+                        <a class="nav-link active" data-toggle="pill">
+                          修改资料
+                        </a>
+                      </li>
+                      <li class="col-md-6 p-0">
+                        <a
+                          class="nav-link"
+                          data-toggle="pill"
+                          @click="ShowEditPWD()"
+                        >
+                          修改密码
+                        </a>
+                      </li>
+                    </ul>
                   </div>
                 </div>
               </div>
             </div>
 
-<div class="col-lg-12" v-if="show">
-                     <div class="iq-card">
-                        <div class="iq-card-body p-0">
-                           <div class="iq-edit-list">
-                              <ul class="iq-edit-profile d-flex nav nav-pills">
-                                 <li class="col-md-6 p-0">
-                                    <a class="nav-link" data-toggle="pill" @click="CloseEditPWD()">
-                                       修改资料
-                                    </a>
-                                 </li>
-                                 <li class="col-md-6 p-0">
-                                    <a class="nav-link active" data-toggle="pill">
-                                       修改密码
-                                    </a>
-                                 </li>
-                              </ul>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-            <div class="col-lg-6" style="left:25%" v-if="show">
+            <div class="col-lg-6" style="left: 25%" v-if="!show">
               <div class="iq-edit-list-data">
                 <div class="tab-content">
                   <div
@@ -256,58 +131,208 @@
                         style="padding-right: 30px; padding-left: 30px"
                       >
                         <el-form
-                  :model="ruleForm"
-                  :rules="rules"
-                  :label-position="labelPosition"
-                  ref="ruleForm"
-                  label-width="100px"
-                  class="demo-ruleForm"
-                >
-                  <el-form-item
-                    label="原密码"
-                    prop="prePass"
-                    style="margin-top: 50px"
+                          :model="ruleForm"
+                          :rules="rules"
+                          :label-position="labelPosition"
+                          ref="ruleForm"
+                          label-width="100px"
+                          class="demo-ruleForm"
+                        >
+                          <div class="demo-fit" style="text-align: center">
+                            <div class="block profile-img-edit">
+                              <el-avatar
+                                shape="circle"
+                                :size="70"
+                                :fit="fill"
+                                :src="Url"
+                              ></el-avatar>
+                              <div class="p-image">
+                                <i class="ri-pencil-line upload-button"></i>
+                                <input
+                                  class="file-upload"
+                                  type="file"
+                                  accept="image/*"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                          <el-form-item label="昵称" prop="name">
+                            <el-input
+                              size="small"
+                              v-model="ruleForm.name"
+                              clearable
+                              id="inputname"
+                            ></el-input>
+                          </el-form-item>
+                          <!-- <el-form-item label="手机号" prop="phone">
+                    <el-input
+                      size="small"
+                      v-model="ruleForm.phone"
+                      clearable
+                      id="inputphone"
+                    ></el-input>
+                  </el-form-item> -->
+                          <el-form-item label="性别" prop="sex">
+                            <el-radio-group
+                              v-model="ruleForm.radio"
+                              @change="changeHandler"
+                              id="inputsex"
+                            >
+                              <el-radio label="男"></el-radio>
+                              <el-radio label="女"></el-radio>
+                              <el-radio label="保密"></el-radio>
+                            </el-radio-group>
+                          </el-form-item>
+                          <el-form-item label="生日">
+                            <el-date-picker
+                              clearable
+                              v-model="value1"
+                              type="date"
+                              value-format="yyyy-MM-dd"
+                              placeholder="选择日期"
+                              size="small"
+                              style="
+                                margin-left: 0;
+                                align: left;
+                                display: block;
+                                float: left;
+                              "
+                              id="inputdate"
+                            >
+                            </el-date-picker>
+                          </el-form-item>
+                          <el-form-item label="邮箱" prop="email">
+                            <el-input
+                              size="small"
+                              v-model="ruleForm.email"
+                              clearable
+                              id="inputmail"
+                            ></el-input>
+                          </el-form-item>
+                          <el-form-item label="住址" prop="addr">
+                            <el-input
+                              size="small"
+                              v-model="ruleForm.addr"
+                              clearable
+                              id="inputaddr"
+                            ></el-input>
+                          </el-form-item>
+                          <el-form-item>
+                            <el-button
+                              class="btn btn-primary mr-2"
+                              @click="submitForm('ruleForm')"
+                              >保存</el-button
+                            >
+                            <el-button
+                              class="btn iq-bg-danger"
+                              @click="resetForm('ruleForm')"
+                              >重置</el-button
+                            >
+                          </el-form-item>
+                        </el-form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-12" v-if="show">
+              <div class="iq-card">
+                <div class="iq-card-body p-0">
+                  <div class="iq-edit-list">
+                    <ul class="iq-edit-profile d-flex nav nav-pills">
+                      <li class="col-md-6 p-0">
+                        <a
+                          class="nav-link"
+                          data-toggle="pill"
+                          @click="CloseEditPWD()"
+                        >
+                          修改资料
+                        </a>
+                      </li>
+                      <li class="col-md-6 p-0">
+                        <a class="nav-link active" data-toggle="pill">
+                          修改密码
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6" style="left: 25%" v-if="show">
+              <div class="iq-edit-list-data">
+                <div class="tab-content">
+                  <div
+                    class="tab-pane fade active show"
+                    id="personal-information"
+                    role="tabpanel"
                   >
-                    <el-input
-                      type="password"
-                      placeholder="请输入原密码"
-                      v-model="ruleForm.prePass"
-                      autocomplete="off"
-                      id="prepass"
-                    ></el-input>
-                  </el-form-item>
-                  <el-form-item
-                    label="新密码"
-                    prop="pass"
-                    style="margin-top: 50px"
-                  >
-                    <el-input
-                      type="password"
-                      placeholder="请输入新密码"
-                      v-model="ruleForm.pass"
-                      autocomplete="off"
-                      id="newpass"
-                    ></el-input>
-                  </el-form-item>
-                  <el-form-item label="确认新密码" prop="checkPass"
-                      style="margin-top: 50px">
-                    <el-input
-                      type="password"
-                      placeholder="请再次输入新密码"
-                      v-model="ruleForm.checkPass"
-                      autocomplete="off"
-                    ></el-input>
-                  </el-form-item>
-                  <el-form-item>
-                      
-                    <el-button class="btn btn-primary mr-2" @click="PWDsubmitForm('ruleForm')"
-                      >保存</el-button
-                    >
-                    <el-button class="btn iq-bg-danger" @click="PWDresetForm('ruleForm')"
-                      >重置</el-button
-                    >
-                  </el-form-item>
-                </el-form>
+                    <div class="iq-card">
+                      <div
+                        class="iq-card-body"
+                        style="padding-right: 30px; padding-left: 30px"
+                      >
+                        <el-form
+                          :model="ruleForm"
+                          :rules="rules"
+                          :label-position="labelPosition"
+                          ref="ruleForm"
+                          label-width="100px"
+                          class="demo-ruleForm"
+                        >
+                          <el-form-item
+                            label="原密码"
+                            prop="prePass"
+                            style="margin-top: 50px"
+                          >
+                            <el-input
+                              type="password"
+                              placeholder="请输入原密码"
+                              v-model="ruleForm.prePass"
+                              autocomplete="off"
+                              id="prepass"
+                            ></el-input>
+                          </el-form-item>
+                          <el-form-item
+                            label="新密码"
+                            prop="pass"
+                            style="margin-top: 50px"
+                          >
+                            <el-input
+                              type="password"
+                              placeholder="请输入新密码"
+                              v-model="ruleForm.pass"
+                              autocomplete="off"
+                              id="newpass"
+                            ></el-input>
+                          </el-form-item>
+                          <el-form-item
+                            label="确认新密码"
+                            prop="checkPass"
+                            style="margin-top: 50px"
+                          >
+                            <el-input
+                              type="password"
+                              placeholder="请再次输入新密码"
+                              v-model="ruleForm.checkPass"
+                              autocomplete="off"
+                            ></el-input>
+                          </el-form-item>
+                          <el-form-item>
+                            <el-button
+                              class="btn btn-primary mr-2"
+                              @click="PWDsubmitForm('ruleForm')"
+                              >保存</el-button
+                            >
+                            <el-button
+                              class="btn iq-bg-danger"
+                              @click="PWDresetForm('ruleForm')"
+                              >重置</el-button
+                            >
+                          </el-form-item>
+                        </el-form>
                       </div>
                     </div>
                   </div>
@@ -365,25 +390,28 @@ export default {
         }
       });
     };
-    var validatePass= (rule, value, callback) => {
-        if (!value) {
-          return callback(new Error('请输入密码'));
-        }
-        setTimeout(() => {
-          let reg =  /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[._~!@#$^&*])[A-Za-z0-9._~!@#$^&*]{6,12}$/
-          if (value == '' || !reg.test(value)) {
-            callback(new Error('密码长度为6~12位，必须由字母、数字、特殊符号(._~!@#$^&*)组成'));
-          }
-          else{
-            callback();
-          }
-        });
+    var validatePass = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error("请输入密码"));
       }
+      setTimeout(() => {
+        let reg = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[._~!@#$^&*])[A-Za-z0-9._~!@#$^&*]{6,12}$/;
+        if (value == "" || !reg.test(value)) {
+          callback(
+            new Error(
+              "密码长度为6~12位，必须由字母、数字、特殊符号(._~!@#$^&*)组成"
+            )
+          );
+        } else {
+          callback();
+        }
+      });
+    };
     var validatePass2 = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error('请再次输入密码'));
+      if (value === "") {
+        callback(new Error("请再次输入密码"));
       } else if (value !== this.ruleForm.pass) {
-        callback(new Error('两次输入密码不一致!'));
+        callback(new Error("两次输入密码不一致!"));
       } else {
         callback();
       }
@@ -453,8 +481,7 @@ export default {
         .get("/apis/backend/profile/25/")
         .then(
           (response) => (
-            (self.MyContent = response.data),
-            (this.Url = self.MyContent.avatar)
+            (self.MyContent = response.data), (this.Url = self.MyContent.avatar)
           )
         )
         .catch(function (error) {
@@ -477,8 +504,7 @@ export default {
         })
         .then(
           (response) => (
-            (self.content = response),
-            this.$message.success("修改成功")
+            (self.content = response), this.$message.success("修改成功")
           )
         )
         .catch(function (error) {
@@ -550,12 +576,12 @@ export default {
     PWDresetForm(formName) {
       this.$refs[formName].resetFields();
     },
-    ShowEditPWD(){
-      this.show=true;
+    ShowEditPWD() {
+      this.show = true;
     },
     CloseEditPWD() {
-      this.show=false;
-    }
+      this.show = false;
+    },
   },
 };
 </script>

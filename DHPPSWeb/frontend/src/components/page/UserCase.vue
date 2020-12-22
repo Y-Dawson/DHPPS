@@ -95,10 +95,11 @@
                 <div
                   class="box-card-group"
                   style="
-                    margin-left: 60px;
+                    margin-left: 100px;
                     margin-top: 20px;
+                    margin-bottom:10px;
                     width: auto;
-                    height: 450px;
+                    height: 480px;
                     text-align: left;
                   ">
                   <el-col
@@ -109,17 +110,17 @@
                     <el-card class="box-card">
                       <div slot="header" class="clearfix">
                         <i
-                          class="layui-icon layui-icon-template-1"
+                          class="el-icon el-icon-map-location"
                           style="
                             margin-right: 10px;
-                            font-size: 40px;
+                            font-size: 38px;
                             color: rgb(173, 173, 173);
                           "
                         ></i>
                         <span id="returnContent">{{ item.caseName }}</span>
                         <div
                           style="
-                            font-size: 8px;
+                            font-size: 18px;
                             line-height: 20px;
                             float: right;
                             text-align: right;
@@ -128,14 +129,14 @@
                           <el-button
                             id="delete"
                             type="text"
-                            style="font-size: 8px; color: #55587e"
+                            style="font-size: 14px; color: #55587e"
                             @click="Edit(item.caseId)"
                             >进入编辑</el-button
                           >
                           <el-button
                             id="delete"
                             type="text"
-                            style="font-size: 8px; color: rgb(221, 0, 0)"
+                            style="font-size: 14px; color: rgb(221, 0, 0)"
                             @click="Open(item.caseId)"
                             >删除</el-button
                           >
@@ -159,11 +160,29 @@
                     </el-card>
                   </el-col>
                 </div>
-                <div class="paginate">
-                  <button class="primaryb" @click="GetPrevPage()">上一页</button>
-                  <span>第{{ currentPage }}页/共{{ totalPage }}页</span>
-                  <button class="primaryb" @click="GetNextPage()">下一页</button>
-                </div>
+                <div>
+                      <nav aria-label="Page navigation example">
+                        <ul class="pagination mb-0" style="justify-content: center">
+                          <li class="page-item">
+                            <a
+                              class="page-link"
+                              tabindex="-1"
+                              aria-disabled="true"
+                              @click="GetPrevCasePage()"
+                              >Previous</a
+                            >
+                          </li>
+                          <li class="page-item">
+                            <a class="page-link"
+                              >第{{ currentCasePage }}页/共{{ totalCasePage }}页</a
+                            >
+                          </li>
+                          <li class="page-item">
+                            <a class="page-link" @click="GetNextCasePage()">Next</a>
+                          </li>
+                        </ul>
+                      </nav>
+                    </div>
               </div>
         </div>
       </div>
@@ -184,9 +203,9 @@ export default {
       contentList: [],
       cases: [],
       //分页
-      totalPage: 1, // 统共页数，默认为1
-      currentPage: 1, //当前页数 ，默认为1
-      pageSize: 6, // 每页显示数量
+      totalCasePage: 1, // 统共页数，默认为1
+      currentCasePage: 1, //当前页数 ，默认为1
+      pageCaseSize: 6, // 每页显示数量
       currentPageData: [], //当前页显示内容
     };
   },
@@ -200,19 +219,19 @@ export default {
   },
   methods: {
     //上一页
-    GetPrevPage() {
-      if (this.currentPage == 1) return;
-      this.currentPage--;
+    GetPrevCasePage() {
+      if (this.currentCasePage == 1) return;
+      this.currentCasePage--;
       this.GetCaseContent();
     },
     // 下一页
-    GetNextPage() {
-      if (this.currentPage == this.totalPage) return;
-      this.currentPage++;
+    GetNextCasePage() {
+      if (this.currentCasePage == this.totalCasePage) return;
+      this.currentCasePage++;
       this.GetCaseContent();
     },
     SetPages() {
-      if (this.totalPage < 1) totalPage = 1;
+      if (this.totalCasePage < 1) totalCasePage = 1;
     },
     getMyContent: function () {
       var self = this;
@@ -238,20 +257,125 @@ export default {
           params: {
             userId: 1,
             pageSize: 6,
-            page: self.currentPage,
+            page: self.currentCasePage,
           },
         })
         .then(
           (response) => (
             (self.currentPageData = response.data),
-            (self.totalPage = Math.ceil(
-              self.currentPageData.pagination / self.pageSize
+            (self.totalCasePage = Math.ceil(
+              self.currentPageData.pagination / self.pageCaseSize
             ))
           )
         )
         .catch(function (error) {
           // 请求失败处理
           alert('数据请求失败')
+        });
+    },
+    // 案例编辑
+    Edit: function (id) {
+      var self = this;
+      let data = new FormData();
+      data.append("caseid", id);
+      axios
+        .post("http://127.0.0.1:8000/backend/getCaseInfo/", data)
+        .then((response) => {
+          self.cases = response.data.cases;
+          console.log(JSON.stringify(self.cases));
+
+          console.log(self.cases.Initcitydata);
+          var city_inf = [];
+          for (var j in self.cases.Initcitydata) {
+            var s =
+              "cityname:" +
+              self.cases.Initcitydata[j].cityname +
+              ",initpop:" +
+              self.cases.Initcitydata[j].initpop +
+              ",initinfect:" +
+              self.cases.Initcitydata[j].initinfect;
+            console.log("s:", s);
+            city_inf.push(s);
+          }
+
+          var road_inf = [];
+          for (var j in self.cases.Initroaddata) {
+            var s =
+              "departure:" +
+              self.cases.Initroaddata[j].departure +
+              ",destination:" +
+              self.cases.Initroaddata[j].destination +
+              ",volume:" +
+              self.cases.Initroaddata[j].volume;
+            console.log("s:", s);
+            road_inf.push(s);
+          }
+
+          var city_pos = [];
+          for (var j in self.cases.Cityposition) {
+            var s =
+              "cityname:" +
+              self.cases.Cityposition[j].cityname +
+              ",x:" +
+              self.cases.Cityposition[j].x +
+              ",y:" +
+              self.cases.Cityposition[j].y;
+            console.log("s:", s);
+            city_pos.push(s);
+          }
+
+          this.$router.push({
+            path: "/setting",
+            query: {
+              params: JSON.stringify({
+                userId: this.userId,
+                casename: this.cases.casename,
+                citynum: this.cases.citynum,
+                roadnum: this.cases.roadnum,
+                Initcitydata: city_inf,
+                Initroaddata: road_inf,
+                Cityposition: city_pos,
+              }),
+            },
+          });
+        })
+        .catch(function (error) {
+          alert(JSON.stringify(error.response));
+          alert("数据请求失败wdnmd");
+        });
+    },
+    DeleteCaseContent: function (id) {
+      var self = this;
+      axios
+        .delete("http://127.0.0.1:8000/backend/case/" + id, {})
+        .then(
+          (response) => (self.currentPageData = response.data)
+        )
+        .catch(function (error) {
+          alert('数据请求失败')
+        });
+    },
+    Open(id) {
+      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          this.DeleteCaseContent(id),
+            this.GetCaseContent(),
+            this.reload(),
+            this.$message({
+              type: "success",
+              message: "删除成功!",
+            });
+          this.GetCaseContent();
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除",
+          });
         });
     },
   },
@@ -265,25 +389,30 @@ export default {
 @import "../../css/animate.css";
 </style>
 <style scoped>
+.container-fluid{
+  height:550px;
+  padding: 0px;
+}
 .list {
   text-align: center;
   margin: 10px 300px;
 }
 .paginate {
-  margin-top: 20px;
+  /* margin-top: 20px; */
   /* margin-left: 200px; */
   /* left:50% */
 }
 /* 案例块文字内容 */
 .box-text {
   margin-left: 5px;
-  line-height: 18px;
-  font-size: 12px;
+  line-height: 20px;
+  font-size: 14px;
   color: rgb(71, 71, 71);
 }
 /* 案例块样式 */
 .box-card {
-  width: 240px;
+  border-radius: 14px;
+  width: 300px;
   /* float: left; */
   margin-right: 180px;
   margin-bottom: 20px;
