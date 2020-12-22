@@ -33,8 +33,14 @@
                 >
               </li>
               <li>
-                <a href="#" class="iq-waves-effect"
-                  ><i class="ri-home-4-line"></i><span>案例管理</span></a
+                <router-link
+                  class="iq-waves-effect"
+                  :to="{
+                    path: '/SuperCaseManage',
+                    query: { uI: this.AdminId },
+                  }"
+                  ><i class="ri-home-4-line"></i
+                  ><span>案例管理</span></router-link
                 >
               </li>
               <li>
@@ -83,7 +89,7 @@
                     alt="user"
                   />
                   <div class="caption">
-                    <h6 class="mb-0 line-height">{{ MyContent.userName }}</h6>
+                    <h6 class="mb-0 line-height">{{ MyContent.username }}</h6>
                   </div>
                 </a>
               </li>
@@ -139,8 +145,10 @@
                   </div>
                 </div>
                 <div class="iq-card-body">
-                  <ve-histogram :data="chartHistogramData" 
-                    height="500px" ></ve-histogram>
+                  <ve-histogram
+                    :data="chartHistogramData"
+                    height="500px"
+                  ></ve-histogram>
                 </div>
               </div>
             </div>
@@ -176,7 +184,7 @@
 <script src="https://www.jq22.com/jquery/jquery-1.10.2.js"></script>
 <script>
 import VeRing from "v-charts/lib/ring.common";
-import VeHistogram from 'v-charts/lib/histogram.common';
+import VeHistogram from "v-charts/lib/histogram.common";
 export default {
   components: {
     [VeRing.name]: VeRing,
@@ -201,48 +209,28 @@ export default {
       AdminUrl: "",
       MyContent: [],
       AdminId: "25",
+      sexData: [],
+      cityData: [],
       chartRingData: {
         columns: ["性别", "用户数量"],
-        rows: [
-          { 性别: "男", 用户数量: 1393 },
-          { 性别: "女", 用户数量: 3530 },
-          { 性别: "保密", 用户数量: 2923 },
-        ],
+        rows: [],
       },
       chartCityData: {
         columns: ["城市", "使用数量"],
-        rows: [
-          { 城市: "长沙", 使用数量: 1393 },
-          { 城市: "重庆", 使用数量: 3530 },
-          { 城市: "上海", 使用数量: 2923 },
-          { 城市: "成都", 使用数量: 1823 },
-          { 城市: "北京", 使用数量: 3945 },
-          { 城市: "广州", 使用数量: 1234 },
-        ],
+        rows: [],
       },
       chartHistogramData: {
-          columns: ['日期', '用户数量', '案例数量', ],
-          rows: [
-            { '日期': '2020.09', '用户数量': 1393, '案例数量': 1093, },
-            { '日期': '2020.10', '用户数量': 3530, '案例数量': 3230, },
-            { '日期': '2020.11', '用户数量': 3981, '案例数量': 4281, },
-            { '日期': '2020.12', '用户数量': 4233, '案例数量': 5212, },
-            { '日期': '2021.01', '用户数量': 5124, '案例数量': 6712, }
-          ]
-        },
+        columns: ["日期", "用户数量", "案例数量"],
+        rows: [
+          { 日期: "2020.09", 用户数量: 1393, 案例数量: 1093 },
+          { 日期: "2020.10", 用户数量: 3530, 案例数量: 3230 },
+          { 日期: "2020.11", 用户数量: 3981, 案例数量: 4281 },
+          { 日期: "2020.12", 用户数量: 4233, 案例数量: 5212 },
+          { 日期: "2021.01", 用户数量: 5124, 案例数量: 6712 },
+        ],
+      },
       chartRingSettings: {
         radius: ["60px", "80px"],
-        label: {
-          formatter: (params) => {
-            if (params.dataIndex === 0) {
-              return `男${params.percent}%`;
-            } else if (params.dataIndex === 1) {
-              return `女${params.percent}%`;
-            } else {
-              return `保密${params.percent}%`;
-            }
-          },
-        },
         itemStyle: {
           //这里是更添加阴影
           emphasis: {
@@ -262,7 +250,8 @@ export default {
             },
           },
         },
-      },chartCitySettings: {
+      },
+      chartCitySettings: {
         radius: ["60px", "80px"],
         itemStyle: {
           //这里是更添加阴影
@@ -290,7 +279,9 @@ export default {
     };
   },
   created: function () {
-    this.getMyContent(), this.getUserContent();
+    this.getMyContent();
+    this.getSexData();
+    this.getCityData();
   },
   methods: {
     getMyContent: function () {
@@ -303,6 +294,46 @@ export default {
             (this.AdminUrl = self.MyContent.avatar)
           )
         )
+        .catch(function (error) {
+          // 请求失败处理
+          alert("数据请求失败wdnmd");
+        });
+    },
+    getSexData: function () {
+      var self = this;
+      axios
+        .get("/apis/backend/sexNum/")
+        .then((response) => {
+          this.sexData = response.data.TopcityInfos;
+          //通过遍历DataShow分别给columns 中的维度和指标 赋值；
+          for (var i = 0; i < this.sexData.length; i++) {
+            this.chartRingData.rows.push({
+              //注意，由于我后端createTime该字段直接返回是一个时间戳，所以此处用到了 一个时间转换插件moment.js
+              性别: this.sexData[i].sex,
+              用户数量: this.sexData[i].sexCount,
+            });
+          }
+        })
+        .catch(function (error) {
+          // 请求失败处理
+          alert("数据请求失败wdnmd");
+        });
+    },
+    getCityData: function () {
+      var self = this;
+      axios
+        .get("/apis/backend/topCity/")
+        .then((response) => {
+          this.cityData = response.data.TopcityInfos;
+          //通过遍历DataShow分别给columns 中的维度和指标 赋值；
+          for (var i = 0; i < this.cityData.length; i++) {
+            this.chartCityData.rows.push({
+              //注意，由于我后端createTime该字段直接返回是一个时间戳，所以此处用到了 一个时间转换插件moment.js
+              城市: this.cityData[i].cityName,
+              使用数量: this.cityData[i].cityCount,
+            });
+          }
+        })
         .catch(function (error) {
           // 请求失败处理
           alert("数据请求失败wdnmd");

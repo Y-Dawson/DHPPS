@@ -39,7 +39,8 @@
                     path: '/AdminCaseManage',
                     query: { uI: this.AdminId },
                   }"
-                  ><i class="ri-home-4-line"></i><span>案例管理</span></router-link
+                  ><i class="ri-home-4-line"></i
+                  ><span>案例管理</span></router-link
                 >
               </li>
               <li>
@@ -144,8 +145,10 @@
                   </div>
                 </div>
                 <div class="iq-card-body">
-                  <ve-histogram :data="chartHistogramData" 
-                    height="500px" ></ve-histogram>
+                  <ve-histogram
+                    :data="chartHistogramData"
+                    height="500px"
+                  ></ve-histogram>
                 </div>
               </div>
             </div>
@@ -181,7 +184,7 @@
 <script src="https://www.jq22.com/jquery/jquery-1.10.2.js"></script>
 <script>
 import VeRing from "v-charts/lib/ring.common";
-import VeHistogram from 'v-charts/lib/histogram.common';
+import VeHistogram from "v-charts/lib/histogram.common";
 export default {
   components: {
     [VeRing.name]: VeRing,
@@ -206,7 +209,7 @@ export default {
       AdminUrl: "",
       MyContent: [],
       AdminId: "25",
-      sexData:[],
+      sexData: [],
       cityData: [],
       chartRingData: {
         columns: ["性别", "用户数量"],
@@ -217,15 +220,15 @@ export default {
         rows: [],
       },
       chartHistogramData: {
-          columns: ['日期', '用户数量', '案例数量', ],
-          rows: [
-            { '日期': '2020.09', '用户数量': 1393, '案例数量': 1093, },
-            { '日期': '2020.10', '用户数量': 3530, '案例数量': 3230, },
-            { '日期': '2020.11', '用户数量': 3981, '案例数量': 4281, },
-            { '日期': '2020.12', '用户数量': 4233, '案例数量': 5212, },
-            { '日期': '2021.01', '用户数量': 5124, '案例数量': 6712, }
-          ]
-        },
+        columns: ["日期", "用户数量", "案例数量"],
+        rows: [
+          { 日期: "2020.09", 用户数量: 1393, 案例数量: 1093 },
+          { 日期: "2020.10", 用户数量: 3530, 案例数量: 3230 },
+          { 日期: "2020.11", 用户数量: 3981, 案例数量: 4281 },
+          { 日期: "2020.12", 用户数量: 4233, 案例数量: 5212 },
+          { 日期: "2021.01", 用户数量: 5124, 案例数量: 6712 },
+        ],
+      },
       chartRingSettings: {
         radius: ["60px", "80px"],
         itemStyle: {
@@ -247,7 +250,8 @@ export default {
             },
           },
         },
-      },chartCitySettings: {
+      },
+      chartCitySettings: {
         radius: ["60px", "80px"],
         itemStyle: {
           //这里是更添加阴影
@@ -295,54 +299,46 @@ export default {
           alert("数据请求失败wdnmd");
         });
     },
-    getSexData: function() {
+    getSexData: function () {
       var self = this;
       axios
         .get("/apis/backend/sexNum/")
-        .then(
-          (response) => {
-            alert(JSON.stringify(response.data.TopcityInfos))
+        .then((response) => {
           this.sexData = response.data.TopcityInfos;
           //通过遍历DataShow分别给columns 中的维度和指标 赋值；
           for (var i = 0; i < this.sexData.length; i++) {
             this.chartRingData.rows.push({
-         //注意，由于我后端createTime该字段直接返回是一个时间戳，所以此处用到了 一个时间转换插件moment.js
-              "性别": this.sexData[i].sex,
-              "用户数量": this.sexData[i].sexCount,
+              //注意，由于我后端createTime该字段直接返回是一个时间戳，所以此处用到了 一个时间转换插件moment.js
+              性别: this.sexData[i].sex,
+              用户数量: this.sexData[i].sexCount,
             });
-
           }
-          }
-        )
+        })
         .catch(function (error) {
           // 请求失败处理
           alert("数据请求失败wdnmd");
         });
     },
-    getCityData:function(){
+    getCityData: function () {
       var self = this;
       axios
         .get("/apis/backend/topCity/")
-        .then(
-          (response) => {
-            alert(JSON.stringify(response.data.TopcityInfos))
+        .then((response) => {
           this.cityData = response.data.TopcityInfos;
           //通过遍历DataShow分别给columns 中的维度和指标 赋值；
           for (var i = 0; i < this.cityData.length; i++) {
             this.chartCityData.rows.push({
-         //注意，由于我后端createTime该字段直接返回是一个时间戳，所以此处用到了 一个时间转换插件moment.js
-              "城市": this.cityData[i].cityName,
-              "使用数量": this.cityData[i].cityCount,
+              //注意，由于我后端createTime该字段直接返回是一个时间戳，所以此处用到了 一个时间转换插件moment.js
+              城市: this.cityData[i].cityName,
+              使用数量: this.cityData[i].cityCount,
             });
           }
-            alert(JSON.stringify(this.chartCityData))
-          }
-        )
+        })
         .catch(function (error) {
           // 请求失败处理
           alert("数据请求失败wdnmd");
         });
-    }
+    },
   },
 };
 </script>
