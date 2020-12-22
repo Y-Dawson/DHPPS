@@ -1013,7 +1013,7 @@ def GetTopCityInfos(request):
             cityInfos = cityInfos.order_by('cityCount')[:6]
             jsonList = []
             for cityInfo in cityInfos:
-                cityInfoDict = model_to_dict(cityInfo)
+                cityInfoDict = {"cityName": cityInfo["cityName"], "cityCount": cityInfo["cityCount"]}
                 jsonList.append({**cityInfoDict})
             jsonRes = json.loads(json.dumps(jsonList, cls=DateEnconding))
             print(jsonRes)
