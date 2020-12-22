@@ -325,17 +325,17 @@ export default {
         .get("/apis/backend/topCity/")
         .then(
           (response) => {
-            alert(JSON.stringify(response.data))
-          this.cityData = response.data;
+            alert(JSON.stringify(response.data.TopcityInfos))
+          this.cityData = response.data.TopcityInfos;
           //通过遍历DataShow分别给columns 中的维度和指标 赋值；
-          for (var i = 0; i < this.sexData.length; i++) {
-            this.chartRingData.rows.push({
+          for (var i = 0; i < this.cityData.length; i++) {
+            this.chartCityData.rows.push({
          //注意，由于我后端createTime该字段直接返回是一个时间戳，所以此处用到了 一个时间转换插件moment.js
-              "城市": this.sexData[i].sex,
-              "使用数量": this.sexData[i].sexCount,
+              "城市": this.cityData[i].cityName,
+              "使用数量": this.cityData[i].cityCount,
             });
-
           }
+            alert(JSON.stringify(this.chartCityData))
           }
         )
         .catch(function (error) {

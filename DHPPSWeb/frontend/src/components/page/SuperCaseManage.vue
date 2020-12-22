@@ -291,7 +291,8 @@
                     </el-card>
                   </el-col>
                 </div>
-                <div>
+                
+                    <div>
                       <nav aria-label="Page navigation example">
                         <ul class="pagination mb-0" style="justify-content: center">
                           <li class="page-item">
@@ -314,6 +315,11 @@
                         </ul>
                       </nav>
                     </div>
+                <!-- <div class="paginate">
+                  <button class="primaryb" @click="GetPrevCasePage()">上一页</button>
+                  <span>第{{ currentCasePage }}页/共{{ totalCasePage }}页</span>
+                  <button class="primaryb" @click="GetNextCasePage()">下一页</button>
+                </div> -->
               </div>
             </div>
           </div>
@@ -385,7 +391,7 @@ export default {
     getMyContent: function () {
       var self = this;
       axios
-        .get("http://127.0.0.1:8000/backend/profile/25/")
+        .get("/apis/backend/profile/25/")
         .then(
           (response) => (
             (self.MyContent = response.data),
@@ -399,7 +405,7 @@ export default {
     },
     getUserContent: function () {
       axios
-        .get("http://127.0.0.1:8000/backend/userManage/", {
+        .get("/apis/backend/userManage/", {
           params: {
             pageSize: 10,
             page: this.currentPage,
@@ -426,6 +432,7 @@ export default {
     },
     ClosePage: function () {
       this.show = false;
+      this.getUserContent();
     },
     //获取案例内容
     GetCaseContent: function () {
@@ -435,7 +442,7 @@ export default {
           params: {
             userId: this.UserId,
             pageSize: 6,
-            page: self.currentPage,
+            page: self.currentCasePage,
           },
         })
         .then(
@@ -506,7 +513,7 @@ export default {
       var self = this;
       // var date = $("#input1").val();
       axios
-        .delete("http://127.0.0.1:8000/backend/accountInfo/" + UI + "/", {})
+        .delete("/apis/backend/accountInfo/" + UI + "/", {})
         .then(
           (response) => (
             (self.content = response), self.getUserContent()
