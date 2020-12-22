@@ -78,20 +78,28 @@ def LoginRequired(view_func):
     return wrapper
 
 
+# 身份信息获取函数
+# 从参数获取phoneNum和password，取出对应salt加密，并判断是否和存储加密密码相同
+# 登录成功，返回消息和200状态码
+# 登录失败，返回消息和404状态码
 def GetIdentity(request):
     if not request.session.get('isLogin', None):
         # 如果本来就未登录，也就没有登出一说
         return JsonResponse({"message": "未登录", "status": 404})
     else:
-        userId = request.session.get('userId', None)
-        authority = request.session.get('userAuthority', None)
-
-        response = JsonResponse({
-            "userId": userId,
-            "authority": authority,
-            "message": "返回数据成功",
-            "status": 200})
-        return response
+        if request.method == "POST":
+            userId = request.session.get('userId', None)
+            authority = request.session.get('userAuthority', None)
+                          
+            return JsonResponse({
+                "userId": userId,
+                "authority": authority,
+                "message": "返回数据成功",
+                "status": 200})
+        else:
+            return JsonResponse({
+                "message": "请求方法无效",
+                "status": 200})
 
 
 # 登录函数视图
@@ -455,17 +463,14 @@ def SaveCase(request):
                     roadCount += 1
                 if (newCase):
                     models.Accountinformation.objects.filter(userId=userId).update(caseNumber=F("caseNumber") + 1)
-                message = "保存案例成功"
-                status = 200
-                newcaseId = newCase.caseId
+                return JsonResponse({"message": "保存案例成功", "status": 200, "caseId": newCase.caseId})
             except Exception as e:
                 print('str(Exception):\t', str(Exception))
                 print('str(e):\t\t', str(e))
                 print('repr(e):\t', repr(e))
                 # print('e.message:\t', e.message)
                 print('########################################################')
-                message = "保存案例失败"
-                status = 404
+                return JsonResponse({"message": "保存案例失败", "status": 404})
         elif (caseMode == "地图模式"):
             initTotalNum = 0
             initTotalInfectedNum = 0
@@ -482,9 +487,6 @@ def SaveCase(request):
                     initInfect = int(value)
                     initTotalInfectedNum += initInfect
                 cityCount += 1
-            message = "开始进行案例保存"
-            status = 200
-            newcaseId = 0
             try:
                 # 新增案例
                 if (models.Accountinformation.objects.filter(userId=userId).exist()):
@@ -541,20 +543,18 @@ def SaveCase(request):
                     roadCount += 1
                 if (newCase):
                     models.Accountinformation.objects.filter(userId=userId).update(caseNumber=F("caseNumber") + 1)
-                message = "保存案例成功"
-                status = 200
-                newcaseId = newCase.caseId
+                return JsonResponse({"message": "保存案例成功", "status": 200, "caseId": newCase.caseId})
             except Exception as e:
                 print('str(Exception):\t', str(Exception))
                 print('str(e):\t\t', str(e))
                 print('repr(e):\t', repr(e))
                 # print('e.message:\t', e.message)
                 print('########################################################')
-                message = "保存案例失败"
-                status = 404
+                return JsonResponse({"message": "保存案例失败", "status": 404})
         else:
             return JsonResponse({"message": "检测到未知的地图模式", "status": 404})
-        return JsonResponse({"message": message, "status": status, "caseId": newcaseId})
+    else:
+        return JsonResponse({"message": "该接口不支持此方法", "status": 404})
 
 
 # 解析前端发回数据并送入模型进行模拟，取得返回数据并输出
@@ -567,119 +567,208 @@ def StartSimulate(request):
         caseName = request.POST.get('caseName', None)
         cityNum = request.POST.get('citynum', None)
         roadNum = request.POST.get('roadnum', None)
+        caseMode = request.POST.get('caseMode', None)
         InitCityData = request.POST.get('InitCityData', None)
         InitRoadData = request.POST.get('InitRoadData', None)
         CityPosition = request.POST.get('CityPosition', None)
         dayNum = request.POST.get('daynum', None)
         if not(userId and caseName and cityNum and roadNum and InitCityData and InitRoadData and CityPosition and dayNum):
             return JsonResponse({"message": "表单未填写完整", "status": 404})
-        # 案例计数：初始人口与初始感染人口
-        initTotalNum = 0
-        initTotalInfectedNum = 0
-        initcitydataList = InitCityData.split(",")
-        initroaddataList = InitRoadData.split(",")
-        citypositionList = CityPosition.split(",")
-        cityCount = 0
-        for cityInfo in initcitydataList:
-            value = cityInfo.split(":")[1]
-            if cityCount % 3 == 1:
-                initPop = int(value)
-                initTotalNum += initPop
-            elif cityCount % 3 == 2:
-                initInfect = int(value)
-                initTotalInfectedNum += initInfect
-            cityCount += 1
-        # 案例解析：从获取数据分别解析
-        # 各城市人数 = 一维List
-        # 各城市道路流通指数 = 实对称矩阵
-        # 各城市感染人数 = 一维List
-        # 各城市位置 = List，每个元素为一个数对，表示城市x,y坐标
-        cityNum = int(cityNum)
-        roadNum = int(roadNum)
-        dayNum = int(dayNum)
-        cityNameList = []
-        initPopList = []
-        initRoadList = [[0] * cityNum for row in range(cityNum)]
-        initInfectedList = []
-        cityPosList = []
-        try:
-            # 新增城市信息
+
+        if (caseMode == "自定模式"):
+            # 案例计数：初始人口与初始感染人口
+            initTotalNum = 0
+            initTotalInfectedNum = 0
+            initcitydataList = InitCityData.split(",")
+            initroaddataList = InitRoadData.split(",")
+            citypositionList = CityPosition.split(",")
             cityCount = 0
-            initPop = ""
-            initInfect = ""
-            x = 0.0
-            y = 0.0
             for cityInfo in initcitydataList:
                 value = cityInfo.split(":")[1]
-                posValue = citypositionList[cityCount].split(":")[1]
-                if cityCount % 3 == 0:
-                    # 存入城市名称
-                    cityNameList.append(value)
-                elif cityCount % 3 == 1:
-                    # 存入城市初始人口
-                    initPopList.append(int(value))
-                    x = float(posValue)
+                if cityCount % 3 == 1:
+                    initPop = int(value)
+                    initTotalNum += initPop
                 elif cityCount % 3 == 2:
-                    # 存入城市感染人口和城市坐标
-                    initInfectedList.append(int(value))
-                    y = float(posValue)
-                    posList = []
-                    posList.append(x)
-                    posList.append(y)
-                    cityPosList.append(posList)
+                    initInfect = int(value)
+                    initTotalInfectedNum += initInfect
                 cityCount += 1
+            # 案例解析：从获取数据分别解析
+            # 各城市人数 = 一维List
+            # 各城市道路流通指数 = 实对称矩阵
+            # 各城市感染人数 = 一维List
+            # 各城市位置 = List，每个元素为一个数对，表示城市x,y坐标
+            cityNum = int(cityNum)
+            roadNum = int(roadNum)
+            dayNum = int(dayNum)
+            cityNameList = []
+            initPopList = []
+            initRoadList = [[0] * cityNum for row in range(cityNum)]
+            initInfectedList = []
+            cityPosList = []
+            try:
+                # 新增城市信息
+                cityCount = 0
+                initPop = ""
+                initInfect = ""
+                x = 0.0
+                y = 0.0
+                for cityInfo in initcitydataList:
+                    value = cityInfo.split(":")[1]
+                    posValue = citypositionList[cityCount].split(":")[1]
+                    if cityCount % 3 == 0:
+                        # 存入城市名称
+                        cityNameList.append(value)
+                    elif cityCount % 3 == 1:
+                        # 存入城市初始人口
+                        initPopList.append(int(value))
+                        x = float(posValue)
+                    elif cityCount % 3 == 2:
+                        # 存入城市感染人口和城市坐标
+                        initInfectedList.append(int(value))
+                        y = float(posValue)
+                        posList = []
+                        posList.append(x)
+                        posList.append(y)
+                        cityPosList.append(posList)
+                    cityCount += 1
 
-            # 新增道路信息
-            roadCount = 0
-            for roadInfo in initroaddataList:
-                value = roadInfo.split(":")[1]
-                if roadCount % 3 == 0:
-                    # 出发城市下标
-                    departure = cityNameList.index(value)
-                elif roadCount % 3 == 1:
-                    # 到达城市下标
-                    destination = cityNameList.index(value)
-                elif roadCount % 3 == 2:
-                    volume = float(value)
-                    initRoadList[departure][destination] = volume
-                    initRoadList[destination][departure] = volume
-                roadCount += 1
-        except Exception as e:
-            print('str(Exception):\t', str(Exception))
-            print('str(e):\t\t', str(e))
-            print('repr(e):\t', repr(e))
-            # print('e.message:\t', e.message)
-            print('########################################################')
-            return JsonResponse({"message": "案例保存失败，数据库出错", "status": 404})
-        # 调用模型函数，传入参数，获得返回值
-        dailyInfectMatrix = model(initPopList, dayNum)
-        # 以下为模拟产生返回数据
-        # dailyInfectMatrix = []
-        # for dayCount in range(dayNum):
-        #     dayNewInfect = []
-        #     for cityIdx in range(cityNum):
-        #         dayNewInfect.append(dayCount*10)
-        #     dailyInfectMatrix.append(dayNewInfect)
+                # 新增道路信息
+                roadCount = 0
+                for roadInfo in initroaddataList:
+                    value = roadInfo.split(":")[1]
+                    if roadCount % 3 == 0:
+                        # 出发城市下标
+                        departure = cityNameList.index(value)
+                    elif roadCount % 3 == 1:
+                        # 到达城市下标
+                        destination = cityNameList.index(value)
+                    elif roadCount % 3 == 2:
+                        volume = float(value)
+                        initRoadList[departure][destination] = volume
+                        initRoadList[destination][departure] = volume
+                    roadCount += 1
+            except Exception as e:
+                print('str(Exception):\t', str(Exception))
+                print('str(e):\t\t', str(e))
+                print('repr(e):\t', repr(e))
+                print('########################################################')
+                return JsonResponse({"message": "案例保存失败，数据库出错", "status": 404})
+            # 调用模型函数，传入参数，获得返回值
+            dailyInfectMatrix = model(initPopList, dayNum)
 
-        # 构造发回数据
-        DailyForecastData = []
-        for dayCount in range(dayNum):
-            dayCase = []
-            for cityIdx in range(cityNum):
-                cityCase = {}
-                cityCase["cityName"] = cityNameList[cityIdx]
-                cityCase["population"] = initPopList[cityIdx]
+            # 构造发回数据
+            DailyForecastData = []
+            for dayCount in range(dayNum):
+                dayCase = []
+                for cityIdx in range(cityNum):
+                    cityCase = {}
+                    cityCase["cityName"] = cityNameList[cityIdx]
+                    cityCase["population"] = initPopList[cityIdx]
 
-                if (dayCount == 0):
-                    cityCase["infected"] = initInfectedList[cityIdx]
-                    cityCase["dailyinfected"] = int(dailyInfectMatrix[cityIdx][dayCount])
-                else:
-                    cityCase["infected"] = int(dailyInfectMatrix[cityIdx][dayCount])+initInfectedList[cityIdx]
-                    cityCase["dailyinfected"] = int(dailyInfectMatrix[cityIdx][dayCount]) - int(dailyInfectMatrix[cityIdx][dayCount-1])
+                    if (dayCount == 0):
+                        cityCase["infected"] = initInfectedList[cityIdx]
+                        cityCase["dailyinfected"] = int(dailyInfectMatrix[cityIdx][dayCount])
+                    else:
+                        cityCase["infected"] = int(dailyInfectMatrix[cityIdx][dayCount])+initInfectedList[cityIdx]
+                        cityCase["dailyinfected"] = int(dailyInfectMatrix[cityIdx][dayCount]) - int(dailyInfectMatrix[cityIdx][dayCount-1])
 
-                dayCase.append(cityCase)
-            DailyForecastData.append(dayCase)
-        return JsonResponse({"DailyForecastData": DailyForecastData, "status": 200})
+                    dayCase.append(cityCase)
+                DailyForecastData.append(dayCase)
+            return JsonResponse({"DailyForecastData": DailyForecastData, "status": 200})
+        elif (caseMode == "地图模式"):
+            # 案例计数：初始人口与初始感染人口
+            initTotalNum = 0
+            initTotalInfectedNum = 0
+            initcitydataList = InitCityData.split(",")
+            initroaddataList = InitRoadData.split(",")
+            cityCount = 0
+            for cityInfo in initcitydataList:
+                value = cityInfo.split(":")[1]
+                if cityCount % 3 == 1:
+                    initPop = int(value)
+                    initTotalNum += initPop
+                elif cityCount % 3 == 2:
+                    initInfect = int(value)
+                    initTotalInfectedNum += initInfect
+                cityCount += 1
+            # 案例解析：从获取数据分别解析
+            # 各城市人数 = 一维List
+            # 各城市道路流通指数 = 实对称矩阵
+            # 各城市感染人数 = 一维List
+            # 各城市位置 = List，每个元素为一个数对，表示城市x,y坐标
+            cityNum = int(cityNum)
+            roadNum = int(roadNum)
+            dayNum = int(dayNum)
+            cityNameList = []
+            initPopList = []
+            initRoadList = [[0] * cityNum for row in range(cityNum)]
+            initInfectedList = []
+            try:
+                # 新增城市信息
+                cityCount = 0
+                initPop = ""
+                initInfect = ""
+                x = 0.0
+                y = 0.0
+                for cityInfo in initcitydataList:
+                    value = cityInfo.split(":")[1]
+                    if cityCount % 3 == 0:
+                        # 存入城市名称
+                        cityNameList.append(value)
+                    elif cityCount % 3 == 1:
+                        # 存入城市初始人口
+                        initPopList.append(int(value))
+                    elif cityCount % 3 == 2:
+                        # 存入城市感染人口和城市坐标
+                        initInfectedList.append(int(value))
+                    cityCount += 1
+
+                # 新增道路信息
+                roadCount = 0
+                for roadInfo in initroaddataList:
+                    value = roadInfo.split(":")[1]
+                    if roadCount % 3 == 0:
+                        # 出发城市下标
+                        departure = cityNameList.index(value)
+                    elif roadCount % 3 == 1:
+                        # 到达城市下标
+                        destination = cityNameList.index(value)
+                    elif roadCount % 3 == 2:
+                        volume = float(value)
+                        initRoadList[departure][destination] = volume
+                        initRoadList[destination][departure] = volume
+                    roadCount += 1
+            except Exception as e:
+                print('str(Exception):\t', str(Exception))
+                print('str(e):\t\t', str(e))
+                print('repr(e):\t', repr(e))
+                # print('e.message:\t', e.message)
+                print('########################################################')
+                return JsonResponse({"message": "案例保存失败，数据库出错", "status": 404})
+            # 调用模型函数，传入参数，获得返回值
+            dailyInfectMatrix = model(initPopList, dayNum)
+
+            # 构造发回数据
+            DailyForecastData = []
+            for dayCount in range(dayNum):
+                dayCase = []
+                for cityIdx in range(cityNum):
+                    cityCase = {}
+                    cityCase["cityName"] = cityNameList[cityIdx]
+                    cityCase["population"] = initPopList[cityIdx]
+
+                    if (dayCount == 0):
+                        cityCase["infected"] = initInfectedList[cityIdx]
+                        cityCase["dailyinfected"] = int(dailyInfectMatrix[cityIdx][dayCount])
+                    else:
+                        cityCase["infected"] = int(dailyInfectMatrix[cityIdx][dayCount])+initInfectedList[cityIdx]
+                        cityCase["dailyinfected"] = int(dailyInfectMatrix[cityIdx][dayCount]) - int(dailyInfectMatrix[cityIdx][dayCount-1])
+
+                    dayCase.append(cityCase)
+                DailyForecastData.append(dayCase)
+            return JsonResponse({"DailyForecastData": DailyForecastData, "status": 200})
+        else:
+            return JsonResponse({"message": "检测到未知的地图模式", "status": 404})
     return JsonResponse({"message": "该接口不支持此方法", "status": 404})
 
 
@@ -745,7 +834,9 @@ class ImageCodeView(View):
 # 发送成功，返回消息和200状态码
 # 发送失败，返回消息和404状态码
 def GetCaseInfos(request):
-    if request.method == "POST":
+    if not request.session.get('isLogin', None):
+        return JsonResponse({"message": "你还未登录", "status": 404})
+    elif request.method == "POST":
         caseId = request.POST.get("caseId", None)
         if caseId:
             try:
@@ -794,7 +885,8 @@ def GetCaseInfos(request):
                 print('########################################################')
                 return JsonResponse({"message": "数据库出错", "status": 404})
         return JsonResponse({"message": "请求参数未填写", "status": 404})
-    return JsonResponse({"message": "请求方法未注册", "status": 404})
+    else:
+        return JsonResponse({"message": "请求方法未注册", "status": 404})
 
 
 # 返回所有管理员信息
@@ -803,7 +895,9 @@ def GetCaseInfos(request):
 # 发送成功，返回消息和200状态码
 # 发送失败，返回消息和404状态码
 def GetUserInfos(request):
-    if request.method == "GET":
+    if not request.session.get('isLogin', None):
+        return JsonResponse({"message": "你还未登录", "status": 404})
+    elif request.method == "GET":
         pageSize = request.GET.get("pageSize")
         page = request.GET.get("page")
         accountInfos = models.AccountInformation.objects.select_related("personalprofile").all().exclude(authority="超级管理员").order_by('userId')
@@ -826,6 +920,8 @@ def GetUserInfos(request):
             'pageSize': accountPaginator.per_page,
             'page': pageInfos.start_index() // accountPaginator.per_page + 1
         })
+    else:
+        return JsonResponse({"message": "请求方法未注册", "status": 404})
 
 
 # 返回所有管理员信息
@@ -834,7 +930,9 @@ def GetUserInfos(request):
 # 发送成功，返回消息和200状态码
 # 发送失败，返回消息和404状态码
 def GetGeneralUserInfos(request):
-    if request.method == "GET":
+    if not request.session.get('isLogin', None):
+        return JsonResponse({"message": "你还未登录", "status": 404})
+    elif request.method == "GET":
         pageSize = request.GET.get("pageSize")
         page = request.GET.get("page")
         generalUserInfos = models.AccountInformation.objects.select_related("personalprofile").filter(authority="普通用户").order_by('userId')
@@ -857,6 +955,8 @@ def GetGeneralUserInfos(request):
             'pageSize': accountPaginator.per_page,
             'page': pageInfos.start_index() // accountPaginator.per_page + 1
         })
+    else:
+        return JsonResponse({"message": "请求方法未注册", "status": 404})
 
 
 # 返回所有管理员信息
@@ -865,7 +965,9 @@ def GetGeneralUserInfos(request):
 # 发送成功，返回消息和200状态码
 # 发送失败，返回消息和404状态码
 def GetAdminInfos(request):
-    if request.method == "GET":
+    if not request.session.get('isLogin', None):
+        return JsonResponse({"message": "你还未登录", "status": 404})
+    elif request.method == "GET":
         pageSize = request.GET.get("pageSize")
         page = request.GET.get("page")
         adminUserInfos = models.AccountInformation.objects.select_related("personalprofile").filter(authority="管理员").order_by('userId')
@@ -888,6 +990,8 @@ def GetAdminInfos(request):
             'pageSize': accountPaginator.per_page,
             'page': pageInfos.start_index() // accountPaginator.per_page + 1
         })
+    else:
+        return JsonResponse({"message": "请求方法未注册", "status": 404})
 
 
 # 返回高频城市信息
@@ -904,7 +1008,15 @@ def GetTopCityInfos(request):
                         .filter(caseId__caseMode="地图模式")\
                         .values("cityName")\
                         .annotate(cityCount=Count("cityId"))\
-                        .order_by('cityName')[:6]
+                        .order_by('cityName')
+
+            cityInfos = cityInfos.order_by('cityCount')[:6]
+            jsonList = []
+            for cityInfo in cityInfos:
+                cityInfoDict = model_to_dict(cityInfo)
+                jsonList.append({**cityInfoDict})
+            jsonRes = json.loads(json.dumps(jsonList, cls=DateEnconding))
+            print(jsonRes)
         except Exception as e:
             print('str(Exception):\t', str(Exception))
             print('str(e):\t\t', str(e))
@@ -912,34 +1024,41 @@ def GetTopCityInfos(request):
             # print('e.message:\t', e.message)
             print('########################################################')
             return JsonResponse({"message": "案例保存失败，数据库出错", "status": 404})
-        return JsonResponse({"TopcityInfos": serializers.serialize("json", cityInfos), "status": 200})
-    return JsonResponse({"message": "该接口不支持此方法", "status": 404})
+        return JsonResponse({"TopcityInfos": jsonRes, "status": 200})
+    else:
+        return JsonResponse({"message": "请求方法未注册", "status": 404})
 
 
 # 返回各性别人数
 # 发送成功，返回消息和200状态码
 # 发送失败，返回消息和404状态码
 def GetSexNum(request):
-    '''if not request.session.get('isLogin', None):
+    if not request.session.get('isLogin', None):
         return JsonResponse({"message": "你还未登录，获取高频城市需要先登录", "status": 404})
-    el'''
-    if request.method == "GET":
+    elif request.method == "GET":
         # 该接口无提交数据
         # 获取统计信息
         try:
             sexInfos = models.PersonalProfile.objects\
                         .values("sex")\
-                        .annotate(cityCount=Count("userId__userId"))\
+                        .annotate(sexCount=Count("userId__userId"))\
                         .order_by('sex')
+            jsonList = []
+            for sexInfo in sexInfos:
+                sexInfoDict = {"sex": sexInfo["sex"], "sexCount": sexInfo["sexCount"]}
+                jsonList.append({**sexInfoDict})
+            jsonRes = json.loads(json.dumps(jsonList, cls=DateEnconding))
+            print(jsonRes)
         except Exception as e:
             print('str(Exception):\t', str(Exception))
             print('str(e):\t\t', str(e))
             print('repr(e):\t', repr(e))
             # print('e.message:\t', e.message)
             print('########################################################')
-            return JsonResponse({"message": "案例保存失败，数据库出错", "status": 404})
-        return JsonResponse({"TopcityInfos": serializers.serialize("json", sexInfos), "status": 200})
-    return JsonResponse({"message": "该接口不支持此方法", "status": 404})
+            return JsonResponse({"message": "信息获取失败，数据库出错", "status": 404})
+        return JsonResponse({"TopcityInfos": jsonRes, "message": "信息获取成功", "status": 200})
+    else:
+        return JsonResponse({"message": "请求方法未注册", "status": 404})
 
 
 # 以下类均为继承ModelViewSet类的视图集类，其中成员变量均为继承而来
