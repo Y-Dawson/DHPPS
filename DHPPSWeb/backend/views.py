@@ -1010,7 +1010,7 @@ def GetTopCityInfos(request):
                         .annotate(cityCount=Count("cityName"))\
                         .order_by('cityName')
 
-            cityInfos = cityInfos.order_by('cityCount')[:6]
+            cityInfos = cityInfos.order_by('-cityCount')[:6]
             jsonList = []
             for cityInfo in cityInfos:
                 cityInfoDict = {"cityName": cityInfo["cityName"], "cityCount": cityInfo["cityCount"]}
