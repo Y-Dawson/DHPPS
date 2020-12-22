@@ -51,9 +51,6 @@
         label-width="100px"
         class="druleForm"
       >
-        <!-- <el-form-item label="问题" prop="question">
-          <el-input v-model="ruleForm.question"></el-input>
-        </el-form-item> -->
         <el-form-item>
           <label class="authority">选择城市： </label>
           <select id="selected" v-model="selected" name="authority">
@@ -86,9 +83,6 @@
         label-width="100px"
         class="druleForm"
       >
-        <!-- <el-form-item label="问题" prop="question">
-          <el-input v-model="ruleForm.question"></el-input>
-        </el-form-item> -->
         <el-form-item>
           <label class="authority">选择城市1： </label>
           <select id="selectedcity1" v-model="selected1" name="authority1">
@@ -135,10 +129,7 @@ export default {
       city_po: [],
       road_di: [],
 
-      used_city1: [
-        // { id: 1, name: "济南" },
-        // { id: 2, name: "成都" },
-      ],
+      used_city1: [],
       used_city2: [],
       selected1: "",
       selected2: "",
@@ -388,34 +379,18 @@ export default {
     create_city() {
       var cn = document.getElementById("selected").value;
       var s =
-        cn +
-        ": 总人口:" +
-        this.ruleForm.to_pop +
-        ",初始感染数:" +
-        this.ruleForm.begin_inf;
+        cn + ":总人口:" + this.ruleForm.to_pop + ",初始感染数:" + this.ruleForm.begin_inf;
       this.city_po.push(s);
       this.isShow1 = false;
-      // this.used_city1[citycnt]["id"]=citycnt+1;
-      // this.used_city1[citycnt]["name"]=cn;
-      // this.used_city2[citycnt]["id"]=citycnt+1;
-      // this.used_city2[citycnt]["name"]=cn;
       citycnt += 1;
-      // this.used_city1['id']=1;
-      // this.used_city1['name']="济南";
       var newc = new Array();
       newc["id"] = citycnt;
       newc["name"] = cn;
+      console.log("citycnt", citycnt);
 
       this.used_city1.push(newc);
       this.used_city2.push(newc);
       console.log("city1:", this.used_city1);
-
-      // newc['id']=3;
-      // newc['name']="上海";
-      // console.log("new:",newc);
-
-      // this.used_city1.push(newc);
-      // console.log("city1:",this.used_city1);
       console.log("city2:", this.used_city2);
     },
 
@@ -442,65 +417,64 @@ export default {
         inputErrorMessage: "案例名称格式不正确",
       })
         .then(({ value }) => {
-          this.sc = false;
-
           var myFormData = new FormData();
 
-          myFormData.append("userid", this.userId);
+          myFormData.append("userId", this.userId);
 
-          myFormData.append("casename", value);
+          myFormData.append("caseName", value);
 
           var city_infor = [];
           var cn = "Z";
           var initpop = 0;
           var initinfect = 0;
+          var loopcnt = 0;
           var citycnt = 0;
-
+          console.log("城市信息", this.city_po);
           for (var cid in this.city_po) {
-            var te1 = this.city_po[cid].split(":");
-            var te2 = te1[2].split(",");
-            cn = te1[0];
-            initpop = te2[0];
-            initinfect = te1[3];
             citycnt += 1;
+            var tc = this.city_po[cid].split(":");
+            cn = tc[0];
+            initinfect = tc[3];
+            var ttc = tc[2].split(",");
+            initpop = ttc[0];
             var s =
               "cityname:" + cn + ",initpop:" + initpop + ",initinfect:" + initinfect;
             city_infor.push(s);
+            console.log("s", s);
           }
           myFormData.append("citynum", citycnt);
 
           var roadcnt = 0;
           var road_inf = [];
+          var cn1, cn2, volume;
           for (var rid in this.road_di) {
-            var te1 = this.road_di[rid].split(":");
-            var te2 = te1[0].split("-");
             roadcnt += 1;
-            var departure = te2[0];
-            var destination = te2[1];
-            var volume = te1[1];
-            var s =
-              "departure:" +
-              departure +
-              ",destination:" +
-              destination +
-              ",volume:" +
-              volume;
+            var tr = this.road_di[rid].split("-");
+            var ttr = tr[1].split(":");
+            cn1 = tr[0];
+            cn2 = ttr[0];
+            volume = ttr[1];
+            var s = "departure:" + cn1 + ",destination:" + cn2 + ",volume:" + volume;
             road_inf.push(s);
+            console.log("rs", s);
           }
           myFormData.append("roadnum", roadcnt);
+          myFormData.append("caseMode", "地图模式");
 
-          myFormData.append("Initcitydata", city_infor);
-          myFormData.append("Initroaddata", road_inf);
+          myFormData.append("InitCityData", city_infor);
+          myFormData.append("InitRoadData", road_inf);
+
+          myFormData.append("CityPosition", "Empty");
 
           for (var value of myFormData.values()) {
             console.log(value);
           }
 
           axios
-            .post("http://127.0.0.1:8000/backend/saveCase/", myFormData)
+            .post("/apis/backend/saveCase/", myFormData)
             .then((response) => {
               // alert(JSON.stringify(response));
-              // alert("保存案例");
+              alert("保存案例");
             })
             .catch(function (error) {
               // alert(JSON.stringify(response));
@@ -508,7 +482,6 @@ export default {
             });
         })
         .catch(() => {
-          this.sc = false;
           this.$message({
             type: "info",
             message: "取消输入",
@@ -519,65 +492,75 @@ export default {
     begin_simulation() {
       var myFormData = new FormData();
 
-      myFormData.append("userid", this.userId);
+      myFormData.append("userId", this.userId);
 
-      myFormData.append("casename", 99);
+      myFormData.append("caseName", 99);
 
       var city_infor = [];
       var cn = "Z";
       var initpop = 0;
       var initinfect = 0;
+      var loopcnt = 0;
       var citycnt = 0;
-
+      console.log("城市信息", this.city_po);
       for (var cid in this.city_po) {
-        var te1 = this.city_po[cid].split(":");
-        var te2 = te1[2].split(",");
-        cn = te1[0];
-        initpop = te2[0];
-        initinfect = te1[3];
         citycnt += 1;
+        var tc = this.city_po[cid].split(":");
+        cn = tc[0];
+        initinfect = tc[3];
+        var ttc = tc[2].split(",");
+        initpop = ttc[0];
         var s = "cityname:" + cn + ",initpop:" + initpop + ",initinfect:" + initinfect;
         city_infor.push(s);
+        console.log("s", s);
       }
       myFormData.append("citynum", citycnt);
 
       var roadcnt = 0;
       var road_inf = [];
+      var cn1, cn2, volume;
       for (var rid in this.road_di) {
-        var te1 = this.road_di[rid].split(":");
-        var te2 = te1[0].split("-");
         roadcnt += 1;
-        var departure = te2[0];
-        var destination = te2[1];
-        var volume = te1[1];
-        var s =
-          "departure:" + departure + ",destination:" + destination + ",volume:" + volume;
+        var tr = this.road_di[rid].split("-");
+        var ttr = tr[1].split(":");
+        cn1 = tr[0];
+        cn2 = ttr[0];
+        volume = ttr[1];
+        var s = "departure:" + cn1 + ",destination:" + cn2 + ",volume:" + volume;
         road_inf.push(s);
+        console.log("rs", s);
       }
       myFormData.append("roadnum", roadcnt);
+      myFormData.append("caseMode", "地图模式");
 
-      myFormData.append("Initcitydata", city_infor);
-      myFormData.append("Initroaddata", road_inf);
+      myFormData.append("InitCityData", city_infor);
+      myFormData.append("InitRoadData", road_inf);
+
+      myFormData.append("CityPosition", "Empty");
+
+      myFormData.append("daynum", 365);
 
       for (var value of myFormData.values()) {
         console.log(value);
       }
 
       axios
-        .post("http://127.0.0.1:8000/backend/startSimulate/", myFormData)
+        .post("/apis/backend/startSimulate/", myFormData)
         .then((response) => {
           // alert(JSON.stringify(response));
-          // alert("开始模拟");
+          alert("开始模拟");
+
           this.$router.push({
-            path: "/simulation",
+            path: "/simulationMap",
             query: {
               params: JSON.stringify({
-                userid: this.userId,
-                casename: 99,
+                userId: this.userId,
+                caseName: 99,
                 citynum: citycnt,
                 roadnum: roadcnt,
-                Initcitydata: city_infor,
-                Initroaddata: road_inf,
+                InitCityData: city_infor,
+                InitRoadData: road_inf,
+                Daynum: 365,
                 DailyInfected: response,
               }),
             },
@@ -587,6 +570,14 @@ export default {
           // alert(JSON.stringify(response));
           // alert("发送失败");
         });
+    },
+
+    handleclose(done) {
+      this.$confirm("确认关闭？")
+        .then((_) => {
+          done();
+        })
+        .catch((_) => {});
     },
   },
 };
@@ -616,7 +607,7 @@ li {
 header {
   position: relative;
   height: 1.25rem;
-  background: url("../../assets/img/head_bg.png") no-repeat;
+  background: url(../../assets/img/head_bg.png) no-repeat;
   height: 50px;
   width: 100%;
   background-size: 100% 100%;
@@ -654,7 +645,7 @@ h1 {
   padding: 0 15px 40px;
   margin-bottom: 15px;
   border: 1px solid rgba(25, 186, 139, 0.17);
-  background: url("../../assets/img/line.png") rgba(255, 255, 255, 0.04);
+  background: url(../../assets/img/line.png) rgba(255, 255, 255, 0.04);
 }
 
 .mainbox .column .panel::before {
@@ -720,7 +711,7 @@ h1 {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: url("../../assets/img/map.png");
+  background: url(../../assets/img/map.png);
   background-size: 100% 100%;
   opacity: 0.3;
 }
@@ -732,9 +723,9 @@ h1 {
   transform: translate(-50%, -50%);
   width: 370px;
   height: 370px;
-  background: url("../../assets/img/lbx.png");
+  background: url(../../assets/img/lbx.png);
   background-size: 100% 100%;
-  /* animation: rotate1 15s linear infinite; */
+  animation: rotate1 15s linear infinite;
   opacity: 0.6;
 }
 
@@ -745,9 +736,9 @@ h1 {
   transform: translate(-50%, -50%);
   width: 335px;
   height: 335px;
-  background: url("../../assets/img/jt.png");
+  background: url(../../assets/img/jt.png);
   background-size: 100% 100%;
-  /* animation: rotate2 15s linear infinite; */
+  animation: rotate2 15s linear infinite;
   opacity: 0.6;
 }
 

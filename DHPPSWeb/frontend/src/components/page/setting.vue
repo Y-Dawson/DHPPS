@@ -14,7 +14,15 @@
 
           <li class="layui-nav-item" style="line-height: 40px">
             <router-link
-              :to="{ path: '/UserProfile', query: { userId: userId } }"
+              :to="{ path: '/settingMap', query: { userId: userId, caseName: 999 } }"
+              style="margin-left: 10px; float: left"
+              >地图模式</router-link
+            >
+          </li>
+
+          <li class="layui-nav-item" style="line-height: 40px">
+            <router-link
+              :to="{ path: '/Userprofile', query: { userId: userId } }"
               style="margin-left: 10px; float: left"
               >个人中心</router-link
             >
@@ -884,24 +892,24 @@ export default {
   mounted: function () {
     this.params = JSON.parse(this.$route.query.params);
     console.log("用户ID：", this.params.userId);
-    console.log("案例名：", this.params.casename);
+    console.log("案例名：", this.params.caseName);
     // console.log("类型：", typeof this.params.casename);
     console.log("城市数目：", this.params.citynum);
     console.log("道路数目：", this.params.roadnum);
-    console.log("初始城市信息：", this.params.Initcitydata);
-    console.log("道路信息：", this.params.Initroaddata);
-    console.log("城市坐标：", this.params.Cityposition);
+    console.log("初始城市信息：", this.params.InitCityData);
+    console.log("道路信息：", this.params.InitRoadData);
+    console.log("城市坐标：", this.params.CityPosition);
     this.userId = this.params.userId;
 
     citycnt = 1;
     linecnt = 1;
-    if (this.params.casename != 999) {
+    if (this.params.caseName != 999) {
       console.log("从模拟界面返回");
       citycnt = this.params.citynum + 1;
       linecnt = 1;
       var cnt = 0;
-      for (var j in this.params.Cityposition) {
-        var te = this.params.Cityposition[j].split(",");
+      for (var j in this.params.CityPosition) {
+        var te = this.params.CityPosition[j].split(",");
         var tt, ci, x, y, cid;
         cnt = 0;
         for (var k in te) {
@@ -928,9 +936,9 @@ export default {
         this.SetButton(nu);
       }
 
-      for (var j in this.params.Initroaddata) {
+      for (var j in this.params.InitRoadData) {
         // console.log(this.params.Initroaddata[j]);
-        var ri = this.params.Initroaddata[j].split(",");
+        var ri = this.params.InitRoadData[j].split(",");
         // console.log(ri);
         var city1, city2, vol, tt, s;
         cnt = 0;
@@ -958,8 +966,8 @@ export default {
         this.DrawLine(cid1, cid2);
       }
 
-      for (var j in this.params.Initcitydata) {
-        var ci = this.params.Initcitydata[j].split(",");
+      for (var j in this.params.InitCityData) {
+        var ci = this.params.InitCityData[j].split(",");
         var tt, cityna, initpo, initIn;
         cnt = 0;
         for (var k in ci) {
@@ -1143,9 +1151,9 @@ export default {
 
           var myFormData = new FormData();
 
-          myFormData.append("userid", this.userId);
+          myFormData.append("userId", this.userId);
 
-          myFormData.append("casename", 99);
+          myFormData.append("caseName", 99);
 
           var city_infor = [];
           var cn = "Z";
@@ -1187,9 +1195,10 @@ export default {
             road_inf.push(s);
           }
           myFormData.append("roadnum", roadcnt);
+          myFormData.append("caseMode", "自定模式");
 
-          myFormData.append("Initcitydata", city_infor);
-          myFormData.append("Initroaddata", road_inf);
+          myFormData.append("InitCityData", city_infor);
+          myFormData.append("InitRoadData", road_inf);
 
           var city_position = [];
           loopcnt = 0;
@@ -1208,7 +1217,7 @@ export default {
               city_position.push(s);
             }
           }
-          myFormData.append("Cityposition", city_position);
+          myFormData.append("CityPosition", city_position);
 
           myFormData.append("daynum", parseInt(value) + 1);
 
@@ -1217,21 +1226,21 @@ export default {
           }
 
           axios
-            .post("http://127.0.0.1:8000/backend/startSimulate/", myFormData)
+            .post("/apis/backend/startSimulate/", myFormData)
             .then((response) => {
-              // alert(JSON.stringify(response));
+              alert(JSON.stringify(response));
               // alert("开始模拟");
               this.$router.push({
                 path: "/simulation",
                 query: {
                   params: JSON.stringify({
-                    userid: this.userId,
-                    casename: 99,
+                    userId: this.userId,
+                    caseName: 99,
                     citynum: citycnt,
                     roadnum: roadcnt,
-                    Initcitydata: city_infor,
-                    Initroaddata: road_inf,
-                    Cityposition: city_position,
+                    InitCityData: city_infor,
+                    InitRoadData: road_inf,
+                    CityPosition: city_position,
                     Daynum: value,
                     DailyInfected: response,
                   }),
@@ -1308,7 +1317,7 @@ export default {
             road_inf.push(s);
           }
           myFormData.append("roadnum", roadcnt);
-          myFormData.append("caseMode",1);
+          myFormData.append("caseMode", "自定模式");
 
           myFormData.append("InitCityData", city_infor);
           myFormData.append("InitRoadData", road_inf);
@@ -1337,7 +1346,7 @@ export default {
           }
 
           axios
-            .post("http://127.0.0.1:8000/backend/SaveCase/", myFormData)
+            .post("/apis/backend/saveCase/", myFormData)
             .then((response) => {
               // alert(JSON.stringify(response));
               // alert("保存案例");
