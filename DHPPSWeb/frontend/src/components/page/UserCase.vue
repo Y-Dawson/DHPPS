@@ -91,7 +91,7 @@
       <!-- Page Content  -->
       <div id="content-page" class="content-page" style="z-index: 1">
         <div class="container-fluid">
-          <div class="row">
+          <div style="text-align:center;">
                 <div
                   class="box-card-group"
                   style="
@@ -116,7 +116,7 @@
                             color: rgb(173, 173, 173);
                           "
                         ></i>
-                        <span id="returnContent">{{ item.casename }}</span>
+                        <span id="returnContent">{{ item.caseName }}</span>
                         <div
                           style="
                             font-size: 8px;
@@ -129,31 +129,31 @@
                             id="delete"
                             type="text"
                             style="font-size: 8px; color: #55587e"
-                            @click="Edit(item.caseid)"
+                            @click="Edit(item.caseId)"
                             >进入编辑</el-button
                           >
                           <el-button
                             id="delete"
                             type="text"
                             style="font-size: 8px; color: rgb(221, 0, 0)"
-                            @click="Open(item.caseid)"
+                            @click="Open(item.caseId)"
                             >删除</el-button
                           >
                         </div>
                       </div>
                       <dl class="box-text">
                         <span>初始城市数量：</span>
-                        <span id="returnContent">{{ item.citynumber }}</span>
+                        <span id="returnContent">{{ item.cityNumber }}</span>
                         <br />
                         <span>初始道路数量：</span>
-                        <span id="returnContent">{{ item.roadnumber }}</span>
+                        <span id="returnContent">{{ item.roadNumber }}</span>
                         <br />
                         <span>初始总人口：</span>
-                        <span id="returnContent">{{ item.inittotal }}</span>
+                        <span id="returnContent">{{ item.initTotal }}</span>
                         <br />
                         <span>初始感染人口：</span>
                         <span id="returnContent">{{
-                          item.inittotalinfected
+                          item.initTotalInfected
                         }}</span>
                       </dl>
                     </el-card>
@@ -263,4 +263,37 @@ export default {
 @import "../../css/typography.css";
 @import "../../css/style.css";
 @import "../../css/animate.css";
+</style>
+<style scoped>
+.list {
+  text-align: center;
+  margin: 10px 300px;
+}
+.paginate {
+  margin-top: 20px;
+  /* margin-left: 200px; */
+  /* left:50% */
+}
+/* 案例块文字内容 */
+.box-text {
+  margin-left: 5px;
+  line-height: 18px;
+  font-size: 12px;
+  color: rgb(71, 71, 71);
+}
+/* 案例块样式 */
+.box-card {
+  width: 240px;
+  /* float: left; */
+  margin-right: 180px;
+  margin-bottom: 20px;
+}
+.reset {
+  background: #fff;
+  border: 1px #55587e solid;
+}
+.el-checkbox :hover {
+  background: #8b9bbd;
+}
+
 </style>

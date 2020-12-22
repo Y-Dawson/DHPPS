@@ -125,8 +125,8 @@
           </el-form-item>
         </div>
         <div class="layui-form-item">
-          <el-form-item style="color:#fff">
-            <router-link class="use-account" to="/Login"
+          <el-form-item >
+            <router-link class="use-account" to="/Login" style="color:#fff;margin-top:20px;"
               >使用已有账号登录</router-link
             >
           </el-form-item>
@@ -372,12 +372,13 @@ export default {
 .ms-login {
     position: absolute;
     left: 50%;
-    top: 40%;
+    top: 35%;
     width: 350px;
     margin: -190px 0 0 -175px;
     border-radius: 5px;
     background: rgba(24, 26, 37, 0.5);
     overflow: hidden;
+    padding-bottom: 10px;
 }
 .ms-title {
   width: 100%;
@@ -400,9 +401,10 @@ export default {
 .el-button--info {
   position: absolute;
   width: 80px;
-  height: 35px;
-  margin-left: 32px;
-  margin-top: -57px;
+  height: 32px;
+  margin-left: 25px;
+  margin-top: -60px;
+  background-color: transparent;
 }
 
 .el-button--primary {
@@ -410,6 +412,8 @@ export default {
   width: 125px;
   height: 30px;
   margin-left: -65px;
+  background-color: #5D5EB4;
+  border:0px;
 }
 
 .use-account {

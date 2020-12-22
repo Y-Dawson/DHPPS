@@ -11,8 +11,9 @@
                 v-model="forgetForm.phone"
                 placeholder="请输入11位手机号"
                 id="phonenum"
+                class="MyInput"
               >
-              <el-button slot="prepend" icon="el-icon-user"></el-button>
+              <i slot="prefix" class="el-input__icon el-icon-user"></i>
               </el-input>
             </el-form-item>
           </div>
@@ -27,8 +28,9 @@
                 v-model="forgetForm.securitt_code"
                 placeholder="请输入验证码"
                 id="securitt_code"
+                class="MyInput"
               >
-              <el-button slot="prepend" icon="el-icon-user"></el-button>
+              <i slot="prefix" class="el-input__icon el-icon-user"></i>
               </el-input>
             </el-form-item>
             <el-form-item>
@@ -47,8 +49,9 @@
                 placeholder="请填写6到12位密码"
                 type="password"
                 id="password"
+                class="MyInput"
               >
-              <el-button slot="prepend" icon="el-icon-lock"></el-button>
+              <i slot="prefix" class="el-input__icon el-icon-user"></i>
               </el-input>
             </el-form-item>
           </div>
@@ -65,24 +68,18 @@
                 placeholder="确认密码"
                 type="password"
                 id="password2"
+                class="MyInput"
               >
-              <el-button slot="prepend" icon="el-icon-lock"></el-button>
+              <i slot="prefix" class="el-input__icon el-icon-user"></i>
               </el-input>
             </el-form-item>
           </div>
-          <!-- <div class="layui-form-mid layui-word-aux">请填写6到12位密码</div> -->
         </div>
       </div>
       <el-form-item class="btns">
         <router-link to='/Login'><el-button type="return" >返 回</el-button></router-link>
         <el-button type="primary" @click="submitForm('forgetForm')">确 定</el-button>
       </el-form-item>
-
-      <!-- <el-form-item class="btns">
-        <el-button type="return"><router-link to='/Login'>返回</router-link></el-button> -->
-        <!-- <el-button type="info" @click="resetLoginForm">返回</el-button> -->
-        <!-- <el-button type="primary" @click="submitForm('forgetForm')">确 定</el-button>
-      </el-form-item> -->
      </el-form>
     </div>
   </div>
@@ -196,9 +193,6 @@ export default {
             alert(JSON.stringify(response.data)),
             self.returnmessage=response.data.message,
             self.phoneIsValid()            
-            // alert(self.returnmessage),
-            // self.skip()
-            // alert(JSON.stringify(response.data.message))
           )
         )
         .catch(function (error) {
@@ -246,15 +240,38 @@ export default {
 };
 </script>
 <style>
-@import "../../assets/layui/css/layui.css";
-body {
-  background-image: url(../../assets/img/background2.jpg);
-  /* width: 1000px; */
+.MyInput .el-input__inner{
+  background-color: transparent;
+  border-radius: 0px;
+  border:0px;
+  border-bottom: 1px white solid;
+  color: #fff;
+}
+.MyInput .el-input__inner:hover{
+  background-color: transparent;
+  border-radius: 0px;
+  border:0px;
+  border-bottom: 1px white solid;
+}
+.MyInput .el-input__inner:focus-within{
+  background-color: transparent;
+  border-radius: 0px;
+  border:0px;
+  border-bottom: 1px white solid;
 }
 </style>
 
 <style scoped>
 @import "../../assets/layui/css/layui.css";
+#forgetPass{
+  width: 100%;
+  height: 100%;
+  background-image: url(../../assets/img/3.jpg);
+  background-size: cover;
+  position: absolute;
+  z-index: -1;
+  background-repeat: no-repeat;
+}
 .ms-login {
     position: absolute;
     left: 50%;
@@ -263,7 +280,7 @@ body {
     height:380px;
     margin: -190px 0 0 -175px;
     border-radius: 5px;
-    background: rgba(255, 255, 255, 0.5);
+    background: rgba(24, 26, 37, 0.5);
     overflow: hidden;
 }
 .ms-title {
@@ -289,9 +306,10 @@ body {
 .el-button--info {
   position: absolute;
   width: 80px;
-  height: 35px;
-  margin-left: 36px;
+  height: 32px;
+  margin-left: 32px;
   margin-top: -38px;
+  background-color: transparent;
 }
 .el-button--return {
   /* background-color: rgba(109, 113, 116, 0.295); */
@@ -305,5 +323,7 @@ body {
   width: 100px;
   height: 40px;
   margin-left: 10px;
+  background-color: #5D5EB4;
+  border:0px;
 }
 </style>
