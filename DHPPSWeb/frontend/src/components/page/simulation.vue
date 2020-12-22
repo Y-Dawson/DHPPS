@@ -725,23 +725,23 @@ export default {
   mounted: function () {
     this.params = JSON.parse(this.$route.query.params);
 
-    console.log("用户ID：", this.params.userid);
-    console.log("案例名：", this.params.casename);
+    console.log("用户ID：", this.params.userId);
+    console.log("案例名：", this.params.caseName);
     console.log("城市数目：", this.params.citynum);
     console.log("道路数目：", this.params.roadnum);
-    console.log("初始城市信息：", this.params.Initcitydata);
-    console.log("道路信息：", this.params.Initroaddata);
-    console.log("城市坐标：", this.params.Cityposition);
-    console.log("每日病例：", this.params.DailyInfected.data.DailyforecastData);
-    var foreData = this.params.DailyInfected.data.DailyforecastData;
+    console.log("初始城市信息：", this.params.InitCityData);
+    console.log("道路信息：", this.params.InitRoadData);
+    console.log("城市坐标：", this.params.CityPosition);
+    console.log("每日病例：", this.params.DailyInfected.data.DailyForecastData);
+    var foreData = this.params.DailyInfected.data.DailyForecastData;
 
-    this.userId = this.params.userid;
-    this.casename = this.params.casename;
+    this.userId = this.params.userId;
+    this.casename = this.params.caseName;
     this.citycnt = this.params.citynum;
     this.linecnt = this.params.roadnum;
-    this.city_information = this.params.Initcitydata;
-    this.road_inf = this.params.Initroaddata;
-    this.city_position = this.params.Cityposition;
+    this.city_information = this.params.InitCityData;
+    this.road_inf = this.params.InitRoadData;
+    this.city_position = this.params.CityPosition;
     this.day_num = parseInt(this.params.Daynum);
     this.daily_step = 100 / this.day_num;
     console.log("模拟天数：", this.params.Daynum);
@@ -750,7 +750,7 @@ export default {
     for (var i = 0; i < parseInt(this.params.Daynum); i++) {
       for (var j = 0; j < parseInt(this.params.citynum); j++) {
         this.AddInformation(
-          foreData[i][j]["cityname"],
+          foreData[i][j]["cityName"],
           foreData[i][j]["population"],
           foreData[i][j]["dailyinfected"],
           foreData[i][j]["infected"]
@@ -762,7 +762,7 @@ export default {
       var newa = new Array();
       for (var j = 0; j < parseInt(this.params.Daynum); j++) {
         var s =
-          foreData[j][i]["cityname"] +
+          foreData[j][i]["cityName"] +
           ":" +
           foreData[j][i]["population"] +
           "," +
@@ -803,8 +803,8 @@ export default {
     console.log("rc", this.row_cnt);
 
     var cnt = 0;
-    for (var j in this.params.Cityposition) {
-      var te = this.params.Cityposition[j].split(",");
+    for (var j in this.params.CityPosition) {
+      var te = this.params.CityPosition[j].split(",");
       console.log("te", te);
       console.log("j", j);
       var tt, ci, x, y, cid;
@@ -836,9 +836,9 @@ export default {
       console.log("cityID", cid);
     }
 
-    for (var j in this.params.Initroaddata) {
-      console.log(this.params.Initroaddata[j]);
-      var ri = this.params.Initroaddata[j].split(",");
+    for (var j in this.params.InitRoadData) {
+      console.log(this.params.InitRoadData[j]);
+      var ri = this.params.InitRoadData[j].split(",");
       console.log(ri);
       var city1, city2, vol, tt, s;
       cnt = 0;
@@ -879,12 +879,12 @@ export default {
           query: {
             params: JSON.stringify({
               userId: this.userId,
-              casename: this.casename,
+              caseName: this.casename,
               citynum: this.citycnt,
               roadnum: this.linecnt,
-              Initcitydata: this.city_information,
-              Initroaddata: this.road_inf,
-              Cityposition: this.city_position,
+              InitCityData: this.city_information,
+              InitRoadData: this.road_inf,
+              CityPosition: this.city_position,
             }),
           },
         });

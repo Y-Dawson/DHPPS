@@ -9,8 +9,8 @@
         <div class="no">
           <div class="no-hd">
             <ul>
-              <li>123456</li>
-              <li>123456</li>
+              <li>{{ total_people }}</li>
+              <li>{{ total_infected }}</li>
             </ul>
           </div>
 
@@ -54,18 +54,81 @@ import { flexible } from "../../assets/js/flexible.js";
 import { jquery } from "../../assets/js/jquery.js";
 // import { china } from "../../assets/js/china.js";
 
-var echarts = require('echarts');
-import '../../../node_modules/echarts/lib/chart/map/china.js';
+var echarts = require("echarts");
+import "../../../node_modules/echarts/lib/chart/map/china.js";
 // var china = require("../../assets/js/china.js");
 // import { china } from "../../assets/js/china.js";
 
 export default {
   data() {
-    return {};
+    return {
+      total_people: 0,
+      total_infected: 0,
+
+      citynamelist: [],
+      linemap_information: [],
+    };
   },
   mounted: function () {
+    this.params = JSON.parse(this.$route.query.params);
+
+    console.log("用户ID：", this.params.userId);
+    console.log("案例名：", this.params.caseName);
+    console.log("城市数目：", this.params.citynum);
+    console.log("道路数目：", this.params.roadnum);
+    console.log("初始城市信息：", this.params.InitCityData);
+    console.log("道路信息：", this.params.InitRoadData);
+    console.log("每日病例：", this.params.DailyInfected.data.DailyForecastData);
+    var foreData = this.params.DailyInfected.data.DailyForecastData;
+
+    for (var j = 0; j < parseInt(this.params.citynum); j++) {
+      this.total_people += parseInt(foreData[364][j]["population"]);
+      this.total_infected += parseInt(foreData[364][j]["infected"]);
+    }
+
+    var cn;
+    for (var j in this.params.InitCityData) {
+      console.log(this.params.InitCityData[j]);
+      var tc = this.params.InitCityData[j].split(":");
+      var ttc = tc[1].split(",");
+      cn = ttc[0];
+      this.citynamelist.push(cn);
+    }
+
+    console.log("citynamelist", this.citynamelist);
+
+    for (var j in this.citynamelist) {
+      var newa = new Array();
+      newa["name"] = this.citynamelist[j];
+      newa["type"] = "line";
+      var newb = new Array();
+
+      newb.push(foreData[0][j]["infected"]);
+      newb.push(foreData[31][j]["infected"]);
+      newb.push(foreData[59][j]["infected"]);
+      newb.push(foreData[90][j]["infected"]);
+      newb.push(foreData[120][j]["infected"]);
+      newb.push(foreData[151][j]["infected"]);
+      newb.push(foreData[181][j]["infected"]);
+      newb.push(foreData[212][j]["infected"]);
+      newb.push(foreData[243][j]["infected"]);
+      newb.push(foreData[273][j]["infected"]);
+      newb.push(foreData[304][j]["infected"]);
+      newb.push(foreData[334][j]["infected"]);
+      newa["data"] = newb;
+
+      newa["smooth"] = "true";
+
+      console.log("newa",newa);
+
+      this.linemap_information.push(newa);
+    }
+
+    alert(this.linemap_information);
+    console.log("series",this.linemap_information);
+
     this.drawLine();
-  
+
     this.drawPie();
 
     this.drawMap();
@@ -83,7 +146,7 @@ export default {
             color: "#4c9bfd",
           },
           right: "10%",
-          data: ["济南", "成都", "视频广告", "直接访问", "搜索引擎"],
+          data: this.citynamelist,
         },
         grid: {
           top: "20%",
@@ -144,22 +207,26 @@ export default {
             },
           },
         },
-        series: [
-          {
-            name: "济南",
-            type: "line",
-            data: [120, 132, 101, 134, 90, 230, 210, 120, 130, 150, 180, 220],
-            smooth: true,
-          },
-          {
-            name: "成都",
-            type: "line",
-            data: [220, 182, 191, 234, 290, 330, 310, 330, 240, 260, 280, 500],
-            smooth: true,
-          },
-        ],
+        series: this.linemap_information,
+        // [
+        //   {
+        //     name: "济南",
+        //     type: "line",
+        //     data: [120, 132, 101, 134, 90, 230, 210, 120, 130, 150, 180, 220],
+        //     smooth: true,
+        //   },
+        //   {
+        //     name: "成都",
+        //     type: "line",
+        //     data: [220, 182, 191, 234, 290, 330, 310, 330, 240, 260, 280, 500],
+        //     smooth: true,
+        //   },
+        // ],
       };
       myChart.setOption(option);
+      // myChart.setOption({
+      //   series: this.linemap_information
+      // });
 
       window.addEventListener("resize", function () {
         myChart.resize();
@@ -192,7 +259,7 @@ export default {
           bottom: "0%",
           itemWidth: 10,
           itemHeight: 10,
-          data: ["rose1", "rose2", "rose3", "rose4", "rose5", "rose6", "rose7", "rose8"],
+          data: this.citynamelist,
         },
         series: [
           {
@@ -413,7 +480,7 @@ export default {
             });
           }
         }
-        console.log("res[1]:",res[1]);
+        console.log("res[1]:", res[1]);
         return res;
       };
 
@@ -584,7 +651,7 @@ li {
 } */
 
 #simulationMap {
-  background: url("../../assets/img/bg.jpg") no-repeat top center;
+  background: url(../../assets/img/bg.jpg) no-repeat top center;
   line-height: 1.15;
   height: 655px;
   width: 100%;
@@ -594,7 +661,7 @@ li {
 header {
   position: relative;
   height: 1.25rem;
-  background: url("../../assets/img/head_bg.png") no-repeat;
+  background: url(../../assets/img/head_bg.png) no-repeat;
   height: 50px;
   width: 100%;
   background-size: 100% 100%;
@@ -637,7 +704,7 @@ h2 {
   padding: 0 15px 40px;
   margin-bottom: 15px;
   border: 1px solid rgba(25, 186, 139, 0.17);
-  background: url("../../assets/img/line.png") rgba(255, 255, 255, 0.04);
+  background: url(../../assets/img/line.png) rgba(255, 255, 255, 0.04);
 }
 
 .mainbox .column .panel::before {
@@ -782,7 +849,7 @@ h2 {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: url("../../assets/img/map.png");
+  background: url(../../assets/img/map.png);
   background-size: 100% 100%;
   opacity: 0.3;
 }
@@ -794,7 +861,7 @@ h2 {
   transform: translate(-50%, -50%);
   width: 370px;
   height: 370px;
-  background: url("../../assets/img/lbx.png");
+  background: url(../../assets/img/lbx.png);
   background-size: 100% 100%;
   animation: rotate1 15s linear infinite;
   opacity: 0.6;
@@ -807,7 +874,7 @@ h2 {
   transform: translate(-50%, -50%);
   width: 335px;
   height: 335px;
-  background: url("../../assets/img/jt.png");
+  background: url(../../assets/img/jt.png);
   background-size: 100% 100%;
   animation: rotate2 15s linear infinite;
   opacity: 0.6;
