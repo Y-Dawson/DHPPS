@@ -123,20 +123,6 @@
                   </div>
             <div class="col-sm-12" v-if="!show">
               <div class="iq-card">
-                <div class="iq-card-header d-flex justify-content-between">
-                  <div class="iq-header-title">
-                    <div class="chat-header-icons d-flex">
-                      <a
-                        href="javascript:void();"
-                        class="chat-icon-phone iq-bg-primary"
-                        style="width:120px"
-                      >
-                        <i class="ri-user-3-line"></i>
-                        用户管理
-                      </a>
-                    </div>
-                  </div>
-                </div>
                 <div class="iq-card-body">
                   <div class="">
                     <table
@@ -177,7 +163,6 @@
                           <el-avatar
                               shape="circle"
                               :size="30"
-                              :fit="fit"
                               :src="item.avatar"
                            ></el-avatar>
                            </td> -->
@@ -202,7 +187,7 @@
                                 title=""
                                 data-original-title="Edit"
                                 @click="
-                                  UserEdit(item.userId, item.userName, true)
+                                  UserEdit(item.userId, item.userName, item.remark, item.authority, true)
                                 "
                               >
                                 <i class="ri-pencil-line"></i>
@@ -286,20 +271,6 @@
                   </div>
             <div class="col-sm-12" v-if="show">
               <div class="iq-card">
-                <div class="iq-card-header d-flex justify-content-between">
-                  <div class="iq-header-title">
-                    <div class="chat-header-icons d-flex">
-                      <a
-                        href="javascript:void();"
-                        class="chat-icon-phone iq-bg-primary"
-                        style="width:120px"
-                      >
-                        <i class="ri-user-3-line"></i>
-                        员工管理
-                      </a>
-                    </div>
-                  </div>
-                </div>
                 <div class="iq-card-body">
                   <div class="">
                     <table
@@ -340,7 +311,6 @@
                           <el-avatar
                               shape="circle"
                               :size="30"
-                              :fit="fit"
                               :src="item.avatar"
                            ></el-avatar>
                            </td> -->
@@ -365,7 +335,7 @@
                                 title=""
                                 data-original-title="Edit"
                                 @click="
-                                  StaffEdit(item.StaffId, item.StaffName, true)
+                                  StaffEdit(item.userId, item.userName, item.remark, item.authority, true)
                                 "
                               >
                                 <i class="ri-pencil-line"></i>
@@ -376,7 +346,7 @@
                                 data-placement="top"
                                 title=""
                                 data-original-title="Delete"
-                                @click="handleStaffDel(item.StaffId)"
+                                @click="handleStaffDel(item.userId)"
                                 ><i class="ri-delete-bin-line"></i
                               ></a>
                             </div>
@@ -595,15 +565,6 @@
 </template>
 
 <script>
-// import custom from "../../js/custom.js";
-// import smooth from "../../js/smooth-scrollbar.js";
-// import magnific from "../../js/jquery.magnific-popup.min.js";
-// import select2 from "../../js/select2.min.js";
-// import slick from "../../js/slick.min.js";
-// import wow from "../../js/wow.min.js";
-// import counterup from "../../js/jquery.counterup.min.js";
-// import popper from "../../js/popper.min.js";
-// import popup from "../../js/jquery.popup.js";
 export default {
   data() {
     return {
@@ -629,8 +590,12 @@ export default {
       //用户编辑的id和昵称
       UserId: "",
       UserName: "",
+      UserRemark:"",
+      UserAuthority:"",
       StaffId: "",
       StaffName: "",
+      StaffRemark: "",
+      StaffAuthority:"",
       showModal: false,
       radioVal: "普通用户",
       show: false,
@@ -680,27 +645,30 @@ export default {
     },
     PostUserMessage: function (UI) {
       var self = this;
-      alert($("#RemarkMessage").val()),
-        alert(UI),
-        alert($("#selected").val()),
+        if($("#RemarkMessage").val()!=="") self.UserRemark=$("#RemarkMessage").val();
+        if($("#selected").val()=="管理员"||$("#selected").val()=="普通用户") self.UserAuthority=$("#selected").val();
+        else if($("#RemarkMessage").val() =="") {
+          this.$message("请选择需要修改的内容");
+          return;
+        }
         axios
           .put("/apis/backend/accountInfo/" + UI + "/", {
-            remark: $("#RemarkMessage").val(),
-            authority: $("#selected").val(),
+            remark: self.UserRemark,
+            authority: self.UserAuthority,
           })
           .then(
             (response) => (
-              alert(26),
-              this.$message("修改权限成功"),
-              alert(JSON.stringify(response))
+              this.$message("修改成功"),
+              this.getUserContent(),
+              this.CloseUserEdit(false)
             )
           )
           .catch(function (error) {
             alert("数据发送失败");
           });
     },
-    UserEdit: function (UI, UN, show) {
-      (this.UserId = UI), (this.UserName = UN), (this.showModal = show);
+    UserEdit: function (UI, UN, UR, UA, show) {
+      (this.UserId = UI), (this.UserName = UN), (this.UserRemark=UR), (this.UserAuthority=UA), (this.showModal = show);
     },
     CloseUserEdit: function (show) {
       this.showModal = show;
@@ -769,11 +737,10 @@ export default {
 
     getStaffContent: function () {
         var self = this;
-        alert(this.AdminId)
         axios
           .get("/apis/backend/adminManage/",{
             params:{
-              pageStaffSize: 10,
+              pageSize: 10,
               page: self.currentStaffPage
             }
           })
@@ -791,17 +758,22 @@ export default {
       },
     PostStaffMessage: function (UI) {
       var self = this;
-      alert($("#RemarkMessage").val()),
-        alert($("#selected").val()),
+      if($("#RemarkMessage").val()!=="") self.StaffRemark=$("#RemarkMessage").val();
+        if($("#selected").val()=="管理员"||$("#selected").val()=="普通用户") self.StaffAuthority=$("#selected").val();
+        else if($("#RemarkMessage").val() =="") {
+          this.$message("请选择需要修改的内容");
+          return;
+        }
         axios
           .put("/apis/backend/accountInfo/" + UI + "/", {
-            remark: $("#RemarkMessage").val(),
-            authority: $("#selected").val(),
+            remark: self.StaffRemark,
+            authority: self.StaffAuthority,
           })
           .then(
             (response) => (
-              this.$message("修改权限成功"),
-              alert(JSON.stringify(response))
+              this.$message("修改成功"),
+              this.ShowPage(),
+              this.CloseStaffEdit()
             )
           )
           .catch(function (error) {
@@ -862,8 +834,8 @@ export default {
       testStaffPage:function(){
         if(this.totalStaffPage==0) this.totalStaffPage=1;
       },
-    StaffEdit: function (UI, UN, show) {
-      (this.StaffId = UI), (this.StaffName = UN), (this.showStaff = show);
+    StaffEdit: function (UI, UN, UR, UA, show) {
+      (this.StaffId = UI), (this.StaffName = UN), (this.StaffRemark=UR), (this.StaffAuthority=UA), (this.showStaff = show);
     },
     CloseStaffEdit: function (show) {
       this.showStaff = show;

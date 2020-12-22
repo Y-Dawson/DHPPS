@@ -83,13 +83,12 @@
                   class="search-toggle iq-waves-effect d-flex align-items-center"
                 >
                   <img
-                    :fit="fit"
                     :src="AdminUrl"
                     class="img-fluid rounded mr-3"
                     alt="user"
                   />
                   <div class="caption">
-                    <h6 class="mb-0 line-height">{{ MyContent.username }}</h6>
+                    <h6 class="mb-0 line-height">{{ MyContent.userName }}</h6>
                   </div>
                 </a>
               </li>
@@ -109,20 +108,6 @@
           <div class="row">
             <div class="col-sm-12">
               <div class="iq-card">
-                <div class="iq-card-header d-flex justify-content-between">
-                  <div class="iq-header-title">
-                    <div class="chat-header-icons d-flex">
-                      <a
-                        href="javascript:void();"
-                        class="chat-icon-phone iq-bg-primary"
-                        style="width: 120px"
-                      >
-                        <i class="ri-file-mark-fill"></i>
-                        案例管理
-                      </a>
-                    </div>
-                  </div>
-                </div>
                 <div class="iq-card-body">
                   <div class="">
                     <table
@@ -144,15 +129,15 @@
                       <tbody>
                         <tr
                           v-for="item in content"
-                          :key="item.userid"
+                          :key="item.userId"
                           style="text-align: center"
                         >
-                          <td>{{ item.userid }}</td>
-                          <td>{{ item.username }}</td>
-                          <td>{{ item.phonenumber }}</td>
+                          <td>{{ item.userId }}</td>
+                          <td>{{ item.userName }}</td>
+                          <td>{{ item.phoneNumber }}</td>
                           <td>
                             <span class="badge iq-bg-primary">{{
-                              item.casenumber
+                              item.caseNumber
                             }}</span>
                           </td>
                           <td>{{ item.remark }}</td>
@@ -167,7 +152,7 @@
                                 data-placement="top"
                                 title=""
                                 data-original-title="Edit"
-                                @click="SwitchPage(item.userid)"
+                                @click="SwitchPage(item.userId)"
                               >
                                 查看案例
                               </a>
@@ -258,7 +243,7 @@
                             color: rgb(173, 173, 173);
                           "
                         ></i>
-                        <span id="returnContent">{{ item.casename }}</span>
+                        <span id="returnContent">{{ item.caseName }}</span>
                         <div
                           style="
                             font-size: 8px;
@@ -271,7 +256,7 @@
                             id="delete"
                             type="text"
                             style="font-size: 8px; color: #55587e"
-                            @click="edit(item.caseid)"
+                            @click="edit(item.caseId)"
                             >进入编辑</el-button
                           >
                           <br />
@@ -279,7 +264,7 @@
                             id="delete"
                             type="text"
                             style="font-size: 8px; color: rgb(221, 0, 0)"
-                            @click="open(item.caseid)"
+                            @click="open(item.caseId)"
                             >删除</el-button
                           >
                         </div>
@@ -287,17 +272,17 @@
                       <dl class="box-text">
                         <!-- <span>{{casenum}}</span> -->
                         <span>初始城市数量：</span>
-                        <span id="returnContent">{{ item.citynumber }}</span>
+                        <span id="returnContent">{{ item.cityNumber }}</span>
                         <br />
                         <span>初始道路数量：</span>
-                        <span id="returnContent">{{ item.roadnumber }}</span>
+                        <span id="returnContent">{{ item.roadNumber }}</span>
                         <br />
                         <span>初始总人口：</span>
-                        <span id="returnContent">{{ item.inittotal }}</span>
+                        <span id="returnContent">{{ item.initTotal }}</span>
                         <br />
                         <span>初始感染人口：</span>
                         <span id="returnContent">{{
-                          item.inittotalinfected
+                          item.initTotalInfected
                         }}</span>
                         <!-- <span id="returnContent" style="color:black;">{{ ccontent.themename }}</span> -->
                         <!-- <span id="returnContent">{{ content }}</span> -->
@@ -306,11 +291,29 @@
                     </el-card>
                   </el-col>
                 </div>
-                <div class="paginate">
-                  <button class="primaryb" @click="prevPage()">上一页</button>
-                  <span>第{{ currentPage }}页/共{{ totalPage }}页</span>
-                  <button class="primaryb" @click="nextPage()">下一页</button>
-                </div>
+                <div>
+                      <nav aria-label="Page navigation example">
+                        <ul class="pagination mb-0" style="justify-content: center">
+                          <li class="page-item">
+                            <a
+                              class="page-link"
+                              tabindex="-1"
+                              aria-disabled="true"
+                              @click="GetPrevCasePage()"
+                              >Previous</a
+                            >
+                          </li>
+                          <li class="page-item">
+                            <a class="page-link"
+                              >第{{ currentCasePage }}页/共{{ totalCasePage }}页</a
+                            >
+                          </li>
+                          <li class="page-item">
+                            <a class="page-link" @click="GetNextCasePage()">Next</a>
+                          </li>
+                        </ul>
+                      </nav>
+                    </div>
               </div>
             </div>
           </div>
@@ -355,7 +358,6 @@ export default {
       content: [],
       //用户案例列表
       cases: [],
-      currentPageData: [], //当前页显示案例内容
       casenum: 8,
       test: 0,
       MyContent: [],
@@ -365,6 +367,11 @@ export default {
       currentPage: 1, //当前页数 ，默认为1
       pageSize: 4, // 每页显示数量
       paginate: 10,
+      //分页
+      totalCasePage: 1, // 统共页数，默认为1
+      currentCasePage: 1, //当前页数 ，默认为1
+      pageCaseSize: 6, // 每页显示数量
+      currentPageData: [], //当前页显示内容
       //用户编辑的id和昵称
       UserId: "",
       UserName: "",
@@ -392,7 +399,7 @@ export default {
     },
     getUserContent: function () {
       axios
-        .get("http://127.0.0.1:8000/backend/generalUserManage/", {
+        .get("http://127.0.0.1:8000/backend/userManage/", {
           params: {
             pageSize: 10,
             page: this.currentPage,
@@ -412,130 +419,36 @@ export default {
           alert("数据请求失败wdnmd");
         });
     },
-    PostUserMessage: function (UI) {
-      var self = this;
-      alert($("#RemarkMessage").val()),
-        alert(UI),
-        alert($("#selected").val()),
-        axios
-          .put("http://127.0.0.1:8000/backend/accountInfo/" + UI + "/", {
-            remark: $("#RemarkMessage").val(),
-            authority: $("#selected").val(),
-          })
-          .then(
-            (response) => (
-              alert(26),
-              this.$message("修改权限成功"),
-              alert(JSON.stringify(response))
-            )
-          )
-          .catch(function (error) {
-            alert("数据发送失败");
-          });
-    },
     SwitchPage: function (UI) {
       (this.UserId = UI), (this.show = true);
-      getCaseContent(UI);
+      this.GetCaseContent();
+      this.SetPages();
     },
     ClosePage: function () {
       this.show = false;
     },
     //获取案例内容
-    getCaseContent: function () {
+    GetCaseContent: function () {
       var self = this;
       axios
-        .get("http://127.0.0.1:8000/backend/case/", {
+        .get("/apis/backend/case/", {
           params: {
-            userid: this.$route.query.userId,
-            page_size: 6,
+            userId: this.UserId,
+            pageSize: 6,
             page: self.currentPage,
           },
         })
         .then(
           (response) => (
             (self.currentPageData = response.data),
-            // alert(JSON.stringify(this.currentPageData))
-            (self.totalPage = Math.ceil(
-              self.currentPageData.pagination / self.pageSize
+            (self.totalCasePage = Math.ceil(
+              self.currentPageData.pagination / self.pageCaseSize
             ))
-            //
           )
         )
         .catch(function (error) {
           // 请求失败处理
-          // alert('数据请求失败wdnmd')
-        });
-    },
-    edit: function (id) {
-      var self = this;
-      let data = new FormData();
-      data.append("caseid", id);
-      axios
-        .post("http://127.0.0.1:8000/backend/getCaseInfo/", data)
-        .then((response) => {
-          self.cases = response.data.cases;
-          console.log(JSON.stringify(self.cases));
-
-          console.log(self.cases.Initcitydata);
-          var city_inf = [];
-          for (var j in self.cases.Initcitydata) {
-            var s =
-              "cityname:" +
-              self.cases.Initcitydata[j].cityname +
-              ",initpop:" +
-              self.cases.Initcitydata[j].initpop +
-              ",initinfect:" +
-              self.cases.Initcitydata[j].initinfect;
-            console.log("s:", s);
-            city_inf.push(s);
-          }
-
-          var road_inf = [];
-          for (var j in self.cases.Initroaddata) {
-            var s =
-              "departure:" +
-              self.cases.Initroaddata[j].departure +
-              ",destination:" +
-              self.cases.Initroaddata[j].destination +
-              ",volume:" +
-              self.cases.Initroaddata[j].volume;
-            console.log("s:", s);
-            road_inf.push(s);
-          }
-
-          var city_pos = [];
-          for (var j in self.cases.Cityposition) {
-            var s =
-              "cityname:" +
-              self.cases.Cityposition[j].cityname +
-              ",x:" +
-              self.cases.Cityposition[j].x +
-              ",y:" +
-              self.cases.Cityposition[j].y;
-            console.log("s:", s);
-            city_pos.push(s);
-          }
-
-          this.$router.push({
-            path: "/setting",
-            query: {
-              params: JSON.stringify({
-                userId: this.userId,
-                casename: this.cases.casename,
-                citynum: this.cases.citynum,
-                roadnum: this.cases.roadnum,
-                Initcitydata: city_inf,
-                Initroaddata: road_inf,
-                Cityposition: city_pos,
-              }),
-            },
-          });
-        })
-        .catch(function (error) {
-          // 请求失败处理
-          // alert(JSON.stringify(response));
-          alert(JSON.stringify(error.response));
-          alert("数据请求失败wdnmd");
+          alert('数据请求失败')
         });
     },
 
@@ -553,6 +466,21 @@ export default {
     },
     testPage: function () {
       if (this.totalPage == 0) this.totalPage = 1;
+    },
+    //上一页
+    GetPrevCasePage() {
+      if (this.currentCasePage == 1) return;
+      this.currentCasePage--;
+      this.GetCaseContent();
+    },
+    // 下一页
+    GetNextCasePage() {
+      if (this.currentCasePage == this.totalCasePage) return;
+      this.currentCasePage++;
+      this.GetCaseContent();
+    },
+    SetPages() {
+      if (this.totalCasePage < 1) totalCasePage = 1;
     },
     handleDel(UI) {
       this.$confirm("确认删除该用户吗？", "系统提示", {

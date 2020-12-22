@@ -82,7 +82,6 @@
                   class="search-toggle iq-waves-effect d-flex align-items-center"
                 >
                   <img
-                    :fit="fit"
                     :src="AdminUrl"
                     class="img-fluid rounded mr-3"
                     alt="user"
@@ -103,20 +102,6 @@
           <div class="row">
             <div class="col-sm-12">
               <div class="iq-card">
-                <div class="iq-card-header d-flex justify-content-between">
-                  <div class="iq-header-title">
-                    <div class="chat-header-icons d-flex">
-                      <a
-                        href="javascript:void();"
-                        class="chat-icon-phone iq-bg-primary"
-                        style="width:120px"
-                      >
-                        <i class="ri-user-3-line"></i>
-                        用户管理
-                      </a>
-                    </div>
-                  </div>
-                </div>
                 <div class="iq-card-body">
                   <div class="">
                     <table
@@ -148,7 +133,6 @@
                           <td class="text-center">
                             <div class="avatar avatar-md">
                               <img
-                                :fit="fit"
                                 :src="item.avatar"
                                 class="img-fluid rounded mr-3"
                               />
@@ -158,7 +142,6 @@
                           <el-avatar
                               shape="circle"
                               :size="30"
-                              :fit="fit"
                               :src="item.avatar"
                            ></el-avatar>
                            </td> -->
@@ -183,7 +166,7 @@
                                 title=""
                                 data-original-title="Edit"
                                 @click="
-                                  UserEdit(item.userId, item.userName, true)
+                                  UserEdit(item.userId, item.userName, item.remark, item.authority, true)
                                 "
                               >
                                 <i class="ri-pencil-line"></i>
@@ -371,6 +354,8 @@ export default {
       //用户编辑的id和昵称
       UserId: "",
       UserName: "",
+      UserRemark:"",
+      UserAuthority:"",
       showModal: false,
       radioVal: "普通用户",
     };
@@ -418,27 +403,30 @@ export default {
     },
     PostUserMessage: function (UI) {
       var self = this;
-      alert($("#RemarkMessage").val()),
-        alert(UI),
-        alert($("#selected").val()),
+      if($("#RemarkMessage").val()!=="") self.UserRemark=$("#RemarkMessage").val();
+        if($("#selected").val()=="管理员"||$("#selected").val()=="普通用户") self.UserAuthority=$("#selected").val();
+        else if($("#RemarkMessage").val() =="") {
+          this.$message("请选择需要修改的内容");
+          return;
+        }
         axios
           .put("/apis/backend/accountInfo/" + UI + "/", {
-            remark: $("#RemarkMessage").val(),
-            authority: $("#selected").val(),
+            remark: self.UserRemark,
+            authority: self.UserAuthority
           })
           .then(
             (response) => (
-              alert(26),
-              this.$message("修改权限成功"),
-              alert(JSON.stringify(response))
+              this.$message("修改成功"),
+              this.getUserContent(),
+              this.CloseUserEdit()
             )
           )
           .catch(function (error) {
             alert("数据发送失败");
           });
     },
-    UserEdit: function (UI, UN, show) {
-      (this.UserId = UI), (this.UserName = UN), (this.showModal = show);
+    UserEdit: function (UI, UN, UR, UA, show) {
+      (this.UserId = UI), (this.UserName = UN), (this.UserRemark=UR), (this.UserAuthority=UA), (this.showModal = show);
     },
     CloseUserEdit: function (show) {
       this.showModal = show;

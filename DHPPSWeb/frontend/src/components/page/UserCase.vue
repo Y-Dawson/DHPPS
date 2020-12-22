@@ -159,11 +159,29 @@
                     </el-card>
                   </el-col>
                 </div>
-                <div class="paginate">
-                  <button class="primaryb" @click="GetPrevPage()">上一页</button>
-                  <span>第{{ currentPage }}页/共{{ totalPage }}页</span>
-                  <button class="primaryb" @click="GetNextPage()">下一页</button>
-                </div>
+                <div>
+                      <nav aria-label="Page navigation example">
+                        <ul class="pagination mb-0" style="justify-content: center">
+                          <li class="page-item">
+                            <a
+                              class="page-link"
+                              tabindex="-1"
+                              aria-disabled="true"
+                              @click="GetPrevCasePage()"
+                              >Previous</a
+                            >
+                          </li>
+                          <li class="page-item">
+                            <a class="page-link"
+                              >第{{ currentCasePage }}页/共{{ totalCasePage }}页</a
+                            >
+                          </li>
+                          <li class="page-item">
+                            <a class="page-link" @click="GetNextCasePage()">Next</a>
+                          </li>
+                        </ul>
+                      </nav>
+                    </div>
               </div>
         </div>
       </div>
@@ -184,9 +202,9 @@ export default {
       contentList: [],
       cases: [],
       //分页
-      totalPage: 1, // 统共页数，默认为1
-      currentPage: 1, //当前页数 ，默认为1
-      pageSize: 6, // 每页显示数量
+      totalCasePage: 1, // 统共页数，默认为1
+      currentCasePage: 1, //当前页数 ，默认为1
+      pageCaseSize: 6, // 每页显示数量
       currentPageData: [], //当前页显示内容
     };
   },
@@ -200,19 +218,19 @@ export default {
   },
   methods: {
     //上一页
-    GetPrevPage() {
-      if (this.currentPage == 1) return;
-      this.currentPage--;
+    GetPrevCasePage() {
+      if (this.currentCasePage == 1) return;
+      this.currentCasePage--;
       this.GetCaseContent();
     },
     // 下一页
-    GetNextPage() {
-      if (this.currentPage == this.totalPage) return;
-      this.currentPage++;
+    GetNextCasePage() {
+      if (this.currentCasePage == this.totalCasePage) return;
+      this.currentCasePage++;
       this.GetCaseContent();
     },
     SetPages() {
-      if (this.totalPage < 1) totalPage = 1;
+      if (this.totalCasePage < 1) totalCasePage = 1;
     },
     getMyContent: function () {
       var self = this;
@@ -244,8 +262,8 @@ export default {
         .then(
           (response) => (
             (self.currentPageData = response.data),
-            (self.totalPage = Math.ceil(
-              self.currentPageData.pagination / self.pageSize
+            (self.totalCasePage = Math.ceil(
+              self.currentPageData.pagination / self.pageCaseSize
             ))
           )
         )
