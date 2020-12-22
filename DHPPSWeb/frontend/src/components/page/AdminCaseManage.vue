@@ -441,7 +441,7 @@ export default {
           params: {
             userId: this.UserId,
             pageSize: 6,
-            page: self.currentPage,
+            page: self.currentCasePage,
           },
         })
         .then(

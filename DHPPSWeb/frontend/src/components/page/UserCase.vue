@@ -256,7 +256,7 @@ export default {
           params: {
             userId: 1,
             pageSize: 6,
-            page: self.currentPage,
+            page: self.currentCasePage,
           },
         })
         .then(
