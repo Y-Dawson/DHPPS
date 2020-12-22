@@ -1007,7 +1007,7 @@ def GetTopCityInfos(request):
             cityInfos = models.InitCityData.objects\
                         .filter(caseId__caseMode="地图模式")\
                         .values("cityName")\
-                        .annotate(cityCount=Count("cityId"))\
+                        .annotate(cityCount=Count("cityName"))\
                         .order_by('cityName')
 
             cityInfos = cityInfos.order_by('cityCount')[:6]
