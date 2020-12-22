@@ -135,13 +135,17 @@
                   class="demo-ruleForm"
                 >
                   <div class="demo-fit" style="text-align: center">
-                    <div class="block">
+                    <div class="block profile-img-edit" >
                       <el-avatar
                         shape="circle"
                         :size="70"
                         :fit="fill"
                         :src="Url"
                       ></el-avatar>
+                      <div class="p-image">
+                                                  <i class="ri-pencil-line upload-button"></i>
+                                                  <input class="file-upload" type="file" accept="image/*"/>
+                                               </div>
                     </div>
                   </div>
                   <el-form-item label="昵称" prop="name">
