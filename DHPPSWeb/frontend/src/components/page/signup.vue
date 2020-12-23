@@ -276,6 +276,7 @@ export default {
       var self = this;
       let data = new FormData();
         data.append("phoneNum", $("#phonenum").val());
+        data.append("requestType", "signUp");
       axios
         .post("/apis/backend/requestSmsCode/", data)
         .then(

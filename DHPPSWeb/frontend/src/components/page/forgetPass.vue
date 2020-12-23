@@ -184,7 +184,7 @@ export default {
       var self = this;
       let data = new FormData();
         data.append("phoneNum", $("#phonenum").val());
-        alert($("#phonenum").val())
+        data.append("requestType", "forgetPwd");
       axios
         .post("/apis/backend/requestSmsCode/", data)
         .then(
