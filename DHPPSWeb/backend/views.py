@@ -155,7 +155,7 @@ def Signin(request):
 
 
 # 登出函数视图
-# 从缓存获取对应session
+# 从redis获取对应session并删除
 # 登出成功，返回消息和200状态码
 # 登出失败，返回消息和404状态码
 def Logout(request):
@@ -217,8 +217,9 @@ def RequestSmsCode(request):
 
 # 注册函数视图
 # 从参数获取userName，phonenum,email,password,verifyCode
-# 登出成功，返回消息和200状态码
-# 登出失败，返回消息和404状态码
+# 验证判断其合法性，并创建对应数据存入数据库
+# 注册成功，返回消息和200状态码
+# 注册失败，返回消息和404状态码
 def Signup(request):
     if request.session.get('isLogin', None):
         # 登录状态不允许注册。
@@ -839,7 +840,7 @@ class ImageCodeView(View):
 
 
 # 返回所有案例信息
-# 获取所有管理员信息，分页器处理后发出
+# 根据caseId发送对应案例的所有相关信息，包括城市，城市位置，道路信息
 # 发送成功，返回消息和200状态码
 # 发送失败，返回消息和404状态码
 def GetCaseInfos(request):
@@ -898,9 +899,9 @@ def GetCaseInfos(request):
         return JsonResponse({"message": "请求方法未注册", "status": 404})
 
 
-# 返回所有管理员信息
+# 返回所有超级管理员信息
 # 获取分页信息
-# 获取所有管理员信息，分页器处理后发出
+# 获取所有超级管理员信息，分页器处理后发出
 # 发送成功，返回消息和200状态码
 # 发送失败，返回消息和404状态码
 def GetUserInfos(request):
@@ -933,9 +934,9 @@ def GetUserInfos(request):
         return JsonResponse({"message": "请求方法未注册", "status": 404})
 
 
-# 返回所有管理员信息
+# 返回所有普通用户信息
 # 获取分页信息
-# 获取所有管理员信息，分页器处理后发出
+# 获取所有普通用户信息，分页器处理后发出
 # 发送成功，返回消息和200状态码
 # 发送失败，返回消息和404状态码
 def GetGeneralUserInfos(request):
@@ -1074,10 +1075,9 @@ def GetSexNum(request):
 # 发送成功，返回消息和200状态码
 # 发送失败，返回消息和404状态码
 def GetUserCaseStat(request):
-    # if not request.session.get('isLogin', None):
-    #     return JsonResponse({"message": "你还未登录，获取用户案例统计信息需要先登录", "status": 404})
-    # el
-    if request.method == "GET":
+    if not request.session.get('isLogin', None):
+        return JsonResponse({"message": "你还未登录，获取用户案例统计信息需要先登录", "status": 404})
+    elif request.method == "GET":
         # 该接口无提交数据
         # 获取统计信息
         try:
