@@ -90,7 +90,7 @@ def GetIdentity(request):
         if request.method == "POST":
             userId = request.session.get('userId', None)
             authority = request.session.get('userAuthority', None)
-                          
+
             return JsonResponse({
                 "userId": userId,
                 "authority": authority,
@@ -178,8 +178,19 @@ def Logout(request):
 def RequestSmsCode(request):
     if request.method == "POST":
         phoneNum = request.POST.get('phoneNum', None)
+        requestType = request.POST.get('requestType', None)
         if phoneNum is None:
             return JsonResponse({"message": "电话号码不能为空", "status": 404})
+        if requestType is None:
+            return JsonResponse({"message": "请求类型不能为空", "status": 404})
+
+        samePhoneUser = models.PersonalProfile.objects.filter(phoneNumber=phoneNum)
+        if samePhoneUser:  # 手机号码已存在
+            if requestType == "signUp":
+                return JsonResponse({"message": "该手机号码已被注册，请使用别的手机号码！", "status": 404})
+        else:
+            if requestType == "forgetPwd":
+                return JsonResponse({"message": "该手机号码尚未注册！", "status": 404})
 
         redisClient = get_redis_connection('smsCode')
         if (redisClient.get(phoneNum+"Flag") is not None):
@@ -396,9 +407,7 @@ def SaveCase(request):
                     initInfect = int(value)
                     initTotalInfectedNum += initInfect
                 cityCount += 1
-            message = "开始进行案例保存"
-            status = 200
-            newcaseId = 0
+
             try:
                 # 新增案例
                 if (models.Accountinformation.objects.filter(userId=userId).exist()):
@@ -1057,6 +1066,52 @@ def GetSexNum(request):
             print('########################################################')
             return JsonResponse({"message": "信息获取失败，数据库出错", "status": 404})
         return JsonResponse({"TopcityInfos": jsonRes, "message": "信息获取成功", "status": 200})
+    else:
+        return JsonResponse({"message": "请求方法未注册", "status": 404})
+
+
+# 返回最近五个月每月新增用户数量和案例数量
+# 发送成功，返回消息和200状态码
+# 发送失败，返回消息和404状态码
+def GetUserCaseStat(request):
+    # if not request.session.get('isLogin', None):
+    #     return JsonResponse({"message": "你还未登录，获取用户案例统计信息需要先登录", "status": 404})
+    # el
+    if request.method == "GET":
+        # 该接口无提交数据
+        # 获取统计信息
+        try:
+            nowDate = timezone.now().date()
+            pastLimitDate = nowDate.replace(year=nowDate.year, month=(nowDate.month+7) % 12, day=1)
+
+            jsonList = []
+            for i in range(5):
+                accountCountInfo = models.AccountInformation.objects\
+                    .filter(createDate__gte=pastLimitDate)\
+                    .filter(createDate__lt=pastLimitDate.replace(month=nowDate.month % 12+1))\
+                    .aggregate(accountCount=Count("userId"))
+                caseCountInfo = models.CaseData.objects\
+                    .filter(caseCreateDate__gte=pastLimitDate)\
+                    .filter(caseCreateDate__lt=pastLimitDate.replace(month=nowDate.month % 12+1))\
+                    .aggregate(caseCount=Count("caseId"))
+
+                statInfoDict = {
+                    "date": pastLimitDate.strftime("%Y.%m"),
+                    "userCount": accountCountInfo["accountCount"],
+                    "caseCount": caseCountInfo["caseCount"]
+                    }
+                jsonList.append({**statInfoDict})
+                pastLimitDate = pastLimitDate.replace(month=nowDate.month % 12+1)
+            jsonRes = json.loads(json.dumps(jsonList, cls=DateEnconding))
+            print(jsonRes)
+        except Exception as e:
+            print('str(Exception):\t', str(Exception))
+            print('str(e):\t\t', str(e))
+            print('repr(e):\t', repr(e))
+            # print('e.message:\t', e.message)
+            print('########################################################')
+            return JsonResponse({"message": "信息获取失败，数据库出错", "status": 404})
+        return JsonResponse({"UserCaseStatInfos": jsonRes, "message": "信息获取成功", "status": 200})
     else:
         return JsonResponse({"message": "请求方法未注册", "status": 404})
 

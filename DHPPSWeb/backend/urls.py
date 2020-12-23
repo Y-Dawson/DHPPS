@@ -52,6 +52,7 @@ urlpatterns = [
     # 图表相关数据请求
     path('topCity/', views.GetTopCityInfos, name="topCity"),
     path('sexNum/', views.GetSexNum, name="sexNum"),
+    path('userCaseStat/', views.GetUserCaseStat, name="userCaseStat"),
     # 以下为对任意模型的增删改查列
 
     # 关于accountInfo的请求：
