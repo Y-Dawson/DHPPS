@@ -23,6 +23,7 @@ from django.forms.models import model_to_dict
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 import datetime
+from dateutil.relativedelta import relativedelta
 import secrets
 # Create your views here.
 
@@ -344,7 +345,7 @@ def ForgetPwd(request):
             # 获取失败则捕捉错误
 
             redisClient = get_redis_connection('smsCode')
-            verifyCodeInCache = redisClient.get(phoneNum)
+            verifyCodeInCache = redisClient.get("phonenum")
             print(verifyCodeInCache)
             if verifyCodeInCache is None:
                 return JsonResponse({"message": "尚未申请短信验证码", "status": 404})
@@ -1075,24 +1076,25 @@ def GetSexNum(request):
 # 发送成功，返回消息和200状态码
 # 发送失败，返回消息和404状态码
 def GetUserCaseStat(request):
-    if not request.session.get('isLogin', None):
-        return JsonResponse({"message": "你还未登录，获取用户案例统计信息需要先登录", "status": 404})
-    elif request.method == "GET":
+    # if not request.session.get('isLogin', None):
+    #     return JsonResponse({"message": "你还未登录，获取用户案例统计信息需要先登录", "status": 404})
+    # el
+    if request.method == "GET":
         # 该接口无提交数据
         # 获取统计信息
         try:
             nowDate = timezone.now().date()
-            pastLimitDate = nowDate.replace(year=nowDate.year, month=(nowDate.month+7) % 12, day=1)
+            pastLimitDate = nowDate + relativedelta(months=-5)
 
             jsonList = []
             for i in range(5):
                 accountCountInfo = models.AccountInformation.objects\
                     .filter(createDate__gte=pastLimitDate)\
-                    .filter(createDate__lt=pastLimitDate.replace(month=nowDate.month % 12+1))\
+                    .filter(createDate__lt=pastLimitDate + relativedelta(months=+1))\
                     .aggregate(accountCount=Count("userId"))
                 caseCountInfo = models.CaseData.objects\
                     .filter(caseCreateDate__gte=pastLimitDate)\
-                    .filter(caseCreateDate__lt=pastLimitDate.replace(month=nowDate.month % 12+1))\
+                    .filter(caseCreateDate__lt=pastLimitDate + relativedelta(months=+1))\
                     .aggregate(caseCount=Count("caseId"))
 
                 statInfoDict = {
@@ -1101,7 +1103,7 @@ def GetUserCaseStat(request):
                     "caseCount": caseCountInfo["caseCount"]
                     }
                 jsonList.append({**statInfoDict})
-                pastLimitDate = pastLimitDate.replace(month=nowDate.month % 12+1)
+                pastLimitDate = pastLimitDate + relativedelta(months=+1)
             jsonRes = json.loads(json.dumps(jsonList, cls=DateEnconding))
             print(jsonRes)
         except Exception as e:
