@@ -2,6 +2,9 @@
   <div id="simulationMap">
     <header>
       <h1>数据可视化</h1>
+      <div class="stop">
+        <button @click="stopSimulation">停止模拟</button>
+      </div>
     </header>
 
     <section class="mainbox">
@@ -67,6 +70,15 @@ export default {
 
       citynamelist: [],
       linemap_information: [],
+      piemap_information: [],
+      map_information: [],
+
+      userId: 0,
+      caseName: 0,
+      citynum: 0,
+      roadnum: 0,
+      city_inf: [],
+      road_inf: [],
     };
   },
   mounted: function () {
@@ -80,6 +92,13 @@ export default {
     console.log("道路信息：", this.params.InitRoadData);
     console.log("每日病例：", this.params.DailyInfected.data.DailyForecastData);
     var foreData = this.params.DailyInfected.data.DailyForecastData;
+
+    this.userId = this.params.userId;
+    this.caseName = this.params.caseName;
+    this.citynum = this.params.citynum;
+    this.roadnum = this.params.roadnum;
+    this.city_inf = this.params.InitCityData;
+    this.road_inf = this.params.InitRoadData;
 
     for (var j = 0; j < parseInt(this.params.citynum); j++) {
       this.total_people += parseInt(foreData[364][j]["population"]);
@@ -98,7 +117,7 @@ export default {
     console.log("citynamelist", this.citynamelist);
 
     for (var j in this.citynamelist) {
-      var newa = new Array();
+      var newa = {};
       newa["name"] = this.citynamelist[j];
       newa["type"] = "line";
       var newb = new Array();
@@ -119,19 +138,60 @@ export default {
 
       newa["smooth"] = "true";
 
-      console.log("newa",newa);
-
       this.linemap_information.push(newa);
     }
 
-    alert(this.linemap_information);
-    console.log("series",this.linemap_information);
+    console.log("series", this.linemap_information);
+
+    for (var j in this.citynamelist) {
+      var newc = {};
+      newc["value"] = foreData[364][j]["infected"];
+      newc["name"] = this.citynamelist[j];
+      this.piemap_information.push(newc);
+    }
+
+    console.log("pieinf", this.piemap_information);
+
+    console.log("road_inf", this.params.InitRoadData);
+
+    var road_data = [];
+    for (var j in this.params.InitRoadData) {
+      var newa = new Array();
+      var c1 = {};
+      var c2 = {};
+      var te = this.params.InitRoadData[j].split(":");
+      var tte1 = te[1].split(",");
+      var tte2 = te[2].split(",");
+      console.log("te", te);
+      c1["name"] = tte1[0];
+      c2["name"] = tte2[0];
+      c2["value"] = parseInt(te[3]);
+      newa.push(c1);
+      newa.push(c2);
+      console.log("newa", newa);
+      road_data.push(newa);
+    }
+
+    console.log("road_data", road_data);
+    // this.map_information.push(road_data);
+    this.map_information = road_data;
+    console.log("mapinf", this.map_information);
+
+    var YCData = [
+      [{ name: "拉萨" }, { name: "济南", value: 100 }],
+      [{ name: "拉萨" }, { name: "哈尔滨", value: 100 }],
+      [{ name: "银川" }, { name: "上海", value: 100 }],
+      [{ name: "银川" }, { name: "西安", value: 100 }],
+      [{ name: "银川" }, { name: "西宁", value: 100 }],
+    ];
+
+    console.log("ycdata", YCData);
 
     this.drawLine();
 
     this.drawPie();
 
-    this.drawMap();
+    this.drawMap(this.params.InitRoadData);
   },
   methods: {
     drawLine() {
@@ -208,25 +268,8 @@ export default {
           },
         },
         series: this.linemap_information,
-        // [
-        //   {
-        //     name: "济南",
-        //     type: "line",
-        //     data: [120, 132, 101, 134, 90, 230, 210, 120, 130, 150, 180, 220],
-        //     smooth: true,
-        //   },
-        //   {
-        //     name: "成都",
-        //     type: "line",
-        //     data: [220, 182, 191, 234, 290, 330, 310, 330, 240, 260, 280, 500],
-        //     smooth: true,
-        //   },
-        // ],
       };
       myChart.setOption(option);
-      // myChart.setOption({
-      //   series: this.linemap_information
-      // });
 
       window.addEventListener("resize", function () {
         myChart.resize();
@@ -274,16 +317,7 @@ export default {
             labelLine: {
               length: 10,
             },
-            data: [
-              { value: 10, name: "rose1" },
-              { value: 5, name: "rose2" },
-              { value: 15, name: "rose3" },
-              { value: 25, name: "rose4" },
-              { value: 20, name: "rose5" },
-              { value: 35, name: "rose6" },
-              { value: 30, name: "rose7" },
-              { value: 40, name: "rose8" },
-            ],
+            data: this.piemap_information,
           },
         ],
       };
@@ -294,117 +328,9 @@ export default {
       });
     },
 
-    drawMap() {
+    drawMap(mapData) {
       var myChart = echarts.init(document.getElementById("map"));
       var geoCoordMap = {
-        // 上海: [121.4648, 31.2891],
-        // 丽水: [119.5642, 28.1854],
-        // 乌鲁木齐: [87.9236, 43.5883],
-        // 佛山: [112.8955, 23.1097],
-        // 保定: [115.0488, 39.0948],
-        // 兰州: [103.5901, 36.3043],
-        // 包头: [110.3467, 41.4899],
-        // 北京: [116.4551, 40.2539],
-        // 北海: [109.314, 21.6211],
-        // 南京: [118.8062, 31.9208],
-        // 南宁: [108.479, 23.1152],
-        // 南昌: [116.0046, 28.6633],
-        // 南通: [121.1023, 32.1625],
-        // 厦门: [118.1689, 24.6478],
-        // 台州: [121.1353, 28.6688],
-        // 合肥: [117.29, 32.0581],
-        // 呼和浩特: [111.4124, 40.4901],
-        // 咸阳: [108.4131, 34.8706],
-        // 哈尔滨: [127.9688, 45.368],
-        // 唐山: [118.4766, 39.6826],
-        // 嘉兴: [120.9155, 30.6354],
-        // 大同: [113.7854, 39.8035],
-        // 大连: [122.2229, 39.4409],
-        // 天津: [117.4219, 39.4189],
-        // 太原: [112.3352, 37.9413],
-        // 威海: [121.9482, 37.1393],
-        // 宁波: [121.5967, 29.6466],
-        // 宝鸡: [107.1826, 34.3433],
-        // 宿迁: [118.5535, 33.7775],
-        // 常州: [119.4543, 31.5582],
-        // 广州: [113.5107, 23.2196],
-        // 廊坊: [116.521, 39.0509],
-        // 延安: [109.1052, 36.4252],
-        // 张家口: [115.1477, 40.8527],
-        // 徐州: [117.5208, 34.3268],
-        // 德州: [116.6858, 37.2107],
-        // 惠州: [114.6204, 23.1647],
-        // 成都: [103.9526, 30.7617],
-        // 扬州: [119.4653, 32.8162],
-        // 承德: [117.5757, 41.4075],
-        // 拉萨: [91.1865, 30.1465],
-        // 无锡: [120.3442, 31.5527],
-        // 日照: [119.2786, 35.5023],
-        // 昆明: [102.9199, 25.4663],
-        // 杭州: [119.5313, 29.8773],
-        // 枣庄: [117.323, 34.8926],
-        // 柳州: [109.3799, 24.9774],
-        // 株洲: [113.5327, 27.0319],
-        // 武汉: [114.3896, 30.6628],
-        // 汕头: [117.1692, 23.3405],
-        // 江门: [112.6318, 22.1484],
-        // 沈阳: [123.1238, 42.1216],
-        // 沧州: [116.8286, 38.2104],
-        // 河源: [114.917, 23.9722],
-        // 泉州: [118.3228, 25.1147],
-        // 泰安: [117.0264, 36.0516],
-        // 泰州: [120.0586, 32.5525],
-        // 济南: [117.1582, 36.8701],
-        // 济宁: [116.8286, 35.3375],
-        // 海口: [110.3893, 19.8516],
-        // 淄博: [118.0371, 36.6064],
-        // 淮安: [118.927, 33.4039],
-        // 深圳: [114.5435, 22.5439],
-        // 清远: [112.9175, 24.3292],
-        // 温州: [120.498, 27.8119],
-        // 渭南: [109.7864, 35.0299],
-        // 湖州: [119.8608, 30.7782],
-        // 湘潭: [112.5439, 27.7075],
-        // 滨州: [117.8174, 37.4963],
-        // 潍坊: [119.0918, 36.524],
-        // 烟台: [120.7397, 37.5128],
-        // 玉溪: [101.9312, 23.8898],
-        // 珠海: [113.7305, 22.1155],
-        // 盐城: [120.2234, 33.5577],
-        // 盘锦: [121.9482, 41.0449],
-        // 石家庄: [114.4995, 38.1006],
-        // 福州: [119.4543, 25.9222],
-        // 秦皇岛: [119.2126, 40.0232],
-        // 绍兴: [120.564, 29.7565],
-        // 聊城: [115.9167, 36.4032],
-        // 肇庆: [112.1265, 23.5822],
-        // 舟山: [122.2559, 30.2234],
-        // 苏州: [120.6519, 31.3989],
-        // 莱芜: [117.6526, 36.2714],
-        // 菏泽: [115.6201, 35.2057],
-        // 营口: [122.4316, 40.4297],
-        // 葫芦岛: [120.1575, 40.578],
-        // 衡水: [115.8838, 37.7161],
-        // 衢州: [118.6853, 28.8666],
-        // 西宁: [101.4038, 36.8207],
-        // 西安: [109.1162, 34.2004],
-        // 贵阳: [106.6992, 26.7682],
-        // 连云港: [119.1248, 34.552],
-        // 邢台: [114.8071, 37.2821],
-        // 邯郸: [114.4775, 36.535],
-        // 郑州: [113.4668, 34.6234],
-        // 鄂尔多斯: [108.9734, 39.2487],
-        // 重庆: [107.7539, 30.1904],
-        // 金华: [120.0037, 29.1028],
-        // 铜川: [109.0393, 35.1947],
-        // 银川: [106.3586, 38.1775],
-        // 镇江: [119.4763, 31.9702],
-        // 长春: [125.8154, 44.2584],
-        // 长沙: [113.0823, 28.2568],
-        // 长治: [112.8625, 36.4746],
-        // 阳泉: [113.4778, 38.0951],
-        // 青岛: [120.4651, 36.3373],
-        // 韶关: [113.7964, 24.7028],
         上海: [121.4648, 31.2891],
         乌鲁木齐: [87.9236, 43.5883],
         保定: [115.0488, 39.0948],
@@ -438,29 +364,68 @@ export default {
         西宁: [101.4038, 36.8207],
       };
 
-      var XAData = [
-        [{ name: "西安" }, { name: "拉萨", value: 100 }],
-        [{ name: "西安" }, { name: "上海", value: 100 }],
-        [{ name: "西安" }, { name: "广州", value: 100 }],
-        [{ name: "西安" }, { name: "西宁", value: 100 }],
-        [{ name: "西安" }, { name: "银川", value: 100 }],
-      ];
+      var road_data = [];
+      for (var j in mapData) {
+        var newa = new Array();
+        var newb = new Array();
+        var c1 = {};
+        var c2 = {};
+        var c3 = {};
+        var c4 = {};
 
-      var XNData = [
-        [{ name: "西宁" }, { name: "北京", value: 100 }],
-        [{ name: "西宁" }, { name: "上海", value: 100 }],
-        [{ name: "西宁" }, { name: "广州", value: 100 }],
-        [{ name: "西宁" }, { name: "西安", value: 100 }],
-        [{ name: "西宁" }, { name: "银川", value: 100 }],
-      ];
+        var te = this.params.InitRoadData[j].split(":");
+        var tte1 = te[1].split(",");
+        var tte2 = te[2].split(",");
+        console.log("te", te);
+        c1["name"] = tte1[0];
+        c2["name"] = tte2[0];
+        c2["value"] = parseInt(te[3]);
+        newa.push(c1);
+        newa.push(c2);
+        console.log("newa", newa);
+        road_data.push(newa);
 
-      var YCData = [
-        [{ name: "拉萨" }, { name: "济南", value: 100 }],
-        [{ name: "拉萨" }, { name: "哈尔滨", value: 100 }],
-        [{ name: "银川" }, { name: "上海", value: 100 }],
-        [{ name: "银川" }, { name: "西安", value: 100 }],
-        [{ name: "银川" }, { name: "西宁", value: 100 }],
-      ];
+        c3["name"] = tte2[0];
+        c4["name"] = tte1[0];
+        c4["value"] = parseInt(te[3]);
+        newb.push(c3);
+        newb.push(c4);
+        console.log("newb", newb);
+        road_data.push(newb);
+      }
+
+      var XAData = road_data;
+      console.log("mapData", mapData);
+      console.log("XAData", XAData);
+
+      // var XAData = [
+      //   [{ name: "西安" }, { name: "拉萨", value: 100 }],
+      //   [{ name: "西安" }, { name: "上海", value: 100 }],
+      //   [{ name: "西安" }, { name: "广州", value: 100 }],
+      //   [{ name: "西安" }, { name: "西宁", value: 100 }],
+      //   [{ name: "西安" }, { name: "银川", value: 100 }],
+      //   [{ name: "西宁" }, { name: "北京", value: 100 }],
+      //   [{ name: "西宁" }, { name: "上海", value: 100 }],
+      //   [{ name: "西宁" }, { name: "广州", value: 100 }],
+      //   [{ name: "西宁" }, { name: "西安", value: 100 }],
+      //   [{ name: "西宁" }, { name: "银川", value: 100 }],
+      // ];
+
+      // var XNData = [
+      //   [{ name: "西宁" }, { name: "北京", value: 100 }],
+      //   [{ name: "西宁" }, { name: "上海", value: 100 }],
+      //   [{ name: "西宁" }, { name: "广州", value: 100 }],
+      //   [{ name: "西宁" }, { name: "西安", value: 100 }],
+      //   [{ name: "西宁" }, { name: "银川", value: 100 }],
+      // ];
+
+      // var YCData = [
+      //   [{ name: "拉萨" }, { name: "济南", value: 100 }],
+      //   [{ name: "拉萨" }, { name: "哈尔滨", value: 100 }],
+      //   [{ name: "银川" }, { name: "上海", value: 100 }],
+      //   [{ name: "银川" }, { name: "西安", value: 100 }],
+      //   [{ name: "银川" }, { name: "西宁", value: 100 }],
+      // ];
 
       var planePath =
         "path://M1705.06,1318.313v-89.254l-319.9-221.799l0.073-208.063c0.521-84.662-26.629-121.796-63.961-121.491c-37.332-0.305-64.482,36.829-63.961,121.491l0.073,208.063l-319.9,221.799v89.254l330.343-157.288l12.238,241.308l-134.449,92.931l0.531,42.034l175.125-42.917l175.125,42.917l0.531-42.034l-134.449-92.931l12.238-241.308L1705.06,1318.313z";
@@ -480,7 +445,7 @@ export default {
             });
           }
         }
-        console.log("res[1]:", res[1]);
+        // console.log("res[1]:", res[1]);
         return res;
       };
 
@@ -488,8 +453,8 @@ export default {
       var series = [];
       [
         ["西安", XAData],
-        ["西宁", XNData],
-        ["银川", YCData],
+        // ["西宁", XNData],
+        // ["银川", YCData],
       ].forEach(function (item, i) {
         series.push(
           {
@@ -630,6 +595,22 @@ export default {
         myChart.resize();
       });
     },
+
+    stopSimulation() {
+      this.$router.push({
+        path: "/settingMap",
+        query: {
+          params: JSON.stringify({
+            userId: this.userId,
+            caseName: this.caseName,
+            citynum: this.citynum,
+            roadnum: this.roadnum,
+            InitCityData: this.city_inf,
+            InitRoadData: this.road_inf,
+          }),
+        },
+      });
+    },
   },
 };
 </script>
@@ -680,6 +661,19 @@ h2 {
   color: #fff;
   font-size: 20px;
   font-weight: 400;
+}
+
+header .stop {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+}
+
+.stop button {
+  background-color: rgb(0, 42, 242);
+  color: white;
+  font-size: 20px;
+  border: none;
 }
 
 .mainbox {
