@@ -2,6 +2,9 @@
   <div id="settingMap">
     <header>
       <h1>地图模式</h1>
+      <div class="toDIY">
+        <button @click="toDIYModel">自定模式</button>
+      </div>
     </header>
 
     <section class="mainbox">
@@ -125,6 +128,7 @@ export default {
   data() {
     return {
       userId: 1,
+      caseName: 0,
 
       city_po: [],
       road_di: [],
@@ -158,6 +162,43 @@ export default {
     };
   },
   mounted: function () {
+    this.params = JSON.parse(this.$route.query.params);
+
+    console.log("用户ID：", this.params.userId);
+    console.log("案例名：", this.params.caseName);
+    console.log("城市数目：", this.params.citynum);
+    console.log("道路数目：", this.params.roadnum);
+    console.log("初始城市信息：", this.params.InitCityData);
+    console.log("道路信息：", this.params.InitRoadData);
+
+    if (this.params.caseName != 999) {
+      console.log("从地图模拟页面返回");
+
+      var cn, totp, initinf;
+      for (var i in this.params.InitCityData) {
+        var te = this.params.InitCityData[i].split(":");
+        var tte1 = te[1].split(",");
+        var tte2 = te[2].split(",");
+        cn = tte1[0];
+        totp = tte2[0];
+        initinf = te[3];
+        var s = cn + ":总人口:" + totp + ",初始感染数:" + initinf;
+        this.city_po.push(s);
+      }
+
+      var cn1,cn2,vo;
+      for(var i in this.params.InitRoadData){
+        var tr=this.params.InitRoadData[i].split(":");
+        var ttr1 = tr[1].split(",");
+        var ttr2 = tr[2].split(",");
+        cn1 = ttr1[0];
+        cn2 = ttr2[0];
+        vo = tr[3];
+        var s = cn1 + "-" + cn2 + ":" + vo;
+        this.road_di.push(s);
+      }
+    }
+
     this.drawMap();
   },
   methods: {
@@ -579,6 +620,18 @@ export default {
         })
         .catch((_) => {});
     },
+
+    toDIYModel(){
+      this.$router.push({
+        path: "/setting",
+        query: {
+          params: JSON.stringify({
+            userId: this.userId,
+            caseName: 999,
+          }),
+        },
+      });
+    },
   },
 };
 </script>
@@ -607,7 +660,7 @@ li {
 header {
   position: relative;
   height: 1.25rem;
-  background: url(../../assets/img/head_bg.png) no-repeat;
+  background: url("../../assets/img/head_bg.png") no-repeat;
   height: 50px;
   width: 100%;
   background-size: 100% 100%;
@@ -617,6 +670,19 @@ h1 {
   font-style: 0.475rem;
   color: #fff;
   text-align: center;
+}
+
+header .toDIY {
+  position: absolute;
+  left: 5px;
+  top: 5px;
+}
+
+.toDIY button {
+  background-color: rgb(149, 154, 169);
+  color: white;
+  font-size: 20px;
+  border: none;
 }
 
 .mainbox {
@@ -645,7 +711,7 @@ h1 {
   padding: 0 15px 40px;
   margin-bottom: 15px;
   border: 1px solid rgba(25, 186, 139, 0.17);
-  background: url(../../assets/img/line.png) rgba(255, 255, 255, 0.04);
+  background: url("../../assets/img/line.png") rgba(255, 255, 255, 0.04);
 }
 
 .mainbox .column .panel::before {
@@ -711,7 +777,7 @@ h1 {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: url(../../assets/img/map.png);
+  background: url("../../assets/img/map.png");
   background-size: 100% 100%;
   opacity: 0.3;
 }
@@ -723,7 +789,7 @@ h1 {
   transform: translate(-50%, -50%);
   width: 370px;
   height: 370px;
-  background: url(../../assets/img/lbx.png);
+  background: url("../../assets/img/lbx.png");
   background-size: 100% 100%;
   animation: rotate1 15s linear infinite;
   opacity: 0.6;
@@ -736,7 +802,7 @@ h1 {
   transform: translate(-50%, -50%);
   width: 335px;
   height: 335px;
-  background: url(../../assets/img/jt.png);
+  background: url("../../assets/img/jt.png");
   background-size: 100% 100%;
   animation: rotate2 15s linear infinite;
   opacity: 0.6;
