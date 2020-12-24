@@ -337,7 +337,7 @@ def ForgetPwd(request):
         return JsonResponse({"message": "你已经登录，忘记密码需先退出", "status": 404})
     elif request.method == "POST":
         # 从参数获取phoneNum和password
-        phoneNum = request.POST.get('phonenum', None)
+        phoneNum = request.POST.get('phoneNum', None)
         verifyCode = request.POST.get('verifyCode', None)
         newPassword = request.POST.get('newPassword', None)
         if phoneNum and verifyCode and newPassword:
@@ -345,7 +345,7 @@ def ForgetPwd(request):
             # 获取失败则捕捉错误
 
             redisClient = get_redis_connection('smsCode')
-            verifyCodeInCache = redisClient.get("phonenum")
+            verifyCodeInCache = redisClient.get(phoneNum)
             print(verifyCodeInCache)
             if verifyCodeInCache is None:
                 return JsonResponse({"message": "尚未申请短信验证码", "status": 404})
