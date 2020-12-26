@@ -112,7 +112,7 @@ export default {
             query:{
               params:JSON.stringify({
                 userId:this.userId,
-                casename: 999,
+                caseName: 999,
                 userAuthority:this.userAuthority
               })
             },

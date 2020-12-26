@@ -1136,7 +1136,7 @@ class CaseViewSet(viewsets.ModelViewSet):
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         if (instance):
-            models.AccountInformation.objects.filter(userId=instance.userId).update(caseNumber=F("caseNumber") - 1)
+            models.AccountInformation.objects.filter(userId=instance.userId.userId).update(caseNumber=F("caseNumber") - 1)
         return super(CaseViewSet, self).destroy(request, *args, **kwargs)
 
 
