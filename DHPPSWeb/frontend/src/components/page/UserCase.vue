@@ -277,9 +277,9 @@ export default {
     Edit: function (id) {
       var self = this;
       let data = new FormData();
-      data.append("caseid", id);
+      data.append("caseId", id);
       axios
-        .post("http://127.0.0.1:8000/backend/getCaseInfo/", data)
+        .post("apis/backend/getCaseInfo/", data)
         .then((response) => {
           self.cases = response.data.cases;
           console.log(JSON.stringify(self.cases));
@@ -329,12 +329,12 @@ export default {
             query: {
               params: JSON.stringify({
                 userId: this.userId,
-                casename: this.cases.casename,
+                caseName: this.cases.casename,
                 citynum: this.cases.citynum,
                 roadnum: this.cases.roadnum,
-                Initcitydata: city_inf,
-                Initroaddata: road_inf,
-                Cityposition: city_pos,
+                InitCityData: city_inf,
+                InitRoadData: road_inf,
+                CityPosition: city_pos,
               }),
             },
           });
@@ -346,13 +346,14 @@ export default {
     },
     DeleteCaseContent: function (id) {
       var self = this;
+      // alert(id);
       axios
-        .delete("http://127.0.0.1:8000/backend/case/" + id, {})
+        .delete("apis/backend/case/" + id+ "/")
         .then(
           (response) => (self.currentPageData = response.data)
         )
         .catch(function (error) {
-          alert('数据请求失败')
+          alert('数据fas失败')
         });
     },
     Open(id) {

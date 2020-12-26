@@ -478,7 +478,7 @@ export default {
     getMyContent: function () {
       var self = this;
       axios
-        .get("/apis/backend/profile/25/")
+        .get("/apis/backend/profile/1/")
         .then(
           (response) => (
             (self.MyContent = response.data), (this.Url = self.MyContent.avatar)
@@ -494,7 +494,7 @@ export default {
       var uname = $("#inputname").val();
       alert($("#inputname").val());
       axios
-        .put("/apis/backend/profile/25/", {
+        .put("/apis/backend/profile/1/", {
           userName: $("#inputname").val(),
           // phonenumber: $("#inputphone").val(),
           birth: this.value1,
