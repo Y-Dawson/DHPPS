@@ -221,10 +221,11 @@
                 <div
                   class="box-card-group"
                   style="
-                    margin-left: 60px;
+                    margin-left: 100px;
                     margin-top: 20px;
+                    margin-bottom:10px;
                     width: auto;
-                    height: 450px;
+                    height: 480px;
                     text-align: left;
                   "
                 >
@@ -239,12 +240,12 @@
                           class="layui-icon layui-icon-template-1"
                           style="
                             margin-right: 10px;
-                            font-size: 40px;
+                            font-size: 20px;
                             color: rgb(173, 173, 173);
                           "
                         ></i>
                         <span id="returnContent">{{ item.caseName }}</span>
-                        <div
+                        <!-- <div
                           style="
                             font-size: 8px;
                             line-height: 20px;
@@ -255,7 +256,7 @@
                           <el-button
                             id="delete"
                             type="text"
-                            style="font-size: 8px; color: #55587e"
+                            style="font-size: 8px; color: #55587e;display:inline-block;"
                             @click="edit(item.caseId)"
                             >进入编辑</el-button
                           >
@@ -263,11 +264,11 @@
                           <el-button
                             id="delete"
                             type="text"
-                            style="font-size: 8px; color: rgb(221, 0, 0)"
+                            style="font-size: 8px; color: rgb(221, 0, 0);display:inline-block;"
                             @click="open(item.caseId)"
                             >删除</el-button
                           >
-                        </div>
+                        </div> -->
                       </div>
                       <dl class="box-text">
                         <!-- <span>{{casenum}}</span> -->
@@ -568,15 +569,16 @@ export default {
 /* 案例块文字内容 */
 .box-text {
   margin-left: 5px;
-  line-height: 18px;
-  font-size: 12px;
+  line-height: 20px;
+  font-size: 14px;
   color: rgb(71, 71, 71);
 }
 /* 案例块样式 */
 .box-card {
-  width: 240px;
-  float: left;
-  margin-right: 50px;
+  border-radius: 14px;
+  width: 300px;
+  /* float: left; */
+  margin-right: 180px;
   margin-bottom: 20px;
 }
 .reset {

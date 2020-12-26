@@ -255,7 +255,7 @@ export default {
       axios
         .get("/apis/backend/case/", {
           params: {
-            userId: 1,
+            userId: 12,
             pageSize: 6,
             page: self.currentCasePage,
           },

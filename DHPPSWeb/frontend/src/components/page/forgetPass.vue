@@ -209,13 +209,14 @@ export default {
       axios
         .post('/apis/backend/forgetPwd/', data)
         .then(response => (
+          alert(JSON.stringify(response.data) ),
           self.returnData = response.data,
           self.returnmessage=response.data.message,
           // alert(self.returnmessage),
           self.skip()
         ))
         .catch(function (error) {
-          alert(JSON.stringify(error.response));
+          alert("获取失败");
           console.log(error.response);
         });
     },

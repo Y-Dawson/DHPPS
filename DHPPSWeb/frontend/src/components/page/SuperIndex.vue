@@ -89,7 +89,7 @@
                     alt="user"
                   />
                   <div class="caption">
-                    <h6 class="mb-0 line-height">{{ MyContent.username }}</h6>
+                    <h6 class="mb-0 line-height">{{ MyContent.userName }}</h6>
                   </div>
                 </a>
               </li>
@@ -211,6 +211,7 @@ export default {
       AdminId: "25",
       sexData: [],
       cityData: [],
+      userCaseData: [],
       chartRingData: {
         columns: ["性别", "用户数量"],
         rows: [],
@@ -221,13 +222,7 @@ export default {
       },
       chartHistogramData: {
         columns: ["日期", "用户数量", "案例数量"],
-        rows: [
-          { 日期: "2020.09", 用户数量: 1393, 案例数量: 1093 },
-          { 日期: "2020.10", 用户数量: 3530, 案例数量: 3230 },
-          { 日期: "2020.11", 用户数量: 3981, 案例数量: 4281 },
-          { 日期: "2020.12", 用户数量: 4233, 案例数量: 5212 },
-          { 日期: "2021.01", 用户数量: 5124, 案例数量: 6712 },
-        ],
+        rows: [],
       },
       chartRingSettings: {
         radius: ["60px", "80px"],
@@ -282,6 +277,7 @@ export default {
     this.getMyContent();
     this.getSexData();
     this.getCityData();
+    this.getUserCaseData();
   },
   methods: {
     getMyContent: function () {
@@ -339,6 +335,23 @@ export default {
           alert("数据请求失败wdnmd");
         });
     },
+    getUserCaseData: function() {
+      var self=this;
+      axios
+        .get("/apis/backend/userCaseStat/")
+        .then((response)=>{
+          this.userCaseData=response.data.UserCaseStatInfos;
+          //通过遍历DataShow分别给columns 中的维度和指标 赋值；
+          for (var i = 0; i < this.userCaseData.length; i++) {
+            this.chartHistogramData.rows.push({
+              //注意，由于我后端createTime该字段直接返回是一个时间戳，所以此处用到了 一个时间转换插件moment.js
+              时间: this.userCaseData[i].date,
+              用户数量: this.userCaseData[i].userCount,
+              案例数量: this.userCaseData[i].caseCount,
+            });
+          }
+        })
+    }
   },
 };
 </script>
