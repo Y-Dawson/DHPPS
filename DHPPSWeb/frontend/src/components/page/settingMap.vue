@@ -62,6 +62,12 @@
             <option value="长沙">长沙</option>
             <option value="北京">北京</option>
             <option value="上海">上海</option>
+            <option value="广州">广州</option>
+            <option value="福州">福州</option>
+            <option value="拉萨">拉萨</option>
+            <option value="长春">长春</option>
+            <option value="银川">银川</option>
+            <option value="南京">南京</option>
           </select>
         </el-form-item>
         <el-form-item label="总人口" prop="to_pop" class="e_inp">
@@ -115,9 +121,9 @@
     </el-dialog>
   </div>
 </template>
-
+<script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
 <script>
-import { flexible } from "../../assets/js/flexible.js";
+// import { flexible } from "../../assets/js/flexible.js";
 import { jquery } from "../../assets/js/jquery.js";
 var echarts = require("echarts");
 import "../../../node_modules/echarts/lib/chart/map/china.js";
@@ -161,7 +167,9 @@ export default {
       },
     };
   },
+
   mounted: function () {
+    console.log("地图模式初始化");
     this.params = JSON.parse(this.$route.query.params);
 
     console.log("用户ID：", this.params.userId);
@@ -201,6 +209,7 @@ export default {
 
     this.drawMap();
   },
+
   methods: {
     drawMap() {
       var myChart = echarts.init(document.getElementById("map"));

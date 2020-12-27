@@ -112,7 +112,7 @@ export default {
             query:{
               params:JSON.stringify({
                 userId:this.userId,
-                casename: 999,
+                caseName: 999,
                 userAuthority:this.userAuthority
               })
             },
@@ -120,7 +120,7 @@ export default {
         }
         else if(this.userAuthority=="管理员"){
           this.$router.push({
-            path:'/AdminUserManage',
+            path:'/AdminIndex',
             query:{
               params:JSON.stringify({
                 userId:this.userId,
@@ -131,7 +131,7 @@ export default {
         }
         else if(this.userAuthority=="超级管理员"){
           this.$router.push({
-            path:'/SuperUserManage',
+            path:'/SuperIndex',
             query:{
               params:JSON.stringify({
                 userId:this.userId,
@@ -196,7 +196,7 @@ export default {
               params:JSON.stringify({
                 userId:this.userId,
                 userAuthority:this.userAuthority,
-                casename: 999
+                caseName: 999
               })
             },
           });

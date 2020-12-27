@@ -255,7 +255,7 @@ export default {
       axios
         .get("/apis/backend/case/", {
           params: {
-            userId: 1,
+            userId: 12,
             pageSize: 6,
             page: self.currentCasePage,
           },
@@ -328,7 +328,7 @@ export default {
             path: "/setting",
             query: {
               params: JSON.stringify({
-                userId: this.userId,
+                userId: 1,
                 caseName: this.cases.casename,
                 citynum: this.cases.citynum,
                 roadnum: this.cases.roadnum,
@@ -365,7 +365,7 @@ export default {
         .then(() => {
           this.DeleteCaseContent(id),
             this.GetCaseContent(),
-            this.reload(),
+            // this.reload(),
             this.$message({
               type: "success",
               message: "删除成功!",
@@ -373,10 +373,10 @@ export default {
           this.GetCaseContent();
         })
         .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消删除",
-          });
+          // this.$message({
+          //   type: "info",
+          //   message: "已取消删除",
+          // });
         });
     },
   },
@@ -398,11 +398,7 @@ export default {
   text-align: center;
   margin: 10px 300px;
 }
-.paginate {
-  /* margin-top: 20px; */
-  /* margin-left: 200px; */
-  /* left:50% */
-}
+
 /* 案例块文字内容 */
 .box-text {
   margin-left: 5px;

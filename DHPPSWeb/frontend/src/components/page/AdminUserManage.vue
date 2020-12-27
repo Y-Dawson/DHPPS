@@ -82,9 +82,8 @@
                   class="search-toggle iq-waves-effect d-flex align-items-center"
                 >
                   <img
-                    :src="AdminUrl"
+                    :src="MyContent.avatar"
                     class="img-fluid rounded mr-3"
-                    alt="user"
                   />
                   <div class="caption">
                     <h6 class="mb-0 line-height">{{ MyContent.userName }}</h6>
@@ -135,6 +134,7 @@
                               <img
                                 :src="item.avatar"
                                 class="img-fluid rounded mr-3"
+                                alt="user"
                               />
                             </div>
                           </td>
@@ -389,6 +389,7 @@ export default {
         })
         .then(
           (response) => (
+            alert(JSON.stringify(response.data.data)),
             (this.content = response.data.data),
             (this.paginate = response.data.pagination),
             (this.pageSize = response.data.pageSize),
