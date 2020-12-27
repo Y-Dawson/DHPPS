@@ -282,8 +282,8 @@ def Signup(request):
                 )
                 logger.info(json.dumps(newLoginData, cls=DateEnconding))
                 logger.info(json.dumps(newUser, cls=DateEnconding))
-                redisClient.setex(phoneNum, 1, 0)
-                redisClient.setex(phoneNum+"Flag", 1, 0)
+                redisClient.delete(phoneNum)
+                redisClient.delete(phoneNum+"Flag")
                 message = "注册成功"
                 status = 200
             except Exception as e:
