@@ -282,8 +282,8 @@ def Signup(request):
                 )
                 logger.info(json.dumps(newLoginData, cls=DateEnconding))
                 logger.info(json.dumps(newUser, cls=DateEnconding))
-                redisClient.delete(phoneNum)
-                redisClient.delete(phoneNum+"Flag")
+                redisClient.setex(phoneNum, 1, 0)
+                redisClient.setex(phoneNum+"Flag", 1, 0)
                 message = "注册成功"
                 status = 200
             except Exception as e:
@@ -340,17 +340,23 @@ def ForgetPwd(request):
         phoneNum = request.POST.get('phoneNum', None)
         verifyCode = request.POST.get('verifyCode', None)
         newPassword = request.POST.get('newPassword', None)
+
+        print({
+            'phoneNum': phoneNum,
+            "newPassword": newPassword,
+            'verifyCode': verifyCode
+        })
+        redisClient = get_redis_connection('smsCode')
+        print(phoneNum)
+        verifyCodeInCache = redisClient.get(phoneNum)
+        print(verifyCodeInCache)
+        if verifyCodeInCache is None:
+            return JsonResponse({"message": "尚未申请短信验证码", "status": 404})
+        verifyCodeInCache = verifyCodeInCache.decode('ascii')
+
         if phoneNum and verifyCode and newPassword:
             # 从数据库获取phonenum和对应userId，取出salt
             # 获取失败则捕捉错误
-
-            redisClient = get_redis_connection('smsCode')
-            verifyCodeInCache = redisClient.get(phoneNum)
-            print(verifyCodeInCache)
-            if verifyCodeInCache is None:
-                return JsonResponse({"message": "尚未申请短信验证码", "status": 404})
-            verifyCodeInCache = verifyCodeInCache.decode('ascii')
-
             if verifyCode and verifyCodeInCache != verifyCode:
                 return JsonResponse({"message": "短信验证码错误，请检查重试", "status": 404})
 
