@@ -1076,10 +1076,9 @@ def GetSexNum(request):
 # 发送成功，返回消息和200状态码
 # 发送失败，返回消息和404状态码
 def GetUserCaseStat(request):
-    # if not request.session.get('isLogin', None):
-    #     return JsonResponse({"message": "你还未登录，获取用户案例统计信息需要先登录", "status": 404})
-    # el
-    if request.method == "GET":
+    if not request.session.get('isLogin', None):
+        return JsonResponse({"message": "你还未登录，获取用户案例统计信息需要先登录", "status": 404})
+    elif request.method == "GET":
         # 该接口无提交数据
         # 获取统计信息
         try:
