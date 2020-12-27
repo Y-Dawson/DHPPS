@@ -768,9 +768,10 @@
   </div>
 </template>
 
+<script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
 <script>
 import g_Global from "../../global_vue.js";
-import { flexible } from "../../assets/js/flexible.js";
+// import { flexible } from "../../assets/js/flexible.js";
 import { jquery } from "../../assets/js/jquery.js";
 var echarts = require("echarts");
 import "../../../node_modules/echarts/lib/chart/map/china.js";
