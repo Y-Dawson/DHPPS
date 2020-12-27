@@ -412,9 +412,9 @@ def SaveCase(request):
 
             try:
                 # 新增案例
-                if (models.Accountinformation.objects.filter(userId=userId).exist()):
+                if (models.AccountInformation.objects.filter(userId=userId).exist()):
                     newCase = models.CaseData.objects.create(
-                        userId=models.Accountinformation.objects.filter(userId=userId).first(),
+                        userId=models.AccountInformation.objects.filter(userId=userId).first(),
                         caseName=caseName,
                         caseMode=caseMode,
                         cityNumber=int(cityNum),
@@ -473,7 +473,7 @@ def SaveCase(request):
                         )
                     roadCount += 1
                 if (newCase):
-                    models.Accountinformation.objects.filter(userId=userId).update(caseNumber=F("caseNumber") + 1)
+                    models.AccountInformation.objects.filter(userId=userId).update(caseNumber=F("caseNumber") + 1)
                 return JsonResponse({"message": "保存案例成功", "status": 200, "caseId": newCase.caseId})
             except Exception as e:
                 print('str(Exception):\t', str(Exception))
@@ -500,9 +500,9 @@ def SaveCase(request):
                 cityCount += 1
             try:
                 # 新增案例
-                if (models.Accountinformation.objects.filter(userId=userId).exist()):
+                if (models.AccountInformation.objects.filter(userId=userId).exist()):
                     newCase = models.CaseData.objects.create(
-                        userId=models.Accountinformation.objects.filter(userId=userId).first(),
+                        userId=models.AccountInformation.objects.filter(userId=userId).first(),
                         caseName=caseName,
                         caseMode=caseMode,
                         cityNumber=int(cityNum),
@@ -553,7 +553,7 @@ def SaveCase(request):
                         )
                     roadCount += 1
                 if (newCase):
-                    models.Accountinformation.objects.filter(userId=userId).update(caseNumber=F("caseNumber") + 1)
+                    models.AccountInformation.objects.filter(userId=userId).update(caseNumber=F("caseNumber") + 1)
                 return JsonResponse({"message": "保存案例成功", "status": 200, "caseId": newCase.caseId})
             except Exception as e:
                 print('str(Exception):\t', str(Exception))
@@ -1136,7 +1136,7 @@ class CaseViewSet(viewsets.ModelViewSet):
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         if (instance):
-            models.Accountinformation.objects.filter(userId=instance.userId).update(caseNumber=F("caseNumber") - 1)
+            models.AccountInformation.objects.filter(userId=instance.userId.userId).update(caseNumber=F("caseNumber") - 1)
         return super(CaseViewSet, self).destroy(request, *args, **kwargs)
 
 

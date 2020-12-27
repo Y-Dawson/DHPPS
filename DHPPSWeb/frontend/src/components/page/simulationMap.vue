@@ -49,11 +49,11 @@
     </section>
   </div>
 </template>
-
+<script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
 <script>
 // import { echarts } from "../../assets/js/echarts.min.js";
 
-import { flexible } from "../../assets/js/flexible.js";
+// import { flexible } from "../../assets/js/flexible.js";
 import { jquery } from "../../assets/js/jquery.js";
 // import { china } from "../../assets/js/china.js";
 

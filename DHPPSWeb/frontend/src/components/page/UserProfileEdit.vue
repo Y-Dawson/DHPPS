@@ -423,7 +423,7 @@ export default {
       Url:
         "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
       MyContent: [],
-      AdminId: "46",
+      AdminId: "1",
       sex: "",
       // 设置单选默认值
       pickerOptions: {
@@ -478,7 +478,7 @@ export default {
     getMyContent: function () {
       var self = this;
       axios
-        .get("/apis/backend/profile/25/")
+        .get("/apis/backend/profile/1/")
         .then(
           (response) => (
             (self.MyContent = response.data), (this.Url = self.MyContent.avatar)
@@ -494,7 +494,7 @@ export default {
       var uname = $("#inputname").val();
       alert($("#inputname").val());
       axios
-        .put("/apis/backend/profile/25/", {
+        .put("/apis/backend/profile/1/", {
           userName: $("#inputname").val(),
           // phonenumber: $("#inputphone").val(),
           birth: this.value1,
@@ -539,7 +539,7 @@ export default {
     changePass: function () {
       var self = this;
       let data = new FormData();
-      data.append("userId", 46);
+      data.append("userId", 1);
       data.append("oldPassword", $("#prepass").val());
       data.append("newPassword", $("#newpass").val());
       // var prepass=$("#prepass").val()

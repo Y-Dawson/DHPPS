@@ -277,9 +277,9 @@ export default {
     Edit: function (id) {
       var self = this;
       let data = new FormData();
-      data.append("caseid", id);
+      data.append("caseId", id);
       axios
-        .post("http://127.0.0.1:8000/backend/getCaseInfo/", data)
+        .post("apis/backend/getCaseInfo/", data)
         .then((response) => {
           self.cases = response.data.cases;
           console.log(JSON.stringify(self.cases));
@@ -328,13 +328,13 @@ export default {
             path: "/setting",
             query: {
               params: JSON.stringify({
-                userId: this.userId,
-                casename: this.cases.casename,
+                userId: 1,
+                caseName: this.cases.casename,
                 citynum: this.cases.citynum,
                 roadnum: this.cases.roadnum,
-                Initcitydata: city_inf,
-                Initroaddata: road_inf,
-                Cityposition: city_pos,
+                InitCityData: city_inf,
+                InitRoadData: road_inf,
+                CityPosition: city_pos,
               }),
             },
           });
@@ -346,13 +346,14 @@ export default {
     },
     DeleteCaseContent: function (id) {
       var self = this;
+      // alert(id);
       axios
-        .delete("http://127.0.0.1:8000/backend/case/" + id, {})
+        .delete("apis/backend/case/" + id+ "/")
         .then(
           (response) => (self.currentPageData = response.data)
         )
         .catch(function (error) {
-          alert('数据请求失败')
+          alert('数据fas失败')
         });
     },
     Open(id) {
@@ -364,7 +365,7 @@ export default {
         .then(() => {
           this.DeleteCaseContent(id),
             this.GetCaseContent(),
-            this.reload(),
+            // this.reload(),
             this.$message({
               type: "success",
               message: "删除成功!",
@@ -372,10 +373,10 @@ export default {
           this.GetCaseContent();
         })
         .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消删除",
-          });
+          // this.$message({
+          //   type: "info",
+          //   message: "已取消删除",
+          // });
         });
     },
   },
@@ -397,11 +398,7 @@ export default {
   text-align: center;
   margin: 10px 300px;
 }
-.paginate {
-  /* margin-top: 20px; */
-  /* margin-left: 200px; */
-  /* left:50% */
-}
+
 /* 案例块文字内容 */
 .box-text {
   margin-left: 5px;

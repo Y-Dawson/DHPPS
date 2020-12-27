@@ -15,6 +15,8 @@ import SuperIndex from '@/components/page/SuperIndex'
 import SuperUserManage from '@/components/page/SuperUserManage'
 import SuperCaseManage from '@/components/page/SuperCaseManage'
 import UserCase from '@/components/page/UserCase'
+import settingMap from '@/components/page/settingMap'
+import simulationMap from '@/components/page/simulationMap'
 
 Vue.use(Router)
 
@@ -38,6 +40,8 @@ export default new Router({
     {path:'/SuperIndex',component:SuperIndex},
     {path:'/SuperUserManage',component:SuperUserManage},
     {path:'/SuperCaseManage',component:SuperCaseManage},
-    {path:'/UserCase',component:UserCase}
+    {path:'/UserCase',component:UserCase},
+    {path:'/settingMap',component:settingMap},
+    {path:'/simulationMap',component:simulationMap}
   ]
 })

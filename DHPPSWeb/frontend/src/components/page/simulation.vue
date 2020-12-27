@@ -100,7 +100,7 @@
         </li>
       </ul>
 
-      <div class="add-wrapper">
+      <!-- <div class="add-wrapper">
         <i class="layui-icon layui-icon-add-1 add">
           <ul class="tools-list">
             <li>
@@ -129,7 +129,7 @@
             </li>
           </ul>
         </i>
-      </div>
+      </div> -->
 
       <ul class="city-list">
         <span class="title">已创建：</span>
@@ -152,7 +152,7 @@
       </ul>
 
       <ul class="img-list">
-        <li v-for="o in citycnt" :key="o">
+        <li v-for="o in citycnt + 100" :key="o">
           <div :id="'ci' + o" class="city" style="left: 10000px; top: 10000px">
             <img
               src="../../assets/layui/images/city.gif"
@@ -591,6 +591,7 @@ export default {
       value1: 0,
       daily_step: 0,
       day_num: 0,
+      cityname: [],
 
       cityx1: 0,
       cityy1: 0,
@@ -759,6 +760,10 @@ export default {
     }
 
     for (var i = 0; i < parseInt(this.params.citynum); i++) {
+      this.cityname.push(foreData[0][i]["cityName"]);
+    }
+
+    for (var i = 0; i < parseInt(this.params.citynum); i++) {
       var newa = new Array();
       for (var j = 0; j < parseInt(this.params.Daynum); j++) {
         var s =
@@ -777,6 +782,7 @@ export default {
     this.row_cnt.push(1);
 
     console.log("citynum", this.citycnt);
+    console.log("c3inf", this.ci3_totalInfected);
 
     for (var i = 0; i < parseInt(this.params.citynum); i++) {
       var pop = parseInt(foreData[0][i]["population"]);
@@ -981,6 +987,21 @@ export default {
       if (n == "L") return "ci12";
     },
 
+    GetNum(n) {
+      if (n == "A") return 1;
+      if (n == "B") return 2;
+      if (n == "C") return 3;
+      if (n == "D") return 4;
+      if (n == "E") return 5;
+      if (n == "F") return 6;
+      if (n == "G") return 7;
+      if (n == "H") return 8;
+      if (n == "I") return 9;
+      if (n == "G") return 10;
+      if (n == "K") return 11;
+      if (n == "L") return 12;
+    },
+
     AddInformation(n, popu, dinf, inf) {
       if (n == "A") {
         this.ci1_population.push(popu);
@@ -1007,21 +1028,31 @@ export default {
     changeColor(index) {
       // console.log("动起来");
       // console.log(this.citycnt);
-      for (var i = 1; i <= this.citycnt; i++) {
+      var ccnt = 0;
+      var nowcnt = 0;
+      for (var i in this.cityname) {
         // console.log("row", this.row_cnt[i]);
-        for (var j = 1; j <= this.row_cnt[i]; j++) {
-          if (j < this.row_cnt[i]) {
+        nowcnt += 1;
+        ccnt = this.GetNum(this.cityname[i]);
+        console.log("ccnt", ccnt);
+        console.log("nowcnt", nowcnt);
+        console.log("typeofnowcnt", typeof nowcnt);
+        console.log("row_cnt[nowcnt]", this.row_cnt[2]);
+        console.log("row_cnt[nowcnt]", this.row_cnt[nowcnt]);
+        for (var j = 1; j <= this.row_cnt[nowcnt]; j++) {
+          if (j < this.row_cnt[nowcnt]) {
             for (var k = 1; k <= 8; k++) {
-              var iid = "i" + i + j + k;
+              var iid = "i" + ccnt + j + k;
+              console.log("iid",iid);
               var iidentity = document.getElementById(iid);
-              // console.log("iidentity", iidentity);
+              console.log("iidentity", iidentity);
               iidentity.style.color = "green";
               // console.log("iid", iid);
             }
           } else {
             // console.log("换行");
-            for (var k = 1; k <= this.people_cnt[i][j]; k++) {
-              var iid = "i" + i + j + k;
+            for (var k = 1; k <= this.people_cnt[nowcnt][j]; k++) {
+              var iid = "i" + ccnt + j + k;
               var iidentity = document.getElementById(iid);
               // console.log("iidentity", iidentity);
               iidentity.style.color = "green";
@@ -1030,16 +1061,16 @@ export default {
           }
         }
 
-        if (i == 1) {
+        if (ccnt == 1) {
           var inf_cnt = parseInt(this.ci1_totalInfected[index]);
           inf_cnt = parseInt(inf_cnt / 100);
           console.log("tot", this.ci1_totalInfected[index]);
           console.log("inf_cnt", inf_cnt);
 
-          for (var j = 1; j <= this.row_cnt[i]; j++) {
+          for (var j = 1; j <= this.row_cnt[nowcnt]; j++) {
             if (inf_cnt > 8) {
               for (var k = 1; k <= 8; k++) {
-                var iid = "i" + i + j + k;
+                var iid = "i" + ccnt + j + k;
                 var iidentity = document.getElementById(iid);
                 console.log("iidentity", iidentity);
                 iidentity.style.color = "red";
@@ -1047,7 +1078,7 @@ export default {
               inf_cnt -= 8;
             } else {
               for (var k = 1; k <= inf_cnt; k++) {
-                var iid = "i" + i + j + k;
+                var iid = "i" + ccnt + j + k;
                 var iidentity = document.getElementById(iid);
                 console.log("iidentity", iidentity);
                 iidentity.style.color = "red";
@@ -1057,16 +1088,16 @@ export default {
           }
         }
 
-        if (i == 2) {
+        if (ccnt == 2) {
           var inf_cnt = parseInt(this.ci2_totalInfected[index]);
           inf_cnt = parseInt(inf_cnt / 100);
           console.log("tot", this.ci2_totalInfected[index]);
           console.log("inf_cnt", inf_cnt);
 
-          for (var j = 1; j <= this.row_cnt[i]; j++) {
+          for (var j = 1; j <= this.row_cnt[nowcnt]; j++) {
             if (inf_cnt > 8) {
               for (var k = 1; k <= 8; k++) {
-                var iid = "i" + i + j + k;
+                var iid = "i" + ccnt + j + k;
                 var iidentity = document.getElementById(iid);
                 console.log("iidentity", iidentity);
                 iidentity.style.color = "red";
@@ -1074,7 +1105,7 @@ export default {
               inf_cnt -= 8;
             } else {
               for (var k = 1; k <= inf_cnt; k++) {
-                var iid = "i" + i + j + k;
+                var iid = "i" + ccnt + j + k;
                 var iidentity = document.getElementById(iid);
                 console.log("iidentity", iidentity);
                 iidentity.style.color = "red";
@@ -1084,16 +1115,20 @@ export default {
           }
         }
 
-        if (i == 3) {
+        if (ccnt == 3) {
           var inf_cnt = parseInt(this.ci3_totalInfected[index]);
           inf_cnt = parseInt(inf_cnt / 100);
           console.log("tot", this.ci3_totalInfected[index]);
           console.log("inf_cnt", inf_cnt);
 
-          for (var j = 1; j <= this.row_cnt[i]; j++) {
+          console.log("row_cnt", this.row_cnt);
+          console.log("row_cnt[ccnt]", this.row_cnt[nowcnt]);
+
+          for (var j = 1; j <= this.row_cnt[nowcnt]; j++) {
+            console.log("可执行");
             if (inf_cnt > 8) {
               for (var k = 1; k <= 8; k++) {
-                var iid = "i" + i + j + k;
+                var iid = "i" + ccnt + j + k;
                 var iidentity = document.getElementById(iid);
                 console.log("iidentity", iidentity);
                 iidentity.style.color = "red";
@@ -1101,7 +1136,7 @@ export default {
               inf_cnt -= 8;
             } else {
               for (var k = 1; k <= inf_cnt; k++) {
-                var iid = "i" + i + j + k;
+                var iid = "i" + ccnt + j + k;
                 var iidentity = document.getElementById(iid);
                 console.log("iidentity", iidentity);
                 iidentity.style.color = "red";
