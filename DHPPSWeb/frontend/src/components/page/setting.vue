@@ -14,7 +14,10 @@
 
           <li class="layui-nav-item" style="line-height: 40px">
             <router-link
-              :to="{ path: '/settingMap', query: { userId: userId, caseName: 999 } }"
+              :to="{
+                path: '/settingMap',
+                query: { params: JSON.stringify({ userId: userId, caseName: 999 }) },
+              }"
               style="margin-left: 10px; float: left"
               >地图模式</router-link
             >
@@ -163,7 +166,7 @@
         </li>
       </ul>
 
-      <div class="add-wrapper">
+      <!-- <div class="add-wrapper">
         <i class="layui-icon layui-icon-add-1 add">
           <ul class="tools-list">
             <li>
@@ -192,24 +195,26 @@
             </li>
           </ul>
         </i>
-      </div>
+      </div> -->
 
       <ul class="city-list">
         <span class="title">已创建：</span>
         <li>
-          <div>
+          <div class="panel">
+            <h2>城市信息</h2>
+            <div class="chart" id="bar"></div>
+          </div>
+          <!-- <div>
             <span class="little-title">城市列表：</span>
             <li id="city_inf" v-for="city in city_po" :key="city">
               {{ city }}
             </li>
-            <!-- <span id="city_inf" v-for="(index,item) in city_po"> -->
-            <!-- <span>B：400</span>
-            <span>C：100</span>
-            <span>D：800</span> -->
-          </div>
+          </div> -->
         </li>
         <li>
-          <div>
+          <div class="panel">
+            <!-- <h2>道路信息</h2>
+            <div class="chart" id="threebar"></div> -->
             <span class="little-title">道路列表：</span>
             <li id="city_inf" v-for="road in road_di" :key="road">
               {{ road }}
@@ -763,8 +768,13 @@
   </div>
 </template>
 
+<script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
 <script>
 import g_Global from "../../global_vue.js";
+// import { flexible } from "../../assets/js/flexible.js";
+import { jquery } from "../../assets/js/jquery.js";
+var echarts = require("echarts");
+import "../../../node_modules/echarts/lib/chart/map/china.js";
 
 var citycnt = 1;
 var linecnt = 1;
@@ -840,6 +850,12 @@ export default {
         "line11",
         "line12",
       ],
+
+      cityname: [],
+      citypeople: [],
+      cityInf: [],
+      roadVol: [],
+
       cityFormRule: {
         // cityName: [
         //   { required: true, message: "请输入城市名", trigger: "blur" },
@@ -965,6 +981,7 @@ export default {
 
         this.DrawLine(cid1, cid2);
       }
+      2;
 
       for (var j in this.params.InitCityData) {
         var ci = this.params.InitCityData[j].split(",");
@@ -989,7 +1006,13 @@ export default {
         this.city_po.push(s);
         s = "初始感染人数:" + initIn;
         this.city_po.push(s);
+
+        this.cityname.push(cityna);
+        this.citypeople.push(initpo);
+        this.cityInf.push(initIn);
       }
+
+      this.DrawMap();
     }
   },
 
@@ -1074,6 +1097,7 @@ export default {
         query: { userId: this.userId },
       });
     },
+
     DrawLine(ci1, ci2) {
       var c1 = document.getElementById(ci1);
       var c2 = document.getElementById(ci2);
@@ -1122,6 +1146,181 @@ export default {
       linecnt += 1;
 
       console.log("画了这条线了：", linecnt);
+    },
+
+    DrawMap() {
+      console.log("画个柱状图");
+
+      var myChart = echarts.init(document.getElementById("bar"));
+
+      var seriesLabel = {
+        normal: {
+          show: true,
+          textBorderColor: "#333",
+          textBorderWidth: 2,
+        },
+      };
+
+      var option = {
+        tooltip: {
+          trigger: "axis",
+          axisPointer: {
+            type: "shadow",
+          },
+        },
+        legend: {
+          data: ["总人口", "感染人数"],
+        },
+        grid: {
+          left: 20,
+        },
+        xAxis: {
+          type: "value",
+          name: "人数",
+          axisLabel: {
+            formatter: "{value}",
+          },
+        },
+        yAxis: {
+          type: "category",
+          inverse: true,
+          data: this.cityname,
+          axisLabel: {
+            formatter: function (value) {
+              return "{" + value + "| }\n{value|" + value + "}";
+            },
+            margin: 10,
+            rich: {
+              value: {
+                lineHeight: 30,
+                align: "center",
+              },
+            },
+          },
+        },
+        series: [
+          {
+            name: "总人口",
+            type: "bar",
+            data: this.citypeople,
+            label: seriesLabel,
+          },
+          {
+            name: "感染人数",
+            type: "bar",
+            label: seriesLabel,
+            data: this.cityInf,
+          },
+        ],
+      };
+
+      myChart.setOption(option);
+    },
+
+    Draw3DMap() {
+      console.log(this.roadVol);
+
+      var myChart = echarts.init(document.getElementById("threebar"));
+
+      console.log("myChart", myChart);
+
+      console.log("cityname", this.cityname);
+
+      console.log("画个3D柱状图");
+
+      var days = ["A", "B"];
+
+      var sj = [
+        [0, 0, 5],
+        [0, 1, 1],
+        [1, 0, 7],
+        [1, 1, 0],
+      ];
+      var option = {
+        tooltip: {},
+        visualMap: {
+          max: 7,
+          inRange: {
+            color: [
+              "#313695",
+              "#4575b4",
+              "#74add1",
+              "#abd9e9",
+              "#e0f3f8",
+              "#ffffbf",
+              "#fee090",
+              "#fdae61",
+              "#f46d43",
+              "#d73027",
+              "#a50026",
+            ],
+          },
+        },
+        xAxis3D: {
+          type: "category",
+          data: days,
+          name: "出发地",
+        },
+        yAxis3D: {
+          type: "category",
+          data: days,
+          name: "目的地",
+        },
+        zAxis3D: {
+          type: "value",
+          name: "人流量",
+        },
+        grid3D: {
+          boxWidth: 200,
+          boxDepth: 80,
+          viewControl: {
+            // projection: 'orthographic'
+          },
+          light: {
+            main: {
+              intensity: 1.2,
+              shadow: true,
+            },
+            ambient: {
+              intensity: 0.3,
+            },
+          },
+        },
+        series: [
+          {
+            type: "bar3D",
+            data: sj.map(function (item) {
+              console.log("发生什么事了");
+              return {
+                value: [item[1], item[0], item[2]],
+              };
+            }),
+            shading: "lambert",
+
+            label: {
+              textStyle: {
+                fontSize: 16,
+                borderWidth: 1,
+              },
+            },
+
+            emphasis: {
+              label: {
+                textStyle: {
+                  fontSize: 20,
+                  color: "#900",
+                },
+              },
+              itemStyle: {
+                color: "#900",
+              },
+            },
+          },
+        ],
+      };
+      console.log("快画完了");
+      myChart.setOption(option);
+      console.log("画完了");
     },
 
     BeginToSimulation() {
@@ -1395,8 +1594,8 @@ export default {
         // this.cp = false;
         concnt = 0;
       }
-      this.set(data.cityForm, "cityleft", e.pageX + "px");
-      this.set(data.cityForm, "citytop", e.pageY + "px");
+      // this.set(data.cityForm, "cityleft", e.pageX + "px");
+      // this.set(data.cityForm, "citytop", e.pageY + "px");
       this.cityForm.ShowCity = true;
       console.log("cityleft:" + g_Global.cityleft + ", citytop:" + g_Global.citytop);
       console.log("cityleft:" + this.cityleft + ", citytop:" + this.citytop);
@@ -1404,6 +1603,7 @@ export default {
 
     ConfirmRoad(tcx1, tcy1, tcx2, tcy2, dx, dy, dis) {
       var tra = 0;
+      console.log("输入人流量");
       this.$prompt("请输入此路人流量", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -1412,7 +1612,16 @@ export default {
       })
         .then(({ value }) => {
           var road_inf = this.road_c1 + "-" + this.road_c2 + ":" + value;
-          console.log(road_inf);
+          console.log("road_inf", road_inf);
+
+          var newar = new Array();
+          var n1 = this.GetCityNum(this.road_c1);
+          var n2 = this.GetCityNum(this.road_c2);
+          var vol = parseInt(value);
+          newar.push(n1);
+          newar.push(n2);
+          newar.push(vol);
+          this.roadVol.push(newar);
 
           console.log("tcx1：" + tcx1);
 
@@ -1451,6 +1660,8 @@ export default {
           linecnt += 1;
           this.cp = false;
           concnt = 0;
+
+          // this.Draw3DMap();
         })
         .catch(() => {
           this.cp = false;
@@ -1459,10 +1670,7 @@ export default {
             type: "info",
             message: "取消输入",
           });
-          tra = -1;
         });
-      console.log(tra);
-      return tra;
     },
 
     ConnectCity(e) {
@@ -1564,6 +1772,21 @@ export default {
         .then(() => {
           console.log("e", e);
           var c = document.getElementById(e);
+
+          var cico = this.GetCode(e);
+          console.log("cico", cico);
+
+          var nacnt = 0;
+          for (var k in this.cityname) {
+            if (cico == this.cityname[k]) {
+              nacnt = k;
+            }
+          }
+          console.log(nacnt);
+          this.cityname.splice(nacnt,1);
+          this.citypeople.splice(nacnt,1);
+          this.cityInf.splice(nacnt,1);
+          this.DrawMap();
 
           cn = 0;
 
@@ -1720,10 +1943,6 @@ export default {
       }
     },
 
-    // changeString(str) {
-    //   return str.replace(/<br>/g, "\n");
-    // },
-
     ConfirmCity(e) {
       this.np = false;
       var c = document.getElementById(e);
@@ -1770,10 +1989,15 @@ export default {
         return;
       }
 
+      this.cityname.push(cn);
+      this.citypeople.push(this.cityForm.population);
+      this.cityInf.push(this.cityForm.beginInfected);
       this.city_po.push(cy);
       this.city_po.push(cz);
 
       this.SetButton(citycnt);
+
+      this.DrawMap();
 
       citycnt++;
       // console.log(typeof(this.city_po));
@@ -1817,6 +2041,32 @@ export default {
       if (n == "ci8") return 8;
       if (n == "ci9") return 9;
       if (n == "ci10") return 10;
+    },
+
+    GetCode(n) {
+      if (n == "ci1") return "A";
+      if (n == "ci2") return "B";
+      if (n == "ci3") return "C";
+      if (n == "ci4") return "D";
+      if (n == "ci5") return "E";
+      if (n == "ci6") return "F";
+      if (n == "ci7") return "G";
+      if (n == "ci8") return "H";
+      if (n == "ci9") return "I";
+      if (n == "ci10") return "J";
+    },
+
+    GetCityNum(n) {
+      if (n == "A") return 0;
+      if (n == "B") return 1;
+      if (n == "C") return 2;
+      if (n == "D") return 3;
+      if (n == "E") return 4;
+      if (n == "F") return 5;
+      if (n == "G") return 6;
+      if (n == "H") return 7;
+      if (n == "I") return 8;
+      if (n == "J") return 9;
     },
 
     SetButton(n) {
@@ -1986,7 +2236,7 @@ body {
 .city-list {
   position: absolute;
   right: 0;
-  width: 220px;
+  width: 320px;
   height: 655px;
   background-color: rgb(241, 245, 253);
   border: 1px solid rgb(204, 204, 204);
@@ -2001,9 +2251,9 @@ body {
   margin-bottom: 10px;
 }
 
-.city-list div {
+.city-list .panel {
   margin-left: 10px;
-  width: 160px;
+  width: 300px;
   height: 300px;
   background-color: rgb(241, 245, 253);
   border: 1px solid rgb(204, 204, 204);
@@ -2022,6 +2272,23 @@ body {
   font-size: 20px;
   margin-top: 5px;
   margin-bottom: 10px;
+}
+
+h2 {
+  height: 0.6rem;
+  line-height: 0.6rem;
+  text-align: center;
+  color: #000;
+  font-size: 20px;
+  font-weight: 400;
+}
+
+.city-list #bar,
+.city-list #threebar {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 260px;
 }
 
 .add-wrapper {
@@ -2109,13 +2376,13 @@ body {
 .layui-layout-right .theme-wrapper {
   /* display: none; */
   position: absolute;
-  height: 300px;
-  width: 249px;
+  height: 200px;
+  width: 360px;
   background-color: #fff;
   border: 1px solid rgb(187, 187, 187);
   box-shadow: 2px 2px rgba(0, 0, 0, 0.2);
   margin-top: -5px;
-  margin-left: 250px;
+  margin-left: 375px;
   z-index: 999;
   transition: margin-left 0.3s;
 }

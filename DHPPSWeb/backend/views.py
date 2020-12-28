@@ -340,17 +340,23 @@ def ForgetPwd(request):
         phoneNum = request.POST.get('phoneNum', None)
         verifyCode = request.POST.get('verifyCode', None)
         newPassword = request.POST.get('newPassword', None)
+
+        print({
+            'phoneNum': phoneNum,
+            "newPassword": newPassword,
+            'verifyCode': verifyCode
+        })
+        redisClient = get_redis_connection('smsCode')
+        print(phoneNum)
+        verifyCodeInCache = redisClient.get(phoneNum)
+        print(verifyCodeInCache)
+        if verifyCodeInCache is None:
+            return JsonResponse({"message": "尚未申请短信验证码", "status": 404})
+        verifyCodeInCache = verifyCodeInCache.decode('ascii')
+
         if phoneNum and verifyCode and newPassword:
             # 从数据库获取phonenum和对应userId，取出salt
             # 获取失败则捕捉错误
-
-            redisClient = get_redis_connection('smsCode')
-            verifyCodeInCache = redisClient.get(phoneNum)
-            print(verifyCodeInCache)
-            if verifyCodeInCache is None:
-                return JsonResponse({"message": "尚未申请短信验证码", "status": 404})
-            verifyCodeInCache = verifyCodeInCache.decode('ascii')
-
             if verifyCode and verifyCodeInCache != verifyCode:
                 return JsonResponse({"message": "短信验证码错误，请检查重试", "status": 404})
 
@@ -1076,10 +1082,9 @@ def GetSexNum(request):
 # 发送成功，返回消息和200状态码
 # 发送失败，返回消息和404状态码
 def GetUserCaseStat(request):
-    # if not request.session.get('isLogin', None):
-    #     return JsonResponse({"message": "你还未登录，获取用户案例统计信息需要先登录", "status": 404})
-    # el
-    if request.method == "GET":
+    if not request.session.get('isLogin', None):
+        return JsonResponse({"message": "你还未登录，获取用户案例统计信息需要先登录", "status": 404})
+    elif request.method == "GET":
         # 该接口无提交数据
         # 获取统计信息
         try:
