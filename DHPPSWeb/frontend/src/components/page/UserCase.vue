@@ -74,7 +74,7 @@
                 >
                   <img
                     :fit="fit"
-                    :src="Url"
+                    :src="imageUrl"
                     class="img-fluid rounded mr-3"
                     alt="user"
                   />
@@ -196,10 +196,8 @@ export default {
     return {
       // 头像
       fits: ["fill"],
-      Url:
-        "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
+      imageUrl:"",
       MyContent: [],
-      AdminId: "25",
       contentList: [],
       cases: [],
       //分页
@@ -210,8 +208,7 @@ export default {
     };
   },
   created: function () {
-    this.getMyContent(), 
-    this.getUserContent();
+    this.getMyContent()
   },
   mounted: function () {
     this.GetCaseContent();
@@ -240,7 +237,7 @@ export default {
         .then(
           (response) => (
             (self.MyContent = response.data),
-            (this.Url = self.MyContent.avatar)
+            (this.imageUrl = self.MyContent.avatar)
             // alert(JSON.stringify(self.MyContent))
           )
         )
