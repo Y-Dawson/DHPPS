@@ -14,7 +14,7 @@
                   class="iq-waves-effect"
                   :to="{
                     path: '/UserProfile',
-                    query: { uI: this.AdminId },
+                    query: { uI: this.userId },
                   }"
                   ><i class="ri-profile-line"></i
                   ><span>个人资料</span></router-link
@@ -30,7 +30,7 @@
                   class="iq-waves-effect"
                   :to="{
                     path: '/UserCase',
-                    query: { uI: this.AdminUserId },
+                    query: { uI: this.userId },
                   }"
                   ><i class="ri-file-list-line"></i
                   ><span>我的案例</span></router-link
@@ -48,28 +48,24 @@
           <nav class="navbar navbar-expand-lg navbar-light p-0">
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <ul class="navbar-nav ml-auto navbar-list">
-                <li class="nav-item">
-                  <a class="search-toggle iq-waves-effect" href="#"
-                    ><i class="ri-calendar-line"></i
-                  ></a>
-                  <div class="iq-sub-dropdown">
-                    <div class="calender-small"></div>
-                  </div>
-                </li>
+                <li class="nav-item"></li>
               </ul>
             </div>
             <ul class="navbar-list">
               <li>
-                <a
-                  href="#"
-                  class="search-toggle iq-waves-effect d-flex align-items-center"
-                >
-                  <img
-                    :fit="fit"
-                    :src="imageUrl"
-                    class="img-fluid rounded mr-3"
-                    alt="user"
-                  />
+                <el-popover placement="bottom" width="400" trigger="click">
+                  <el-calendar v-model="value"> </el-calendar>
+                  <el-button slot="reference" id="calendar">
+                    <i
+                      class="ri-calendar-line"
+                      style="font-size: 20px; color: rgb(135, 123, 244)"
+                    ></i>
+                  </el-button>
+                </el-popover>
+              </li>
+              <li>
+                <a class="d-flex align-items-center">
+                  <img :src="imageUrl" class="img-fluid rounded mr-3" alt="user" />
                   <div class="caption">
                     <h6 class="mb-0 line-height">{{ MyContent.userName }}</h6>
                   </div>
@@ -153,7 +149,6 @@
                           <el-avatar
                             shape="circle"
                             :size="70"
-                            :fit="fill"
                             :src="changingUrl"
                           ></el-avatar>
                           <el-upload
@@ -196,7 +191,7 @@
                               v-model="ruleForm.name"
                               clearable
                               id="inputname"
-                            ></el-input>
+                            >{{ MyContent.userName }}</el-input>
                           </el-form-item>
                           <el-form-item label="性别" prop="sex">
                             <el-radio-group
@@ -443,6 +438,7 @@ export default {
       }
     };
     return {
+      userId:'',
       show: false,
       // 头像
       fits: ["fill"],
@@ -499,26 +495,51 @@ export default {
     };
   },
   created: function () {
-    this.getMyContent(), this.getUserContent();
+    this.GetUserIdentity()
+    this.getMyContent()
   },
   methods: {
+    //获取用户身份
+    GetUserIdentity(){
+      var self=this
+      axios
+        .post("/apis/backend/getIdentity/")
+        .then(response => (
+           self.userId=response.data.userId
+          //  alert(JSON.stringify(response.data))
+          //  alert(this.userId),
+          //  this.getMyContent()
+          )
+        )
+        .catch(function (error) {
+          // alert(JSON.stringify(error.response.data.message));
+          alert("获取用户身份失败");
+        });
+    },
     getMyContent: function () {
       var self = this;
+      // alert("this is getMyContent")
+      // alert(this.userId)
       axios
-        .get("/apis/backend/profile/1/")
+        .get("/apis/backend/profile/"+this.userId+"/")
         .then(
           (response) => (
-            (self.MyContent = response.data),
-            (this.imageUrl = self.MyContent.avatar),
-            (this.changingUrl=self.MyContent.avatar)
+            self.MyContent = response.data[0],
+            this.imageUrl = self.MyContent.avatar,
+            this.changingUrl=self.MyContent.avatar,
+            this.ruleForm.name=this.MyContent.userName,
+            this.ruleForm.email=this.MyContent.email,
+            this.ruleForm.radio=this.MyContent.sex,
+            this.ruleForm.addr=this.MyContent.address,
+            this.value1=this.MyContent.birth
           )
         )
         .catch(function (error) {
           // 请求失败处理
-          alert("数据请求失败wdnmd");
+          alert("getMyContent数据请求失败wdnmd");
         });
     },
-    putContent: function (userId) {
+    putContent: function () {
       var self = this;
       let data = new FormData();
       data.append("avatar", this.image)
@@ -528,10 +549,12 @@ export default {
       data.append("email",$("#inputmail").val())
       data.append("address",$("#inputaddr").val())
       axios
-        .put("/apis/backend/profile/1/",data)
+        .put("/apis/backend/profile/"+this.userId+"/",data)
         .then(
           (response) => (
-            (self.content = response), this.$message.success("修改成功")
+            self.content = response, 
+            alert("修改成功"),
+            this.$message.success("修改成功")
           )
         )
         .catch(function (error) {
@@ -544,9 +567,9 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.putContent(this.userId);
-          this.$router.push({
-            path:'/UserProfile',
-          });
+           location.reload()
+          // this.getMyContent()
+          // this.reload()
         } else {
           this.$message.error("修改失败");
           return false;
@@ -587,7 +610,7 @@ export default {
     changePass: function () {
       var self = this;
       let data = new FormData();
-      data.append("userId", 1);
+      data.append("userId", this.userId);
       data.append("oldPassword", $("#prepass").val());
       data.append("newPassword", $("#newpass").val());
       // var prepass=$("#prepass").val()
@@ -597,8 +620,6 @@ export default {
           (response) => (
             (self.content = response.data),
             (self.passMassege = response.data.message),
-            // alert(JSON.stringify(response.data.message)),
-            // self.$message.success("修改密码成功")
             self.submitMessage()
           )
         )
@@ -611,10 +632,7 @@ export default {
     PWDsubmitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          // alert("this is submit")
           this.changePass();
-          // this.putContent()
-          // alert('submit!')
         } else {
           console.log("error submit!!");
           return false;
@@ -639,4 +657,26 @@ export default {
 @import "../../css/typography.css";
 @import "../../css/style.css";
 @import "../../css/animate.css";
+/* 日历组件 */
+.el-calendar-table .el-calendar-day {
+  height: 40px;
+}
+.el-calendar-table .el-calendar-day:hover {
+  background: #d8c5f8;
+}
+.el-calendar-table td.is-selected {
+  background-color: #dbc7fc;
+  color: #fff;
+}
+.el-calendar-table td.is-today {
+  color: #9150f8;
+}
+#calendar {
+  border: 0px;
+  margin-top: 20px;
+  background: transparent;
+}
+#calendar :hover {
+  background: transparent;
+}
 </style>

@@ -19,7 +19,7 @@
                   class="iq-waves-effect"
                   :to="{
                     path: 'UserProfileEdit',
-                    query: { uI: this.AdminId },
+                    query: { uI: this.userId },
                   }"
                   ><i class="ri-file-edit-line"></i
                   ><span>修改资料</span></router-link
@@ -30,7 +30,7 @@
                   class="iq-waves-effect"
                   :to="{
                     path: '/UserCase',
-                    query: { uI: this.AdminUserId },
+                    query: { uI: this.userId },
                   }"
                   ><i class="ri-file-list-line"></i
                   ><span>我的案例</span></router-link
@@ -45,39 +45,27 @@
       <!-- TOP Nav Bar -->
       <div class="iq-top-navbar" style="z-index: 1">
         <div class="iq-navbar-custom">
-          <!-- <div class="iq-sidebar-logo">
-               <div class="top-logo">
-                  <a href="index.html" class="logo">
-                  <img src="images/logo.gif" class="img-fluid" alt="">
-                  <span>vito</span>
-                  </a>
-               </div>
-            </div> -->
           <nav class="navbar navbar-expand-lg navbar-light p-0">
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <ul class="navbar-nav ml-auto navbar-list">
-                <li class="nav-item">
-                  <a class="search-toggle iq-waves-effect" href="#"
-                    ><i class="ri-calendar-line"></i
-                  ></a>
-                  <div class="iq-sub-dropdown">
-                    <div class="calender-small"></div>
-                  </div>
-                </li>
+                <li class="nav-item"></li>
               </ul>
             </div>
             <ul class="navbar-list">
               <li>
-                <a
-                  href="#"
-                  class="search-toggle iq-waves-effect d-flex align-items-center"
-                >
-                  <img
-                    :fit="fit"
-                    :src="Url"
-                    class="img-fluid rounded mr-3"
-                    alt="user"
-                  />
+                <el-popover placement="bottom" width="400" trigger="click">
+                  <el-calendar v-model="value"> </el-calendar>
+                  <el-button slot="reference" id="calendar">
+                    <i
+                      class="ri-calendar-line"
+                      style="font-size: 20px; color: rgb(135, 123, 244)"
+                    ></i>
+                  </el-button>
+                </el-popover>
+              </li>
+              <li>
+                <a class="d-flex align-items-center">
+                  <img :src="Url" class="img-fluid rounded mr-3" alt="user" />
                   <div class="caption">
                     <h6 class="mb-0 line-height">{{ MyContent.userName }}</h6>
                   </div>
@@ -92,7 +80,7 @@
       <div id="content-page" class="content-page" style="z-index: 1">
         <div class="container-fluid">
           <div class="row">
-            <div class="col-lg-6" style="left:25%">
+            <div class="col-lg-6" style="left: 25%">
               <div class="iq-edit-list-data">
                 <div class="tab-content">
                   <div
@@ -101,86 +89,97 @@
                     role="tabpanel"
                   >
                     <div class="iq-card">
-                      <div
-                        class="iq-card-body"
-                      >
+                      <div class="iq-card-body">
                         <div class="imf">
                           <ul
                             id="todo-task1"
                             class="sub-task show mt-2 p-0"
-                            style="list-style-type: none;"
+                            style="list-style-type: none"
                           >
-                          <li>
-                            <!-- <div class="demo-fit"> -->
-                              <div class="block" v-for="fit in fits" :key="fit" style="text-align:center">
+                            <li>
+                              <!-- <div class="demo-fit"> -->
+                              <div
+                                class="block"
+                                v-for="fit in fits"
+                                :key="fit"
+                                style="text-align: center"
+                              >
                                 <el-avatar
                                   shape="circle"
                                   :size="70"
-                                  :fit="fit"
                                   :src="Url"
                                 ></el-avatar>
                               </div>
-                            <!-- </div> -->
-                          </li>
-                            <li style="margin-top: 20px;margin-left:30%">
+                              <!-- </div> -->
+                            </li>
+                            <li style="margin-top: 20px; margin-left: 30%">
                               <h5>
-                                <i class="ri-checkbox-blank-circle-fill text-success"></i>
-                              <span style="font-size:18px">
-                                昵称： {{ MyContent.userName }}
-                              </span>
+                                <i
+                                  class="ri-checkbox-blank-circle-fill text-success"
+                                ></i>
+                                <span style="font-size: 18px">
+                                  昵称： {{ MyContent.userName }}
+                                </span>
                               </h5>
                             </li>
-                            <li style="margin-top: 20px;margin-left:30%">
+                            <li style="margin-top: 20px; margin-left: 30%">
                               <h5>
-                              <i
-                                class="ri-checkbox-blank-circle-fill text-warning"
-                              ></i>
-                              <span style="font-size:18px">
-                              性别： {{ MyContent.sex }}
-                              </span>
+                                <i
+                                  class="ri-checkbox-blank-circle-fill text-warning"
+                                ></i>
+                                <span style="font-size: 18px">
+                                  性别： {{ MyContent.sex }}
+                                </span>
                               </h5>
                             </li>
-                            <li style="margin-top: 20px;margin-left:30%">
+                            <li style="margin-top: 20px; margin-left: 30%">
                               <h5>
-                              <i
-                                class="ri-checkbox-blank-circle-fill text-danger"
-                              ></i>
-                              <span style="font-size:18px">
-                              出生日期： {{ MyContent.birth }}
-                              </span>
+                                <i
+                                  class="ri-checkbox-blank-circle-fill text-danger"
+                                ></i>
+                                <span style="font-size: 18px">
+                                  出生日期： {{ MyContent.birth }}
+                                </span>
                               </h5>
                             </li>
-                            <li style="margin-top: 20px;margin-left:30%">
+                            <li style="margin-top: 20px; margin-left: 30%">
                               <h5>
-                              <i
-                                class="ri-checkbox-blank-circle-fill text-primary"
-                              ></i><span style="font-size:18px">
-                              手机号： {{ MyContent.phoneNumber }}
-                              </span>
+                                <i
+                                  class="ri-checkbox-blank-circle-fill text-primary"
+                                ></i
+                                ><span style="font-size: 18px">
+                                  手机号： {{ MyContent.phoneNumber }}
+                                </span>
                               </h5>
                             </li>
-                            <li style="margin-top: 20px;margin-left:30%">
+                            <li style="margin-top: 20px; margin-left: 30%">
                               <h5>
-                              <i
-                                class="ri-checkbox-blank-circle-fill text-info
-"
-                              ></i>
-                              <span style="font-size:18px">
-                              邮箱： {{ MyContent.email }}
-                              </span>
+                                <i
+                                  class="ri-checkbox-blank-circle-fill text-info"
+                                ></i>
+                                <span style="font-size: 18px">
+                                  邮箱： {{ MyContent.email }}
+                                </span>
                               </h5>
                             </li>
-                            <li style="margin-top: 20px;margin-left:30%">
+                            <li style="margin-top: 20px; margin-left: 30%">
                               <h5>
-                              <i
-                                class="ri-checkbox-blank-circle-fill text-dark"
-                              ></i>
-                              <span style="font-size:18px">
-                              住址： {{ MyContent.address }}
-                              </span>
+                                <i
+                                  class="ri-checkbox-blank-circle-fill text-dark"
+                                ></i>
+                                <span style="font-size: 18px">
+                                  住址： {{ MyContent.address }}
+                                </span>
                               </h5>
                             </li>
-                            <button style="margin-top: 40px" type="button" class="btn btn-primary btn-block" @click="handleLogout()">注销</button>
+                            <button
+                              style="margin-top: 40px"
+                              type="button"
+                              class="btn btn-primary btn-block"
+                              @click="handleLogout()"
+                            >
+                              注销
+                            </button>
                           </ul>
                         </div>
                       </div>
@@ -200,26 +199,43 @@
 export default {
   data() {
     return {
+      value: new Date(),
       // 头像
       fits: ["fill"],
-      Url:"",
+      Url: "",
       MyContent: [],
-      AdminId: "1",
+      userId: "",
     };
   },
+  mounted: function () {
+    this.getMyContent();
+  },
   created: function () {
-    this.getMyContent(), this.getUserContent();
+    this.GetUserIdentity();
+    this.getMyContent();
   },
   methods: {
-    getMyContent: function () {
+    //获取用户身份
+    GetUserIdentity() {
       var self = this;
       axios
-        .get("/apis/backend/profile/1/")
+        .post("/apis/backend/getIdentity/")
+        .then((response) => (self.userId = response.data.userId))
+        .catch(function (error) {
+          // alert(JSON.stringify(error.response.data.message));
+          alert("获取用户身份失败");
+        });
+    },
+    getMyContent: function () {
+      var self = this;
+      // var userId=this.userId;
+      // alert("获取内容")
+      axios
+        .get("/apis/backend/profile/" + this.userId + "/")
         .then(
           (response) => (
-            (self.MyContent = response.data),
+            (self.MyContent = response.data[0]),
             (this.Url = self.MyContent.avatar)
-            // alert(JSON.stringify(self.MyContent))
           )
         )
         .catch(function (error) {
@@ -227,37 +243,35 @@ export default {
           alert("数据请求失败wdnmd");
         });
     },
-    handleLogout: function() {
-        this.$confirm("确认退出吗？","系统提示",{
-          confirmButtonText:"确定",
-          cancelButtonText:"取消",
-          type:"warning"
+    handleLogout: function () {
+      this.$confirm("确认退出吗？", "系统提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          this.logout();
+          this.$message({
+            type: "success",
+            message: "退出成功！",
+          });
+          this.$router.push({
+            path: "/Login",
+          });
         })
-          .then(()=>{
-            this.logout();
-            this.$message({
-              type:"success",
-              message:"退出成功！"
-            });
-            this.$router.push({
-              path:'/Login'
-            });
-          })
-          .catch(()=>{
-            this.$message({
-              type:"info",
-              message:"取消退出！"
-            });
-          })
-      },
-      logout: function() {
-        var self = this;
-      axios
-        .get("/apis/backend/logout/")
-        .catch(function (error) {
-          alert("数据请求失败wdnmd");
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "取消退出！",
+          });
         });
-      }
+    },
+    logout: function () {
+      var self = this;
+      axios.get("/apis/backend/logout/").catch(function (error) {
+        alert("数据请求失败wdnmd");
+      });
+    },
   },
 };
 </script>
@@ -267,4 +281,26 @@ export default {
 @import "../../css/typography.css";
 @import "../../css/style.css";
 @import "../../css/animate.css";
+/* 日历组件 */
+.el-calendar-table .el-calendar-day {
+  height: 40px;
+}
+.el-calendar-table .el-calendar-day:hover {
+  background: #d8c5f8;
+}
+.el-calendar-table td.is-selected {
+  background-color: #dbc7fc;
+  color: #fff;
+}
+.el-calendar-table td.is-today {
+  color: #9150f8;
+}
+#calendar {
+  border: 0px;
+  margin-top: 20px;
+  background: transparent;
+}
+#calendar :hover {
+  background: transparent;
+}
 </style>

@@ -14,7 +14,7 @@
                   class="iq-waves-effect"
                   :to="{
                     path: '/UserProfile',
-                    query: { uI: this.AdminUserId },
+                    query: { uI: this.userId },
                   }"
                   ><i class="ri-profile-line"></i
                   ><span>个人资料</span></router-link
@@ -25,7 +25,7 @@
                   class="iq-waves-effect"
                   :to="{
                     path: 'UserProfileEdit',
-                    query: { uI: this.AdminUserId },
+                    query: { uI: this.userId },
                   }"
                   ><i class="ri-file-edit-line"></i
                   ><span>修改资料</span></router-link
@@ -45,39 +45,27 @@
       <!-- TOP Nav Bar -->
       <div class="iq-top-navbar" style="z-index: 1">
         <div class="iq-navbar-custom">
-          <!-- <div class="iq-sidebar-logo">
-               <div class="top-logo">
-                  <a href="index.html" class="logo">
-                  <img src="images/logo.gif" class="img-fluid" alt="">
-                  <span>vito</span>
-                  </a>
-               </div>
-            </div> -->
           <nav class="navbar navbar-expand-lg navbar-light p-0">
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <ul class="navbar-nav ml-auto navbar-list">
-                <li class="nav-item">
-                  <a class="search-toggle iq-waves-effect" href="#"
-                    ><i class="ri-calendar-line"></i
-                  ></a>
-                  <div class="iq-sub-dropdown">
-                    <div class="calender-small"></div>
-                  </div>
-                </li>
+                <li class="nav-item"></li>
               </ul>
             </div>
             <ul class="navbar-list">
               <li>
-                <a
-                  href="#"
-                  class="search-toggle iq-waves-effect d-flex align-items-center"
-                >
-                  <img
-                    :fit="fit"
-                    :src="imageUrl"
-                    class="img-fluid rounded mr-3"
-                    alt="user"
-                  />
+                <el-popover placement="bottom" width="400" trigger="click">
+                  <el-calendar v-model="value"> </el-calendar>
+                  <el-button slot="reference" id="calendar">
+                    <i
+                      class="ri-calendar-line"
+                      style="font-size: 20px; color: rgb(135, 123, 244)"
+                    ></i>
+                  </el-button>
+                </el-popover>
+              </li>
+              <li>
+                <a class="d-flex align-items-center">
+                  <img :src="imageUrl" class="img-fluid rounded mr-3" alt="user" />
                   <div class="caption">
                     <h6 class="mb-0 line-height">{{ MyContent.userName }}</h6>
                   </div>
@@ -194,6 +182,7 @@
 export default {
   data() {
     return {
+      userId:'',
       // 头像
       fits: ["fill"],
       imageUrl:"",
@@ -208,6 +197,7 @@ export default {
     };
   },
   created: function () {
+    this.GetUserIdentity()
     this.getMyContent()
   },
   mounted: function () {
@@ -215,6 +205,20 @@ export default {
     this.SetPages();
   },
   methods: {
+    //获取用户身份
+    GetUserIdentity(){
+      var self=this
+      axios
+        .post("/apis/backend/getIdentity/")
+        .then(response => (
+           self.userId=response.data.userId
+          )
+        )
+        .catch(function (error) {
+          // alert(JSON.stringify(error.response.data.message));
+          alert("获取用户身份失败");
+        });
+    },
     //上一页
     GetPrevCasePage() {
       if (this.currentCasePage == 1) return;
@@ -233,10 +237,10 @@ export default {
     getMyContent: function () {
       var self = this;
       axios
-        .get("/apis/backend/profile/1/")
+        .get("/apis/backend/profile/"+this.userId+"/")
         .then(
           (response) => (
-            (self.MyContent = response.data),
+            (self.MyContent = response.data[0]),
             (this.imageUrl = self.MyContent.avatar)
             // alert(JSON.stringify(self.MyContent))
           )
@@ -252,7 +256,7 @@ export default {
       axios
         .get("/apis/backend/case/", {
           params: {
-            userId: 1,
+            userId: this.userId,
             pageSize: 6,
             page: self.currentCasePage,
           },
@@ -275,10 +279,12 @@ export default {
       var self = this;
       let data = new FormData();
       data.append("caseId", id);
+      alert(id)
       axios
         .post("apis/backend/getCaseInfo/", data)
         .then((response) => {
           self.cases = response.data.cases;
+          alert(JSON.stringify(self.cases)),
           console.log(JSON.stringify(self.cases));
 
           console.log(self.cases.Initcitydata);
