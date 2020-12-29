@@ -279,50 +279,49 @@ export default {
       var self = this;
       let data = new FormData();
       data.append("caseId", id);
-      alert(id)
       axios
         .post("apis/backend/getCaseInfo/", data)
         .then((response) => {
           self.cases = response.data.cases;
-          alert(JSON.stringify(self.cases)),
+          // alert(JSON.stringify(self.cases)),
           console.log(JSON.stringify(self.cases));
 
-          console.log(self.cases.Initcitydata);
+          console.log(self.cases.InitCityData);
           var city_inf = [];
-          for (var j in self.cases.Initcitydata) {
+          for (var j in self.cases.InitCityData) {
             var s =
               "cityname:" +
-              self.cases.Initcitydata[j].cityname +
+              self.cases.InitCityData[j].cityName +
               ",initpop:" +
-              self.cases.Initcitydata[j].initpop +
+              self.cases.InitCityData[j].initPop +
               ",initinfect:" +
-              self.cases.Initcitydata[j].initinfect;
+              self.cases.InitCityData[j].initInfect;
             console.log("s:", s);
             city_inf.push(s);
           }
 
           var road_inf = [];
-          for (var j in self.cases.Initroaddata) {
+          for (var j in self.cases.InitRoadData) {
             var s =
               "departure:" +
-              self.cases.Initroaddata[j].departure +
+              self.cases.InitRoadData[j].departure +
               ",destination:" +
-              self.cases.Initroaddata[j].destination +
+              self.cases.InitRoadData[j].destination +
               ",volume:" +
-              self.cases.Initroaddata[j].volume;
+              self.cases.InitRoadData[j].volume;
             console.log("s:", s);
             road_inf.push(s);
           }
 
           var city_pos = [];
-          for (var j in self.cases.Cityposition) {
+          for (var j in self.cases.CityPosition) {
             var s =
               "cityname:" +
-              self.cases.Cityposition[j].cityname +
+              self.cases.CityPosition[j].cityName +
               ",x:" +
-              self.cases.Cityposition[j].x +
+              self.cases.CityPosition[j].x +
               ",y:" +
-              self.cases.Cityposition[j].y;
+              self.cases.CityPosition[j].y;
             console.log("s:", s);
             city_pos.push(s);
           }
@@ -344,7 +343,7 @@ export default {
         })
         .catch(function (error) {
           alert(JSON.stringify(error.response));
-          alert("数据请求失败wdnmd");
+          alert("getCaseInfo数据请求失败wdnmd");
         });
     },
     DeleteCaseContent: function (id) {
