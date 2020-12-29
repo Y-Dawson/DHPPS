@@ -57,7 +57,9 @@
       <router-link to="/forgetPass" class="forget-password" style="font-size:14px;margin-left:10px; float:right;">忘记密码</router-link>
       <!-- <a class="forget-password" href="./forgetPass" style="margin-right:10px; float:right;">忘记密码</a> -->
      </el-form>
+     
     </div>
+    <a style="color:#fff; border:2px #fff solid;padding:5px;" href="http://127.0.0.1:5500/frontend/template/index.html">回到首页</a>
   </div>
 </template>
 
@@ -101,6 +103,9 @@ export default {
     // this.JumpPage();
   },
   methods: {
+    jumpHtml(){
+      window.location.href="index.html"
+    },
     submitMessage(){
       if(this.loginMassege=="登录成功"){
         // this.$cookies.get(keyName)
@@ -216,6 +221,7 @@ export default {
     },
   },
 };
+// document.write(location.href);
 </script>
 <style>
 .MyInput .el-input__inner{
