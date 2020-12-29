@@ -198,7 +198,6 @@ export default {
   },
   created: function () {
     this.GetUserIdentity()
-    this.getMyContent()
   },
   mounted: function () {
     this.GetCaseContent();
@@ -211,7 +210,8 @@ export default {
       axios
         .post("/apis/backend/getIdentity/")
         .then(response => (
-           self.userId=response.data.userId
+           self.userId=response.data.userId,
+           this.getMyContent()
           )
         )
         .catch(function (error) {
@@ -240,8 +240,8 @@ export default {
         .get("/apis/backend/profile/"+this.userId+"/")
         .then(
           (response) => (
-            (self.MyContent = response.data[0]),
-            (this.imageUrl = self.MyContent.avatar)
+            self.MyContent = response.data,
+            this.imageUrl = self.MyContent.avatar
             // alert(JSON.stringify(self.MyContent))
           )
         )

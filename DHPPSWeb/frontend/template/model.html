@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>model</title>
+    <link href="https://fonts.googleapis.com/css?family=Playfair+Display:700i" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="static/css/normalize2.css" />
+    <link rel="stylesheet" type="text/css" href="static/css/demo.css" />
+    <link rel="stylesheet" type="text/css" href="static/css/component.css" />
+    <script>document.documentElement.className = 'js';</script>
+    <style>
+        li {
+            margin-bottom: 40px;
+            list-style: none;
+        }
+    </style>
+</head>
+
+<body class="demo-1" >
+    <svg class="hidden">
+        <symbol id="icon-arrow" viewBox="0 0 24 24">
+            <title>arrow</title>
+            <polygon points="6.3,12.8 20.9,12.8 20.9,11.2 6.3,11.2 10.2,7.2 9,6 3.1,12 9,18 10.2,16.8 " />
+        </symbol>
+        <symbol id="icon-drop" viewBox="0 0 24 24">
+            <title>drop</title>
+            <path
+                d="M12,21c-3.6,0-6.6-3-6.6-6.6C5.4,11,10.8,4,11.4,3.2C11.6,3.1,11.8,3,12,3s0.4,0.1,0.6,0.3c0.6,0.8,6.1,7.8,6.1,11.2C18.6,18.1,15.6,21,12,21zM12,4.8c-1.8,2.4-5.2,7.4-5.2,9.6c0,2.9,2.3,5.2,5.2,5.2s5.2-2.3,5.2-5.2C17.2,12.2,13.8,7.3,12,4.8z" />
+            <path
+                d="M12,18.2c-0.4,0-0.7-0.3-0.7-0.7s0.3-0.7,0.7-0.7c1.3,0,2.4-1.1,2.4-2.4c0-0.4,0.3-0.7,0.7-0.7c0.4,0,0.7,0.3,0.7,0.7C15.8,16.5,14.1,18.2,12,18.2z" />
+        </symbol>
+        <symbol id="icon-caret" viewBox="0 0 24 24">
+            <title>caret</title>
+            <polygon points="15.7,16.6 11.1,12 15.7,7.4 14.3,6 8.3,12 14.3,18" />
+        </symbol>
+        <symbol id="icon-menu" viewBox="0 0 24 24">
+            <title>menu</title>
+            <path d="M23.8,6H0.1V3h23.7V6z M23.8,10.5H0.1v3h23.7V10.5z M14.2,18h-14v3h14V18z" />
+        </symbol>
+        <symbol id="icon-cross" viewBox="0 0 24 24">
+            <title>cross</title>
+            <path
+                d="M14.1,12l7.3,7.3l-2.1,2.1L12,14.1l-7.3,7.3l-2.1-2.1L9.9,12L2.6,4.7l2.1-2.1L12,9.9l7.3-7.3l2.1,2.1L14.1,12z" />
+        </symbol>
+    </svg>
+    <main class="view">
+        <div class="content" >
+            <div class="deco">
+                <!-- <p class="deco__text">算法模型展示</p> -->
+            </div>
+            <header class="codrops-header" >
+                <a class="btn-custom" href="index.html">返回首页</a>
+                <p class="codrops-header__info" id="text1">We will show you some of the balabalba</p>
+                <span class="codrops-header__deco" >Algorithm</span>
+                <h1 class="codrops-header__title" id="text2">算法模型展示</h1>
+                <p class="codrops-header__tagline" id="text3" style="font-size: 20px;">Algorithm Model</p>
+            </header>
+        </div>
+        <button class="btn btn--menu">
+            <svg class="icon icon--menu">
+                <use xlink:href="#icon-menu"></use>
+            </svg>
+            <svg class="icon icon--cross">
+                <use xlink:href="#icon-cross"></use>
+            </svg>
+        </button>
+        <nav class="tabsnav tabsnav--vertical tabsnav--ander">
+            <div class="tabsnav__item">
+                <div class="tabsnav__bar" ></div>
+                <h3 class="tabsnav__title">SEIR</h3>
+            </div>
+            <div class="tabsnav__item">
+                <div class="tabsnav__bar"></div>
+                <h3 class="tabsnav__title">CovLSTM</h3>
+            </div>
+            <div class="tabsnav__item">
+                <div class="tabsnav__bar"></div>
+                <h3 class="tabsnav__title">Covlution</h3>
+            </div>
+        </nav>
+        <div class="tabscontent">
+            <div class="tabscontent__item">
+                <figure class="poster">
+                    <div class="poster__img">
+                        <img src="static/images/principle/s44.png" alt="Poster 1" style="display: inline-block; height: 280px;"
+                            data-scroll-reveal="enter bottom after 3s" />
+                        <img src="static/images/principle/sff.png" alt="Poster 1"
+                            style="margin-left: 50px;  display: inline-block; height: 250px;"
+                            data-scroll-reveal="enter bottom after 3s" />
+                        <img src="static/images/principle/s3.png" alt="Poster 1" style="display: inline-block; height: 250px;"
+                            data-scroll-reveal="enter bottom after 3s" />
+                        <div style="margin-top: 50px; margin-left: 150px; margin-bottom: 100px;">
+                            <img src="static/images/principle/s5.png" alt="Poster 1"
+                                style="display: inline-block; height: 50px;"
+                                data-scroll-reveal="enter bottom after 3s" />
+                        </div>
+                    </div>
+                    <figcaption class="poster__caption">
+                        <h2 class="poster__title" style="margin-top: -20px;">SEIR模型</h2>
+                        <p class="poster__deco"></p>
+                        <div class="poster__box"></div>
+                        <span class="poster__number" style="color:  #5D5EB4">03</span>
+                    </figcaption>
+                </figure>
+            </div>
+            <div class="tabscontent__item">
+                <figure class="poster">
+                    <div class="poster__img">
+                        <img src="static/images/principle/LSTM1.png" alt="Poster 1"
+                            style="display: inline-block; height: 350px;" data-scroll-reveal="enter bottom after 3s" />
+                        <div style="display: inline-block;">
+                            <ul>
+                                <li>
+                                    <img data-scroll-reveal="enter bottom after 4.5s" alt=""
+                                        src="static/images/principle/li1.png" style="margin-right: 0px; width: 40px;">
+                                    <img data-scroll-reveal="enter bottom after 4.5s" alt=""
+                                        src="static/images/principle/formula11.png" style="margin-right: 0px; width: 350px;">
+                                </li>
+                                <li>
+                                    <img data-scroll-reveal="enter bottom after 5.5s" alt=""
+                                        src="static/images/principle/li1.png" style="margin-right: 0px; width: 40px;">
+                                    <img data-scroll-reveal="enter bottom after 5.5s" alt=""
+                                        src="static/images/principle/formula22.png" style="width: 350px;">
+                                </li>
+                                <li>
+                                    <img data-scroll-reveal="enter bottom after 6.5s" alt=""
+                                        src="static/images/principle/li2.png" style="margin-right: 0px; width: 40px;">
+                                    <img data-scroll-reveal="enter bottom after 6.5s" alt=""
+                                        src="static/images/principle/formula33.png" style="width: 350px;">
+                                </li>
+                                <li>
+                                    <img data-scroll-reveal="enter bottom after 7s" alt=""
+                                        src="static/images/principle/li1.png" style="margin-right: 0px; width: 40px;">
+                                    <img data-scroll-reveal="enter bottom after 7s" alt=""
+                                        src="static/images/principle/formula44.png" style="width: 350px;">
+                                </li>
+                                <li>
+                                    <img data-scroll-reveal="enter bottom after 7s" alt=""
+                                        src="static/images/principle/formula55.png" style="width: 200px;">
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                    <figcaption class="poster__caption">
+                        <h4 class="poster__title">CovLSTM</h4>
+                        <!-- 侧边文字 -->
+                        <p class="poster__deco"></p>
+                        <div class="poster__box"></div>
+                        <span class="poster__number" style="color:  #5D5EB4">02</span>
+                    </figcaption>
+                </figure>
+            </div>
+            <div class="tabscontent__item">
+                <figure class="poster">
+                    <div class="poster__img">
+                        <img src="static/images/principle/c0.png" alt="Poster 1"
+                            style="display: inline-block; margin-left: -20px;  width: 200px;"
+                            data-scroll-reveal="enter bottom after 3s" />
+                        <img src="static/images/principle/c1.png" alt="Poster 1"
+                            style="display: inline-block; margin-left: -20px;  width: 240px;"
+                            data-scroll-reveal="enter bottom after 4s" />
+                        <img src="static/images/principle/c2.png" alt="Poster 1"
+                            style="display: inline-block; margin-left: -20px;  width: 180px;"
+                            data-scroll-reveal="enter bottom after 5s" />
+                        <img src="static/images/principle/c3.png" alt="Poster 1"
+                            style="display: inline-block; margin-left: -30px; width: 340px;"
+                            data-scroll-reveal="enter bottom after 6s" />
+                        <div style="margin-left: 170px; margin-top: -20px;">
+                            <img data-scroll-reveal="enter bottom after 4.5s" alt=""
+                                src="static/images/principle/subsampling.png"
+                                style=" display: inline-block; margin-right: 0px; width: 150px;">
+                            <img data-scroll-reveal="enter bottom after 5.5s" alt=""
+                                src="static/images/principle/convolutions.png"
+                                style=" display: inline-block;margin-left: 60px; width: 150px;">
+                            <img data-scroll-reveal="enter bottom after 6.5s" alt=""
+                                src="static/images/principle/subsampling.png"
+                                style=" display: inline-block;margin-left: -10px; width: 150px;">
+                            <img data-scroll-reveal="enter bottom after 7s" alt=""
+                                src="static/images/principle/fullyconnected.png"
+                                style=" display: inline-block;margin-left: -30px; width: 150px;">
+                        </div>
+                        <img src="static/images/principle/cf.png" alt="Poster 1"
+                            style="margin:20px 0px 100px 240px; left: 50%; width: 400px;"
+                            data-scroll-reveal="enter bottom after 8s" />
+                    </div>
+                    <figcaption class="poster__caption">
+                        <h4 class="poster__title">Convolutions</h4>
+                        <!-- 侧边文字 -->
+                        <p class="poster__deco"></p>
+                        <div class="poster__box"></div>
+                        <span class="poster__number" style="color:  #5D5EB4">01</span>
+                    </figcaption>
+                </figure>
+            </div>
+            <button class="btn btn--back"><svg class="icon icon--caret">
+                    <use xlink:href="#icon-caret"></use>
+                </svg></button>
+        </div>
+    </main>
+
+    <script src="static/js/anime.min.js"></script>
+    <script src="static/js/enquire.min2.js"></script>
+    <script src="static/js/tabsnav.js"></script>
+    <script src="static/js/demo1.js"></script>
+    <script type="text/javascript">
+        var p1=document.getElementById('text1');
+        p1.style.opacity=1;
+        function fadeIn(element,speed){
+            var speed=speed||10;
+            var num=0;
+            var st=setInterval(function(){
+                num++;
+                element.style.opacity=num/10;
+                if(num>=10){clearInterval(st);}
+            },speed);
+        }
+        window.onload = function (){
+            fadeIn(text1,100);
+            fadeIn(text2,100);
+            fadeIn(text3,100);
+        }
+    </script>
+</body>
+
+</html>

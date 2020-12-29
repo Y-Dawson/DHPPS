@@ -496,7 +496,7 @@ export default {
   },
   created: function () {
     this.GetUserIdentity()
-    this.getMyContent()
+    // this.getMyContent()
   },
   methods: {
     //获取用户身份
@@ -505,10 +505,8 @@ export default {
       axios
         .post("/apis/backend/getIdentity/")
         .then(response => (
-           self.userId=response.data.userId
-          //  alert(JSON.stringify(response.data))
-          //  alert(this.userId),
-          //  this.getMyContent()
+           self.userId=response.data.userId,
+           this.getMyContent()
           )
         )
         .catch(function (error) {
@@ -524,7 +522,7 @@ export default {
         .get("/apis/backend/profile/"+this.userId+"/")
         .then(
           (response) => (
-            self.MyContent = response.data[0],
+            self.MyContent = response.data,
             this.imageUrl = self.MyContent.avatar,
             this.changingUrl=self.MyContent.avatar,
             this.ruleForm.name=this.MyContent.userName,
