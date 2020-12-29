@@ -12,6 +12,7 @@ import AdminIndex from '@/components/page/AdminIndex'
 import UserProfile from '@/components/page/UserProfile'
 import UserProfileEdit from '@/components/page/UserProfileEdit'
 import SuperUserManage from '@/components/page/SuperUserManage'
+import AdminModelView from '@/components/page/AdminModelView'
 import UserCase from '@/components/page/UserCase'
 import settingMap from '@/components/page/settingMap'
 import simulationMap from '@/components/page/simulationMap'
@@ -36,6 +37,7 @@ export default new Router({
     {path:'/UserProfile',component:UserProfile},
     {path:'/UserProfileEdit',component:UserProfileEdit},
     {path:'/SuperUserManage',component:SuperUserManage},
+    {path:'/AdminModelView',component:AdminModelView},
     {path:'/UserCase',component:UserCase},
     {path:'/settingMap',component:settingMap},
     {path:'/simulationMap',component:simulationMap},

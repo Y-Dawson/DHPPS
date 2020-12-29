@@ -59,6 +59,20 @@
             </div>
             <ul class="navbar-list">
               <li>
+                <div class="chat-header-icons d-flex">
+                  <router-link
+                    class="chat-icon-phone iq-bg-primary"
+                    style="width: 100px; font-size: 14px; margin-top: 18px"
+                    :to="{
+                      path: '/UserProfile',
+                    }"
+                  >
+                    <i class="ri-reply-fill"></i>
+                    个人中心
+                  </router-link>
+                </div>
+              </li>
+              <li>
                 <el-popover placement="bottom" width="400" trigger="click">
                   <el-calendar v-model="value"> </el-calendar>
                   <el-button slot="reference" id="calendar">
@@ -626,7 +640,7 @@ export default {
 }
 #calendar {
   border: 0px;
-  margin-top: 20px;
+  margin-top: 10px;
   background: transparent;
 }
 #calendar :hover {
