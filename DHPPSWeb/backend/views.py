@@ -418,7 +418,7 @@ def SaveCase(request):
 
             try:
                 # 新增案例
-                if (models.AccountInformation.objects.filter(userId=userId).exist()):
+                if (models.AccountInformation.objects.filter(userId=userId).exists()):
                     newCase = models.CaseData.objects.create(
                         userId=models.AccountInformation.objects.filter(userId=userId).first(),
                         caseName=caseName,
@@ -506,7 +506,7 @@ def SaveCase(request):
                 cityCount += 1
             try:
                 # 新增案例
-                if (models.AccountInformation.objects.filter(userId=userId).exist()):
+                if (models.AccountInformation.objects.filter(userId=userId).exists()):
                     newCase = models.CaseData.objects.create(
                         userId=models.AccountInformation.objects.filter(userId=userId).first(),
                         caseName=caseName,
