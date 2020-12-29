@@ -865,6 +865,7 @@ def GetCaseInfos(request):
                 cases["caseName"] = caseInfo.caseName
                 cases["cityNum"] = len(cityInfos)
                 cases["roadNum"] = len(roadInfos)
+                cases["caseMode"] = caseInfo.caseMode
 
                 cityList = []
                 cityPosList = []
@@ -877,8 +878,8 @@ def GetCaseInfos(request):
 
                     cityPosCase = {}
                     cityPosCase["cityName"] = cityInfos[cityIdx].cityName
-                    cityPosCase["x"] = cityInfos[cityIdx].CityPosition.x
-                    cityPosCase["y"] = cityInfos[cityIdx].CityPosition.y
+                    cityPosCase["x"] = cityInfos[cityIdx].cityposition.x
+                    cityPosCase["y"] = cityInfos[cityIdx].cityposition.y
                     cityPosList.append(cityPosCase)
 
                 roadList = []
