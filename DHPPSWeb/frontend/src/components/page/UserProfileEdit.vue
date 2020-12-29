@@ -45,14 +45,6 @@
       <!-- TOP Nav Bar -->
       <div class="iq-top-navbar" style="z-index: 1">
         <div class="iq-navbar-custom">
-          <!-- <div class="iq-sidebar-logo">
-               <div class="top-logo">
-                  <a href="index.html" class="logo">
-                  <img src="images/logo.gif" class="img-fluid" alt="">
-                  <span>vito</span>
-                  </a>
-               </div>
-            </div> -->
           <nav class="navbar navbar-expand-lg navbar-light p-0">
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <ul class="navbar-nav ml-auto navbar-list">
@@ -74,7 +66,7 @@
                 >
                   <img
                     :fit="fit"
-                    :src="Url"
+                    :src="imageUrl"
                     class="img-fluid rounded mr-3"
                     alt="user"
                   />
@@ -138,7 +130,7 @@
                           label-width="100px"
                           class="demo-ruleForm"
                         >
-                          <div class="demo-fit" style="text-align: center">
+                          <!-- <div class="demo-fit" style="text-align: center">
                             <div class="block profile-img-edit">
                               <el-avatar
                                 shape="circle"
@@ -155,6 +147,48 @@
                                 />
                               </div>
                             </div>
+                          </div> -->
+                          <div class="demo-fit" style="text-align: center">
+                            <div class="block profile-img-edit">
+                          <el-avatar
+                            shape="circle"
+                            :size="70"
+                            :fit="fill"
+                            :src="changingUrl"
+                          ></el-avatar>
+                          <el-upload
+                            action="#"
+                            class="upload-demo"
+                            :show-file-list="false"
+                            :on-success="handleAvatarSuccess"
+                            :before-upload="beforeAvatarUpload"
+                            :on-progress="handleAvatarSuccess"
+                            style="margin-top: -20px"
+                          >
+                            <div
+                              class="avatarEdit"
+                              cursor:pointer
+                              style="
+                                background: #827af3;
+                                margin-top: -50px;
+                                margin-left:50px;
+                                padding-bottom: 0px;
+                                width: 30px;
+                                padding-top: 2px;
+                                height: 30px;
+                                border: 0px;
+                                color: #fff;
+                                border-radius: 50%;
+                                text-align: center;
+                              "
+                            >
+                              <i
+                                class="el-icon-edit"
+                                style="font-size: 18px; margin-bottom: -5px"
+                              ></i>
+                            </div>
+                          </el-upload>
+                          </div>
                           </div>
                           <el-form-item label="昵称" prop="name">
                             <el-input
@@ -164,14 +198,6 @@
                               id="inputname"
                             ></el-input>
                           </el-form-item>
-                          <!-- <el-form-item label="手机号" prop="phone">
-                    <el-input
-                      size="small"
-                      v-model="ruleForm.phone"
-                      clearable
-                      id="inputphone"
-                    ></el-input>
-                  </el-form-item> -->
                           <el-form-item label="性别" prop="sex">
                             <el-radio-group
                               v-model="ruleForm.radio"
@@ -183,7 +209,7 @@
                               <el-radio label="保密"></el-radio>
                             </el-radio-group>
                           </el-form-item>
-                          <el-form-item label="生日">
+                          <el-form-item label="出生日期">
                             <el-date-picker
                               clearable
                               v-model="value1"
@@ -420,8 +446,9 @@ export default {
       show: false,
       // 头像
       fits: ["fill"],
-      Url:
-        "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
+      imageUrl: "",
+      changingUrl:"",
+      image: "",
       MyContent: [],
       AdminId: "1",
       sex: "",
@@ -481,7 +508,9 @@ export default {
         .get("/apis/backend/profile/1/")
         .then(
           (response) => (
-            (self.MyContent = response.data), (this.Url = self.MyContent.avatar)
+            (self.MyContent = response.data),
+            (this.imageUrl = self.MyContent.avatar),
+            (this.changingUrl=self.MyContent.avatar)
           )
         )
         .catch(function (error) {
@@ -491,17 +520,15 @@ export default {
     },
     putContent: function (userId) {
       var self = this;
-      var uname = $("#inputname").val();
-      alert($("#inputname").val());
+      let data = new FormData();
+      data.append("avatar", this.image)
+      data.append("userName",$("#inputname").val())
+      data.append("birth",this.value1)
+      data.append("sex",this.ruleForm.radio)
+      data.append("email",$("#inputmail").val())
+      data.append("address",$("#inputaddr").val())
       axios
-        .put("/apis/backend/profile/1/", {
-          userName: $("#inputname").val(),
-          // phonenumber: $("#inputphone").val(),
-          birth: this.value1,
-          sex: this.ruleForm.radio,
-          email: $("#inputmail").val(),
-          address: $("#inputaddr").val(),
-        })
+        .put("/apis/backend/profile/1/",data)
         .then(
           (response) => (
             (self.content = response), this.$message.success("修改成功")
@@ -517,12 +544,33 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.putContent(this.userId);
-          // alert('submit!')
+          this.$router.push({
+            path:'/UserProfile',
+          });
         } else {
           this.$message.error("修改失败");
           return false;
         }
       });
+    },
+    handleAvatarSuccess(res, file, fileList) {
+      // alert("success")
+      this.image = file.raw;
+      console.log("现在的图片是：");
+      console.log(file.raw);
+      this.changingUrl = URL.createObjectURL(file.raw);
+    },
+    beforeAvatarUpload(file) {
+      const isJPG = file.type === "image/jpeg";
+      const isLt2M = file.size / 1024 / 1024 < 2;
+
+      if (!isJPG) {
+        this.$message.error("上传头像图片只能是 JPG 格式!");
+      }
+      if (!isLt2M) {
+        this.$message.error("上传头像图片大小不能超过 2MB!");
+      }
+      return isJPG && isLt2M;
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();

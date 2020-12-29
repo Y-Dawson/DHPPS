@@ -146,7 +146,7 @@
                                 class="ri-checkbox-blank-circle-fill text-danger"
                               ></i>
                               <span style="font-size:18px">
-                              生日： {{ MyContent.birth }}
+                              出生日期： {{ MyContent.birth }}
                               </span>
                               </h5>
                             </li>
@@ -202,8 +202,7 @@ export default {
     return {
       // 头像
       fits: ["fill"],
-      Url:
-        "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
+      Url:"",
       MyContent: [],
       AdminId: "1",
     };
