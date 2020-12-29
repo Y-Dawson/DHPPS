@@ -1,5 +1,5 @@
 <template>
-  <div style="background-color: rgb(235, 234, 250)">
+  <div v-if="authorityShow" style="background-color: rgb(235, 234, 250)">
     <div class="wrapper">
       <!-- Sidebar  -->
       <div class="iq-sidebar" style="z-index: 1">
@@ -22,14 +22,11 @@
                         </ul>
                      </li> -->
               <li>
-                <router-link
+                <a
                   class="iq-waves-effect"
-                  :to="{
-                    path: '/AdminUserManage',
-                    query: { uI: this.AdminId },
-                  }"
+                  @click="adminOrSuperAdmin()"
                   ><i class="ri-user-line"></i
-                  ><span>信息管理</span></router-link
+                  ><span>信息管理</span></a
                 >
               </li>
               <li>
@@ -56,38 +53,27 @@
       <!-- TOP Nav Bar -->
       <div class="iq-top-navbar" style="z-index: 1">
         <div class="iq-navbar-custom">
-          <!-- <div class="iq-sidebar-logo">
-               <div class="top-logo">
-                  <a href="index.html" class="logo">
-                  <img src="images/logo.gif" class="img-fluid" alt="">
-                  <span>vito</span>
-                  </a>
-               </div>
-            </div> -->
           <nav class="navbar navbar-expand-lg navbar-light p-0">
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <ul class="navbar-nav ml-auto navbar-list">
-                <li class="nav-item">
-                  <a class="search-toggle iq-waves-effect" href="#"
-                    ><i class="ri-calendar-line"></i
-                  ></a>
-                  <div class="iq-sub-dropdown">
-                    <div class="calender-small"></div>
-                  </div>
-                </li>
+                <li class="nav-item"></li>
               </ul>
             </div>
             <ul class="navbar-list">
               <li>
-                <a
-                  href="#"
-                  class="search-toggle iq-waves-effect d-flex align-items-center"
-                >
-                  <img
-                    :src="AdminUrl"
-                    class="img-fluid rounded mr-3"
-                    alt="user"
-                  />
+                <el-popover placement="bottom" width="400" trigger="click">
+                  <el-calendar v-model="value"> </el-calendar>
+                  <el-button slot="reference" id="calendar">
+                    <i
+                      class="ri-calendar-line"
+                      style="font-size: 20px; color: rgb(135, 123, 244)"
+                    ></i>
+                  </el-button>
+                </el-popover>
+              </li>
+              <li>
+                <a class="d-flex align-items-center">
+                  <img :src="AdminUrl" class="img-fluid rounded mr-3" alt="user" />
                   <div class="caption">
                     <h6 class="mb-0 line-height">{{ MyContent.userName }}</h6>
                   </div>
@@ -208,7 +194,9 @@ export default {
       fits: ["fill"],
       AdminUrl: "",
       MyContent: [],
-      AdminId: "25",
+      AdminId: "",
+      AdminAuthority: "",
+      authorityShow: false,
       sexData: [],
       cityData: [],
       userCaseData: [],
@@ -274,22 +262,43 @@ export default {
     };
   },
   created: function () {
-    this.getMyContent();
-    this.getSexData();
-    this.getCityData();
-    this.getUserCaseData();
+    this.getMyIdentity();
   },
   methods: {
+    //获取管理员身份
+    getMyIdentity: function() {
+      var self = this;
+      axios
+        .post("/apis/backend/getIdentity/")
+        .then((response) => {
+          this.AdminId = response.data.userId;
+          this.AdminAuthority=response.data.authority;
+          if (response.data.authority == "管理员"||response.data.authority=="超级管理员") {
+            this.authorityShow = true;
+            this.getMyContent();
+            this.getSexData();
+            this.getCityData();
+            this.getUserCaseData();
+          } else {
+            this.$message("您没有权限进入管理员界面！");
+            this.$router.push({
+              path: "/UserProfile",
+            });
+          }
+        })
+        .catch(function (error) {
+          alert(JSON.stringify(error));
+          alert("获取用户身份失败");
+        });
+    },
     getMyContent: function () {
       var self = this;
       axios
-        .get("/apis/backend/profile/25/")
-        .then(
-          (response) => (
-            (self.MyContent = response.data),
-            (this.AdminUrl = self.MyContent.avatar)
-          )
-        )
+        .get("/apis/backend/profile/" + this.AdminId + "/")
+        .then((response) => {
+          (self.MyContent = response.data),
+            (this.AdminUrl = self.MyContent.avatar);
+        })
         .catch(function (error) {
           // 请求失败处理
           alert("数据请求失败wdnmd");
@@ -335,22 +344,32 @@ export default {
           alert("数据请求失败wdnmd");
         });
     },
-    getUserCaseData: function() {
-      var self=this;
-      axios
-        .get("/apis/backend/userCaseStat/")
-        .then((response)=>{
-          this.userCaseData=response.data.UserCaseStatInfos;
-          //通过遍历DataShow分别给columns 中的维度和指标 赋值；
-          for (var i = 0; i < this.userCaseData.length; i++) {
-            this.chartHistogramData.rows.push({
-              //注意，由于我后端createTime该字段直接返回是一个时间戳，所以此处用到了 一个时间转换插件moment.js
-              时间: this.userCaseData[i].date,
-              用户数量: this.userCaseData[i].userCount,
-              案例数量: this.userCaseData[i].caseCount,
+    getUserCaseData: function () {
+      var self = this;
+      axios.get("/apis/backend/userCaseStat/").then((response) => {
+          (this.userCaseData = response.data.UserCaseStatInfos);
+        //通过遍历DataShow分别给columns 中的维度和指标 赋值；
+        for (var i = 0; i < this.userCaseData.length; i++) {
+          this.chartHistogramData.rows.push({
+            //注意，由于我后端createTime该字段直接返回是一个时间戳，所以此处用到了 一个时间转换插件moment.js
+            日期: this.userCaseData[i].date,
+            用户数量: this.userCaseData[i].userCount,
+            案例数量: this.userCaseData[i].caseCount,
+          });
+        }
+      });
+    },
+    adminOrSuperAdmin: function() {
+      if(this.AdminAuthority=="超级管理员") {
+        this.$router.push({
+              path: "/SuperUserManage",
             });
-          }
-        })
+      }
+      else if(this.AdminAuthority=="管理员") {
+        this.$router.push({
+              path: "/AdminUserManage",
+            });
+      }
     }
   },
 };
@@ -369,5 +388,27 @@ export default {
 }
 .rounded-circle {
   border-radius: 50% !important;
+}
+/* 日历组件 */
+.el-calendar-table .el-calendar-day {
+  height: 40px;
+}
+.el-calendar-table .el-calendar-day:hover {
+  background: #d8c5f8;
+}
+.el-calendar-table td.is-selected {
+  background-color: #dbc7fc;
+  color: #fff;
+}
+.el-calendar-table td.is-today {
+  color: #9150f8;
+}
+#calendar {
+  border: 0px;
+  margin-top: 20px;
+  background: transparent;
+}
+#calendar :hover {
+  background: transparent;
 }
 </style>

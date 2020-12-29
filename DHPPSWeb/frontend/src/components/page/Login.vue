@@ -118,26 +118,9 @@ export default {
             },
           });
         }
-        else if(this.userAuthority=="管理员"){
+        else if(this.userAuthority=="管理员"||this.userAuthority=="超级管理员"){
           this.$router.push({
-            path:'/AdminIndex',
-            query:{
-              params:JSON.stringify({
-                userId:this.userId,
-                userAuthority:this.userAuthority
-              })
-            },
-          });
-        }
-        else if(this.userAuthority=="超级管理员"){
-          this.$router.push({
-            path:'/SuperIndex',
-            query:{
-              params:JSON.stringify({
-                userId:this.userId,
-                userAuthority:this.userAuthority
-              })
-            },
+            path:'/AdminIndex'
           });
         }
       }

@@ -1,5 +1,5 @@
 <template>
-  <div style="background-color: rgb(235, 234, 250)">
+  <div v-if="authorityShow" style="background-color: rgb(235, 234, 250)">
     <div class="wrapper">
       <!-- Sidebar  -->
       <div class="iq-sidebar" style="z-index: 1">
@@ -13,8 +13,7 @@
                 <router-link
                   class="iq-waves-effect"
                   :to="{
-                    path: '/SuperIndex',
-                    query: { uI: this.AdminId },
+                    path: '/AdminIndex'
                   }"
                   ><i class="ri-home-4-line"></i><span>首页</span></router-link
                 >
@@ -35,8 +34,7 @@
                 <router-link
                   class="iq-waves-effect"
                   :to="{
-                    path: '/SuperCaseManage',
-                    query: { uI: this.AdminId },
+                    path: '/AdminCaseManage'
                   }"
                   ><i class="ri-home-4-line"></i><span>案例管理</span></router-link
                 >
@@ -54,38 +52,27 @@
       <!-- TOP Nav Bar -->
       <div class="iq-top-navbar" style="z-index: 1">
         <div class="iq-navbar-custom">
-          <!-- <div class="iq-sidebar-logo">
-               <div class="top-logo">
-                  <a href="index.html" class="logo">
-                  <img src="images/logo.gif" class="img-fluid" alt="">
-                  <span>vito</span>
-                  </a>
-               </div>
-            </div> -->
           <nav class="navbar navbar-expand-lg navbar-light p-0">
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <ul class="navbar-nav ml-auto navbar-list">
-                <li class="nav-item">
-                  <a class="search-toggle iq-waves-effect" href="#"
-                    ><i class="ri-calendar-line"></i
-                  ></a>
-                  <div class="iq-sub-dropdown">
-                    <div class="calender-small"></div>
-                  </div>
-                </li>
+                <li class="nav-item"></li>
               </ul>
             </div>
             <ul class="navbar-list">
               <li>
-                <a
-                  href="#"
-                  class="search-toggle iq-waves-effect d-flex align-items-center"
-                >
-                  <img
-                    :src="AdminUrl"
-                    class="img-fluid rounded mr-3"
-                    alt="user"
-                  />
+                <el-popover placement="bottom" width="400" trigger="click">
+                  <el-calendar v-model="value"> </el-calendar>
+                  <el-button slot="reference" id="calendar">
+                    <i
+                      class="ri-calendar-line"
+                      style="font-size: 20px; color: rgb(135, 123, 244)"
+                    ></i>
+                  </el-button>
+                </el-popover>
+              </li>
+              <li>
+                <a class="d-flex align-items-center">
+                  <img :src="AdminUrl" class="img-fluid rounded mr-3" alt="user" />
                   <div class="caption">
                     <h6 class="mb-0 line-height">{{ MyContent.userName }}</h6>
                   </div>
@@ -576,7 +563,8 @@ export default {
       content: [],
       contentStaff: [],
       MyContent: [],
-      AdminId: "25",
+      AdminId: "",
+      authorityShow:false,
       //分页
       totalPage: 1, // 统共页数，默认为1
       currentPage: 1, //当前页数 ，默认为1
@@ -603,13 +591,36 @@ export default {
     };
   },
   created: function () {
-    this.getMyContent(), this.getUserContent();
+    this.getMyIdentity();
   },
   methods: {
+    //获取管理员身份
+    getMyIdentity() {
+      var self = this;
+      axios
+        .post("/apis/backend/getIdentity/")
+        .then((response) => {
+          this.AdminId = response.data.userId;
+          if (response.data.authority == "超级管理员") {
+            this.authorityShow = true;
+            this.getMyContent();
+            this.getUserContent();
+          } else {
+            this.$message("您没有权限进入管理员界面！");
+            this.$router.push({
+              path: "/UserProfile",
+            });
+          }
+        })
+        .catch(function (error) {
+          // alert(JSON.stringify(error.response.data.message));
+          alert("获取用户身份失败");
+        });
+    },
     getMyContent: function () {
       var self = this;
       axios
-        .get("/apis/backend/profile/25/")
+        .get("/apis/backend/profile/" + this.AdminId + "/")
         .then(
           (response) => (
             (self.MyContent = response.data),
@@ -879,5 +890,27 @@ export default {
   background-color: #fff;
   border-radius: 4px;
   padding: 4px 12px;
+}
+/* 日历组件 */
+.el-calendar-table .el-calendar-day {
+  height: 40px;
+}
+.el-calendar-table .el-calendar-day:hover {
+  background: #d8c5f8;
+}
+.el-calendar-table td.is-selected {
+  background-color: #dbc7fc;
+  color: #fff;
+}
+.el-calendar-table td.is-today {
+  color: #9150f8;
+}
+#calendar {
+  border: 0px;
+  margin-top: 20px;
+  background: transparent;
+}
+#calendar :hover {
+  background: transparent;
 }
 </style>
