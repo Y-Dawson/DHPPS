@@ -42,6 +42,6 @@ export default new Router({
     {path:'/SuperCaseManage',component:SuperCaseManage},
     {path:'/UserCase',component:UserCase},
     {path:'/settingMap',component:settingMap},
-    {path:'/simulationMap',component:simulationMap}
+    {path:'/simulationMap',component:simulationMap},
   ]
 })
