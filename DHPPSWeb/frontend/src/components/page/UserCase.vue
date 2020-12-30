@@ -97,7 +97,15 @@
                   >
                     <el-card class="box-card">
                       <div slot="header" class="clearfix">
-                        <i
+                        <i v-if="item.caseMode === '自定模式'"
+                          class="el-icon el-icon-location-outline"
+                          style="
+                            margin-right: 10px;
+                            font-size: 38px;
+                            color: rgb(173, 173, 173);
+                          "
+                        ></i>
+                        <i v-else-if="item.caseMode === '地图模式'"
                           class="el-icon el-icon-map-location"
                           style="
                             margin-right: 10px;
@@ -183,6 +191,7 @@ export default {
   data() {
     return {
       userId:'',
+      isMap:'',//是否是地图模式
       // 头像
       fits: ["fill"],
       imageUrl:"",
@@ -263,10 +272,10 @@ export default {
         })
         .then(
           (response) => (
-            (self.currentPageData = response.data),
-            (self.totalCasePage = Math.ceil(
+            self.currentPageData = response.data,
+            self.totalCasePage = Math.ceil(
               self.currentPageData.pagination / self.pageCaseSize
-            ))
+            )
           )
         )
         .catch(function (error) {

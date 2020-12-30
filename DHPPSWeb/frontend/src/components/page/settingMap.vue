@@ -68,6 +68,26 @@
             <option value="长春">长春</option>
             <option value="银川">银川</option>
             <option value="南京">南京</option>
+            <option value="乌鲁木齐">乌鲁木齐</option>
+            <option value="保定">保定</option>
+            <option value="兰州">兰州</option>
+            <option value="南宁">南宁</option>
+            <option value="合肥">合肥</option>
+            <option value="呼和浩特">呼和浩特</option>
+            <option value="哈尔滨">哈尔滨</option>
+            <option value="天津">天津</option>
+            <option value="太原">太原</option>
+            <option value="昆明">昆明</option>
+            <option value="杭州">杭州</option>
+            <option value="武汉">武汉</option>
+            <option value="沈阳">沈阳</option>
+            <option value="海口">海口</option>
+            <option value="石家庄">石家庄</option>
+            <option value="西安">西安</option>
+            <option value="贵阳">贵阳</option>
+            <option value="郑州">郑州</option>
+            <option value="重庆">重庆</option>
+            <option value="西宁">西宁</option>
           </select>
         </el-form-item>
         <el-form-item label="总人口" prop="to_pop" class="e_inp">
@@ -194,9 +214,9 @@ export default {
         this.city_po.push(s);
       }
 
-      var cn1,cn2,vo;
-      for(var i in this.params.InitRoadData){
-        var tr=this.params.InitRoadData[i].split(":");
+      var cn1, cn2, vo;
+      for (var i in this.params.InitRoadData) {
+        var tr = this.params.InitRoadData[i].split(":");
         var ttr1 = tr[1].split(",");
         var ttr2 = tr[2].split(",");
         cn1 = ttr1[0];
@@ -428,6 +448,24 @@ export default {
 
     create_city() {
       var cn = document.getElementById("selected").value;
+
+      for (var i in this.city_po) {
+        var tc = this.city_po[i].split(":");
+        if (tc[0] == cn) {
+          this.$alert("该城市已存在，请选择不同的城市", "创建失败", {
+            confirmButtonText: "确定",
+            callback: (action) => {
+              this.$message({
+                type: "info",
+                message: `action: ${action}`,
+              });
+            },
+          });
+          this.isShow1 = false;
+          return;
+        }
+      }
+
       var s =
         cn + ":总人口:" + this.ruleForm.to_pop + ",初始感染数:" + this.ruleForm.begin_inf;
       this.city_po.push(s);
@@ -451,6 +489,39 @@ export default {
     create_road() {
       var cn1 = document.getElementById("selectedcity1").value;
       var cn2 = document.getElementById("selectedcity2").value;
+
+      if (cn1 == cn2) {
+        this.$alert("请选择两个不同的城市", "创建失败", {
+          confirmButtonText: "确定",
+          callback: (action) => {
+            this.$message({
+              type: "info",
+              message: `action: ${action}`,
+            });
+          },
+        });
+        this.isShow2 = false;
+        return;
+      }
+
+      for (var i in this.road_di) {
+        var tc = this.road_di[i].split(":");
+        var ttc = tc[0].split("-");
+        if ((ttc[0] == cn1 && ttc[1] == cn2) || (ttc[1] == cn1 && ttc[0] == cn2)) {
+          this.$alert("两城市间已存在航线，请选择不同的城市", "创建失败", {
+            confirmButtonText: "确定",
+            callback: (action) => {
+              this.$message({
+                type: "info",
+                message: `action: ${action}`,
+              });
+            },
+          });
+          this.isShow2 = false;
+          return;
+        }
+      }
+
       var s = cn1 + "-" + cn2 + ":" + this.ruleForm.volumn;
       console.log(s);
       this.road_di.push(s);
@@ -630,7 +701,7 @@ export default {
         .catch((_) => {});
     },
 
-    toDIYModel(){
+    toDIYModel() {
       this.$router.push({
         path: "/setting",
         query: {

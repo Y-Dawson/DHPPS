@@ -134,19 +134,23 @@
       <ul class="city-list">
         <span class="title">已创建：</span>
         <li>
-          <div>
-            <span class="little-title">城市列表：</span>
+          <div class="panel">
+            <h2>城市信息</h2>
+            <div class="chart" id="bar"></div>
+            <!-- <span class="little-title">城市列表：</span>
             <li id="city_inf" v-for="city in city_inf" :key="city">
               {{ city[day] }}
-            </li>
+            </li> -->
           </div>
         </li>
         <li>
-          <div>
-            <span class="little-title">道路列表：</span>
+          <div class="panel">
+            <h2>道路信息</h2>
+            <div class="chart" id="threebar"></div>
+            <!-- <span class="little-title">道路列表：</span>
             <li id="road_inf" v-for="road in road_di" :key="road">
               {{ road }}
-            </li>
+            </li> -->
           </div>
         </li>
       </ul>
@@ -171,259 +175,6 @@
             </div>
           </div>
         </li>
-
-        <!-- <li>
-          <div id="ci1" class="city" style="left: 300px; top: 300px">
-            <img src="../../assets/layui/images/city.gif" alt="" />
-            <div class="city-infor">
-              <el-form-item prop="population">
-                <span>总人口：{{ ci1_population[day] }}</span>
-              </el-form-item>
-
-              <el-form-item prop="beginInfected">
-                <span>总感染人数：{{ ci1_totalInfected[day] }}</span>
-              </el-form-item>
-
-              <el-form-item>
-                <span>新增感染人数：{{ ci1_newInfected[day] }}</span>
-              </el-form-item>
-            </div>
-          </div>
-        </li>
-
-        <li>
-          <div
-            id="ci2"
-            class="city"
-            :style="{
-              left: cityForm.cityleft + 'px',
-              top: cityForm.citytop + 'px',
-            }"
-          >
-            <img src="../../assets/layui/images/city.gif" alt="" />
-            <div class="city-infor">
-              <el-form-item prop="population">
-                <span>总人口：{{ ci2_population[day] }}</span>
-              </el-form-item>
-
-              <el-form-item prop="beginInfected">
-                <span>总感染人数：{{ ci2_totalInfected[day] }}</span>
-              </el-form-item>
-
-              <el-form-item>
-                <span>新增感染人数：{{ ci2_newInfected[day] }}</span>
-              </el-form-item>
-            </div>
-          </div>
-        </li>
-
-        <li>
-          <div
-            id="ci3"
-            class="city"
-            :style="{
-              left: cityForm.cityleft + 'px',
-              top: cityForm.citytop + 'px',
-            }"
-          >
-            <img src="../../assets/layui/images/city.gif" alt="" />
-            <div class="city-infor">
-              <el-form-item prop="population">
-                <span>总人口：{{ ci3_population[day] }}</span>
-              </el-form-item>
-
-              <el-form-item prop="beginInfected">
-                <span>总感染人数：{{ ci3_totalInfected[day] }}</span>
-              </el-form-item>
-
-              <el-form-item>
-                <span>新增感染人数：{{ ci3_newInfected[day] }}</span>
-              </el-form-item>
-            </div>
-          </div>
-        </li>
-
-        <li>
-          <div
-            id="ci4"
-            class="city"
-            :style="{
-              left: cityForm.cityleft + 'px',
-              top: cityForm.citytop + 'px',
-            }"
-          >
-            <img src="../../assets/layui/images/city.gif" alt="" />
-            <div class="city-infor">
-              <el-form-item prop="population">
-                <span>总人口：{{ ci4_population[day] }}</span>
-              </el-form-item>
-
-              <el-form-item prop="beginInfected">
-                <span>总感染人数：{{ ci4_totalInfected[day] }}</span>
-              </el-form-item>
-
-              <el-form-item>
-                <span>新增感染人数：{{ ci4_newInfected[day] }}</span>
-              </el-form-item>
-            </div>
-          </div>
-        </li>
-
-        <li>
-          <div
-            id="ci5"
-            class="city"
-            :style="{
-              left: cityForm.cityleft + 'px',
-              top: cityForm.citytop + 'px',
-            }"
-          >
-            <img src="../../assets/layui/images/city.gif" alt="" />
-            <div class="city-infor">
-              <el-form-item prop="population">
-                <span>总人口：{{ ci5_population[day] }}</span>
-              </el-form-item>
-
-              <el-form-item prop="beginInfected">
-                <span>总感染人数：{{ ci5_totalInfected[day] }}</span>
-              </el-form-item>
-
-              <el-form-item>
-                <span>新增感染人数：{{ ci5_newInfected[day] }}</span>
-              </el-form-item>
-            </div>
-          </div>
-        </li>
-
-        <li>
-          <div
-            id="ci6"
-            class="city"
-            :style="{
-              left: cityForm.cityleft + 'px',
-              top: cityForm.citytop + 'px',
-            }"
-          >
-            <img src="../../assets/layui/images/city.gif" alt="" />
-            <div class="city-infor">
-              <el-form-item prop="population">
-                <span>总人口：{{ ci6_population[day] }}</span>
-              </el-form-item>
-
-              <el-form-item prop="beginInfected">
-                <span>总感染人数：{{ ci6_totalInfected[day] }}</span>
-              </el-form-item>
-
-              <el-form-item>
-                <span>新增感染人数：{{ ci6_newInfected[day] }}</span>
-              </el-form-item>
-            </div>
-          </div>
-        </li>
-
-        <li>
-          <div
-            id="ci7"
-            class="city"
-            :style="{
-              left: cityForm.cityleft + 'px',
-              top: cityForm.citytop + 'px',
-            }"
-          >
-            <img src="../../assets/layui/images/city.gif" alt="" />
-            <div class="city-infor">
-              <el-form-item prop="population">
-                <span>总人口：{{ ci7_population[day] }}</span>
-              </el-form-item>
-
-              <el-form-item prop="beginInfected">
-                <span>总感染人数：{{ ci7_totalInfected[day] }}</span>
-              </el-form-item>
-
-              <el-form-item>
-                <span>新增感染人数：{{ ci7_newInfected[day] }}</span>
-              </el-form-item>
-            </div>
-          </div>
-        </li>
-
-        <li>
-          <div
-            id="ci8"
-            class="city"
-            :style="{
-              left: cityForm.cityleft + 'px',
-              top: cityForm.citytop + 'px',
-            }"
-          >
-            <img src="../../assets/layui/images/city.gif" alt="" />
-            <div class="city-infor">
-              <el-form-item prop="population">
-                <span>总人口：{{ ci8_population[day] }}</span>
-              </el-form-item>
-
-              <el-form-item prop="beginInfected">
-                <span>总感染人数：{{ ci8_totalInfected[day] }}</span>
-              </el-form-item>
-
-              <el-form-item>
-                <span>新增感染人数：{{ ci8_newInfected[day] }}</span>
-              </el-form-item>
-            </div>
-          </div>
-        </li>
-
-        <li>
-          <div
-            id="ci9"
-            class="city"
-            :style="{
-              left: cityForm.cityleft + 'px',
-              top: cityForm.citytop + 'px',
-            }"
-          >
-            <img src="../../assets/layui/images/city.gif" alt="" />
-            <div class="city-infor">
-              <el-form-item prop="population">
-                <span>总人口：{{ ci9_population[day] }}</span>
-              </el-form-item>
-
-              <el-form-item prop="beginInfected">
-                <span>总感染人数：{{ ci9_totalInfected[day] }}</span>
-              </el-form-item>
-
-              <el-form-item>
-                <span>新增感染人数：{{ ci9_newInfected[day] }}</span>
-              </el-form-item>
-            </div>
-          </div>
-        </li>
-
-        <li>
-          <div
-            id="ci10"
-            class="city"
-            :style="{
-              left: cityForm.cityleft + 'px',
-              top: cityForm.citytop + 'px',
-            }"
-          >
-            <img src="../../assets/layui/images/city.gif" alt="" />
-            <div class="city-infor">
-              <el-form-item prop="population">
-                <span>总人口：{{ ci10_population[day] }}</span>
-              </el-form-item>
-
-              <el-form-item prop="beginInfected">
-                <span>总感染人数：{{ ci10_totalInfected[day] }}</span>
-              </el-form-item>
-
-              <el-form-item>
-                <span>新增感染人数：{{ ci10_newInfected[day] }}</span>
-              </el-form-item>
-            </div>
-          </div>
-        </li> -->
       </ul>
 
       <ul class="line_list">
@@ -436,6 +187,7 @@
               top: linetop + 'px',
             }"
           >
+            <img src="../../assets/img/road_line.png" alt="" />
             <span></span>
             <span></span>
           </div>
@@ -449,7 +201,11 @@
               left: lineleft + 'px',
               top: linetop + 'px',
             }"
-          ></div>
+          >
+            <img src="../../assets/img/road_line.png" alt="" />
+            <span></span>
+            <span></span>
+          </div>
         </li>
 
         <li>
@@ -460,7 +216,11 @@
               left: lineleft + 'px',
               top: linetop + 'px',
             }"
-          ></div>
+          >
+            <img src="../../assets/img/road_line.png" alt="" />
+            <span></span>
+            <span></span>
+          </div>
         </li>
 
         <li>
@@ -471,7 +231,10 @@
               left: lineleft + 'px',
               top: linetop + 'px',
             }"
-          ></div>
+          >
+            <img src="../../assets/img/road_line.png" alt="" /> <span></span>
+            <span></span>
+          </div>
         </li>
 
         <li>
@@ -482,7 +245,11 @@
               left: lineleft + 'px',
               top: linetop + 'px',
             }"
-          ></div>
+          >
+            <img src="../../assets/img/road_line.png" alt="" />
+            <span></span>
+            <span></span>
+          </div>
         </li>
 
         <li>
@@ -493,7 +260,11 @@
               left: lineleft + 'px',
               top: linetop + 'px',
             }"
-          ></div>
+          >
+            <img src="../../assets/img/road_line.png" alt="" />
+            <span></span>
+            <span></span>
+          </div>
         </li>
 
         <li>
@@ -504,7 +275,11 @@
               left: lineleft + 'px',
               top: linetop + 'px',
             }"
-          ></div>
+          >
+            <img src="../../assets/img/road_line.png" alt="" />
+            <span></span>
+            <span></span>
+          </div>
         </li>
 
         <li>
@@ -515,7 +290,11 @@
               left: lineleft + 'px',
               top: linetop + 'px',
             }"
-          ></div>
+          >
+            <img src="../../assets/img/road_line.png" alt="" />
+            <span></span>
+            <span></span>
+          </div>
         </li>
 
         <li>
@@ -526,7 +305,11 @@
               left: lineleft + 'px',
               top: linetop + 'px',
             }"
-          ></div>
+          >
+            <img src="../../assets/img/road_line.png" alt="" />
+            <span></span>
+            <span></span>
+          </div>
         </li>
 
         <li>
@@ -537,7 +320,11 @@
               left: lineleft + 'px',
               top: linetop + 'px',
             }"
-          ></div>
+          >
+            <img src="../../assets/img/road_line.png" alt="" />
+            <span></span>
+            <span></span>
+          </div>
         </li>
 
         <li>
@@ -548,7 +335,11 @@
               left: lineleft + 'px',
               top: linetop + 'px',
             }"
-          ></div>
+          >
+            <img src="../../assets/img/road_line.png" alt="" />
+            <span></span>
+            <span></span>
+          </div>
         </li>
 
         <li>
@@ -559,7 +350,11 @@
               left: lineleft + 'px',
               top: linetop + 'px',
             }"
-          ></div>
+          >
+            <img src="../../assets/img/road_line.png" alt="" />
+            <span></span>
+            <span></span>
+          </div>
         </li>
       </ul>
 
@@ -575,8 +370,12 @@
   </div>
 </template>
 
+<script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
 <script>
 import Global from "../../global_vue";
+import { jquery } from "../../assets/js/jquery.js";
+var echarts = require("echarts");
+import "../../../node_modules/echarts/lib/chart/map/china.js";
 
 var linecnt = 1;
 
@@ -591,7 +390,6 @@ export default {
       value1: 0,
       daily_step: 0,
       day_num: 0,
-      cityname: [],
 
       cityx1: 0,
       cityy1: 0,
@@ -632,6 +430,7 @@ export default {
       city_information: [], //初始信息
       road_inf: [],
       city_position: [],
+      name_list: ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"],
 
       ci1_population: [],
       ci1_totalInfected: [],
@@ -663,6 +462,12 @@ export default {
       ci10_population: [],
       ci10_totalInfected: [],
       ci10_newInfected: [],
+
+      cityname: [],
+      citypeople: [],
+      cityInf: [],
+      cityNewInf: [],
+      roadVol: [],
 
       city_po: [],
       road_di: [],
@@ -759,6 +564,8 @@ export default {
       }
     }
 
+    console.log("录入病例信息完毕");
+
     for (var i = 0; i < parseInt(this.params.citynum); i++) {
       this.cityname.push(foreData[0][i]["cityName"]);
     }
@@ -779,12 +586,25 @@ export default {
       this.city_inf.push(newa);
     }
 
+    console.log("录入病例显示信息完毕");
+
     this.row_cnt.push(1);
 
     console.log("citynum", this.citycnt);
     console.log("c3inf", this.ci3_totalInfected);
 
+    var nowcitycnt = 0;
     for (var i = 0; i < parseInt(this.params.citynum); i++) {
+      if (foreData[0][i]["cityName"] != this.name_list[nowcitycnt]) {
+        nowcitycnt += 1;
+        this.row_cnt.push(1);
+        this.people_cnt.push(1);
+        console.log("i", i);
+        console.log("name", foreData[0][i]["cityName"]);
+        i -= 1;
+        continue;
+      }
+      nowcitycnt += 1;
       var pop = parseInt(foreData[0][i]["population"]);
       pop = parseInt(pop / 100);
       var temp = parseInt(pop / 8);
@@ -807,6 +627,7 @@ export default {
 
     this.row_cnt.push(0);
     console.log("rc", this.row_cnt);
+    console.log("pc", this.people_cnt);
 
     var cnt = 0;
     for (var j in this.params.CityPosition) {
@@ -869,10 +690,24 @@ export default {
       var cid2 = this.GetID(city2);
       console.log(cid1, cid2);
 
+      var newar1 = new Array();
+      newar1.push(city1);
+      newar1.push(city2);
+      newar1.push(vol);
+      this.roadVol.push(newar1);
+
+      var newar2 = new Array();
+      newar2.push(city2);
+      newar2.push(city1);
+      newar2.push(vol);
+      this.roadVol.push(newar2);
+
       this.DrawLine(cid1, cid2);
     }
 
-    console.log("c1_inf：", this.ci1_population);
+    // console.log("c1_inf：", this.ci1_population);
+
+    this.DrawRoadMap();
   },
 
   methods: {
@@ -901,6 +736,7 @@ export default {
       this.day = parseInt(val / this.daily_step);
       console.log("day：", this.day);
       this.changeColor(this.day);
+      this.prepareDraw(this.day);
       var d = parseInt(val / this.daily_step) + 1;
       var m = 1;
       if (d > 31) {
@@ -970,6 +806,12 @@ export default {
       ll.style.width = parseInt(dis) + "px";
       ll.style.transform = "rotate(" + rotang + "deg)";
       linecnt += 1;
+
+      // var ii=document.getElementById("img1");
+      // ii.style.animation="roadmove1 3s infinite";
+
+      // console.log("ii",ii);
+      // console.log("ii.style",ii.style.animation);
     },
 
     GetID(n) {
@@ -1019,9 +861,39 @@ export default {
         this.ci3_newInfected.push(dinf);
       }
       if (n == "D") {
-        this.ci3_population.push(popu);
-        this.ci3_totalInfected.push(inf);
-        this.ci3_newInfected.push(dinf);
+        this.ci4_population.push(popu);
+        this.ci4_totalInfected.push(inf);
+        this.ci4_newInfected.push(dinf);
+      }
+      if (n == "E") {
+        this.ci5_population.push(popu);
+        this.ci5_totalInfected.push(inf);
+        this.ci5_newInfected.push(dinf);
+      }
+      if (n == "F") {
+        this.ci6_population.push(popu);
+        this.ci6_totalInfected.push(inf);
+        this.ci6_newInfected.push(dinf);
+      }
+      if (n == "G") {
+        this.ci7_population.push(popu);
+        this.ci7_totalInfected.push(inf);
+        this.ci7_newInfected.push(dinf);
+      }
+      if (n == "H") {
+        this.ci8_population.push(popu);
+        this.ci8_totalInfected.push(inf);
+        this.ci8_newInfected.push(dinf);
+      }
+      if (n == "I") {
+        this.ci9_population.push(popu);
+        this.ci9_totalInfected.push(inf);
+        this.ci9_newInfected.push(dinf);
+      }
+      if (n == "J") {
+        this.ci10_population.push(popu);
+        this.ci10_totalInfected.push(inf);
+        this.ci10_newInfected.push(dinf);
       }
     },
 
@@ -1037,21 +909,21 @@ export default {
         console.log("ccnt", ccnt);
         console.log("nowcnt", nowcnt);
         console.log("typeofnowcnt", typeof nowcnt);
-        console.log("row_cnt[nowcnt]", this.row_cnt[2]);
-        console.log("row_cnt[nowcnt]", this.row_cnt[nowcnt]);
-        for (var j = 1; j <= this.row_cnt[nowcnt]; j++) {
-          if (j < this.row_cnt[nowcnt]) {
+        console.log("row_cnt", this.row_cnt);
+        console.log("row_cnt[nowcnt]", this.row_cnt[ccnt]);
+        for (var j = 1; j <= this.row_cnt[ccnt]; j++) {
+          if (j < this.row_cnt[ccnt]) {
             for (var k = 1; k <= 8; k++) {
               var iid = "i" + ccnt + j + k;
-              console.log("iid",iid);
+              console.log("iid", iid);
               var iidentity = document.getElementById(iid);
               console.log("iidentity", iidentity);
               iidentity.style.color = "green";
               // console.log("iid", iid);
             }
           } else {
-            // console.log("换行");
-            for (var k = 1; k <= this.people_cnt[nowcnt][j]; k++) {
+            console.log("换行");
+            for (var k = 1; k <= this.people_cnt[ccnt][j]; k++) {
               var iid = "i" + ccnt + j + k;
               var iidentity = document.getElementById(iid);
               // console.log("iidentity", iidentity);
@@ -1061,88 +933,59 @@ export default {
           }
         }
 
+        var inf_cnt = 0;
         if (ccnt == 1) {
-          var inf_cnt = parseInt(this.ci1_totalInfected[index]);
-          inf_cnt = parseInt(inf_cnt / 100);
-          console.log("tot", this.ci1_totalInfected[index]);
-          console.log("inf_cnt", inf_cnt);
-
-          for (var j = 1; j <= this.row_cnt[nowcnt]; j++) {
-            if (inf_cnt > 8) {
-              for (var k = 1; k <= 8; k++) {
-                var iid = "i" + ccnt + j + k;
-                var iidentity = document.getElementById(iid);
-                console.log("iidentity", iidentity);
-                iidentity.style.color = "red";
-              }
-              inf_cnt -= 8;
-            } else {
-              for (var k = 1; k <= inf_cnt; k++) {
-                var iid = "i" + ccnt + j + k;
-                var iidentity = document.getElementById(iid);
-                console.log("iidentity", iidentity);
-                iidentity.style.color = "red";
-              }
-              break;
-            }
-          }
+          inf_cnt = parseInt(this.ci1_totalInfected[index]);
         }
-
         if (ccnt == 2) {
-          var inf_cnt = parseInt(this.ci2_totalInfected[index]);
-          inf_cnt = parseInt(inf_cnt / 100);
-          console.log("tot", this.ci2_totalInfected[index]);
-          console.log("inf_cnt", inf_cnt);
-
-          for (var j = 1; j <= this.row_cnt[nowcnt]; j++) {
-            if (inf_cnt > 8) {
-              for (var k = 1; k <= 8; k++) {
-                var iid = "i" + ccnt + j + k;
-                var iidentity = document.getElementById(iid);
-                console.log("iidentity", iidentity);
-                iidentity.style.color = "red";
-              }
-              inf_cnt -= 8;
-            } else {
-              for (var k = 1; k <= inf_cnt; k++) {
-                var iid = "i" + ccnt + j + k;
-                var iidentity = document.getElementById(iid);
-                console.log("iidentity", iidentity);
-                iidentity.style.color = "red";
-              }
-              break;
-            }
-          }
+          inf_cnt = parseInt(this.ci2_totalInfected[index]);
+        }
+        if (ccnt == 3) {
+          inf_cnt = parseInt(this.ci3_totalInfected[index]);
+        }
+        if (ccnt == 4) {
+          inf_cnt = parseInt(this.ci4_totalInfected[index]);
+        }
+        if (ccnt == 5) {
+          inf_cnt = parseInt(this.ci5_totalInfected[index]);
+        }
+        if (ccnt == 6) {
+          inf_cnt = parseInt(this.ci6_totalInfected[index]);
+        }
+        if (ccnt == 7) {
+          inf_cnt = parseInt(this.ci7_totalInfected[index]);
+        }
+        if (ccnt == 8) {
+          inf_cnt = parseInt(this.ci8_totalInfected[index]);
+        }
+        if (ccnt == 9) {
+          inf_cnt = parseInt(this.ci9_totalInfected[index]);
+        }
+        if (ccnt == 10) {
+          inf_cnt = parseInt(this.ci10_totalInfected[index]);
         }
 
-        if (ccnt == 3) {
-          var inf_cnt = parseInt(this.ci3_totalInfected[index]);
-          inf_cnt = parseInt(inf_cnt / 100);
-          console.log("tot", this.ci3_totalInfected[index]);
-          console.log("inf_cnt", inf_cnt);
+        inf_cnt = parseInt(inf_cnt / 100);
+        // console.log("tot", this.ci1_totalInfected[index]);
+        // console.log("inf_cnt", inf_cnt);
 
-          console.log("row_cnt", this.row_cnt);
-          console.log("row_cnt[ccnt]", this.row_cnt[nowcnt]);
-
-          for (var j = 1; j <= this.row_cnt[nowcnt]; j++) {
-            console.log("可执行");
-            if (inf_cnt > 8) {
-              for (var k = 1; k <= 8; k++) {
-                var iid = "i" + ccnt + j + k;
-                var iidentity = document.getElementById(iid);
-                console.log("iidentity", iidentity);
-                iidentity.style.color = "red";
-              }
-              inf_cnt -= 8;
-            } else {
-              for (var k = 1; k <= inf_cnt; k++) {
-                var iid = "i" + ccnt + j + k;
-                var iidentity = document.getElementById(iid);
-                console.log("iidentity", iidentity);
-                iidentity.style.color = "red";
-              }
-              break;
+        for (var j = 1; j <= this.row_cnt[ccnt]; j++) {
+          if (inf_cnt > 8) {
+            for (var k = 1; k <= 8; k++) {
+              var iid = "i" + ccnt + j + k;
+              var iidentity = document.getElementById(iid);
+              console.log("iidentity", iidentity);
+              iidentity.style.color = "red";
             }
+            inf_cnt -= 8;
+          } else {
+            for (var k = 1; k <= inf_cnt; k++) {
+              var iid = "i" + ccnt + j + k;
+              var iidentity = document.getElementById(iid);
+              console.log("iidentity", iidentity);
+              iidentity.style.color = "red";
+            }
+            break;
           }
         }
       }
@@ -1150,6 +993,279 @@ export default {
 
     outp(data) {
       alert(data);
+    },
+
+    prepareDraw(nowday) {
+      this.citypeople = [];
+      this.cityInf = [];
+      this.cityNewInf = [];
+      for (var i in this.cityname) {
+        if (this.cityname[i] == "A") {
+          this.citypeople.push(this.ci1_population[nowday]);
+          this.cityInf.push(this.ci1_totalInfected[nowday]);
+          this.cityNewInf.push(this.ci1_newInfected[nowday]);
+        }
+        if (this.cityname[i] == "B") {
+          this.citypeople.push(this.ci2_population[nowday]);
+          this.cityInf.push(this.ci2_totalInfected[nowday]);
+          this.cityNewInf.push(this.ci2_newInfected[nowday]);
+        }
+        if (this.cityname[i] == "C") {
+          this.citypeople.push(this.ci3_population[nowday]);
+          this.cityInf.push(this.ci3_totalInfected[nowday]);
+          this.cityNewInf.push(this.ci3_newInfected[nowday]);
+        }
+        if (this.cityname[i] == "D") {
+          this.citypeople.push(this.ci4_population[nowday]);
+          this.cityInf.push(this.ci4_totalInfected[nowday]);
+          this.cityNewInf.push(this.ci4_newInfected[nowday]);
+        }
+        if (this.cityname[i] == "E") {
+          this.citypeople.push(this.ci5_population[nowday]);
+          this.cityInf.push(this.ci5_totalInfected[nowday]);
+          this.cityNewInf.push(this.ci5_newInfected[nowday]);
+        }
+        if (this.cityname[i] == "F") {
+          this.citypeople.push(this.ci6_population[nowday]);
+          this.cityInf.push(this.ci6_totalInfected[nowday]);
+          this.cityNewInf.push(this.ci6_newInfected[nowday]);
+        }
+        if (this.cityname[i] == "G") {
+          this.citypeople.push(this.ci7_population[nowday]);
+          this.cityInf.push(this.ci7_totalInfected[nowday]);
+          this.cityNewInf.push(this.ci7_newInfected[nowday]);
+        }
+        if (this.cityname[i] == "H") {
+          this.citypeople.push(this.ci8_population[nowday]);
+          this.cityInf.push(this.ci8_totalInfected[nowday]);
+          this.cityNewInf.push(this.ci8_newInfected[nowday]);
+        }
+        if (this.cityname[i] == "I") {
+          this.citypeople.push(this.ci9_population[nowday]);
+          this.cityInf.push(this.ci9_totalInfected[nowday]);
+          this.cityNewInf.push(this.ci9_newInfected[nowday]);
+        }
+        if (this.cityname[i] == "J") {
+          this.citypeople.push(this.ci10_population[nowday]);
+          this.cityInf.push(this.ci10_totalInfected[nowday]);
+          this.cityNewInf.push(this.ci10_newInfected[nowday]);
+        }
+      }
+
+      this.DrawMap();
+    },
+
+    DrawMap() {
+      console.log("画个柱状图");
+
+      var myChart = echarts.init(document.getElementById("bar"));
+
+      var seriesLabel = {
+        normal: {
+          show: true,
+          textBorderColor: "#333",
+          textBorderWidth: 2,
+        },
+      };
+
+      var option = {
+        tooltip: {
+          trigger: "axis",
+          axisPointer: {
+            type: "shadow",
+          },
+        },
+        legend: {
+          data: ["总人口", "感染人数", "新增感染人数"],
+        },
+        grid: {
+          left: 20,
+          right: 40,
+          top: 15,
+          bottom: 20,
+        },
+        xAxis: {
+          type: "value",
+          name: "人数",
+          axisLabel: {
+            formatter: "{value}",
+            interval: 0,
+          },
+        },
+        yAxis: {
+          type: "category",
+          inverse: true,
+          data: this.cityname,
+          axisLabel: {
+            formatter: function (value) {
+              return "{" + value + "| }\n{value|" + value + "}";
+            },
+            margin: 10,
+            rich: {
+              value: {
+                lineHeight: 30,
+                align: "center",
+              },
+            },
+          },
+        },
+        series: [
+          {
+            name: "总人口",
+            type: "bar",
+            label: seriesLabel,
+            data: this.citypeople,
+          },
+          {
+            name: "感染人数",
+            type: "bar",
+            label: seriesLabel,
+            data: this.cityInf,
+          },
+          {
+            name: "新增感染人数",
+            type: "bar",
+            label: seriesLabel,
+            data: this.cityNewInf,
+          },
+        ],
+      };
+
+      myChart.setOption(option);
+    },
+
+    DrawRoadMap() {
+      console.log("roadVol", this.roadVol);
+
+      var myChart = echarts.init(document.getElementById("threebar"));
+
+      console.log("myChart", myChart);
+
+      console.log("cityname", this.cityname);
+
+      console.log("画个3D柱状图");
+
+      var dataBJ = this.roadVol;
+
+      var schema = [{ name: "date", index: 0, text: "日" }];
+
+      var itemStyle = {
+        opacity: 0.8,
+        shadowBlur: 10,
+        shadowOffsetX: 0,
+        shadowOffsetY: 0,
+        shadowColor: "rgba(0, 0, 0, 0.5)",
+      };
+
+      var option = {
+        // backgroundColor: "#404a59",
+        color: ["#dd4444", "#fec42c", "#80F1BE"],
+        legend: {
+          top: 10,
+          data: ["北京"],
+          textStyle: {
+            color: "#fff",
+            fontSize: 16,
+          },
+        },
+        grid: {
+          left: "10%",
+          right: 150,
+          top: "18%",
+          bottom: "10%",
+        },
+        tooltip: {
+          padding: 10,
+          borderColor: "#777",
+          borderWidth: 1,
+          formatter: function (obj) {
+            var value = obj.value;
+            return (
+              '<div style="border-bottom: 1px solid rgba(255,255,255,.3); font-size: 18px;padding-bottom: 7px;margin-bottom: 7px">' +
+              value[0] +
+              "-" +
+              value[1] +
+              "：" +
+              value[2]
+            );
+          },
+        },
+        xAxis: {
+          type: "category",
+          data: this.cityname,
+          axisLabel: {
+            color: "#777",
+          },
+          axisLine: {
+            show: true,
+            lineStyle: {
+              color: "#777",
+            },
+          },
+          boundaryGap: false,
+          splitLine: {
+            show: true,
+          },
+        },
+        yAxis: {
+          type: "category",
+          data: this.cityname,
+          axisLabel: {
+            color: "#777",
+          },
+          axisLine: {
+            show: true,
+            lineStyle: {
+              color: "#777",
+            },
+          },
+          boundaryGap: false,
+          splitLine: {
+            show: true,
+          },
+        },
+        visualMap: [
+          {
+            left: "right",
+            bottom: "5%",
+            dimension: 2,
+            min: 0,
+            max: 1000,
+            itemHeight: 120,
+
+            precision: 0.1,
+            text: ["明暗：人流量"],
+            textGap: 30,
+            textStyle: {
+              color: "#000",
+            },
+            inRange: {
+              colorLightness: [1, 0.5],
+            },
+            outOfRange: {
+              color: ["rgba(255,255,255,.2)"],
+            },
+            controller: {
+              inRange: {
+                color: ["#c23531"],
+              },
+              outOfRange: {
+                color: ["#444"],
+              },
+            },
+          },
+        ],
+        series: [
+          {
+            type: "scatter",
+            itemStyle: itemStyle,
+            data: dataBJ,
+          },
+        ],
+      };
+      console.log("快画完了");
+      myChart.setOption(option);
+      console.log("画完了");
     },
   },
 };
@@ -1318,7 +1434,7 @@ export default {
 .city-list {
   position: absolute;
   right: 0;
-  width: 220px;
+  width: 340px;
   height: 655px;
   background-color: rgb(241, 245, 253);
   border: 1px solid rgb(204, 204, 204);
@@ -1333,9 +1449,9 @@ export default {
   margin-bottom: 10px;
 }
 
-.city-list div {
+.city-list .panel {
   margin-left: 10px;
-  width: 160px;
+  width: 320px;
   height: 300px;
   background-color: rgb(241, 245, 253);
   border: 1px solid rgb(204, 204, 204);
@@ -1354,6 +1470,24 @@ export default {
   font-size: 20px;
   margin-top: 5px;
   margin-bottom: 10px;
+}
+
+h2 {
+  height: 0.6rem;
+  /* line-height: 0.6rem; */
+  text-align: center;
+  color: #000;
+  font-size: 20px;
+  font-weight: 400;
+  margin-bottom: 15px;
+}
+
+.city-list #bar,
+.city-list #threebar {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 260px;
 }
 
 .add-wrapper {
@@ -1486,8 +1620,11 @@ canvas {
 .line_list .road_line {
   display: block;
   position: absolute;
-  height: 5px;
-  background-color: #000;
+  height: 10px;
+  /* background-color: #000; */
+  /* background: url(../../assets/img/road_line.png); */
+
+  /* background: linear-gradient(to right, rgba(0, 0, 0, 0), #3446e6); */
   overflow: hidden;
 }
 
@@ -1505,6 +1642,16 @@ canvas {
 .road_line span {
   position: absolute;
   display: block;
+}
+
+.road_line img {
+  position: absolute;
+  height: 10px;
+  width: 500px;
+  top: 0px;
+  left: -100px;
+  animation: roadmove1 3s linear infinite;
+  z-index: 0;
 }
 
 .road_line span:nth-child(1) {
@@ -1546,6 +1693,15 @@ canvas {
   }
   100% {
     right: 300px;
+  }
+}
+
+@keyframes roadmove1 {
+  0% {
+    left: -100px;
+  }
+  100% {
+    left: 0px;
   }
 }
 </style>

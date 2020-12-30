@@ -59,7 +59,7 @@
      </el-form>
      
     </div>
-    <a style="color:#fff; border:2px #fff solid;padding:5px;" href="http://127.0.0.1:5500/frontend/template/index.html">回到首页</a>
+    <a class="back" href="http://127.0.0.1:5500/frontend/template/index.html">回到首页</a>
   </div>
 </template>
 
@@ -246,6 +246,16 @@ export default {
 </style>
 <style scoped>
 @import "../../assets/layui/css/layui.css";
+.back{
+    position: absolute;
+    left: 47%;
+    top: 70%;
+    color:#fff;
+    font-size: 14px;
+    border:1px #fff solid;
+    padding:10px;
+    border-radius: 8px;
+}
 .login{
   width: 100%;
   height: 100%;
