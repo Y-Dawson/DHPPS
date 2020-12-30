@@ -52,19 +52,34 @@
               </ul>
             </div>
             <ul class="navbar-list">
+              <li v-if="ifAdmin">
+                <div class="chat-header-icons d-flex">
+                  <router-link
+                    class="chat-icon-phone iq-bg-primary"
+                    style="width: 100px; font-size: 14px; margin-top: 18px; margin-right:10px;"
+                    :to="{
+                      path: '/AdminIndex',
+                    }"
+                  >
+                    <i class="ri-reply-fill"></i>
+                    进入后台
+                  </router-link>
+                </div>
+              </li>
               <li>
                 <div class="chat-header-icons d-flex">
                   <router-link
                     class="chat-icon-phone iq-bg-primary"
                     style="width: 100px; font-size: 14px; margin-top: 18px"
                     :to="{
-                      path: '/setting',query:{
-              params:JSON.stringify({
-                userId:this.userId,
-                userAuthority:this.userAuthority,
-                caseName: 999
-              })
-            }
+                      path: '/setting',
+                      query: {
+                        params: JSON.stringify({
+                          userId: this.userId,
+                          userAuthority: this.userAuthority,
+                          caseName: 999,
+                        }),
+                      },
                     }"
                   >
                     <i class="ri-reply-fill"></i>
@@ -225,23 +240,39 @@ export default {
       Url: "",
       MyContent: [],
       userId: "",
+      userAuthority:"",
+      ifAdmin:false
     };
   },
   created: function () {
     this.GetUserIdentity();
+    // this.Admin()
+    // alert(this.userAuthority)
+    // alert(this.ifAdmin)
     // this.getMyContent();
   },
   methods: {
+    //判断是否管理员
+    Admin(){
+      if(this.userAuthority=="管理员"||this.userAuthority=="超级管理员"){
+        this.ifAdmin=true
+      }
+    },
     //获取用户身份
     GetUserIdentity() {
       var self = this;
       // alert("获取用户身份")
       axios
         .post("/apis/backend/getIdentity/")
-        .then((response) => (self.userId = response.data.userId,
-          // alert(this.userId),
-          this.getMyContent()
-        ))
+        .then(
+          (response) => (
+            self.userId = response.data.userId,
+            self.userAuthority=response.data.authority,
+            // alert(JSON.stringify(response.data)),
+            this.getMyContent(),
+            this.Admin()
+          )
+        )
         .catch(function (error) {
           // alert(JSON.stringify(error.response.data.message));
           alert("获取用户身份失败");
@@ -253,9 +284,9 @@ export default {
         .get("/apis/backend/profile/" + this.userId + "/")
         .then(
           (response) => (
-            self.MyContent = response.data,
+            (self.MyContent = response.data),
             // alert(JSON.stringify(response.data)),
-            this.Url = self.MyContent.avatar
+            (this.Url = self.MyContent.avatar)
           )
         )
         .catch(function (error) {
@@ -296,7 +327,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 @import "../../css/bootstrap.min.css";
 @import "../../css/typography.css";
 @import "../../css/style.css";
