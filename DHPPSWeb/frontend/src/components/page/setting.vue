@@ -213,12 +213,12 @@
         </li>
         <li>
           <div class="panel">
-            <!-- <h2>道路信息</h2>
-            <div class="chart" id="threebar"></div> -->
-            <span class="little-title">道路列表：</span>
+            <h2>道路信息</h2>
+            <div class="chart" id="threebar"></div>
+            <!-- <span class="little-title">道路列表：</span>
             <li id="city_inf" v-for="road in road_di" :key="road">
               {{ road }}
-            </li>
+            </li> -->
           </div>
         </li>
       </ul>
@@ -950,6 +950,8 @@ export default {
         var nu = this.GetNum(cid);
         nu = parseInt(nu);
         this.SetButton(nu);
+
+        citycnt = nu + 1;
       }
 
       for (var j in this.params.InitRoadData) {
@@ -979,9 +981,22 @@ export default {
         var cid2 = this.GetID(city2);
         // console.log(cid1, cid2);
 
+        var newar1 = new Array();
+        newar1.push(city1);
+        newar1.push(city2);
+        newar1.push(vol);
+        this.roadVol.push(newar1);
+
+        var newar2 = new Array();
+        newar2.push(city2);
+        newar2.push(city1);
+        newar2.push(vol);
+        this.roadVol.push(newar2);
+
         this.DrawLine(cid1, cid2);
       }
-      2;
+
+      console.log("roadVol",this.roadVol);
 
       for (var j in this.params.InitCityData) {
         var ci = this.params.InitCityData[j].split(",");
@@ -1013,6 +1028,7 @@ export default {
       }
 
       this.DrawMap();
+      this.DrawRoadMap();
     }
   },
 
@@ -1173,12 +1189,16 @@ export default {
         },
         grid: {
           left: 20,
+          right: 40,
+          top: 15,
+          bottom: 20,
         },
         xAxis: {
           type: "value",
           name: "人数",
           axisLabel: {
             formatter: "{value}",
+            interval: 0,
           },
         },
         yAxis: {
@@ -1217,8 +1237,8 @@ export default {
       myChart.setOption(option);
     },
 
-    Draw3DMap() {
-      console.log(this.roadVol);
+    DrawRoadMap() {
+      console.log("roadVol", this.roadVol);
 
       var myChart = echarts.init(document.getElementById("threebar"));
 
@@ -1228,93 +1248,121 @@ export default {
 
       console.log("画个3D柱状图");
 
-      var days = ["A", "B"];
+      var dataBJ = this.roadVol;
 
-      var sj = [
-        [0, 0, 5],
-        [0, 1, 1],
-        [1, 0, 7],
-        [1, 1, 0],
-      ];
+      var schema = [{ name: "date", index: 0, text: "日" }];
+
+      var itemStyle = {
+        opacity: 0.8,
+        shadowBlur: 10,
+        shadowOffsetX: 0,
+        shadowOffsetY: 0,
+        shadowColor: "rgba(0, 0, 0, 0.5)",
+      };
+
       var option = {
-        tooltip: {},
-        visualMap: {
-          max: 7,
-          inRange: {
-            color: [
-              "#313695",
-              "#4575b4",
-              "#74add1",
-              "#abd9e9",
-              "#e0f3f8",
-              "#ffffbf",
-              "#fee090",
-              "#fdae61",
-              "#f46d43",
-              "#d73027",
-              "#a50026",
-            ],
+        // backgroundColor: "#404a59",
+        color: ["#dd4444", "#fec42c", "#80F1BE"],
+        legend: {
+          top: 10,
+          data: ["北京"],
+          textStyle: {
+            color: "#fff",
+            fontSize: 16,
           },
         },
-        xAxis3D: {
-          type: "category",
-          data: days,
-          name: "出发地",
+        grid: {
+          left: "10%",
+          right: 150,
+          top: "18%",
+          bottom: "10%",
         },
-        yAxis3D: {
-          type: "category",
-          data: days,
-          name: "目的地",
-        },
-        zAxis3D: {
-          type: "value",
-          name: "人流量",
-        },
-        grid3D: {
-          boxWidth: 200,
-          boxDepth: 80,
-          viewControl: {
-            // projection: 'orthographic'
+        tooltip: {
+          padding: 10,
+          borderColor: "#777",
+          borderWidth: 1,
+          formatter: function (obj) {
+            var value = obj.value;
+            return (
+              '<div style="border-bottom: 1px solid rgba(255,255,255,.3); font-size: 18px;padding-bottom: 7px;margin-bottom: 7px">' +
+              value[0] +
+              "-" +
+              value[1] +
+              "：" +
+              value[2]
+            );
           },
-          light: {
-            main: {
-              intensity: 1.2,
-              shadow: true,
-            },
-            ambient: {
-              intensity: 0.3,
+        },
+        xAxis: {
+          type: "category",
+          data: this.cityname,
+          axisLabel: {
+            color: "#777",
+          },
+          axisLine: {
+            show: true,
+            lineStyle: {
+              color: "#777",
             },
           },
+          boundaryGap: false,
+          splitLine: {
+            show: true,
+          },
         },
+        yAxis: {
+          type: "category",
+          data: this.cityname,
+          axisLabel: {
+            color: "#777",
+          },
+          axisLine: {
+            show: true,
+            lineStyle: {
+              color: "#777",
+            },
+          },
+          boundaryGap: false,
+          splitLine: {
+            show: true,
+          },
+        },
+        visualMap: [
+          {
+            left: "right",
+            bottom: "5%",
+            dimension: 2,
+            min: 0,
+            max: 1000,
+            itemHeight: 120,
+
+            precision: 0.1,
+            text: ["明暗：人流量"],
+            textGap: 30,
+            textStyle: {
+              color: "#000",
+            },
+            inRange: {
+              colorLightness: [1, 0.5],
+            },
+            outOfRange: {
+              color: ["rgba(255,255,255,.2)"],
+            },
+            controller: {
+              inRange: {
+                color: ["#c23531"],
+              },
+              outOfRange: {
+                color: ["#444"],
+              },
+            },
+          },
+        ],
         series: [
           {
-            type: "bar3D",
-            data: sj.map(function (item) {
-              console.log("发生什么事了");
-              return {
-                value: [item[1], item[0], item[2]],
-              };
-            }),
-            shading: "lambert",
-
-            label: {
-              textStyle: {
-                fontSize: 16,
-                borderWidth: 1,
-              },
-            },
-
-            emphasis: {
-              label: {
-                textStyle: {
-                  fontSize: 20,
-                  color: "#900",
-                },
-              },
-              itemStyle: {
-                color: "#900",
-              },
-            },
+            type: "scatter",
+            itemStyle: itemStyle,
+            data: dataBJ,
           },
         ],
       };
@@ -1614,14 +1662,19 @@ export default {
           var road_inf = this.road_c1 + "-" + this.road_c2 + ":" + value;
           console.log("road_inf", road_inf);
 
-          var newar = new Array();
-          var n1 = this.GetCityNum(this.road_c1);
-          var n2 = this.GetCityNum(this.road_c2);
+          var newar1 = new Array();
           var vol = parseInt(value);
-          newar.push(n1);
-          newar.push(n2);
-          newar.push(vol);
-          this.roadVol.push(newar);
+          newar1.push(this.road_c1);
+          newar1.push(this.road_c2);
+          newar1.push(vol);
+          this.roadVol.push(newar1);
+
+          var newar2 = new Array();
+          var vol = parseInt(value);
+          newar2.push(this.road_c2);
+          newar2.push(this.road_c1);
+          newar2.push(vol);
+          this.roadVol.push(newar2);
 
           console.log("tcx1：" + tcx1);
 
@@ -1661,7 +1714,7 @@ export default {
           this.cp = false;
           concnt = 0;
 
-          // this.Draw3DMap();
+          this.DrawRoadMap();
         })
         .catch(() => {
           this.cp = false;
@@ -1727,6 +1780,29 @@ export default {
             return;
           }
 
+          for (var i in this.road_di) {
+            var departure = this.road_di[i].substring(0, 1);
+            var destination = this.road_di[i].substring(2, 3);
+            // this.road_c1 + "-" + this.road_c2
+            if (
+              (this.road_c1 == departure && this.road_c2 == destination) ||
+              (this.road_c2 == departure && this.road_c1 == destination)
+            ) {
+              this.$alert("两城市间已存在道路，请选择不同的城市", "连接失败", {
+                confirmButtonText: "确定",
+                callback: (action) => {
+                  this.$message({
+                    type: "info",
+                    message: `action: ${action}`,
+                  });
+                },
+              });
+              concnt = 0;
+              this.cp = false;
+              return;
+            }
+          }
+
           var mc = document.getElementById("myCanvas");
           var mctx = mc.getContext("2d");
 
@@ -1783,9 +1859,9 @@ export default {
             }
           }
           console.log(nacnt);
-          this.cityname.splice(nacnt,1);
-          this.citypeople.splice(nacnt,1);
-          this.cityInf.splice(nacnt,1);
+          this.cityname.splice(nacnt, 1);
+          this.citypeople.splice(nacnt, 1);
+          this.cityInf.splice(nacnt, 1);
           this.DrawMap();
 
           cn = 0;
@@ -1875,9 +1951,19 @@ export default {
           }
 
           var twd = wait_delete.reverse();
+          console.log("人流量图变变变");
           for (var j in twd) {
+            console.log("删前");
+            console.log("road_di",this.road_di);
+            console.log("roadVol",this.roadVol);
             this.road_di.splice(twd[j], 1);
+            this.roadVol.splice(2 * twd[j], 2);
+            console.log("删后");
+            console.log("road_di",this.road_di);
+            console.log("roadVol",this.roadVol);
           }
+
+          this.DrawRoadMap();
 
           console.log("c", c);
 
@@ -1906,6 +1992,9 @@ export default {
 
     DeleteRoad(e) {
       if (this.dr == true) {
+        console.log("this.road_di", this.road_di);
+        console.log("this.roadVol", this.roadVol);
+
         var r = document.getElementById(e);
         for (var j in this.road_di) {
           var c1 = this.road_di[j].substring(0, 1);
@@ -1934,12 +2023,17 @@ export default {
           var ttw = parseInt(tw);
           if (td == tw) {
             this.road_di.splice(j, 1);
+            this.roadVol.splice(2 * j, 2);
+            console.log("this.road_di", this.road_di);
+            console.log("this.roadVol", this.roadVol);
             break;
           }
         }
         r.style.left = 10000 + "px";
         r.style.top = 10000 + "px";
         this.dr = false;
+
+        this.DrawRoadMap();
       }
     },
 
@@ -1998,6 +2092,7 @@ export default {
       this.SetButton(citycnt);
 
       this.DrawMap();
+      this.DrawRoadMap();
 
       citycnt++;
       // console.log(typeof(this.city_po));
@@ -2236,7 +2331,7 @@ body {
 .city-list {
   position: absolute;
   right: 0;
-  width: 320px;
+  width: 340px;
   height: 655px;
   background-color: rgb(241, 245, 253);
   border: 1px solid rgb(204, 204, 204);
@@ -2253,7 +2348,7 @@ body {
 
 .city-list .panel {
   margin-left: 10px;
-  width: 300px;
+  width: 320px;
   height: 300px;
   background-color: rgb(241, 245, 253);
   border: 1px solid rgb(204, 204, 204);
@@ -2276,11 +2371,12 @@ body {
 
 h2 {
   height: 0.6rem;
-  line-height: 0.6rem;
+  /* line-height: 0.6rem; */
   text-align: center;
   color: #000;
   font-size: 20px;
   font-weight: 400;
+  margin-bottom: 15px;
 }
 
 .city-list #bar,
