@@ -11,6 +11,7 @@ urlpatterns = [
     # 渲染首页，其后的页面跳转由前端负责
     path('', views.Index, name="index"),
 
+    path('homepage/', views.HomePage, name="homepage"),
     # 身份验证请求
     path('getIdentity/', views.GetIdentity, name="getIdentity"),
 

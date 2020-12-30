@@ -43,7 +43,16 @@ def Index(request):
     :param request: request object
     :return: page
     """
-    return render(request, 'index.html')
+    return render(request, './dist/index.html')
+
+
+def HomePage(request):
+    '''
+    render Index page
+    :param request: request object
+    :return: homepage
+    '''
+    return render(request, './template/index.html')
 
 
 # 对传入的密码和salt进行md5加密，返回得到的加密密码
@@ -913,9 +922,10 @@ def GetCaseInfos(request):
 # 发送成功，返回消息和200状态码
 # 发送失败，返回消息和404状态码
 def GetUserInfos(request):
-    if not request.session.get('isLogin', None):
-        return JsonResponse({"message": "你还未登录", "status": 404})
-    elif request.method == "GET":
+    # if not request.session.get('isLogin', None):
+    #     return JsonResponse({"message": "你还未登录", "status": 404})
+    # el
+    if request.method == "GET":
         pageSize = request.GET.get("pageSize")
         page = request.GET.get("page")
         accountInfos = models.AccountInformation.objects.select_related("personalprofile").all().exclude(authority="超级管理员").order_by('userId')
@@ -928,7 +938,10 @@ def GetUserInfos(request):
         jsonList = []
         for accountInfo in pageInfos:
             accountInfoDict = model_to_dict(accountInfo)
+            # print("rawData", accountInfo.personalprofile.GetAvatarUrl())
             profileDict = model_to_dict(accountInfo.personalprofile)
+            profileDict["avatar"] = accountInfo.personalprofile.GetAvatarUrl()
+            # print("profileDict", profileDict["avatar"])
             jsonList.append({**accountInfoDict, **profileDict})
         jsonRes = json.loads(json.dumps(jsonList, cls=DateEnconding))
         print(jsonRes)
@@ -964,6 +977,7 @@ def GetGeneralUserInfos(request):
         for accountInfo in pageInfos:
             accountInfoDict = model_to_dict(accountInfo)
             profileDict = model_to_dict(accountInfo.personalprofile)
+            profileDict["avatar"] = accountInfo.personalprofile.GetAvatarUrl()
             jsonList.append({**accountInfoDict, **profileDict})
         jsonRes = json.loads(json.dumps(jsonList, cls=DateEnconding))
         print(jsonRes)
@@ -999,6 +1013,7 @@ def GetAdminInfos(request):
         for accountInfo in pageInfos:
             accountInfoDict = model_to_dict(accountInfo)
             profileDict = model_to_dict(accountInfo.personalprofile)
+            profileDict["avatar"] = accountInfo.personalprofile.GetAvatarUrl()
             jsonList.append({**accountInfoDict, **profileDict})
         jsonRes = json.loads(json.dumps(jsonList, cls=DateEnconding))
         print(jsonRes)
