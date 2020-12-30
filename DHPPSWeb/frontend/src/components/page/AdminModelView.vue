@@ -13,7 +13,7 @@
                 <router-link
                   class="iq-waves-effect"
                   :to="{
-                    path: '/AdminIndex'
+                    path: '/AdminIndex',
                   }"
                   ><i class="ri-home-4-line"></i><span>首页</span></router-link
                 >
@@ -40,7 +40,7 @@
                   ><span>案例管理</span></router-link
                 >
               </li>
-              <li>
+              <li class="active">
                 <a class="iq-waves-effect"
                   ><i class="ri-profile-line"></i>查看模型</a
                 >
@@ -105,8 +105,131 @@
       <!-- Page Content  -->
       <div id="content-page" class="content-page">
         <div class="container-fluid">
-          <div class="row">
+          
+          <div class="row box animated bounceInRight" id="f" v-if="show" >
+            <div class="col-sm-2 col-lg-4">
+              <div
+                class="iq-card"
+                @click="fade1"
+                style="background-color: rgb(122, 164, 226)"
+              >
+                <div class="iq-card-header d-flex justify-content-between">
+                  <div class="iq-header-title">
+                    <h4 class="card-title">Convlution</h4>
+                  </div>
+                </div>
+                <div class="iq-card-body">123123</div>
+              </div>
+            </div>
+            <div class="col-sm-2 col-lg-4">
+              <div class="iq-card" @click="fade2" style="background-color: rgb(103, 184, 209)">
+                <div class="iq-card-header d-flex justify-content-between">
+                  <div class="iq-header-title">
+                    <h4 class="card-title">convLSTM</h4>
+                  </div>
+                </div>
+                <div class="iq-card-body">123123</div>
+              </div>
+            </div>
+            <div class="col-sm-2 col-lg-4">
+              <div class="iq-card" @click="fade3" style="background-color: rgb(112, 211, 203)">
+                <div class="iq-card-header d-flex justify-content-between">
+                  <div class="iq-header-title">
+                    <h4 class="card-title">SEIR</h4>
+                  </div>
+                </div>
+                <div class="iq-card-body">123123</div>
+              </div>
+            </div>
           </div>
+
+          <div class="row box animated flipInX" id="f1"  v-if="show1">
+            <div class="col-sm-2 col-lg-12">
+              <div class="iq-card">
+                <div class="iq-card-header d-flex justify-content-between">
+                  <div class="iq-header-title">
+                    <h4 class="card-title">Convlution</h4>
+                  </div>
+                  <div class="chat-header-icons d-flex">
+                  <a
+                    class="chat-icon-phone iq-bg-primary"
+                    style="width: 100px; font-size: 14px; margin-top: 18px"
+                    @click="fade11"
+                  >
+                    <i class="ri-reply-fill"></i>
+                    返回
+                  </a>
+                </div>
+                </div>
+                <div class="iq-card-body">
+                  <img
+                    class="col-lg-12"
+                    src="../../images/principle/conv.png"
+                    alt="convlution"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row box animated flipInX" id="f2" v-if="show2">
+            <div class="col-sm-2 col-lg-12">
+              <div class="iq-card">
+                <div class="iq-card-header d-flex justify-content-between">
+                  <div class="iq-header-title">
+                    <h4 class="card-title">convLSTM</h4>
+                  </div>
+                  <div class="chat-header-icons d-flex">
+                  <a
+                    class="chat-icon-phone iq-bg-primary"
+                    style="width: 100px; font-size: 14px; margin-top: 18px"
+                    @click="fade21"
+                  >
+                    <i class="ri-reply-fill"></i>
+                    返回
+                  </a>
+                </div>
+                </div>
+                <div class="iq-card-body">
+                  <img
+                    class="col-lg-12"
+                    src="../../images/principle/convLSTM.png"
+                    alt="convLSTM"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row box animated flipInX" id="f3" v-if="show3">
+            <div class="col-sm-2 col-lg-12">
+              <div class="iq-card">
+                <div class="iq-card-header d-flex justify-content-between">
+                  <div class="iq-header-title">
+                    <h4 class="card-title">SEIR</h4>
+                  </div>
+                  <div class="chat-header-icons d-flex">
+                  <a
+                    class="chat-icon-phone iq-bg-primary"
+                    style="width: 100px; font-size: 14px; margin-top: 18px"
+                    @click="fade31"
+                  >
+                    <i class="ri-reply-fill"></i>
+                    返回
+                  </a>
+                </div>
+                </div>
+                <div class="iq-card-body">
+                  <img
+                    class="col-lg-12"
+                    src="../../images/principle/seir.png"
+                    alt="SEIR"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          
         </div>
       </div>
     </div>
@@ -137,6 +260,7 @@
 </template>
 <script src="https://www.jq22.com/jquery/jquery-1.10.2.js"></script>
 <script>
+import animate from "../../css/animate.css";
 export default {
   data() {
     return {
@@ -147,6 +271,10 @@ export default {
       AdminId: "",
       AdminAuthority: "",
       authorityShow: false,
+      show: true,
+      show1: false,
+      show2: false,
+      show3: false,
     };
   },
   created: function () {
@@ -206,6 +334,36 @@ export default {
         });
       }
     },
+    fade1: function () {
+      $("#f").addClass("animated flipOutX");
+      this.show=false;
+      this.show1 = true;
+    },
+    fade11: function () {
+      $("#f1").addClass("animated flipOutX");
+      this.show=true;
+      this.show1 = false;
+    },
+    fade2: function () {
+      $("#f").addClass("animated flipOutX");
+      this.show=false;
+      this.show2 = true;
+    },
+    fade21: function () {
+      $("#f2").addClass("animated flipOutX");
+      this.show=true;
+      this.show2 = false;
+    },
+    fade3: function () {
+      $("#f").addClass("animated flipOutX");
+      this.show=false;
+      this.show2 = true;
+    },
+    fade31: function () {
+      $("#f3").addClass("animated flipOutX");
+      this.show=true;
+      this.show2 = false;
+    },
   },
 };
 </script>
@@ -237,6 +395,9 @@ export default {
 }
 .el-calendar-table td.is-today {
   color: #9150f8;
+  /* color:rgb(103, 184, 209);
+  color:rgb(112, 211, 203);
+  color:rgb(122, 164, 226) */
 }
 #calendar {
   border: 0px;
@@ -245,5 +406,27 @@ export default {
 }
 #calendar :hover {
   background: transparent;
+}
+.goodlist {
+  width: 200px;
+  height: 200px;
+  background: red;
+  animation-duration: 2s;
+}
+/* 从隐藏到显示 */
+.fade-enter {
+  opacity: 0;
+}
+.fade-enter-active,
+.active {
+  transition: opacity 3s;
+}
+/* 从显示到隐藏 */
+.fade-leave-to {
+  opacity: 0;
+}
+.fade-leave-active,
+.leave {
+  transition: opacity 3s;
 }
 </style>
