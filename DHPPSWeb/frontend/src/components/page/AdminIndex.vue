@@ -37,8 +37,13 @@
                 >
               </li>
               <li>
-                <a href="#" class="iq-waves-effect"
-                  ><i class="ri-profile-line"></i>查看模型</a
+                <router-link
+                  class="iq-waves-effect"
+                  :to="{
+                    path: '/AdminModelView',
+                  }"
+                  ><i class="ri-home-4-line"></i
+                  ><span>查看模型</span></router-link
                 >
               </li>
             </ul>

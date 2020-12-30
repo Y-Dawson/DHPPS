@@ -111,34 +111,34 @@
               <div
                 class="iq-card"
                 @click="fade1"
-                style="background-color: rgb(122, 164, 226)"
+                style="background-color:rgb(150, 188, 245)"
               >
                 <div class="iq-card-header d-flex justify-content-between">
                   <div class="iq-header-title">
                     <h4 class="card-title">Convlution</h4>
                   </div>
                 </div>
-                <div class="iq-card-body">123123</div>
+                <div class="iq-card-body">在泛函分析中，卷积、旋积或摺积(英语：Convolution)是通过两个函数f和g 生成第三个函数的一种数学算子，表征函数f与g经过翻转和平移的重叠部分函数值乘积对重叠长度的积分。</div>
               </div>
             </div>
             <div class="col-sm-2 col-lg-4">
-              <div class="iq-card" @click="fade2" style="background-color: rgb(103, 184, 209)">
+              <div class="iq-card" @click="fade2" style="background-color: rgb(125, 201, 224)">
                 <div class="iq-card-header d-flex justify-content-between">
                   <div class="iq-header-title">
-                    <h4 class="card-title">convLSTM</h4>
+                    <h4 class="card-title">ConvLSTM</h4>
                   </div>
                 </div>
-                <div class="iq-card-body">123123</div>
+                <div class="iq-card-body">LSTM在时序数据的处理上能力非常强，但是如果时序数据是图像，则在LSTM的基础上加上卷积操作，对于图像的特征提取会更加有效。</div>
               </div>
             </div>
             <div class="col-sm-2 col-lg-4">
-              <div class="iq-card" @click="fade3" style="background-color: rgb(112, 211, 203)">
+              <div class="iq-card" @click="fade3" style="background-color: rgb(132, 223, 215)">
                 <div class="iq-card-header d-flex justify-content-between">
                   <div class="iq-header-title">
                     <h4 class="card-title">SEIR</h4>
                   </div>
                 </div>
-                <div class="iq-card-body">123123</div>
+                <div class="iq-card-body">SEIR(Susceptible-Exposed-Infected-Removed)，类似于SIR，但是增加了对潜伏期的定义，因此更适用于具有一定潜伏期的传染病。状态之间的转化如下所示：</div>
               </div>
             </div>
           </div>
@@ -177,7 +177,7 @@
               <div class="iq-card">
                 <div class="iq-card-header d-flex justify-content-between">
                   <div class="iq-header-title">
-                    <h4 class="card-title">convLSTM</h4>
+                    <h4 class="card-title">ConvLSTM</h4>
                   </div>
                   <div class="chat-header-icons d-flex">
                   <a
@@ -194,7 +194,7 @@
                   <img
                     class="col-lg-12"
                     src="../../images/principle/convLSTM.png"
-                    alt="convLSTM"
+                    alt="ConvLSTM"
                   />
                 </div>
               </div>
@@ -295,9 +295,6 @@ export default {
           ) {
             this.authorityShow = true;
             this.getMyContent();
-            this.getSexData();
-            this.getCityData();
-            this.getUserCaseData();
           } else {
             this.$message("您没有权限进入管理员界面！");
             this.$router.push({
@@ -357,12 +354,12 @@ export default {
     fade3: function () {
       $("#f").addClass("animated flipOutX");
       this.show=false;
-      this.show2 = true;
+      this.show3 = true;
     },
     fade31: function () {
       $("#f3").addClass("animated flipOutX");
       this.show=true;
-      this.show2 = false;
+      this.show3 = false;
     },
   },
 };
@@ -395,9 +392,9 @@ export default {
 }
 .el-calendar-table td.is-today {
   color: #9150f8;
-  /* color:rgb(103, 184, 209);
-  color:rgb(112, 211, 203);
-  color:rgb(122, 164, 226) */
+  /* color:rgb(125, 201, 224);
+  color:rgb(132, 223, 215);
+  color:rgb(150, 188, 245) */
 }
 #calendar {
   border: 0px;
