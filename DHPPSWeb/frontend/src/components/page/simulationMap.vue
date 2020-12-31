@@ -603,7 +603,7 @@ li {
 #simulationMap {
   background: url(../../assets/img/bg.jpg) no-repeat top center;
   line-height: 1.15;
-  height: 655px;
+  height: 720px;
   width: 100%;
   background-size: 100% 100%;
 }
@@ -639,7 +639,7 @@ header .stop {
 }
 
 .stop button {
-  background-color: rgb(0, 42, 242);
+  background-color: transparent;
   color: white;
   font-size: 20px;
   border: none;
@@ -663,7 +663,7 @@ header .stop {
 
 .mainbox .column .panel {
   position: relative;
-  height: 280px;
+  height: 310px;
   padding: 0 15px 40px;
   margin-bottom: 15px;
   border: 1px solid rgba(25, 186, 139, 0.17);
@@ -848,7 +848,7 @@ header .stop {
   top: 0;
   left: 0;
   width: 100%;
-  height: 480px;
+  height: 500px;
 }
 
 @keyframes rotate1 {

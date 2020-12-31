@@ -1,11 +1,9 @@
 <template>
   <div id="setting">
-    <div class="layui-layout layui-layout-admin">
+    <!-- <div class="layui-layout layui-layout-admin">
       <div class="layui-header">
         <div class="layui-logo">LOGO</div>
         <div class="layui-logotext">高传染性疾病预测系统</div>
-        <!-- <div class="layui-logo">高传染性疾病预测系统</div> -->
-        <!-- 头部区域（可配合layui已有的水平导航） -->
         <ul class="layui-nav layui-layout-right">
           <li class="layui-nav-item theme">
             <i class="layui-icon layui-icon-theme"></i>
@@ -40,7 +38,22 @@
           </li>
         </ul>
       </div>
-    </div>
+    </div> -->
+
+    <header>
+      <h1>自定模式</h1>
+      <div class="toDIY">
+        <button @click="toMapModel">地图模式</button>
+      </div>
+
+      <div class="toMy">
+        <router-link
+          :to="{ path: '/Userprofile', query: { userId: userId } }"
+          style="margin-left: 10px; float: left"
+          >个人中心</router-link
+        >
+      </div>
+    </header>
 
     <canvas
       id="myCanvas"
@@ -996,7 +1009,7 @@ export default {
         this.DrawLine(cid1, cid2);
       }
 
-      console.log("roadVol",this.roadVol);
+      console.log("roadVol", this.roadVol);
 
       for (var j in this.params.InitCityData) {
         var ci = this.params.InitCityData[j].split(",");
@@ -1652,13 +1665,28 @@ export default {
     ConfirmRoad(tcx1, tcy1, tcx2, tcy2, dx, dy, dis) {
       var tra = 0;
       console.log("输入人流量");
-      this.$prompt("请输入此路人流量", "提示", {
+      this.$prompt("请输入此路人流量（1-100）", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         inputPattern: /^[0-9]/,
         inputErrorMessage: "人流量格式不正确",
       })
         .then(({ value }) => {
+          if (value < 1 || value > 100) {
+            this.$alert("人流量应在5~100内", "连接失败", {
+              confirmButtonText: "确定",
+              callback: (action) => {
+                this.$message({
+                  type: "info",
+                  message: `action: ${action}`,
+                });
+              },
+            });
+            concnt = 0;
+            this.cp = false;
+            return;
+          }
+
           var road_inf = this.road_c1 + "-" + this.road_c2 + ":" + value;
           console.log("road_inf", road_inf);
 
@@ -1954,13 +1982,13 @@ export default {
           console.log("人流量图变变变");
           for (var j in twd) {
             console.log("删前");
-            console.log("road_di",this.road_di);
-            console.log("roadVol",this.roadVol);
+            console.log("road_di", this.road_di);
+            console.log("roadVol", this.roadVol);
             this.road_di.splice(twd[j], 1);
             this.roadVol.splice(2 * twd[j], 2);
             console.log("删后");
-            console.log("road_di",this.road_di);
-            console.log("roadVol",this.roadVol);
+            console.log("road_di", this.road_di);
+            console.log("roadVol", this.roadVol);
           }
 
           this.DrawRoadMap();
@@ -2176,6 +2204,18 @@ export default {
       if (n == 9) this.isdisabled9 = true;
       if (n == 10) this.isdisabled10 = true;
     },
+
+    toMapModel() {
+      this.$router.push({
+        path: "/settingMap",
+        query: {
+          params: JSON.stringify({
+            userId: this.userId,
+            caseName: 999,
+          }),
+        },
+      });
+    },
   },
 };
 </script>
@@ -2186,6 +2226,47 @@ export default {
 
 body {
   overflow: hidden;
+}
+
+header {
+  position: relative;
+  height: 1.25rem;
+  background: url("../../assets/img/head_bg.png") no-repeat;
+  height: 50px;
+  width: 100%;
+  background-size: 100% 100%;
+}
+
+h1 {
+  font-style: 0.475rem;
+  color: #fff;
+  text-align: center;
+}
+
+header .toDIY {
+  position: absolute;
+  left: 5px;
+  top: 5px;
+}
+
+.toDIY button {
+  /* background-color: rgb(149, 154, 169); */
+  background-color: transparent;
+  color: white;
+  font-size: 20px;
+  border: none;
+}
+
+header .toMy {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+}
+
+.toMy a {
+  font-size: 20px;
+  color: white;
+  text-decoration: none;
 }
 
 .layui-nav-tree .layui-nav-item a {
