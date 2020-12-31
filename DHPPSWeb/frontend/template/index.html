@@ -16,8 +16,8 @@
     <!-- CSS Files
     ================================================== -->
     <link rel="stylesheet" href="https://www.jq22.com/jquery/bootstrap-4.2.1.css">
-    <link href="static/static/css/bootstrap-grid.min.css" rel="stylesheet" type="text/css">
-    <link href="static/css/bootstrap-reboot.min.css" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/bootstrap-grid.min.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/bootstrap-reboot.min.css' %}" rel="stylesheet" type="text/css">
     <link href="static/css/animate.css" rel="stylesheet" type="text/css">
     <link href="static/css/owl.carousel.css" rel="stylesheet" type="text/css">
     <link href="static/css/owl.theme.css" rel="stylesheet" type="text/css">
@@ -230,58 +230,12 @@
                             <div class="de_testi opt-2">
                                 <blockquote>
                                     <div class="content" style="border: 1px rgb(184, 184, 184) solid;">
-                                        <img alt="" src="static/images/people/6.jpg">
+                                        <img alt="" src="{% static 'images/people/6.jpg' %}">
                                         <h3 style="margin: 10px 10px 0px 10px;color: rgb(90, 90, 90);">案例1</h3>
                                         <p style="margin: 0px 10px 0px 10px;font-size: 12px;">Thanks to the support team, they are very helpfull. This company provide customers great solution, that makes them best.
                                         </p>
                                     </div>
                                 </blockquote>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section id="section-features">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md text-center" style="text-align: center;">
-                            <h2><span class="uptitle id-color">Our Features</span>我们的特点</h2>
-                            <div class="spacer-20"></div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md col-sm-6 mb-sm-30">
-                            <div class="feature-box-type-2" data-scroll-reveal="enter bottom after 0.1s">
-                                <i class="icon-alarmclock"></i>
-                                <h4>Instant Activation</h4>
-                            </div>
-                        </div>
-
-                        <div class="col-md col-sm-6 mb-sm-30">
-                            <div class="feature-box-type-2" data-scroll-reveal="enter bottom after 0.1s">
-                                <i class="icon-profile-male"></i>
-                                <h4>24 / 7 Support</h4>
-                            </div>
-                        </div>
-
-                        <div class="col-md col-sm-6 mb-sm-30">
-                            <div class="feature-box-type-2" data-scroll-reveal="enter bottom after 0.1s">
-                                <i class="icon-refresh"></i>
-                                <h4>99.9% Uptime</h4>
-                            </div>
-                        </div>
-
-                        <div class="col-md col-sm-6 mb-sm-30">
-                            <div class="feature-box-type-2" data-scroll-reveal="enter bottom after 0.1s">
-                                <i class="icon-upload"></i>
-                                <h4>Cloud Powered</h4>
-                            </div>
-                        </div>
-                        <div class="col-md col-sm-6 mb-sm-30">
-                            <div class="feature-box-type-2" data-scroll-reveal="enter bottom after 0.1s">
-                                <i class="icon-layers"></i>
-                                <h4>Multi Datacenter</h4>
                             </div>
                         </div>
                     </div>
@@ -316,7 +270,9 @@
                             <h2>开始创建你的案例</h2>
                             <p class="lead">Chilk here to create your case</p>
                             <div class="spacer-half"></div>
-                            <button class="bubbly-button">Get Started !</button>
+                            <button class="bubbly-button">
+                                <a style="color:#fff" href="http://localhost:8080/">Get Started !</a>
+                            </button>
                             </div>
                         </div>
                         <div class="col-lg-6" style="float: right;"
@@ -327,7 +283,7 @@
                             -webkit-filter: drop-shadow(0 12px 2px #2b2341) 
                             drop-shadow(0 10px 15px rgb(148, 160, 228)) 
                             drop-shadow(0 10px 5px rgb(165, 176, 226));"
-                            src="static/images/misc/city.png" alt="">
+                            src="{% static 'images/misc/city.png' %}" alt="">
                         </div>
                     </div>
                 </div>
@@ -360,7 +316,9 @@
                             <h2>开始创建你的案例</h2>
                             <p class="lead">Chilk here to create your case</p>
                             <div class="spacer-half"></div>
-                            <button class="bubbly-button">Get Started !</button>
+                            <button class="bubbly-button">
+                                <a style="color:#fff" href="http://localhost:8080/">Get Started !</a>
+                            </button>
                             </div>
                         </div>
                     </div>

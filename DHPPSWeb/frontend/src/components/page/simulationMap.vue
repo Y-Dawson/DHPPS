@@ -82,9 +82,11 @@ export default {
     };
   },
   mounted: function () {
+    this.GetUserIdentity();
+
     this.params = JSON.parse(this.$route.query.params);
 
-    console.log("用户ID：", this.params.userId);
+    // console.log("用户ID：", this.params.userId);
     console.log("案例名：", this.params.caseName);
     console.log("城市数目：", this.params.citynum);
     console.log("道路数目：", this.params.roadnum);
@@ -93,7 +95,7 @@ export default {
     console.log("每日病例：", this.params.DailyInfected.data.DailyForecastData);
     var foreData = this.params.DailyInfected.data.DailyForecastData;
 
-    this.userId = this.params.userId;
+    // this.userId = this.params.userId;
     this.caseName = this.params.caseName;
     this.citynum = this.params.citynum;
     this.roadnum = this.params.roadnum;
@@ -194,6 +196,19 @@ export default {
     this.drawMap(this.params.InitRoadData);
   },
   methods: {
+    GetUserIdentity() {
+      axios
+        .post("/apis/backend/getIdentity/")
+        .then((response) => {
+          this.userId = response.data.userId;
+          // alert(JSON.stringify(response.data)),
+        })
+        .catch(function (error) {
+          // alert(JSON.stringify(error.response.data.message));
+          alert("获取用户身份失败");
+        });
+    },
+
     drawLine() {
       var myChart = echarts.init(document.getElementById("line"));
       var option = {
@@ -422,9 +437,7 @@ export default {
 
       var color = ["#a6c84c", "#ffa022", "#46bee9"]; //航线的颜色
       var series = [];
-      [
-        ["西安", XAData],
-      ].forEach(function (item, i) {
+      [["西安", XAData]].forEach(function (item, i) {
         series.push(
           {
             name: item[0] + " Top3",

@@ -7,9 +7,7 @@
       </div>
 
       <div class="toMy">
-        <router-link
-          :to="{ path: '/Userprofile', query: { userId: userId } }"
-          style="margin-left: 10px; float: left"
+        <router-link :to="{ path: '/Userprofile' }" style="margin-left: 10px; float: left"
           >个人中心</router-link
         >
       </div>
@@ -253,9 +251,12 @@ export default {
 
   mounted: function () {
     console.log("地图模式初始化");
+
+    this.GetUserIdentity();
+
     this.params = JSON.parse(this.$route.query.params);
 
-    console.log("用户ID：", this.params.userId);
+    // console.log("用户ID：", this.params.userId);
     console.log("案例名：", this.params.caseName);
     console.log("城市数目：", this.params.citynum);
     console.log("道路数目：", this.params.roadnum);
@@ -505,6 +506,19 @@ export default {
       });
     },
 
+    GetUserIdentity() {
+      axios
+        .post("/apis/backend/getIdentity/")
+        .then((response) => {
+          this.userId = response.data.userId;
+          // alert(JSON.stringify(response.data)),
+        })
+        .catch(function (error) {
+          // alert(JSON.stringify(error.response.data.message));
+          alert("获取用户身份失败");
+        });
+    },
+
     add_city() {
       this.isShow1 = true;
     },
@@ -678,7 +692,7 @@ export default {
       this.$prompt("请输入此案例名称", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        inputPattern: /^[0-9]/,
+        inputPattern: /^[\u4e00-\u9fa5_a-zA-Z0-9]+$/,
         inputErrorMessage: "案例名称格式不正确",
       })
         .then(({ value }) => {

@@ -529,9 +529,11 @@ export default {
   },
 
   mounted: function () {
+    this.GetUserIdentity();
+
     this.params = JSON.parse(this.$route.query.params);
 
-    console.log("用户ID：", this.params.userId);
+    // console.log("用户ID：", this.params.userId);
     console.log("案例名：", this.params.caseName);
     console.log("城市数目：", this.params.citynum);
     console.log("道路数目：", this.params.roadnum);
@@ -541,7 +543,7 @@ export default {
     console.log("每日病例：", this.params.DailyInfected.data.DailyForecastData);
     var foreData = this.params.DailyInfected.data.DailyForecastData;
 
-    this.userId = this.params.userId;
+    // this.userId = this.params.userId;
     this.casename = this.params.caseName;
     this.citycnt = this.params.citynum;
     this.linecnt = this.params.roadnum;
@@ -711,6 +713,19 @@ export default {
   },
 
   methods: {
+    GetUserIdentity() {
+      axios
+        .post("/apis/backend/getIdentity/")
+        .then((response) => {
+          this.userId = response.data.userId;
+          // alert(JSON.stringify(response.data)),
+        })
+        .catch(function (error) {
+          // alert(JSON.stringify(error.response.data.message));
+          alert("获取用户身份失败");
+        });
+    },
+
     StopSimulation(ss) {
       if (this.ss == true) {
         console.log("返回设置参数界面");
@@ -1647,7 +1662,7 @@ canvas {
 .road_line img {
   position: absolute;
   height: 10px;
-  width: 500px;
+  width: 750px;
   top: 0px;
   left: -100px;
   animation: roadmove1 3s linear infinite;
