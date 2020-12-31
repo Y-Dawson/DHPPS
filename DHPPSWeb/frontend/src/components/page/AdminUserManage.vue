@@ -119,7 +119,7 @@
                       <thead>
                         <tr style="text-align: center">
                           <th style="width: 8%">ID</th>
-                          <th style="width: 8%">头像</th>
+                          <th style="width: 5%">头像</th>
                           <th style="width: 10%">昵称</th>
                           <th style="width: 10%">手机号</th>
                           <th style="width: 10%">邮箱</th>
@@ -136,7 +136,7 @@
                           style="text-align: center"
                         >
                           <td>{{ item.userId }}</td>
-                          <td class="text-center">
+                          <td>
                             <div class="avatar avatar-md">
                               <img
                                 :src="item.avatar"
