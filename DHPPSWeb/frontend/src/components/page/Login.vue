@@ -57,7 +57,9 @@
       <router-link to="/forgetPass" class="forget-password" style="font-size:14px;margin-left:10px; float:right;">忘记密码</router-link>
       <!-- <a class="forget-password" href="./forgetPass" style="margin-right:10px; float:right;">忘记密码</a> -->
      </el-form>
+     
     </div>
+    <a class="back" href="http://127.0.0.1:5500/frontend/template/index.html">回到首页</a>
   </div>
 </template>
 
@@ -101,6 +103,9 @@ export default {
     // this.JumpPage();
   },
   methods: {
+    jumpHtml(){
+      window.location.href="index.html"
+    },
     submitMessage(){
       if(this.loginMassege=="登录成功"){
         // this.$cookies.get(keyName)
@@ -118,26 +123,9 @@ export default {
             },
           });
         }
-        else if(this.userAuthority=="管理员"){
+        else if(this.userAuthority=="管理员"||this.userAuthority=="超级管理员"){
           this.$router.push({
-            path:'/AdminIndex',
-            query:{
-              params:JSON.stringify({
-                userId:this.userId,
-                userAuthority:this.userAuthority
-              })
-            },
-          });
-        }
-        else if(this.userAuthority=="超级管理员"){
-          this.$router.push({
-            path:'/SuperIndex',
-            query:{
-              params:JSON.stringify({
-                userId:this.userId,
-                userAuthority:this.userAuthority
-              })
-            },
+            path:'/AdminIndex'
           });
         }
       }
@@ -215,7 +203,7 @@ export default {
             self.userId=response.data.userId,
             self.userAuthority=response.data.userAuthority,
             // alert("数据发送"),
-            alert(JSON.stringify(response.data.message)),
+            // alert(JSON.stringify(response.data.message)),
             self.submitMessage()
           )
         )
@@ -233,6 +221,7 @@ export default {
     },
   },
 };
+// document.write(location.href);
 </script>
 <style>
 .MyInput .el-input__inner{
@@ -257,6 +246,16 @@ export default {
 </style>
 <style scoped>
 @import "../../assets/layui/css/layui.css";
+.back{
+    position: absolute;
+    left: 47%;
+    top: 70%;
+    color:#fff;
+    font-size: 14px;
+    border:1px #fff solid;
+    padding:10px;
+    border-radius: 8px;
+}
 .login{
   width: 100%;
   height: 100%;

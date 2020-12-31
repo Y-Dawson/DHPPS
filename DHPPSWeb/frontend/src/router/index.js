@@ -11,9 +11,8 @@ import AdminCaseManage from '@/components/page/AdminCaseManage'
 import AdminIndex from '@/components/page/AdminIndex'
 import UserProfile from '@/components/page/UserProfile'
 import UserProfileEdit from '@/components/page/UserProfileEdit'
-import SuperIndex from '@/components/page/SuperIndex'
 import SuperUserManage from '@/components/page/SuperUserManage'
-import SuperCaseManage from '@/components/page/SuperCaseManage'
+import AdminModelView from '@/components/page/AdminModelView'
 import UserCase from '@/components/page/UserCase'
 import settingMap from '@/components/page/settingMap'
 import simulationMap from '@/components/page/simulationMap'
@@ -37,9 +36,8 @@ export default new Router({
     {path:'/AdminIndex',component:AdminIndex},
     {path:'/UserProfile',component:UserProfile},
     {path:'/UserProfileEdit',component:UserProfileEdit},
-    {path:'/SuperIndex',component:SuperIndex},
     {path:'/SuperUserManage',component:SuperUserManage},
-    {path:'/SuperCaseManage',component:SuperCaseManage},
+    {path:'/AdminModelView',component:AdminModelView},
     {path:'/UserCase',component:UserCase},
     {path:'/settingMap',component:settingMap},
     {path:'/simulationMap',component:simulationMap},

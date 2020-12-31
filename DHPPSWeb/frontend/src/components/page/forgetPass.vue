@@ -203,7 +203,7 @@ export default {
     forgetPass: function () {
       var self = this;
       let data = new FormData();
-      data.append("phoneNum",$("#phone").val());
+      data.append("phoneNum", $("#phonenum").val());
       data.append("verifyCode",$("#securitt_code").val());
       data.append("newPassword",$("#password").val());
       axios

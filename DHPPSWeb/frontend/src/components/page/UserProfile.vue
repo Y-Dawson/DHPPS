@@ -52,6 +52,41 @@
               </ul>
             </div>
             <ul class="navbar-list">
+              <li v-if="ifAdmin">
+                <div class="chat-header-icons d-flex">
+                  <router-link
+                    class="chat-icon-phone iq-bg-primary"
+                    style="width: 100px; font-size: 14px; margin-top: 18px; margin-right:10px;"
+                    :to="{
+                      path: '/AdminIndex',
+                    }"
+                  >
+                    <i class="ri-reply-fill"></i>
+                    进入后台
+                  </router-link>
+                </div>
+              </li>
+              <li>
+                <div class="chat-header-icons d-flex">
+                  <router-link
+                    class="chat-icon-phone iq-bg-primary"
+                    style="width: 100px; font-size: 14px; margin-top: 18px"
+                    :to="{
+                      path: '/setting',
+                      query: {
+                        params: JSON.stringify({
+                          userId: this.userId,
+                          userAuthority: this.userAuthority,
+                          caseName: 999,
+                        }),
+                      },
+                    }"
+                  >
+                    <i class="ri-reply-fill"></i>
+                    返回前台
+                  </router-link>
+                </div>
+              </li>
               <li>
                 <el-popover placement="bottom" width="400" trigger="click">
                   <el-calendar v-model="value"> </el-calendar>
@@ -205,22 +240,39 @@ export default {
       Url: "",
       MyContent: [],
       userId: "",
+      userAuthority:"",
+      ifAdmin:false
     };
-  },
-  mounted: function () {
-    this.getMyContent();
   },
   created: function () {
     this.GetUserIdentity();
-    this.getMyContent();
+    // this.Admin()
+    // alert(this.userAuthority)
+    // alert(this.ifAdmin)
+    // this.getMyContent();
   },
   methods: {
+    //判断是否管理员
+    Admin(){
+      if(this.userAuthority=="管理员"||this.userAuthority=="超级管理员"){
+        this.ifAdmin=true
+      }
+    },
     //获取用户身份
     GetUserIdentity() {
       var self = this;
+      // alert("获取用户身份")
       axios
         .post("/apis/backend/getIdentity/")
-        .then((response) => (self.userId = response.data.userId))
+        .then(
+          (response) => (
+            self.userId = response.data.userId,
+            self.userAuthority=response.data.authority,
+            // alert(JSON.stringify(response.data)),
+            this.getMyContent(),
+            this.Admin()
+          )
+        )
         .catch(function (error) {
           // alert(JSON.stringify(error.response.data.message));
           alert("获取用户身份失败");
@@ -228,19 +280,18 @@ export default {
     },
     getMyContent: function () {
       var self = this;
-      // var userId=this.userId;
-      // alert("获取内容")
       axios
         .get("/apis/backend/profile/" + this.userId + "/")
         .then(
           (response) => (
-            (self.MyContent = response.data[0]),
+            (self.MyContent = response.data),
+            // alert(JSON.stringify(response.data)),
             (this.Url = self.MyContent.avatar)
           )
         )
         .catch(function (error) {
           // 请求失败处理
-          alert("数据请求失败wdnmd");
+          alert("getMyContent数据请求失败wdnmd");
         });
     },
     handleLogout: function () {
@@ -276,7 +327,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 @import "../../css/bootstrap.min.css";
 @import "../../css/typography.css";
 @import "../../css/style.css";

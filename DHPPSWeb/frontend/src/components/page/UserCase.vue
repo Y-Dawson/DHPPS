@@ -97,7 +97,15 @@
                   >
                     <el-card class="box-card">
                       <div slot="header" class="clearfix">
-                        <i
+                        <i v-if="item.caseMode === '自定模式'"
+                          class="el-icon el-icon-location-outline"
+                          style="
+                            margin-right: 10px;
+                            font-size: 38px;
+                            color: rgb(173, 173, 173);
+                          "
+                        ></i>
+                        <i v-else-if="item.caseMode === '地图模式'"
                           class="el-icon el-icon-map-location"
                           style="
                             margin-right: 10px;
@@ -183,6 +191,7 @@ export default {
   data() {
     return {
       userId:'',
+      isMap:'',//是否是地图模式
       // 头像
       fits: ["fill"],
       imageUrl:"",
@@ -198,7 +207,6 @@ export default {
   },
   created: function () {
     this.GetUserIdentity()
-    this.getMyContent()
   },
   mounted: function () {
     this.GetCaseContent();
@@ -211,7 +219,8 @@ export default {
       axios
         .post("/apis/backend/getIdentity/")
         .then(response => (
-           self.userId=response.data.userId
+           self.userId=response.data.userId,
+           this.getMyContent()
           )
         )
         .catch(function (error) {
@@ -240,8 +249,8 @@ export default {
         .get("/apis/backend/profile/"+this.userId+"/")
         .then(
           (response) => (
-            (self.MyContent = response.data[0]),
-            (this.imageUrl = self.MyContent.avatar)
+            self.MyContent = response.data,
+            this.imageUrl = self.MyContent.avatar
             // alert(JSON.stringify(self.MyContent))
           )
         )
@@ -263,10 +272,10 @@ export default {
         })
         .then(
           (response) => (
-            (self.currentPageData = response.data),
-            (self.totalCasePage = Math.ceil(
+            self.currentPageData = response.data,
+            self.totalCasePage = Math.ceil(
               self.currentPageData.pagination / self.pageCaseSize
-            ))
+            )
           )
         )
         .catch(function (error) {
@@ -279,50 +288,49 @@ export default {
       var self = this;
       let data = new FormData();
       data.append("caseId", id);
-      alert(id)
       axios
         .post("apis/backend/getCaseInfo/", data)
         .then((response) => {
           self.cases = response.data.cases;
-          alert(JSON.stringify(self.cases)),
+          // alert(JSON.stringify(self.cases)),
           console.log(JSON.stringify(self.cases));
 
-          console.log(self.cases.Initcitydata);
+          console.log(self.cases.InitCityData);
           var city_inf = [];
-          for (var j in self.cases.Initcitydata) {
+          for (var j in self.cases.InitCityData) {
             var s =
               "cityname:" +
-              self.cases.Initcitydata[j].cityname +
+              self.cases.InitCityData[j].cityName +
               ",initpop:" +
-              self.cases.Initcitydata[j].initpop +
+              self.cases.InitCityData[j].initPop +
               ",initinfect:" +
-              self.cases.Initcitydata[j].initinfect;
+              self.cases.InitCityData[j].initInfect;
             console.log("s:", s);
             city_inf.push(s);
           }
 
           var road_inf = [];
-          for (var j in self.cases.Initroaddata) {
+          for (var j in self.cases.InitRoadData) {
             var s =
               "departure:" +
-              self.cases.Initroaddata[j].departure +
+              self.cases.InitRoadData[j].departure +
               ",destination:" +
-              self.cases.Initroaddata[j].destination +
+              self.cases.InitRoadData[j].destination +
               ",volume:" +
-              self.cases.Initroaddata[j].volume;
+              self.cases.InitRoadData[j].volume;
             console.log("s:", s);
             road_inf.push(s);
           }
 
           var city_pos = [];
-          for (var j in self.cases.Cityposition) {
+          for (var j in self.cases.CityPosition) {
             var s =
               "cityname:" +
-              self.cases.Cityposition[j].cityname +
+              self.cases.CityPosition[j].cityName +
               ",x:" +
-              self.cases.Cityposition[j].x +
+              self.cases.CityPosition[j].x +
               ",y:" +
-              self.cases.Cityposition[j].y;
+              self.cases.CityPosition[j].y;
             console.log("s:", s);
             city_pos.push(s);
           }
@@ -344,7 +352,7 @@ export default {
         })
         .catch(function (error) {
           alert(JSON.stringify(error.response));
-          alert("数据请求失败wdnmd");
+          alert("getCaseInfo数据请求失败wdnmd");
         });
     },
     DeleteCaseContent: function (id) {
