@@ -339,7 +339,7 @@ export default {
             path: "/setting",
             query: {
               params: JSON.stringify({
-                userId: 1,
+                userId: this.userId,
                 caseName: this.cases.casename,
                 citynum: this.cases.citynum,
                 roadnum: this.cases.roadnum,
@@ -376,6 +376,7 @@ export default {
         .then(() => {
           this.DeleteCaseContent(id),
             this.GetCaseContent(),
+            location.reload(),
             // this.reload(),
             this.$message({
               type: "success",
@@ -394,13 +395,35 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 @import "../../css/bootstrap.min.css";
 @import "../../css/typography.css";
 @import "../../css/style.css";
 @import "../../css/animate.css";
 </style>
-<style scoped>
+<style>
+/* 日历组件 */
+.el-calendar-table .el-calendar-day {
+  height: 40px;
+}
+.el-calendar-table .el-calendar-day:hover {
+  background: #d8c5f8;
+}
+.el-calendar-table td.is-selected {
+  background-color: #dbc7fc;
+  color: #fff;
+}
+.el-calendar-table td.is-today {
+  color: #9150f8;
+}
+#calendar {
+  border: 0px;
+  margin-top: 20px;
+  background: transparent;
+}
+#calendar :hover {
+  background: transparent;
+}
 .container-fluid{
   height:550px;
   padding: 0px;

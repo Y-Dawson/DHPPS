@@ -332,6 +332,8 @@ export default {
 @import "../../css/typography.css";
 @import "../../css/style.css";
 @import "../../css/animate.css";
+</style>
+<style>
 /* 日历组件 */
 .el-calendar-table .el-calendar-day {
   height: 40px;
