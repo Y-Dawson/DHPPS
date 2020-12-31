@@ -1542,7 +1542,7 @@ export default {
       this.$prompt("请输入此案例名称", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        inputPattern: /^[0-9]/,
+        inputPattern: /^[\u4e00-\u9fa5_a-zA-Z0-9]+$/,
         inputErrorMessage: "案例名称格式不正确",
       })
         .then(({ value }) => {
