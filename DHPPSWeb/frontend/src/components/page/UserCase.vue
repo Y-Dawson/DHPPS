@@ -375,14 +375,14 @@ export default {
       })
         .then(() => {
           this.DeleteCaseContent(id),
-            this.GetCaseContent(),
+            // this.GetCaseContent(),
             location.reload(),
             // this.reload(),
             this.$message({
               type: "success",
               message: "删除成功!",
             });
-          this.GetCaseContent();
+          // this.GetCaseContent();
         })
         .catch(() => {
           // this.$message({
