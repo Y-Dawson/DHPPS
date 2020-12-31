@@ -48,7 +48,7 @@
 
       <div class="toMy">
         <router-link
-          :to="{ path: '/Userprofile', query: { userId: userId } }"
+          :to="{ path: '/Userprofile' }"
           style="margin-left: 10px; float: left"
           >个人中心</router-link
         >
@@ -919,8 +919,10 @@ export default {
   },
 
   mounted: function () {
+    this.GetUserIdentity();
+
     this.params = JSON.parse(this.$route.query.params);
-    console.log("用户ID：", this.params.userId);
+    // console.log("用户ID：", this.params.userId);
     console.log("案例名：", this.params.caseName);
     // console.log("类型：", typeof this.params.casename);
     console.log("城市数目：", this.params.citynum);
@@ -928,7 +930,7 @@ export default {
     console.log("初始城市信息：", this.params.InitCityData);
     console.log("道路信息：", this.params.InitRoadData);
     console.log("城市坐标：", this.params.CityPosition);
-    this.userId = this.params.userId;
+    // this.userId = this.params.userId;
 
     citycnt = 1;
     linecnt = 1;
@@ -1125,6 +1127,21 @@ export default {
         path: "/caseView",
         query: { userId: this.userId },
       });
+    },
+
+    GetUserIdentity() {
+      axios
+        .post("/apis/backend/getIdentity/")
+        .then(
+          (response) => {
+            this.userId = response.data.userId;
+            // alert(JSON.stringify(response.data)),
+          }
+        )
+        .catch(function (error) {
+          // alert(JSON.stringify(error.response.data.message));
+          alert("获取用户身份失败");
+        });
     },
 
     DrawLine(ci1, ci2) {
