@@ -108,6 +108,7 @@ export default {
       window.location.href="index.html"
     },
     submitMessage(){
+      // alert(this.loginMassege)
       if(this.loginMassege=="登录成功"){
         // this.$cookies.get(keyName)
         // alert(this.$cookies.get(sessionid))
@@ -144,8 +145,8 @@ export default {
         if(this.loginMassege=="密码错误"){
           this.$message.error("密码错误")
         }
-        if(this.loginMassege=="账号不存在"){
-          this.$message.error("账号不存在")
+        if(this.loginMassege=="该账号不存在"){
+          this.$message.error("该账号不存在")
         }
       }
     
