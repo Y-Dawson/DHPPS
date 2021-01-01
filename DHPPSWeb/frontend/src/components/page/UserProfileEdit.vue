@@ -482,7 +482,7 @@ export default {
         ],
         addr: [{ required: true, trigger: "change" }],
         sex: [{ required: false, trigger: "change" }],
-        addr: [{ min: 0, max: 50 }],
+        addr: [{ min: 0, max: 20 }],
 
         prePass: [{ required: true, validator: validatePass, trigger: "blur" }],
         pass: [{ required: true, validator: validatePass, trigger: "blur" }],

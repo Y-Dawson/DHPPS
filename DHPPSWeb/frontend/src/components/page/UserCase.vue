@@ -198,6 +198,7 @@ export default {
       MyContent: [],
       contentList: [],
       cases: [],
+      caseMode:'',
       //分页
       restCase:0,
       totalCasePage: 1, // 统共页数，默认为1
@@ -294,15 +295,16 @@ export default {
     Edit: function (id) {
       var self = this;
       let data = new FormData();
+      // alert(id)
       data.append("caseId", id);
       axios
         .post("apis/backend/getCaseInfo/", data)
         .then((response) => {
           self.cases = response.data.cases;
           // alert(JSON.stringify(self.cases)),
-          console.log(JSON.stringify(self.cases));
-
-          console.log(self.cases.InitCityData);
+          // console.log(JSON.stringify(self.cases));
+          self.caseMode=self.cases.caseMode
+          // console.log(self.cases.InitCityData);
           var city_inf = [];
           for (var j in self.cases.InitCityData) {
             var s =
@@ -341,8 +343,8 @@ export default {
             console.log("s:", s);
             city_pos.push(s);
           }
-
-          this.$router.push({
+          if(this.caseMode=="自定模式"){
+            this.$router.push({
             path: "/setting",
             query: {
               params: JSON.stringify({
@@ -356,6 +358,25 @@ export default {
               }),
             },
           });
+          }
+          else{
+            // alert(this.caseMode)
+            this.$router.push({
+            path: "/settingMap",
+            query: {
+              params: JSON.stringify({
+                userId: this.userId,
+                caseName: this.cases.casename,
+                citynum: this.cases.citynum,
+                roadnum: this.cases.roadnum,
+                InitCityData: city_inf,
+                InitRoadData: road_inf,
+                CityPosition: city_pos,
+              }),
+            },
+          });
+          }
+          
         })
         .catch(function (error) {
           alert(JSON.stringify(error.response));
@@ -368,7 +389,12 @@ export default {
       axios
         .delete("apis/backend/case/" + id+ "/")
         .then(
-          (response) => (self.currentPageData = response.data)
+          (response) => (self.currentPageData = response.data),
+          location.reload(),
+          this.$message({
+              type: "success",
+              message: "删除成功!",
+          })
         )
         .catch(function (error) {
           alert('数据fas失败')
@@ -381,15 +407,13 @@ export default {
         type: "warning",
       })
         .then(() => {
-          this.DeleteCaseContent(id),
-            // this.GetCaseContent(),
-            location.reload(),
-            // this.reload(),
-            this.$message({
-              type: "success",
-              message: "删除成功!",
-            });
-          // this.GetCaseContent();
+          this.DeleteCaseContent(id)
+          // this.GetCaseContent()
+          // location.reload()
+          // this.$message({
+          //     type: "success",
+          //     message: "删除成功!",
+          // })
         })
         .catch(() => {
           // this.$message({
@@ -450,7 +474,7 @@ export default {
 /* 案例块样式 */
 .box-card {
   border-radius: 14px;
-  width: 300px;
+  width: 280px;
   /* float: left; */
   margin-right: 180px;
   margin-bottom: 20px;

@@ -63,6 +63,7 @@ def ModelPage(request):
     '''
     return render(request, './template/model.html')
 
+
 # 对传入的密码和salt进行md5加密，返回得到的加密密码
 def HashPwd(pwd, salt):
     h = hashlib.md5()
@@ -892,12 +893,13 @@ def GetCaseInfos(request):
                     cityCase["initPop"] = cityInfos[cityIdx].initPop
                     cityCase["initInfect"] = cityInfos[cityIdx].initInfect
                     cityList.append(cityCase)
-
-                    cityPosCase = {}
-                    cityPosCase["cityName"] = cityInfos[cityIdx].cityName
-                    cityPosCase["x"] = cityInfos[cityIdx].cityposition.x
-                    cityPosCase["y"] = cityInfos[cityIdx].cityposition.y
-                    cityPosList.append(cityPosCase)
+                    
+                    if caseInfo.caseMode == "自定模式":
+                        cityPosCase = {}
+                        cityPosCase["cityName"] = cityInfos[cityIdx].cityName
+                        cityPosCase["x"] = cityInfos[cityIdx].cityposition.x
+                        cityPosCase["y"] = cityInfos[cityIdx].cityposition.y
+                        cityPosList.append(cityPosCase)
 
                 roadList = []
                 for roadIdx in range(len(roadInfos)):
@@ -909,7 +911,8 @@ def GetCaseInfos(request):
 
                 cases["InitCityData"] = cityList
                 cases["InitRoadData"] = roadList
-                cases["CityPosition"] = cityPosList
+                if caseInfo.caseMode == "自定模式":
+                    cases["CityPosition"] = cityPosList
 
                 return JsonResponse({"message": "成功返回数据", "cases": cases, "status": 200})
             except Exception as e:
