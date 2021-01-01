@@ -59,7 +59,8 @@
      </el-form>
      
     </div>
-    <a class="back" href="http://127.0.0.1:5500/frontend/template/index.html">回到首页</a>
+    <a class="back" href="http://127.0.0.1:8000/backend/homepage/">回到首页</a>
+    <!-- <router-link to='index.html'>点击跳转</router-link> -->
   </div>
 </template>
 
@@ -113,12 +114,10 @@ export default {
         this.$message.success("登录成功！");
         if(this.userAuthority=="普通用户"){
           this.$router.push({
-            path:'/setting',
+            path:'/UserIndex',
             query:{
               params:JSON.stringify({
-                userId:this.userId,
-                caseName: 999,
-                userAuthority:this.userAuthority
+                caseName: 999
               })
             },
           });
@@ -179,11 +178,9 @@ export default {
       if(this.ifLogin=="返回数据成功"){
         this.$message("你已经登陆")
         this.$router.push({
-            path:'/setting',
+            path:'/UserIndex',
             query:{
               params:JSON.stringify({
-                userId:this.userId,
-                userAuthority:this.userAuthority,
                 caseName: 999
               })
             },

@@ -16,6 +16,7 @@ import AdminModelView from '@/components/page/AdminModelView'
 import UserCase from '@/components/page/UserCase'
 import settingMap from '@/components/page/settingMap'
 import simulationMap from '@/components/page/simulationMap'
+import UserIndex from '@/components/page/UserIndex'
 
 Vue.use(Router)
 
@@ -41,5 +42,6 @@ export default new Router({
     {path:'/UserCase',component:UserCase},
     {path:'/settingMap',component:settingMap},
     {path:'/simulationMap',component:simulationMap},
+    {path:'/UserIndex',component:UserIndex},
   ]
 })

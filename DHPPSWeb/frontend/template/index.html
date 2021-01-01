@@ -10,31 +10,31 @@
     <meta content="" name="author">
 
     <!--[if lt IE 9]>
-    <script src="static/js/html5shiv.js"></script>
+    <script src="{% static 'js/html5shiv.js"></script>
     <![endif]-->
 
     <!-- CSS Files
     ================================================== -->
     <link rel="stylesheet" href="https://www.jq22.com/jquery/bootstrap-4.2.1.css">
-    <link href="static/static/css/bootstrap-grid.min.css" rel="stylesheet" type="text/css">
-    <link href="static/css/bootstrap-reboot.min.css" rel="stylesheet" type="text/css">
-    <link href="static/css/animate.css" rel="stylesheet" type="text/css">
-    <link href="static/css/owl.carousel.css" rel="stylesheet" type="text/css">
-    <link href="static/css/owl.theme.css" rel="stylesheet" type="text/css">
-    <link href="static/css/owl.transitions.css" rel="stylesheet" type="text/css">
-    <link href="static/css/magnific-popup.css" rel="stylesheet" type="text/css">
-	<link href="static/css/jquery.countdown.css" rel="stylesheet" type="text/css">
-    <link href="static/css/style.css" rel="stylesheet" type="text/css">
-    <link href="static/css/buttonstyle.css" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/bootstrap-grid.min.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/bootstrap-reboot.min.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/animate.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/owl.carousel.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/owl.theme.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/owl.transitions.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/magnific-popup.css' %}" rel="stylesheet" type="text/css">
+	<link href="{% static 'css/jquery.countdown.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/buttonstyle.css' %}" rel="stylesheet" type="text/css">
     <!-- color scheme -->
-    <link id="colors" href="static/css/colors/scheme-01.css" rel="stylesheet" type="text/css">
-	<link href="static/css/coloring.css" rel="stylesheet" type="text/css">
+    <link id="colors" href="{% static 'css/colors/scheme-01.css' %}" rel="stylesheet" type="text/css">
+	<link href="{% static 'css/coloring.css' %}" rel="stylesheet" type="text/css">
 
     <!-- RS5.0 Stylesheet -->
-    <link href="static/static/revolution/css/settings.css" rel="stylesheet" type="text/css">
-    <link href="static/static/revolution/css/layers.css" rel="stylesheet" type="text/css">
-    <link href="static/static/revolution/css/navigation.css" rel="stylesheet" type="text/css">
-    <link href="static/css/rev-settings.css" rel="stylesheet" type="text/css">
+    <link href="{% static 'static/revolution/css/settings.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'static/revolution/css/layers.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'static/revolution/css/navigation.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/rev-settings.css' %}" rel="stylesheet" type="text/css">
     <style>
         #citypng:hover{
             filter: drop-shadow(0 10px 20px #130749) 
@@ -63,7 +63,7 @@
                             <div class="header-col left">
                                 <!-- logo begin -->
                                 <div id="logo">
-                                    <a href="index.html"><img alt=""  src="static/images/logo.png"></a>
+                                    <a href="index.html"><img alt=""  src="{% static 'images/logo.png' %}"></a>
                                 </div>
                                 <!-- logo close -->
                             </div>
@@ -102,7 +102,7 @@
                             data-duration="20000" 
                             data-ease="Power1.easeOut" 
                             data-kenburns="off" 
-                            data-lazyload="static/images/slider/2.png" 
+                            data-lazyload="{% static 'images/slider/2.png' %}"
                             data-no-retina="" 
                             data-offsetend="0 0" 
                             data-offsetstart="0 0" 
@@ -110,7 +110,7 @@
                             data-rotatestart="0" 
                             data-scaleend="100" 
                             data-scalestart="110" 
-                            src="static/images/slider/1.png">
+                            src="{% static 'images/slider/1.png' %}">
 
                             <div class="tp-caption custom-font-1" 
                             data-height="none" 
@@ -144,26 +144,26 @@
                                 <a class="btn-slider" href="#section-testimonial">Read More</a>
                             </div>
                             <div class="tp-caption tp-text text-left" data-height="none" data-responsive_offset="on" data-splitin="none" data-splitout="none" data-start="1500" data-transform_in="y:0;s:0;opacity:0;s:800;e:Power2.easeOut;" data-transform_out="opacity:0;y:30;s:700;e:Power2.easeInOut;" data-whitespace="nowrap" data-width="none" data-x="550" data-y="center">
-                                <img src="static/images/slider/map.png" alt="">
+                                <img src="{% static 'images/slider/map.png' %}" alt="">
                             </div>
                             <div class="tp-caption tp-text text-left" data-height="none" data-responsive_offset="on" data-splitin="none" data-splitout="none" data-start="1600" data-transform_in="y:100;opacity:0;0:100;s:800;e:Power2.easeOut;" data-transform_out="opacity:0;y:30;s:700;e:Power2.easeInOut;" data-whitespace="nowrap" data-width="none" data-x="690" data-y="360">
-                                <img src="static/images/slider/marker.png" alt="">
+                                <img src="{% static 'images/slider/marker.png' %}" alt="">
                             </div>
 
                             <div class="tp-caption tp-text text-left" data-height="none" data-responsive_offset="on" data-splitin="none" data-splitout="none" data-start="1700" data-transform_in="y:100;opacity:0;0:100;s:800;e:Power2.easeOut;" data-transform_out="opacity:0;y:30;s:700;e:Power2.easeInOut;" data-whitespace="nowrap" data-width="none" data-x="585" data-y="190">
-                                <img src="static/images/slider/marker.png" alt="">
+                                <img src="{% static 'images/slider/marker.png' %}" alt="">
                             </div>
 
                             <div class="tp-caption tp-text text-left" data-height="none" data-responsive_offset="on" data-splitin="none" data-splitout="none" data-start="1800" data-transform_in="y:100;opacity:0;0:100;s:800;e:Power2.easeOut;" data-transform_out="opacity:0;y:30;s:700;e:Power2.easeInOut;" data-whitespace="nowrap" data-width="none" data-x="785" data-y="215">
-                                <img src="static/images/slider/marker.png" alt="">
+                                <img src="{% static 'images/slider/marker.png' %}" alt="">
                             </div>
 
                             <div class="tp-caption tp-text text-left" data-height="none" data-responsive_offset="on" data-splitin="none" data-splitout="none" data-start="1900" data-transform_in="y:100;opacity:0;0:100;s:800;e:Power2.easeOut;" data-transform_out="opacity:0;y:30;s:700;e:Power2.easeInOut;" data-whitespace="nowrap" data-width="none" data-x="920" data-y="250">
-                                <img src="static/images/slider/marker.png" alt="">
+                                <img src="{% static 'images/slider/marker.png' %}" alt="">
                             </div>
 
                             <div class="tp-caption tp-text text-left" data-height="none" data-responsive_offset="on" data-splitin="none" data-splitout="none" data-start="2000" data-transform_in="y:100;opacity:0;0:100;s:800;e:Power2.easeOut;" data-transform_out="opacity:0;y:30;s:700;e:Power2.easeInOut;" data-whitespace="nowrap" data-width="none" data-x="980" data-y="345">
-                                <img src="static/images/slider/marker.png" alt="">
+                                <img src="{% static 'images/slider/marker.png' %}" alt="">
                             </div>
                         </li>
                     </ul>
@@ -182,7 +182,7 @@
                             <div class="de_testi opt-2">
                                 <blockquote>
                                     <div class="content" style="border: 1px rgb(184, 184, 184) solid;">
-                                        <img alt="" src="static/images/people/5.jpg">
+                                        <img alt="" src="{% static 'images/people/5.jpg' %}">
                                         <h3 style="margin: 10px 10px 0px 10px;color: rgb(90, 90, 90);">案例1</h3>
                                         <p style="margin: 0px 10px 0px 10px;font-size: 12px;">Thanks to the support team, they are very helpfull. This company provide customers great solution, that makes them best.
                                         </p>
@@ -194,7 +194,7 @@
                             <div class="de_testi opt-2">
                                 <blockquote>
                                     <div class="content" style="border: 1px rgb(184, 184, 184) solid;">
-                                        <img alt="" src="static/images/people/6.jpg">
+                                        <img alt="" src="{% static 'images/people/6.jpg' %}">
                                         <h3 style="margin: 10px 10px 0px 10px;color: rgb(90, 90, 90);">案例2</h3>
                                         <p style="margin: 0px 10px 0px 10px;font-size: 12px;">Thanks to the support team, they are very helpfull. This company provide customers great solution, that makes them best.
                                         </p>
@@ -206,7 +206,7 @@
                             <div class="de_testi opt-2">
                                 <blockquote>
                                     <div class="content" style="border: 1px rgb(184, 184, 184) solid;">
-                                        <img alt="" src="static/images/people/7.jpg">
+                                        <img alt="" src="{% static 'images/people/7.jpg' %}">
                                         <h3 style="margin: 10px 10px 0px 10px;color: rgb(90, 90, 90);">案例3</h3>
                                         <p style="margin: 0px 10px 0px 10px;font-size: 12px;">Thanks to the support team, they are very helpfull. This company provide customers great solution, that makes them best.
                                         </p>
@@ -218,7 +218,7 @@
                             <div class="de_testi opt-2">
                                 <blockquote>
                                     <div class="content" style="border: 1px rgb(184, 184, 184) solid;">
-                                        <img alt="" src="static/images/people/5.jpg">
+                                        <img alt="" src="{% static 'images/people/5.jpg' %}">
                                         <h3 style="margin: 10px 10px 0px 10px;color: rgb(90, 90, 90);">案例1</h3>
                                         <p style="margin: 0px 10px 0px 10px;font-size: 12px;">Thanks to the support team, they are very helpfull. This company provide customers great solution, that makes them best.
                                         </p>
@@ -230,58 +230,12 @@
                             <div class="de_testi opt-2">
                                 <blockquote>
                                     <div class="content" style="border: 1px rgb(184, 184, 184) solid;">
-                                        <img alt="" src="static/images/people/6.jpg">
+                                        <img alt="" src="{% static 'images/people/6.jpg' %}">
                                         <h3 style="margin: 10px 10px 0px 10px;color: rgb(90, 90, 90);">案例1</h3>
                                         <p style="margin: 0px 10px 0px 10px;font-size: 12px;">Thanks to the support team, they are very helpfull. This company provide customers great solution, that makes them best.
                                         </p>
                                     </div>
                                 </blockquote>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section id="section-features">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md text-center" style="text-align: center;">
-                            <h2><span class="uptitle id-color">Our Features</span>我们的特点</h2>
-                            <div class="spacer-20"></div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md col-sm-6 mb-sm-30">
-                            <div class="feature-box-type-2" data-scroll-reveal="enter bottom after 0.1s">
-                                <i class="icon-alarmclock"></i>
-                                <h4>Instant Activation</h4>
-                            </div>
-                        </div>
-
-                        <div class="col-md col-sm-6 mb-sm-30">
-                            <div class="feature-box-type-2" data-scroll-reveal="enter bottom after 0.1s">
-                                <i class="icon-profile-male"></i>
-                                <h4>24 / 7 Support</h4>
-                            </div>
-                        </div>
-
-                        <div class="col-md col-sm-6 mb-sm-30">
-                            <div class="feature-box-type-2" data-scroll-reveal="enter bottom after 0.1s">
-                                <i class="icon-refresh"></i>
-                                <h4>99.9% Uptime</h4>
-                            </div>
-                        </div>
-
-                        <div class="col-md col-sm-6 mb-sm-30">
-                            <div class="feature-box-type-2" data-scroll-reveal="enter bottom after 0.1s">
-                                <i class="icon-upload"></i>
-                                <h4>Cloud Powered</h4>
-                            </div>
-                        </div>
-                        <div class="col-md col-sm-6 mb-sm-30">
-                            <div class="feature-box-type-2" data-scroll-reveal="enter bottom after 0.1s">
-                                <i class="icon-layers"></i>
-                                <h4>Multi Datacenter</h4>
                             </div>
                         </div>
                     </div>
@@ -316,7 +270,9 @@
                             <h2>开始创建你的案例</h2>
                             <p class="lead">Chilk here to create your case</p>
                             <div class="spacer-half"></div>
-                            <button class="bubbly-button">Get Started !</button>
+                            <button class="bubbly-button">
+                                <a style="color:#fff" href="http://localhost:8080/">Get Started !</a>
+                            </button>
                             </div>
                         </div>
                         <div class="col-lg-6" style="float: right;"
@@ -327,7 +283,7 @@
                             -webkit-filter: drop-shadow(0 12px 2px #2b2341) 
                             drop-shadow(0 10px 15px rgb(148, 160, 228)) 
                             drop-shadow(0 10px 5px rgb(165, 176, 226));"
-                            src="static/images/misc/city.png" alt="">
+                            src="{% static 'images/misc/city.png' %}" alt="">
                         </div>
                     </div>
                 </div>
@@ -344,7 +300,7 @@
                             -webkit-filter: drop-shadow(0 12px 2px #2b2341) 
                             drop-shadow(0 10px 15px rgb(148, 160, 228)) 
                             drop-shadow(0 10px 5px rgb(165, 176, 226));"
-                            src="static/images/misc/Cmap.png" alt="">
+                            src="{% static 'images/misc/Cmap.png' %}" alt="">
                         </div>
                         
                         <div class="col-lg-5 col-md-6" style="float: right;" >
@@ -360,7 +316,9 @@
                             <h2>开始创建你的案例</h2>
                             <p class="lead">Chilk here to create your case</p>
                             <div class="spacer-half"></div>
-                            <button class="bubbly-button">Get Started !</button>
+                            <button class="bubbly-button">
+                                <a style="color:#fff" href="http://localhost:8080/">Get Started !</a>
+                            </button>
                             </div>
                         </div>
                     </div>
@@ -396,36 +354,37 @@
 
         <!-- Javascript Files
     ================================================== -->
-        <script src="static/js/jquery.min.js"></script>
-        <script src="static/js/bootstrap.min.js"></script>
-        <!-- <script src="static/js/wow.min.js"></script> -->
-        <script src="static/js/jquery.isotope.min.js"></script>
-        <script src="static/js/easing.js"></script>
-        <script src="static/js/owl.carousel.js"></script>
-        <script src="static/js/validation.js"></script>
-        <script src="static/js/jquery.magnific-popup.min.js"></script>
-        <script src="static/js/enquire.min.js"></script>
-        <script src="static/js/jquery.stellar.min.js"></script>
-        <script src="static/js/jquery.plugin.js"></script>
-        <script src="static/js/typed.js"></script>
-        <script src="static/js/app.js"></script>
-		<script src="static/js/jquery.countTo.js"></script>
-        <script src="static/js/jquery.countdown.js"></script>
-        <script src="static/js/designesia.js"></script>
+    "{% static 'images/misc/Cmap.png' %}"
+        <script src="{% static 'js/jquery.min.js' %}"></script>
+        <script src="{% static 'js/bootstrap.min.js' %}"></script>
+        <!-- <script src="{% static 'js/wow.min.js"></script> -->
+        <script src="{% static 'js/jquery.isotope.min.js' %}"></script>
+        <script src="{% static 'js/easing.js' %}"></script>
+        <script src="{% static 'js/owl.carousel.js' %}"></script>
+        <script src="{% static 'js/validation.js' %}"></script>
+        <script src="{% static 'js/jquery.magnific-popup.min.js' %}"></script>
+        <script src="{% static 'js/enquire.min.js' %}"></script>
+        <script src="{% static 'js/jquery.stellar.min.js' %}"></script>
+        <script src="{% static 'js/jquery.plugin.js' %}"></script>
+        <script src="{% static 'js/typed.js' %}"></script>
+        <script src="{% static 'js/app.js' %}"></script>
+		<script src="{% static 'js/jquery.countTo.js' %}"></script>
+        <script src="{% static 'js/jquery.countdown.js' %}"></script>
+        <script src="{% static 'js/designesia.js' %}"></script>
         
         <!-- RS5.0 Core JS Files -->
-        <script src="static/revolution/js/jquery.themepunch.tools.min.js?rev=5.0"></script>
-        <script src="static/revolution/js/jquery.themepunch.revolution.min.js?rev=5.0"></script>
+        <script src="{% static 'revolution/js/jquery.themepunch.tools.min.js' %}"></script>
+        <script src="{% static 'revolution/js/jquery.themepunch.revolution.min.js' %}"></script>
         
 		<!-- RS5.0 Extensions Files -->
-        <script src="static/revolution/js/extensions/revolution.extension.video.min.js"></script>
-        <script src="static/revolution/js/extensions/revolution.extension.slideanims.min.js"></script>
-        <script src="static/revolution/js/extensions/revolution.extension.layeranimation.min.js"></script>
-        <script src="static/revolution/js/extensions/revolution.extension.navigation.min.js"></script>
-        <script src="static/revolution/js/extensions/revolution.extension.actions.min.js"></script>
-        <script src="static/revolution/js/extensions/revolution.extension.kenburn.min.js"></script>
-        <script src="static/revolution/js/extensions/revolution.extension.migration.min.js"></script>
-        <script src="static/revolution/js/extensions/revolution.extension.parallax.min.js"></script>
+        <script src="{% static 'revolution/js/extensions/revolution.extension.video.min.js' %}"></script>
+        <script src="{% static 'revolution/js/extensions/revolution.extension.slideanims.min.js' %}"></script>
+        <script src="{% static 'revolution/js/extensions/revolution.extension.layeranimation.min.js' %}"></script>
+        <script src="{% static 'revolution/js/extensions/revolution.extension.navigation.min.js' %}"></script>
+        <script src="{% static 'revolution/js/extensions/revolution.extension.actions.min.js' %}"></script>
+        <script src="{% static 'revolution/js/extensions/revolution.extension.kenburn.min.js' %}"></script>
+        <script src="{% static 'revolution/js/extensions/revolution.extension.migration.min.js' %}"></script>
+        <script src="{% static 'revolution/js/extensions/revolution.extension.parallax.min.js' %}"></script>
         <!-- current page only scripts -->
         
         <script>
@@ -454,7 +413,7 @@
         </script>
 
         <!-- 组件进入动效 -->
-        <script src="static/js/scrollReveal.js"></script> 
+        <script src="{% static 'js/scrollReveal.js' %}"></script> 
         <script>
         (function(){
             window.scrollReveal = new scrollReveal({ reset: true, move: '50px'});

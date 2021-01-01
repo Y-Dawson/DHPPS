@@ -5,11 +5,19 @@
       <div class="toDIY">
         <button @click="toDIYModel">自定模式</button>
       </div>
+
+      <div class="toMy">
+        <router-link :to="{ path: '/Userprofile' }" style="margin-left: 10px; float: left"
+          >个人中心</router-link
+        >
+      </div>
     </header>
 
     <section class="mainbox">
       <div class="column">
         <el-button type="primary" @click="add_city">增加城市</el-button>
+        <el-button type="primary" @click="reduce_city">删除城市</el-button>
+        <el-button type="primary" @click="save_case">保存案例</el-button>
         <div class="panel">
           <div>
             <span class="little-title">城市列表：</span>
@@ -32,7 +40,7 @@
 
       <div class="column">
         <el-button type="primary" @click="add_road">增加双向航线</el-button>
-        <el-button type="primary" @click="save_case">保存案例</el-button>
+        <el-button type="primary" @click="reduce_road">删除航线</el-button>
         <el-button type="primary" @click="begin_simulation">开始模拟</el-button>
         <div class="panel">
           <div>
@@ -104,6 +112,29 @@
       </el-form>
     </el-dialog>
 
+    <el-dialog title="删除城市" :visible.sync="isShow3" :before-close="handleclose">
+      <el-form
+        :model="ruleForm"
+        :rules="rules"
+        ref="ruleForm"
+        label-width="100px"
+        class="druleForm"
+      >
+        <el-form-item>
+          <label class="authority">选择城市： </label>
+          <select id="selectedcity3" v-model="selected3" name="authority3">
+            <option :value="types3.name" v-for="types3 in used_city1" :key="types3">
+              {{ types3.name }}
+            </option>
+          </select>
+        </el-form-item>
+
+        <el-form-item>
+          <el-button type="primary" @click="delete_city">确认删除</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
+
     <el-dialog title="新增航线" :visible.sync="isShow2" :before-close="handleclose">
       <el-form
         :model="ruleForm"
@@ -139,6 +170,29 @@
         </el-form-item>
       </el-form>
     </el-dialog>
+
+    <el-dialog title="删除航线" :visible.sync="isShow4" :before-close="handleclose">
+      <el-form
+        :model="ruleForm"
+        :rules="rules"
+        ref="ruleForm"
+        label-width="100px"
+        class="druleForm"
+      >
+        <el-form-item>
+          <label class="authority">选择航线： </label>
+          <select id="selectedcity4" v-model="selected4" name="authority4">
+            <option :value="types4.name" v-for="types4 in used_road" :key="types4">
+              {{ types4.name }}
+            </option>
+          </select>
+        </el-form-item>
+
+        <el-form-item>
+          <el-button type="primary" @click="delete_road">确认删除</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 <script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
@@ -149,6 +203,7 @@ var echarts = require("echarts");
 import "../../../node_modules/echarts/lib/chart/map/china.js";
 
 var citycnt = 0;
+var roadcnt = 0;
 
 export default {
   data() {
@@ -161,11 +216,17 @@ export default {
 
       used_city1: [],
       used_city2: [],
+      used_road: [],
       selected1: "",
       selected2: "",
+      selected3: "",
+      selected4: "",
 
       isShow1: false,
       isShow2: false,
+      isShow3: false,
+      isShow4: false,
+
       ruleForm: {
         to_pop: "",
         begin_inf: "",
@@ -190,9 +251,12 @@ export default {
 
   mounted: function () {
     console.log("地图模式初始化");
+
+    this.GetUserIdentity();
+
     this.params = JSON.parse(this.$route.query.params);
 
-    console.log("用户ID：", this.params.userId);
+    // console.log("用户ID：", this.params.userId);
     console.log("案例名：", this.params.caseName);
     console.log("城市数目：", this.params.citynum);
     console.log("道路数目：", this.params.roadnum);
@@ -442,6 +506,19 @@ export default {
       });
     },
 
+    GetUserIdentity() {
+      axios
+        .post("/apis/backend/getIdentity/")
+        .then((response) => {
+          this.userId = response.data.userId;
+          // alert(JSON.stringify(response.data)),
+        })
+        .catch(function (error) {
+          // alert(JSON.stringify(error.response.data.message));
+          alert("获取用户身份失败");
+        });
+    },
+
     add_city() {
       this.isShow1 = true;
     },
@@ -480,6 +557,39 @@ export default {
       this.used_city2.push(newc);
       console.log("city1:", this.used_city1);
       console.log("city2:", this.used_city2);
+    },
+
+    reduce_city() {
+      this.isShow3 = true;
+    },
+
+    delete_city() {
+      var cn = document.getElementById("selectedcity3").value;
+      for (var i in this.city_po) {
+        var tc = this.city_po[i].split(":");
+        if (tc[0] == cn) {
+          this.city_po.splice(i, 1);
+          break;
+        }
+      }
+
+      // console.log("cn",cn);
+      for (var i in this.used_city1) {
+        // console.log("uc1i",this.used_city1[i]);
+        if (this.used_city1[i]["name"] == cn) {
+          console.log("可以删");
+          this.used_city1.splice(i, 1);
+          break;
+        }
+      }
+      for (var i in this.used_city2) {
+        if (this.used_city2[i]["name"] == cn) {
+          this.used_city2.splice(i, 1);
+          break;
+        }
+      }
+
+      this.isShow3 = false;
     },
 
     add_road() {
@@ -522,19 +632,67 @@ export default {
         }
       }
 
+      var value = parseInt(this.ruleForm.volumn);
+      if (value < 1 || value > 100) {
+        this.$alert("人流量应在5~100内", "连接失败", {
+          confirmButtonText: "确定",
+          callback: (action) => {
+            this.$message({
+              type: "info",
+              message: `action: ${action}`,
+            });
+          },
+        });
+        this.isShow2 = false;
+        return;
+      }
+
       var s = cn1 + "-" + cn2 + ":" + this.ruleForm.volumn;
+      var rn = cn1 + "-" + cn2;
       console.log(s);
       this.road_di.push(s);
       console.log("se1:", this.selected1);
       console.log("se1:", this.selected2);
+
+      roadcnt += 1;
+      var newc = new Array();
+      newc["id"] = roadcnt;
+      newc["name"] = rn;
+
+      this.used_road.push(newc);
+
       this.isShow2 = false;
+    },
+
+    reduce_road() {
+      this.isShow4 = true;
+    },
+
+    delete_road() {
+      var rn = document.getElementById("selectedcity4").value;
+      for (var i in this.road_di) {
+        var tr = this.road_di[i].split(":");
+        if (tr[0] == rn) {
+          this.road_di.splice(i, 1);
+          break;
+        }
+      }
+
+      for (var i in this.used_road) {
+        if (this.used_road[i]["name"] == rn) {
+          this.used_road.splice(i, 1);
+          break;
+        }
+      }
+
+      this.isShow4 = false;
     },
 
     save_case() {
       this.$prompt("请输入此案例名称", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        inputPattern: /^[0-9]/,
+        inputPattern: /^[\u4e00-\u9fa5_a-zA-Z0-9]+$/,
         inputErrorMessage: "案例名称格式不正确",
       })
         .then(({ value }) => {
@@ -759,10 +917,23 @@ header .toDIY {
 }
 
 .toDIY button {
-  background-color: rgb(149, 154, 169);
+  /* background-color: rgb(149, 154, 169); */
+  background-color: transparent;
   color: white;
   font-size: 20px;
   border: none;
+}
+
+header .toMy {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+}
+
+.toMy a {
+  font-size: 20px;
+  color: white;
+  text-decoration: none;
 }
 
 .mainbox {
@@ -787,7 +958,7 @@ header .toDIY {
 
 .mainbox .column .panel {
   position: relative;
-  height: 540px;
+  height: 600px;
   padding: 0 15px 40px;
   margin-bottom: 15px;
   border: 1px solid rgba(25, 186, 139, 0.17);
@@ -847,7 +1018,7 @@ header .toDIY {
 
 .map {
   position: relative;
-  height: 570px;
+  height: 630px;
 }
 
 .map .map1 {
