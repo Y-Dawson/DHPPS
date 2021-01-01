@@ -10,8 +10,11 @@ router.register('AccountInfos', views.AccountViewSet)
 urlpatterns = [
     # 渲染首页，其后的页面跳转由前端负责
     path('', views.Index, name="index"),
-
+    # 渲染欢迎页
     path('homepage/', views.HomePage, name="homepage"),
+    # 渲染模型介绍页
+    path('homepage/model/', views.ModelPage, name="model"),
+
     # 身份验证请求
     path('getIdentity/', views.GetIdentity, name="getIdentity"),
 

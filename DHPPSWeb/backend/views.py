@@ -48,12 +48,20 @@ def Index(request):
 
 def HomePage(request):
     '''
-    render Index page
+    render homepage page
     :param request: request object
     :return: homepage
     '''
     return render(request, './template/index.html')
 
+
+def ModelPage(request):
+    '''
+    render Index page
+    :param request: request object
+    :return: homepage
+    '''
+    return render(request, './template/model.html')
 
 # 对传入的密码和salt进行md5加密，返回得到的加密密码
 def HashPwd(pwd, salt):
