@@ -1625,7 +1625,8 @@ export default {
           axios
             .post("/apis/backend/saveCase/", myFormData)
             .then((response) => {
-              // alert(JSON.stringify(response));
+              alert(response);
+              alert(JSON.stringify(response));
               // alert("保存案例");
             })
             .catch(function (error) {

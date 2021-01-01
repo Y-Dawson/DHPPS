@@ -7,9 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>model</title>
     <link href="https://fonts.googleapis.com/css?family=Playfair+Display:700i" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="static/css/normalize2.css" />
-    <link rel="stylesheet" type="text/css" href="static/css/demo.css" />
-    <link rel="stylesheet" type="text/css" href="static/css/component.css" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/normalize2.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/demo.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/component.css' %}" />
     <script>document.documentElement.className = 'js';</script>
     <style>
         li {
@@ -52,7 +52,7 @@
                 <!-- <p class="deco__text">算法模型展示</p> -->
             </div>
             <header class="codrops-header" >
-                <a class="btn-custom" href="index.html">返回首页</a>
+                <a class="btn-custom" href="http://127.0.0.1:8000/backend/homepage/">返回首页</a>
                 <p class="codrops-header__info" id="text1">We will show you some of the balabalba</p>
                 <span class="codrops-header__deco" >Algorithm</span>
                 <h1 class="codrops-header__title" id="text2">算法模型展示</h1>
@@ -85,15 +85,15 @@
             <div class="tabscontent__item">
                 <figure class="poster">
                     <div class="poster__img">
-                        <img src="static/images/principle/s44.png" alt="Poster 1" style="display: inline-block; height: 280px;"
+                        <img src="{% static 'images/principle/s44.png' %}" alt="Poster 1" style="display: inline-block; height: 280px;"
                             data-scroll-reveal="enter bottom after 3s" />
-                        <img src="static/images/principle/sff.png" alt="Poster 1"
+                        <img src="{% static 'images/principle/sff.png' %}" alt="Poster 1"
                             style="margin-left: 50px;  display: inline-block; height: 250px;"
                             data-scroll-reveal="enter bottom after 3s" />
-                        <img src="static/images/principle/s3.png" alt="Poster 1" style="display: inline-block; height: 250px;"
+                        <img src="{% static 'images/principle/s3.png' %}" alt="Poster 1" style="display: inline-block; height: 250px;"
                             data-scroll-reveal="enter bottom after 3s" />
                         <div style="margin-top: 50px; margin-left: 150px; margin-bottom: 100px;">
-                            <img src="static/images/principle/s5.png" alt="Poster 1"
+                            <img src="{% static 'images/principle/s5.png' %}" alt="Poster 1"
                                 style="display: inline-block; height: 50px;"
                                 data-scroll-reveal="enter bottom after 3s" />
                         </div>
@@ -109,37 +109,37 @@
             <div class="tabscontent__item">
                 <figure class="poster">
                     <div class="poster__img">
-                        <img src="static/images/principle/LSTM1.png" alt="Poster 1"
+                        <img src="{% static 'images/principle/LSTM1.png' %}" alt="Poster 1"
                             style="display: inline-block; height: 350px;" data-scroll-reveal="enter bottom after 3s" />
                         <div style="display: inline-block;">
                             <ul>
                                 <li>
                                     <img data-scroll-reveal="enter bottom after 4.5s" alt=""
-                                        src="static/images/principle/li1.png" style="margin-right: 0px; width: 40px;">
+                                        src="{% static 'images/principle/li1.png' %}" style="margin-right: 0px; width: 40px;">
                                     <img data-scroll-reveal="enter bottom after 4.5s" alt=""
-                                        src="static/images/principle/formula11.png" style="margin-right: 0px; width: 350px;">
+                                        src="{% static 'images/principle/formula11.png' %}" style="margin-right: 0px; width: 350px;">
                                 </li>
                                 <li>
                                     <img data-scroll-reveal="enter bottom after 5.5s" alt=""
-                                        src="static/images/principle/li1.png" style="margin-right: 0px; width: 40px;">
+                                        src="{% static 'images/principle/li1.png' %}" style="margin-right: 0px; width: 40px;">
                                     <img data-scroll-reveal="enter bottom after 5.5s" alt=""
-                                        src="static/images/principle/formula22.png" style="width: 350px;">
+                                        src="{% static 'images/principle/formula22.png' %}" style="width: 350px;">
                                 </li>
                                 <li>
                                     <img data-scroll-reveal="enter bottom after 6.5s" alt=""
-                                        src="static/images/principle/li2.png" style="margin-right: 0px; width: 40px;">
+                                        src="{% static 'images/principle/li2.png' %}" style="margin-right: 0px; width: 40px;">
                                     <img data-scroll-reveal="enter bottom after 6.5s" alt=""
-                                        src="static/images/principle/formula33.png" style="width: 350px;">
+                                        src="{% static 'images/principle/formula33.png' %}" style="width: 350px;">
                                 </li>
                                 <li>
                                     <img data-scroll-reveal="enter bottom after 7s" alt=""
-                                        src="static/images/principle/li1.png" style="margin-right: 0px; width: 40px;">
+                                        src="{% static 'images/principle/li1.png' %}" style="margin-right: 0px; width: 40px;">
                                     <img data-scroll-reveal="enter bottom after 7s" alt=""
-                                        src="static/images/principle/formula44.png" style="width: 350px;">
+                                        src="{% static 'images/principle/formula44.png' %}" style="width: 350px;">
                                 </li>
                                 <li>
                                     <img data-scroll-reveal="enter bottom after 7s" alt=""
-                                        src="static/images/principle/formula55.png" style="width: 200px;">
+                                        src="{% static 'images/principle/formula55.png' %}" style="width: 200px;">
                                 </li>
 
                             </ul>
@@ -157,33 +157,33 @@
             <div class="tabscontent__item">
                 <figure class="poster">
                     <div class="poster__img">
-                        <img src="static/images/principle/c0.png" alt="Poster 1"
+                        <img src="{% static 'images/principle/c0.png' %}" alt="Poster 1"
                             style="display: inline-block; margin-left: -20px;  width: 200px;"
                             data-scroll-reveal="enter bottom after 3s" />
-                        <img src="static/images/principle/c1.png" alt="Poster 1"
+                        <img src="{% static 'images/principle/c1.png' %}" alt="Poster 1"
                             style="display: inline-block; margin-left: -20px;  width: 240px;"
                             data-scroll-reveal="enter bottom after 4s" />
-                        <img src="static/images/principle/c2.png" alt="Poster 1"
+                        <img src="{% static 'images/principle/c2.png' %}" alt="Poster 1"
                             style="display: inline-block; margin-left: -20px;  width: 180px;"
                             data-scroll-reveal="enter bottom after 5s" />
-                        <img src="static/images/principle/c3.png" alt="Poster 1"
+                        <img src="{% static 'images/principle/c3.png' %}" alt="Poster 1"
                             style="display: inline-block; margin-left: -30px; width: 340px;"
                             data-scroll-reveal="enter bottom after 6s" />
                         <div style="margin-left: 170px; margin-top: -20px;">
                             <img data-scroll-reveal="enter bottom after 4.5s" alt=""
-                                src="static/images/principle/subsampling.png"
+                                src="{% static 'images/principle/subsampling.png' %}"
                                 style=" display: inline-block; margin-right: 0px; width: 150px;">
                             <img data-scroll-reveal="enter bottom after 5.5s" alt=""
-                                src="static/images/principle/convolutions.png"
+                                src="{% static 'images/principle/convolutions.png' %}"
                                 style=" display: inline-block;margin-left: 60px; width: 150px;">
                             <img data-scroll-reveal="enter bottom after 6.5s" alt=""
-                                src="static/images/principle/subsampling.png"
+                                src="{% static 'images/principle/subsampling.png' %}"
                                 style=" display: inline-block;margin-left: -10px; width: 150px;">
                             <img data-scroll-reveal="enter bottom after 7s" alt=""
-                                src="static/images/principle/fullyconnected.png"
+                                src="{% static 'images/principle/fullyconnected.png' %}"
                                 style=" display: inline-block;margin-left: -30px; width: 150px;">
                         </div>
-                        <img src="static/images/principle/cf.png" alt="Poster 1"
+                        <img src="{% static 'images/principle/cf.png' %}" alt="Poster 1"
                             style="margin:20px 0px 100px 240px; left: 50%; width: 400px;"
                             data-scroll-reveal="enter bottom after 8s" />
                     </div>
@@ -202,10 +202,10 @@
         </div>
     </main>
 
-    <script src="static/js/anime.min.js"></script>
-    <script src="static/js/enquire.min2.js"></script>
-    <script src="static/js/tabsnav.js"></script>
-    <script src="static/js/demo1.js"></script>
+    <script src="{% static 'js/anime.min.js' %}"></script>
+    <script src="{% static 'js/enquire.min2.js' %}"></script>
+    <script src="{% static 'js/tabsnav.js' %}"></script>
+    <script src="{% static 'js/demo1.js' %}"></script>
     <script type="text/javascript">
         var p1=document.getElementById('text1');
         p1.style.opacity=1;
