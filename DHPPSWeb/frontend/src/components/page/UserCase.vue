@@ -199,6 +199,7 @@ export default {
       contentList: [],
       cases: [],
       //分页
+      restCase:0,
       totalCasePage: 1, // 统共页数，默认为1
       currentCasePage: 1, //当前页数 ，默认为1
       pageCaseSize: 6, // 每页显示数量
@@ -210,7 +211,7 @@ export default {
   },
   mounted: function () {
     this.GetCaseContent();
-    this.SetPages();
+    // this.SetPages();
   },
   methods: {
     //获取用户身份
@@ -241,7 +242,11 @@ export default {
       this.GetCaseContent();
     },
     SetPages() {
-      if (this.totalCasePage < 1) totalCasePage = 1;
+      if(this.restCase>0){
+        this.totalCasePage=this.totalCasePage+1;
+      }
+      // alert(this.totalCasePage)
+      // if (this.totalCasePage < 1) totalCasePage = 1;
     },
     getMyContent: function () {
       var self = this;
@@ -273,9 +278,11 @@ export default {
         .then(
           (response) => (
             self.currentPageData = response.data,
-            self.totalCasePage = Math.ceil(
+            self.totalCasePage = Math.floor(
               self.currentPageData.pagination / self.pageCaseSize
-            )
+            ),
+            self.restCase=self.currentPageData.pagination-(self.totalCasePage*self.pageCaseSize),
+            this.SetPages()
           )
         )
         .catch(function (error) {
