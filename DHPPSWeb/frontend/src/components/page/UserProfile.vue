@@ -72,14 +72,7 @@
                     class="chat-icon-phone iq-bg-primary"
                     style="width: 100px; font-size: 14px; margin-top: 18px"
                     :to="{
-                      path: '/setting',
-                      query: {
-                        params: JSON.stringify({
-                          userId: this.userId,
-                          userAuthority: this.userAuthority,
-                          caseName: 999,
-                        }),
-                      },
+                      path: '/UserIndex',
                     }"
                   >
                     <i class="ri-reply-fill"></i>
