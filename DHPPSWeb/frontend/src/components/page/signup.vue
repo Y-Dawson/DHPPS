@@ -28,42 +28,6 @@
 
         <div class="layui-form-item">
           <div class="layui-inline">
-            <div class="password" style="margin-bottom: 15px">
-              <el-form-item prop="password">
-                <el-input
-                  v-model="signupForm.password"
-                  placeholder="输入密码"
-                  type="password"
-                  id="password"
-                  class="MyInput"
-                >
-                <i slot="prefix" class="el-input__icon el-icon-user"></i>
-                </el-input>
-              </el-form-item>
-            </div>
-          </div>
-        </div>
-
-        <div class="layui-form-item">
-          <div class="layui-inline">
-            <div class="password2" style="margin-bottom: 15px">
-              <el-form-item prop="password2">
-                <el-input
-                  v-model="signupForm.password2"
-                  placeholder="确认密码"
-                  type="password"
-                  id="password2"
-                  class="MyInput"
-                >
-                  <i slot="prefix" class="el-input__icon el-icon-user"></i>
-                </el-input>
-              </el-form-item>
-            </div>
-          </div>
-        </div>
-
-        <div class="layui-form-item">
-          <div class="layui-inline">
             <div class="email" style="margin-bottom: 15px">
               <el-form-item prop="email">
                 <el-input
@@ -115,6 +79,42 @@
           <el-form-item>
             <el-button type="info" :disabled="disabled" @click="checkPhone()">{{valiBtn}}</el-button>
           </el-form-item>
+        </div>
+
+        <div class="layui-form-item">
+          <div class="layui-inline">
+            <div class="password" style="margin-bottom: 15px">
+              <el-form-item prop="password">
+                <el-input
+                  v-model="signupForm.password"
+                  placeholder="输入密码"
+                  type="password"
+                  id="password"
+                  class="MyInput"
+                >
+                <i slot="prefix" class="el-input__icon el-icon-user"></i>
+                </el-input>
+              </el-form-item>
+            </div>
+          </div>
+        </div>
+
+        <div class="layui-form-item">
+          <div class="layui-inline">
+            <div class="password2" style="margin-bottom: 15px">
+              <el-form-item prop="password2">
+                <el-input
+                  v-model="signupForm.password2"
+                  placeholder="确认密码"
+                  type="password"
+                  id="password2"
+                  class="MyInput"
+                >
+                  <i slot="prefix" class="el-input__icon el-icon-user"></i>
+                </el-input>
+              </el-form-item>
+            </div>
+          </div>
         </div>
 
         <div class="layui-form-item">
