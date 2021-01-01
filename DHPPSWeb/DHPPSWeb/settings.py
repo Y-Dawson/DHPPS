@@ -95,7 +95,7 @@ DATABASES = {
         'PASSWORD': 'root',  # 数据库密码
 =======
         'PASSWORD': 'xxsql',  # 数据库密码
->>>>>>> 432c3bc1d4aab8b4dd181fff7741b1b0868feb48
+>>>>>>> 8323e03935e74c2ccce40a4178047ca70ba3c3f0
     }
 }
 

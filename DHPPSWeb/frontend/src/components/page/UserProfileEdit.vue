@@ -446,7 +446,6 @@ export default {
       changingUrl:"",
       image: "",
       MyContent: [],
-      AdminId: "1",
       sex: "",
       // 设置单选默认值
       pickerOptions: {
@@ -460,7 +459,7 @@ export default {
         name: "",
         // phone: "",
         email: "",
-        radio: "男",
+        radio: "",
         delivery: false,
         type: [],
         addr: "",
@@ -564,8 +563,8 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.putContent(this.userId);
-           location.reload()
+          this.putContent(this.userId)
+          location.reload()
           // this.getMyContent()
           // this.reload()
         } else {
