@@ -196,6 +196,19 @@
   </div>
 </template>
 <script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
+
+<script type="text/javascript">
+document.οnkeydοwn = function () {
+  var myEvent = event ? event : window.event ? window.event : null;
+  var keycode = myEvent.keyCode;
+  if (myEvent.keyCode == 13) {
+    console.log("接收到回车");
+    myEvent.keyCode = 9;
+    myEvent.returnValue = false;
+  }
+};
+</script>
+
 <script>
 // import { flexible } from "../../assets/js/flexible.js";
 import { jquery } from "../../assets/js/jquery.js";
@@ -235,15 +248,15 @@ export default {
       rules: {
         to_pop: [
           { required: true, message: "请输入总人口", trigger: "blur" },
-          { min: 3, max: 150, message: "长度在 3 到 150 个字符", trigger: "blur" },
+          { min: 1, max: 6, message: "人口数量应在1到100000之间", trigger: "blur" },
         ],
         begin_inf: [
           { required: true, message: "请输入初始感染人数", trigger: "blur" },
-          { min: 3, max: 150, message: "长度在 3 到 150 个字符", trigger: "blur" },
+          { min: 1, max: 4, message: "初始感染人数应该1到1000之间", trigger: "blur" },
         ],
         volumn: [
           { required: true, message: "请输入人流量", trigger: "blur" },
-          { min: 3, max: 150, message: "长度在 3 到 150 个字符", trigger: "blur" },
+          { min: 1, max: 3, message: "人流量应该1到100之间", trigger: "blur" },
         ],
       },
     };
@@ -264,7 +277,7 @@ export default {
     console.log("道路信息：", this.params.InitRoadData);
 
     if (this.params.caseName != 999) {
-      console.log("从地图模拟页面返回");
+      console.log("从地图模拟页面返回"); 
 
       var cn, totp, initinf;
       for (var i in this.params.InitCityData) {

@@ -47,9 +47,7 @@
       </div>
 
       <div class="toMy">
-        <router-link
-          :to="{ path: '/Userprofile' }"
-          style="margin-left: 10px; float: left"
+        <router-link :to="{ path: '/Userprofile' }" style="margin-left: 10px; float: left"
           >个人中心</router-link
         >
       </div>
@@ -64,7 +62,12 @@
       @click="ShowCity"
     ></canvas>
 
-    <el-form ref="cityFormRef" :model="cityForm" :rules="cityFormRule">
+    <el-form
+      ref="cityFormRef"
+      :model="cityForm"
+      :rules="cityFormRule"
+      @submit.native.prevent
+    >
       <ul class="tools-wrapper">
         <li>
           <el-form-item class="new-pointer">
@@ -782,6 +785,19 @@
 </template>
 
 <script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
+
+<script type="text/javascript">
+document.οnkeydοwn = function () {
+  var myEvent = event ? event : window.event ? window.event : null;
+  var keycode = myEvent.keyCode;
+  if (myEvent.keyCode == 13) {
+    console.log("接收到回车");
+    myEvent.keyCode = 9;
+    myEvent.returnValue = false;
+  }
+};
+</script>
+
 <script>
 import g_Global from "../../global_vue.js";
 // import { flexible } from "../../assets/js/flexible.js";
@@ -1124,20 +1140,17 @@ export default {
       this.bs = false;
       this.sc = false;
       this.$router.push({
-        path: "/caseView",
-        query: { userId: this.userId },
+        path: "/UserCase",
       });
     },
 
     GetUserIdentity() {
       axios
         .post("/apis/backend/getIdentity/")
-        .then(
-          (response) => {
-            this.userId = response.data.userId;
-            // alert(JSON.stringify(response.data)),
-          }
-        )
+        .then((response) => {
+          this.userId = response.data.userId;
+          // alert(JSON.stringify(response.data)),
+        })
         .catch(function (error) {
           // alert(JSON.stringify(error.response.data.message));
           alert("获取用户身份失败");
@@ -1625,8 +1638,7 @@ export default {
           axios
             .post("/apis/backend/saveCase/", myFormData)
             .then((response) => {
-              alert(response);
-              alert(JSON.stringify(response));
+              // alert(JSON.stringify(response));
               // alert("保存案例");
             })
             .catch(function (error) {
