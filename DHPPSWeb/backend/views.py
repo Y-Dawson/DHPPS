@@ -25,6 +25,7 @@ import datetime
 from dateutil.relativedelta import relativedelta
 import secrets
 from backend import permission
+from rest_framework.permissions import IsAuthenticated
 # Create your views here.
 
 logger = logging.getLogger("django")
@@ -1164,7 +1165,7 @@ def GetUserCaseStat(request):
 class AccountViewSet(viewsets.ModelViewSet):
     queryset = models.AccountInformation.objects.all()
     serializer_class = customSerializers.AccountInformationSerializer
-    permission_classes = [permission.AdminPermission, permission.SuperAdminPermission]
+    permission_classes = [IsAuthenticated, permission.AdminPermission, permission.SuperAdminPermission]
 
 
 class CaseViewSet(viewsets.ModelViewSet):
@@ -1175,7 +1176,7 @@ class CaseViewSet(viewsets.ModelViewSet):
     filter_class = filters.CaseFilter
     ordering_fields = ('caseName', 'initTotal', 'initTotalInfected', 'cityNumber', 'roadNumber',)
     ordering = ('caseId',)
-    permission_classes = [permission.UserPermission, permission.AdminPermission, permission.SuperAdminPermission]
+    permission_classes = [IsAuthenticated, permission.UserPermission, permission.AdminPermission, permission.SuperAdminPermission]
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -1187,10 +1188,10 @@ class CaseViewSet(viewsets.ModelViewSet):
 class PersonalProfileViewSet(viewsets.ModelViewSet):
     queryset = models.PersonalProfile.objects.all()
     serializer_class = customSerializers.PersonalProfileSerializer
-    permission_classes = [permission.UserPermission, permission.AdminPermission, permission.SuperAdminPermission]
+    permission_classes = [IsAuthenticated, permission.UserPermission, permission.AdminPermission, permission.SuperAdminPermission]
 
 
 class ThemeViewSet(viewsets.ModelViewSet):
-    permission_classes = [permission.UserPermission, permission.AdminPermission, permission.SuperAdminPermission]
+    permission_classes = [IsAuthenticated, permission.UserPermission, permission.AdminPermission, permission.SuperAdminPermission]
     queryset = models.Theme.objects.all()
     serializer_class = customSerializers.ThemeSerializer
