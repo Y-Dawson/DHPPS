@@ -245,6 +245,17 @@ export default {
     // this.getMyContent();
   },
   methods: {
+    Show(){
+      if(this.ifLogin=="返回数据成功"){
+        this.getMyContent()
+      }
+      else{
+        this.$message("你尚未登录")
+        this.$router.push({
+              path:'/Login'
+          });
+      }
+    },
     //判断是否管理员
     Admin(){
       if(this.userAuthority=="管理员"||this.userAuthority=="超级管理员"){
@@ -261,8 +272,9 @@ export default {
           (response) => (
             self.userId = response.data.userId,
             self.userAuthority=response.data.authority,
+            self.ifLogin=response.data.message,
             // alert(JSON.stringify(response.data)),
-            this.getMyContent(),
+            this.Show(),
             this.Admin()
           )
         )

@@ -13,7 +13,7 @@
                 <router-link
                   class="iq-waves-effect"
                   :to="{
-                    path: '/AdminIndex'
+                    path: '/AdminIndex',
                   }"
                   ><i class="ri-home-4-line"></i><span>首页</span></router-link
                 >
@@ -26,11 +26,8 @@
                         </ul>
                      </li> -->
               <li>
-                <a
-                  class="iq-waves-effect"
-                  @click="adminOrSuperAdmin()"
-                  ><i class="ri-user-line"></i
-                  ><span>信息管理</span></a
+                <a class="iq-waves-effect" @click="adminOrSuperAdmin()"
+                  ><i class="ri-user-line"></i><span>信息管理</span></a
                 >
               </li>
               <li class="active">
@@ -90,7 +87,11 @@
               </li>
               <li>
                 <a class="d-flex align-items-center">
-                  <img :src="AdminUrl" class="img-fluid rounded mr-3" alt="user" />
+                  <img
+                    :src="AdminUrl"
+                    class="img-fluid rounded mr-3"
+                    alt="user"
+                  />
                   <div class="caption">
                     <h6 class="mb-0 line-height">{{ MyContent.userName }}</h6>
                   </div>
@@ -225,14 +226,13 @@
                 <div
                   class="box-card-group"
                   style="
-                    margin-left: 100px;
+                    margin-left: 60px;
                     margin-top: 20px;
                     margin-bottom:10px;
                     width: auto;
                     height: 480px;
                     text-align: left;
-                  "
-                >
+                  ">
                   <el-col
                     :span="7"
                     v-for="(item, index) in currentPageData.data"
@@ -240,42 +240,34 @@
                   >
                     <el-card class="box-card">
                       <div slot="header" class="clearfix">
-                        <i
-                          class="layui-icon layui-icon-template-1"
+                        <i v-if="item.caseMode === '自定模式'"
+                          class="el-icon el-icon-location-outline"
                           style="
                             margin-right: 10px;
-                            font-size: 20px;
+                            font-size: 38px;
+                            color: rgb(173, 173, 173);
+                          "
+                        ></i>
+                        <i v-else-if="item.caseMode === '地图模式'"
+                          class="el-icon el-icon-map-location"
+                          style="
+                            margin-right: 10px;
+                            font-size: 38px;
                             color: rgb(173, 173, 173);
                           "
                         ></i>
                         <span id="returnContent">{{ item.caseName }}</span>
-                        <!-- <div
+                        <div
                           style="
-                            font-size: 8px;
+                            font-size: 18px;
                             line-height: 20px;
                             float: right;
                             text-align: right;
                           "
                         >
-                          <el-button
-                            id="delete"
-                            type="text"
-                            style="font-size: 8px; color: #55587e;display:inline-block;"
-                            @click="edit(item.caseId)"
-                            >进入编辑</el-button
-                          >
-                          <br />
-                          <el-button
-                            id="delete"
-                            type="text"
-                            style="font-size: 8px; color: rgb(221, 0, 0);display:inline-block;"
-                            @click="open(item.caseId)"
-                            >删除</el-button
-                          >
-                        </div> -->
+                        </div>
                       </div>
                       <dl class="box-text">
-                        <!-- <span>{{casenum}}</span> -->
                         <span>初始城市数量：</span>
                         <span id="returnContent">{{ item.cityNumber }}</span>
                         <br />
@@ -289,42 +281,34 @@
                         <span id="returnContent">{{
                           item.initTotalInfected
                         }}</span>
-                        <!-- <span id="returnContent" style="color:black;">{{ ccontent.themename }}</span> -->
-                        <!-- <span id="returnContent">{{ content }}</span> -->
-                        <!-- <span id="returnContent">{{ content.themeno }}</span> -->
                       </dl>
                     </el-card>
                   </el-col>
                 </div>
-                
-                    <div>
-                      <nav aria-label="Page navigation example">
-                        <ul class="pagination mb-0" style="justify-content: center">
-                          <li class="page-item">
-                            <a
-                              class="page-link"
-                              tabindex="-1"
-                              aria-disabled="true"
-                              @click="GetPrevCasePage()"
-                              >Previous</a
-                            >
-                          </li>
-                          <li class="page-item">
-                            <a class="page-link"
-                              >第{{ currentCasePage }}页/共{{ totalCasePage }}页</a
-                            >
-                          </li>
-                          <li class="page-item">
-                            <a class="page-link" @click="GetNextCasePage()">Next</a>
-                          </li>
-                        </ul>
-                      </nav>
-                    </div>
-                <!-- <div class="paginate">
-                  <button class="primaryb" @click="GetPrevCasePage()">上一页</button>
-                  <span>第{{ currentCasePage }}页/共{{ totalCasePage }}页</span>
-                  <button class="primaryb" @click="GetNextCasePage()">下一页</button>
-                </div> -->
+
+                <div>
+                  <nav aria-label="Page navigation example">
+                    <ul class="pagination mb-0" style="justify-content: center">
+                      <li class="page-item">
+                        <a
+                          class="page-link"
+                          tabindex="-1"
+                          aria-disabled="true"
+                          @click="GetPrevCasePage()"
+                          >Previous</a
+                        >
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link"
+                          >第{{ currentCasePage }}页/共{{ totalCasePage }}页</a
+                        >
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link" @click="GetNextCasePage()">Next</a>
+                      </li>
+                    </ul>
+                  </nav>
+                </div>
               </div>
             </div>
           </div>
@@ -360,6 +344,7 @@
 export default {
   data() {
     return {
+      value:new Date(),
       // 头像
       fits: ["fill"],
       url:
@@ -396,17 +381,19 @@ export default {
   },
   methods: {
     //获取管理员身份
-    getMyIdentity: function() {
+    getMyIdentity: function () {
       var self = this;
       axios
         .post("/apis/backend/getIdentity/")
         .then((response) => {
           this.AdminId = response.data.userId;
-          this.AdminAuthority=response.data.authority;
-          if (response.data.authority == "管理员"||response.data.authority=="超级管理员") {
+          this.AdminAuthority = response.data.authority;
+          if (
+            response.data.authority == "管理员" ||
+            response.data.authority == "超级管理员"
+          ) {
             this.authorityShow = true;
-            this.getMyContent(),
-            this.getUserContent();
+            this.getMyContent(), this.getUserContent();
           } else {
             this.$message("您没有权限进入管理员界面！");
             this.$router.push({
@@ -421,7 +408,7 @@ export default {
     getMyContent: function () {
       var self = this;
       axios
-        .get("/apis/backend/profile/"+this.AdminId+"/")
+        .get("/apis/backend/profile/" + this.AdminId + "/")
         .then(
           (response) => (
             (self.MyContent = response.data),
@@ -485,7 +472,7 @@ export default {
         )
         .catch(function (error) {
           // 请求失败处理
-          alert('数据请求失败')
+          alert("数据请求失败");
         });
     },
 
@@ -555,18 +542,17 @@ export default {
           console.log(error.response);
         });
     },
-    adminOrSuperAdmin: function() {
-      if(this.AdminAuthority=="超级管理员") {
+    adminOrSuperAdmin: function () {
+      if (this.AdminAuthority == "超级管理员") {
         this.$router.push({
-              path: "/SuperUserManage",
-            });
-      }
-      else if(this.AdminAuthority=="管理员") {
+          path: "/SuperUserManage",
+        });
+      } else if (this.AdminAuthority == "管理员") {
         this.$router.push({
-              path: "/AdminUserManage",
-            });
+          path: "/AdminUserManage",
+        });
       }
-    }
+    },
   },
 };
 </script>
@@ -617,7 +603,7 @@ export default {
 /* 案例块样式 */
 .box-card {
   border-radius: 14px;
-  width: 300px;
+  width: 250px;
   /* float: left; */
   margin-right: 180px;
   margin-bottom: 20px;
