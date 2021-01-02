@@ -207,7 +207,7 @@
                           <el-form-item label="出生日期">
                             <el-date-picker
                               clearable
-                              v-model="value1"
+                              v-model="ruleForm.value1"
                               type="date"
                               value-format="yyyy-MM-dd"
                               placeholder="选择日期"
@@ -438,6 +438,7 @@ export default {
       }
     };
     return {
+      value: new Date(),
       userId:'',
       show: false,
       // 头像
@@ -454,14 +455,14 @@ export default {
         },
       },
       labelPosition: "left",
-      value1: "",
+      
       ruleForm: {
         name: "",
         // phone: "",
         email: "",
         radio: "",
         delivery: false,
-        type: [],
+        value1: "",
         addr: "",
 
         prePass: "",
@@ -528,7 +529,7 @@ export default {
             this.ruleForm.email=this.MyContent.email,
             this.ruleForm.radio=this.MyContent.sex,
             this.ruleForm.addr=this.MyContent.address,
-            this.value1=this.MyContent.birth
+            this.ruleForm.value1=this.MyContent.birth
           )
         )
         .catch(function (error) {
@@ -536,12 +537,18 @@ export default {
           alert("getMyContent数据请求失败wdnmd");
         });
     },
+    delayReload:function(){
+      setTimeout(function(){  //使用  setTimeout（）方法设bai定定时du1000毫秒
+      window.location.reload();//页面刷新zhi
+    },200)
+    },
     putContent: function () {
       var self = this;
       let data = new FormData();
+      // alert(this.image)
       data.append("avatar", this.image)
       data.append("userName",$("#inputname").val())
-      data.append("birth",this.value1)
+      data.append("birth",this.ruleForm.value1)
       data.append("sex",this.ruleForm.radio)
       data.append("email",$("#inputmail").val())
       data.append("address",$("#inputaddr").val())
@@ -550,13 +557,18 @@ export default {
         .then(
           (response) => (
             self.content = response, 
-            alert("修改成功"),
-            this.$message.success("修改成功")
+            // alert(JSON.stringify(response)),
+            // alert("修改成功"),
+            this.$message.success("修改成功"),
+            
+            // this.delayReload()
+            this.getMyContent()
+            // this.$message.success("修改成功")
           )
         )
         .catch(function (error) {
-          // alert(JSON.stringify(response))
-          // alert("数据发送失败")
+          alert(JSON.stringify(response)),
+          alert("数据发送失败")
           console.log(error.response);
         });
     },
@@ -564,7 +576,7 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.putContent(this.userId)
-          location.reload()
+          // location.reload()
           // this.getMyContent()
           // this.reload()
         } else {
@@ -600,6 +612,7 @@ export default {
         this.$message.error("原密码错误");
       } else if (this.passMassege == "修改成功") {
         this.$message.success("修改密码成功");
+        this.PWDresetForm('ruleForm')
       } else {
         this.$message.error("修改失败");
       }

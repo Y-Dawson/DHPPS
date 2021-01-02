@@ -130,18 +130,6 @@ export default {
         }
       }
       else{
-        // if(this.loginMassege=="你已经登录"){
-        // this.$message("你已经登录")
-        // this.$router.push({
-        //     path:'/setting',
-        //     query:{
-        //       params:JSON.stringify({
-        //         userId:this.userId,
-        //         userAuthority:this.userAuthority
-        //       })
-        //     },
-        //   });
-        // }
         if(this.loginMassege=="密码错误"){
           this.$message.error("密码错误")
         }
@@ -162,8 +150,10 @@ export default {
         .then(response => (
           //  alert(JSON.stringify(response)),
            self.userId=response.data.userId,
+           self.userAuthority=response.data.authority,
            self.ifLogin=response.data.message,
-           self.JumpPage()
+          //  alert(JSON.stringify(response.data)),
+           self.JumpPage(self.userAuthority)
           //  alert(self.ifLogin)
           )
         )
@@ -174,18 +164,25 @@ export default {
         });
     },
     //判断用户是否需要再次登陆
-    JumpPage:function(){
+    JumpPage:function(userAuthority){
       // alert(this.ifLogin)
       if(this.ifLogin=="返回数据成功"){
         this.$message("你已经登陆")
-        this.$router.push({
-            path:'/UserIndex',
-            query:{
-              params:JSON.stringify({
-                caseName: 999
-              })
-            },
+        if(userAuthority=="普通用户"){
+          this.$router.push({
+              path:'/UserIndex',
+              query:{
+                params:JSON.stringify({
+                  caseName: 999
+                })
+              },
           });
+        }
+        else{
+          this.$router.push({
+            path:'/AdminIndex'
+          });
+        }
       }
     },
     postContent: function () {

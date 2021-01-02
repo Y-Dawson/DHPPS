@@ -190,6 +190,7 @@
 export default {
   data() {
     return {
+      value:new Date(),
       userId:'',
       isMap:'',//是否是地图模式
       // 头像
@@ -246,6 +247,9 @@ export default {
       if(this.restCase>0){
         this.totalCasePage=this.totalCasePage+1;
       }
+      if(this.currentPageData.pagination==0){
+        this.totalCasePage=1;
+      }
       // alert(this.totalCasePage)
       // if (this.totalCasePage < 1) totalCasePage = 1;
     },
@@ -279,6 +283,7 @@ export default {
         .then(
           (response) => (
             self.currentPageData = response.data,
+            // alert(response.data),
             self.totalCasePage = Math.floor(
               self.currentPageData.pagination / self.pageCaseSize
             ),
@@ -288,7 +293,7 @@ export default {
         )
         .catch(function (error) {
           // 请求失败处理
-          alert('数据请求失败')
+          alert('数据请求失败了')
         });
     },
     // 案例编辑
@@ -383,19 +388,25 @@ export default {
           alert("getCaseInfo数据请求失败wdnmd");
         });
     },
+    DelayReload:function(){
+      setTimeout(function(){  //使用  setTimeout（）方法设bai定定时du1000毫秒
+      window.location.reload();//页面刷新zhi
+    },200)
+    },
     DeleteCaseContent: function (id) {
       var self = this;
       // alert(id);
       axios
         .delete("apis/backend/case/" + id+ "/")
-        .then(
-          (response) => (self.currentPageData = response.data),
-          location.reload(),
+        .then((response) => (
+          self.currentPageData = response.data,
+          this.GetCaseContent(),
           this.$message({
               type: "success",
               message: "删除成功!",
           })
-        )
+          // this.DelayReload()
+        ))
         .catch(function (error) {
           alert('数据fas失败')
         });
@@ -408,6 +419,7 @@ export default {
       })
         .then(() => {
           this.DeleteCaseContent(id)
+          this.GetCaseContent()
           // this.GetCaseContent()
           // location.reload()
           // this.$message({
