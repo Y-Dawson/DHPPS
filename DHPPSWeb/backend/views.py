@@ -411,6 +411,7 @@ def SaveCase(request):
         caseMode = request.POST.get('caseMode', None)
         InitCityData = request.POST.get('InitCityData', None)
         InitRoadData = request.POST.get('InitRoadData', None)
+        # 若获取到InitRoadData为"NULL"，代表无道路
         CityPosition = request.POST.get('CityPosition', None)
         if not(userId and caseName and cityNum and roadNum and InitCityData and InitRoadData and CityPosition):
             return JsonResponse({"message": "表单未填写完整", "status": 404})
@@ -419,12 +420,13 @@ def SaveCase(request):
         if (caseMode == "自定模式"):
             initTotalNum = 0
             initTotalInfectedNum = 0
-            initcitydataList = InitCityData.split(",")
-            initroaddataList = InitRoadData.split(",")
+            initCityDataList = InitCityData.split(",")
+            if InitRoadData != "NULL":
+                initRoadDataList = InitRoadData.split(",")
             citypositionList = CityPosition.split(",")
 
             cityCount = 0
-            for cityInfo in initcitydataList:
+            for cityInfo in initCityDataList:
                 value = cityInfo.split(":")[1]
                 if cityCount % 3 == 1:
                     initPop = int(value)
@@ -455,7 +457,7 @@ def SaveCase(request):
                 initInfect = ""
                 x = 0.0
                 y = 0.0
-                for cityInfo in initcitydataList:
+                for cityInfo in initCityDataList:
                     value = cityInfo.split(":")[1]
                     posValue = citypositionList[cityCount].split(":")[1]
                     if cityCount % 3 == 0:
@@ -480,22 +482,23 @@ def SaveCase(request):
                     cityCount += 1
 
                 # 新增道路信息
-                roadCount = 0
-                for roadInfo in initroaddataList:
-                    value = roadInfo.split(":")[1]
-                    if roadCount % 3 == 0:
-                        departure = value
-                    elif roadCount % 3 == 1:
-                        destination = value
-                    elif roadCount % 3 == 2:
-                        volume = float(value)
-                        models.InitRoadData.objects.create(
-                            caseId=newCase,
-                            departure=departure,
-                            destination=destination,
-                            volume=volume
-                        )
-                    roadCount += 1
+                if InitRoadData != "NULL":
+                    roadCount = 0
+                    for roadInfo in initRoadDataList:
+                        value = roadInfo.split(":")[1]
+                        if roadCount % 3 == 0:
+                            departure = value
+                        elif roadCount % 3 == 1:
+                            destination = value
+                        elif roadCount % 3 == 2:
+                            volume = float(value)
+                            models.InitRoadData.objects.create(
+                                caseId=newCase,
+                                departure=departure,
+                                destination=destination,
+                                volume=volume
+                            )
+                        roadCount += 1
                 if (newCase):
                     models.AccountInformation.objects.filter(userId=userId).update(caseNumber=F("caseNumber") + 1)
                 return JsonResponse({"message": "保存案例成功", "status": 200, "caseId": newCase.caseId})
@@ -509,11 +512,12 @@ def SaveCase(request):
         elif (caseMode == "地图模式"):
             initTotalNum = 0
             initTotalInfectedNum = 0
-            initcitydataList = InitCityData.split(",")
-            initroaddataList = InitRoadData.split(",")
+            initCityDataList = InitCityData.split(",")
+            if InitRoadData != "NULL":
+                initRoadDataList = InitRoadData.split(",")
 
             cityCount = 0
-            for cityInfo in initcitydataList:
+            for cityInfo in initCityDataList:
                 value = cityInfo.split(":")[1]
                 if cityCount % 3 == 1:
                     initPop = int(value)
@@ -543,7 +547,7 @@ def SaveCase(request):
                 initInfect = ""
                 x = 0.0
                 y = 0.0
-                for cityInfo in initcitydataList:
+                for cityInfo in initCityDataList:
                     value = cityInfo.split(":")[1]
                     if cityCount % 3 == 0:
                         cityName = value
@@ -560,22 +564,23 @@ def SaveCase(request):
                     cityCount += 1
 
                 # 新增道路信息
-                roadCount = 0
-                for roadInfo in initroaddataList:
-                    value = roadInfo.split(":")[1]
-                    if roadCount % 3 == 0:
-                        departure = value
-                    elif roadCount % 3 == 1:
-                        destination = value
-                    elif roadCount % 3 == 2:
-                        volume = float(value)
-                        models.InitRoadData.objects.create(
-                            caseId=newCase,
-                            departure=departure,
-                            destination=destination,
-                            volume=volume
-                        )
-                    roadCount += 1
+                if InitRoadData != "NULL":
+                    roadCount = 0
+                    for roadInfo in initRoadDataList:
+                        value = roadInfo.split(":")[1]
+                        if roadCount % 3 == 0:
+                            departure = value
+                        elif roadCount % 3 == 1:
+                            destination = value
+                        elif roadCount % 3 == 2:
+                            volume = float(value)
+                            models.InitRoadData.objects.create(
+                                caseId=newCase,
+                                departure=departure,
+                                destination=destination,
+                                volume=volume
+                            )
+                        roadCount += 1
                 if (newCase):
                     models.AccountInformation.objects.filter(userId=userId).update(caseNumber=F("caseNumber") + 1)
                 return JsonResponse({"message": "保存案例成功", "status": 200, "caseId": newCase.caseId})
@@ -605,6 +610,7 @@ def StartSimulate(request):
         caseMode = request.POST.get('caseMode', None)
         InitCityData = request.POST.get('InitCityData', None)
         InitRoadData = request.POST.get('InitRoadData', None)
+        # 若获取到InitRoadData为"NULL"，代表无道路
         CityPosition = request.POST.get('CityPosition', None)
         dayNum = request.POST.get('daynum', None)
         if not(userId and caseName and cityNum and roadNum and InitCityData and InitRoadData and CityPosition and dayNum):
@@ -614,11 +620,12 @@ def StartSimulate(request):
             # 案例计数：初始人口与初始感染人口
             initTotalNum = 0
             initTotalInfectedNum = 0
-            initcitydataList = InitCityData.split(",")
-            initroaddataList = InitRoadData.split(",")
+            initCityDataList = InitCityData.split(",")
+            if InitRoadData != "NULL":
+                initRoadDataList = InitRoadData.split(",")
             citypositionList = CityPosition.split(",")
             cityCount = 0
-            for cityInfo in initcitydataList:
+            for cityInfo in initCityDataList:
                 value = cityInfo.split(":")[1]
                 if cityCount % 3 == 1:
                     initPop = int(value)
@@ -647,7 +654,7 @@ def StartSimulate(request):
                 initInfect = ""
                 x = 0.0
                 y = 0.0
-                for cityInfo in initcitydataList:
+                for cityInfo in initCityDataList:
                     value = cityInfo.split(":")[1]
                     posValue = citypositionList[cityCount].split(":")[1]
                     if cityCount % 3 == 0:
@@ -668,20 +675,21 @@ def StartSimulate(request):
                     cityCount += 1
 
                 # 新增道路信息
-                roadCount = 0
-                for roadInfo in initroaddataList:
-                    value = roadInfo.split(":")[1]
-                    if roadCount % 3 == 0:
-                        # 出发城市下标
-                        departure = cityNameList.index(value)
-                    elif roadCount % 3 == 1:
-                        # 到达城市下标
-                        destination = cityNameList.index(value)
-                    elif roadCount % 3 == 2:
-                        volume = float(value)
-                        initRoadList[departure][destination] = volume
-                        initRoadList[destination][departure] = volume
-                    roadCount += 1
+                if InitRoadData != "NULL":
+                    roadCount = 0
+                    for roadInfo in initRoadDataList:
+                        value = roadInfo.split(":")[1]
+                        if roadCount % 3 == 0:
+                            # 出发城市下标
+                            departure = cityNameList.index(value)
+                        elif roadCount % 3 == 1:
+                            # 到达城市下标
+                            destination = cityNameList.index(value)
+                        elif roadCount % 3 == 2:
+                            volume = float(value)
+                            initRoadList[departure][destination] = volume
+                            initRoadList[destination][departure] = volume
+                        roadCount += 1
             except Exception as e:
                 print('str(Exception):\t', str(Exception))
                 print('str(e):\t\t', str(e))
@@ -714,10 +722,11 @@ def StartSimulate(request):
             # 案例计数：初始人口与初始感染人口
             initTotalNum = 0
             initTotalInfectedNum = 0
-            initcitydataList = InitCityData.split(",")
-            initroaddataList = InitRoadData.split(",")
+            initCityDataList = InitCityData.split(",")
+            if InitRoadData != "NULL":
+                initRoadDataList = InitRoadData.split(",")
             cityCount = 0
-            for cityInfo in initcitydataList:
+            for cityInfo in initCityDataList:
                 value = cityInfo.split(":")[1]
                 if cityCount % 3 == 1:
                     initPop = int(value)
@@ -745,7 +754,7 @@ def StartSimulate(request):
                 initInfect = ""
                 x = 0.0
                 y = 0.0
-                for cityInfo in initcitydataList:
+                for cityInfo in initCityDataList:
                     value = cityInfo.split(":")[1]
                     if cityCount % 3 == 0:
                         # 存入城市名称
@@ -759,20 +768,21 @@ def StartSimulate(request):
                     cityCount += 1
 
                 # 新增道路信息
-                roadCount = 0
-                for roadInfo in initroaddataList:
-                    value = roadInfo.split(":")[1]
-                    if roadCount % 3 == 0:
-                        # 出发城市下标
-                        departure = cityNameList.index(value)
-                    elif roadCount % 3 == 1:
-                        # 到达城市下标
-                        destination = cityNameList.index(value)
-                    elif roadCount % 3 == 2:
-                        volume = float(value)
-                        initRoadList[departure][destination] = volume
-                        initRoadList[destination][departure] = volume
-                    roadCount += 1
+                if InitRoadData != "NULL":
+                    roadCount = 0
+                    for roadInfo in initRoadDataList:
+                        value = roadInfo.split(":")[1]
+                        if roadCount % 3 == 0:
+                            # 出发城市下标
+                            departure = cityNameList.index(value)
+                        elif roadCount % 3 == 1:
+                            # 到达城市下标
+                            destination = cityNameList.index(value)
+                        elif roadCount % 3 == 2:
+                            volume = float(value)
+                            initRoadList[departure][destination] = volume
+                            initRoadList[destination][departure] = volume
+                        roadCount += 1
             except Exception as e:
                 print('str(Exception):\t', str(Exception))
                 print('str(e):\t\t', str(e))
@@ -881,8 +891,8 @@ def GetCaseInfos(request):
 
                 cases = {}
                 cases["caseName"] = caseInfo.caseName
-                cases["cityNum"] = len(cityInfos)
-                cases["roadNum"] = len(roadInfos)
+                cases["cityNum"] = caseInfo.cityNumber
+                cases["roadNum"] = caseInfo.roadNumber
                 cases["caseMode"] = caseInfo.caseMode
 
                 cityList = []
@@ -893,7 +903,7 @@ def GetCaseInfos(request):
                     cityCase["initPop"] = cityInfos[cityIdx].initPop
                     cityCase["initInfect"] = cityInfos[cityIdx].initInfect
                     cityList.append(cityCase)
-                    
+
                     if caseInfo.caseMode == "自定模式":
                         cityPosCase = {}
                         cityPosCase["cityName"] = cityInfos[cityIdx].cityName
@@ -902,15 +912,15 @@ def GetCaseInfos(request):
                         cityPosList.append(cityPosCase)
 
                 roadList = []
-                for roadIdx in range(len(roadInfos)):
-                    roadCase = {}
-                    roadCase["departure"] = roadInfos[roadIdx].departure
-                    roadCase["destination"] = roadInfos[roadIdx].destination
-                    roadCase["volume"] = roadInfos[roadIdx].volume
-                    roadList.append(roadCase)
-
+                if (roadInfos.exists()):
+                    for roadIdx in range(len(roadInfos)):
+                        roadCase = {}
+                        roadCase["departure"] = roadInfos[roadIdx].departure
+                        roadCase["destination"] = roadInfos[roadIdx].destination
+                        roadCase["volume"] = roadInfos[roadIdx].volume
+                        roadList.append(roadCase)
+                    cases["InitRoadData"] = roadList
                 cases["InitCityData"] = cityList
-                cases["InitRoadData"] = roadList
                 if caseInfo.caseMode == "自定模式":
                     cases["CityPosition"] = cityPosList
 
