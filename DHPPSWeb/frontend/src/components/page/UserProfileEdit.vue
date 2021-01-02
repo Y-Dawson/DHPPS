@@ -441,6 +441,8 @@ export default {
       value: new Date(),
       userId:'',
       show: false,
+      //判断是否已登录状态
+      ifLogin:"",
       // 头像
       fits: ["fill"],
       imageUrl: "",
@@ -499,6 +501,17 @@ export default {
     // this.getMyContent()
   },
   methods: {
+    Show(){
+      if(this.ifLogin=="返回数据成功"){
+        this.getMyContent()
+      }
+      else{
+        this.$message("你尚未登录")
+        this.$router.push({
+              path:'/Login'
+          });
+      }
+    },
     //获取用户身份
     GetUserIdentity(){
       var self=this
@@ -506,18 +519,17 @@ export default {
         .post("/apis/backend/getIdentity/")
         .then(response => (
            self.userId=response.data.userId,
-           this.getMyContent()
+           self.ifLogin=response.data.message,
+           this.Show()
+          //  this.getMyContent()
           )
         )
         .catch(function (error) {
-          // alert(JSON.stringify(error.response.data.message));
           alert("获取用户身份失败");
         });
     },
     getMyContent: function () {
       var self = this;
-      // alert("this is getMyContent")
-      // alert(this.userId)
       axios
         .get("/apis/backend/profile/"+this.userId+"/")
         .then(
@@ -557,8 +569,6 @@ export default {
         .then(
           (response) => (
             self.content = response, 
-            // alert(JSON.stringify(response)),
-            // alert("修改成功"),
             this.$message.success("修改成功"),
             
             // this.delayReload()
@@ -576,9 +586,6 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.putContent(this.userId)
-          // location.reload()
-          // this.getMyContent()
-          // this.reload()
         } else {
           this.$message.error("修改失败");
           return false;

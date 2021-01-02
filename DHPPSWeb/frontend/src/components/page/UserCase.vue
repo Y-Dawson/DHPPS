@@ -83,7 +83,7 @@
                 <div
                   class="box-card-group"
                   style="
-                    margin-left: 100px;
+                    margin-left: 60px;
                     margin-top: 20px;
                     margin-bottom:10px;
                     width: auto;
@@ -193,6 +193,8 @@ export default {
       value:new Date(),
       userId:'',
       isMap:'',//是否是地图模式
+      //判断是否已登录状态
+      ifLogin:"",
       // 头像
       fits: ["fill"],
       imageUrl:"",
@@ -211,11 +213,18 @@ export default {
   created: function () {
     this.GetUserIdentity()
   },
-  mounted: function () {
-    this.GetCaseContent();
-    // this.SetPages();
-  },
   methods: {
+    Show(){
+      if(this.ifLogin=="返回数据成功"){
+        this.getMyContent()
+      }
+      else{
+        this.$message("你尚未登录")
+        this.$router.push({
+              path:'/Login'
+          });
+      }
+    },
     //获取用户身份
     GetUserIdentity(){
       var self=this
@@ -223,7 +232,8 @@ export default {
         .post("/apis/backend/getIdentity/")
         .then(response => (
            self.userId=response.data.userId,
-           this.getMyContent()
+           self.ifLogin=response.data.message,
+           this.Show()
           )
         )
         .catch(function (error) {
@@ -260,7 +270,8 @@ export default {
         .then(
           (response) => (
             self.MyContent = response.data,
-            this.imageUrl = self.MyContent.avatar
+            this.imageUrl = self.MyContent.avatar,
+            this.GetCaseContent()
             // alert(JSON.stringify(self.MyContent))
           )
         )
@@ -420,18 +431,12 @@ export default {
         .then(() => {
           this.DeleteCaseContent(id)
           this.GetCaseContent()
-          // this.GetCaseContent()
-          // location.reload()
-          // this.$message({
-          //     type: "success",
-          //     message: "删除成功!",
-          // })
         })
         .catch(() => {
-          // this.$message({
-          //   type: "info",
-          //   message: "已取消删除",
-          // });
+          this.$message({
+            type: "info",
+            message: "已取消删除",
+          });
         });
     },
   },
@@ -443,6 +448,37 @@ export default {
 @import "../../css/typography.css";
 @import "../../css/style.css";
 @import "../../css/animate.css";
+.container-fluid{
+  height:550px;
+  padding: 0px;
+}
+.list {
+  text-align: center;
+  margin: 10px 300px;
+}
+
+/* 案例块文字内容 */
+.box-text {
+  margin-left: 5px;
+  line-height: 20px;
+  font-size: 14px;
+  color: rgb(71, 71, 71);
+}
+/* 案例块样式 */
+.box-card {
+  border-radius: 14px;
+  width: 250px;
+  /* float: left; */
+  margin-right: 40px;
+  margin-bottom: 20px;
+}
+.reset {
+  background: #fff;
+  border: 1px #55587e solid;
+}
+.el-checkbox :hover {
+  background: #8b9bbd;
+}
 </style>
 <style>
 /* 日历组件 */
@@ -466,37 +502,6 @@ export default {
 }
 #calendar :hover {
   background: transparent;
-}
-.container-fluid{
-  height:550px;
-  padding: 0px;
-}
-.list {
-  text-align: center;
-  margin: 10px 300px;
-}
-
-/* 案例块文字内容 */
-.box-text {
-  margin-left: 5px;
-  line-height: 20px;
-  font-size: 14px;
-  color: rgb(71, 71, 71);
-}
-/* 案例块样式 */
-.box-card {
-  border-radius: 14px;
-  width: 280px;
-  /* float: left; */
-  margin-right: 180px;
-  margin-bottom: 20px;
-}
-.reset {
-  background: #fff;
-  border: 1px #55587e solid;
-}
-.el-checkbox :hover {
-  background: #8b9bbd;
 }
 
 </style>
