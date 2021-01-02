@@ -196,6 +196,19 @@
   </div>
 </template>
 <script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
+
+<script type="text/javascript">
+document.οnkeydοwn = function () {
+  var myEvent = event ? event : window.event ? window.event : null;
+  var keycode = myEvent.keyCode;
+  if (myEvent.keyCode == 13) {
+    console.log("接收到回车");
+    myEvent.keyCode = 9;
+    myEvent.returnValue = false;
+  }
+};
+</script>
+
 <script>
 // import { flexible } from "../../assets/js/flexible.js";
 import { jquery } from "../../assets/js/jquery.js";
@@ -235,15 +248,15 @@ export default {
       rules: {
         to_pop: [
           { required: true, message: "请输入总人口", trigger: "blur" },
-          { min: 3, max: 150, message: "长度在 3 到 150 个字符", trigger: "blur" },
+          { min: 1, max: 6, message: "人口数量应在1到100000之间", trigger: "blur" },
         ],
         begin_inf: [
           { required: true, message: "请输入初始感染人数", trigger: "blur" },
-          { min: 3, max: 150, message: "长度在 3 到 150 个字符", trigger: "blur" },
+          { min: 1, max: 4, message: "初始感染人数应该1到1000之间", trigger: "blur" },
         ],
         volumn: [
           { required: true, message: "请输入人流量", trigger: "blur" },
-          { min: 3, max: 150, message: "长度在 3 到 150 个字符", trigger: "blur" },
+          { min: 1, max: 3, message: "人流量应该1到100之间", trigger: "blur" },
         ],
       },
     };
@@ -265,6 +278,9 @@ export default {
 
     if (this.params.caseName != 999) {
       console.log("从地图模拟页面返回");
+
+      citycnt = this.params.citynum;
+      roadcnt = this.params.roadnum;
 
       var cn, totp, initinf;
       for (var i in this.params.InitCityData) {
@@ -289,6 +305,9 @@ export default {
         var s = cn1 + "-" + cn2 + ":" + vo;
         this.road_di.push(s);
       }
+    } else {
+      citycnt = 0;
+      roadcnt = 0;
     }
 
     this.drawMap();
@@ -589,6 +608,8 @@ export default {
         }
       }
 
+      citycnt += 1;
+
       this.isShow3 = false;
     },
 
@@ -634,7 +655,7 @@ export default {
 
       var value = parseInt(this.ruleForm.volumn);
       if (value < 1 || value > 100) {
-        this.$alert("人流量应在5~100内", "连接失败", {
+        this.$alert("人流量应在1~100内", "连接失败", {
           confirmButtonText: "确定",
           callback: (action) => {
             this.$message({
@@ -685,10 +706,20 @@ export default {
         }
       }
 
+      roadcnt -= 1;
+
       this.isShow4 = false;
     },
 
     save_case() {
+      if (citycnt == 0) {
+        this.$message({
+          type: "warning",
+          message: "您还未进行任何创建",
+        });
+        return;
+      }
+
       this.$prompt("请输入此案例名称", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -741,7 +772,12 @@ export default {
           myFormData.append("caseMode", "地图模式");
 
           myFormData.append("InitCityData", city_infor);
-          myFormData.append("InitRoadData", road_inf);
+
+          if (roadcnt == 0) {
+            myFormData.append("InitRoadData", "NULL");
+          } else {
+            myFormData.append("InitRoadData", road_inf);
+          }
 
           myFormData.append("CityPosition", "Empty");
 
@@ -795,6 +831,16 @@ export default {
       }
       myFormData.append("citynum", citycnt);
 
+      console.log("citycnt", citycnt);
+
+      if (citycnt == 0) {
+        this.$message({
+          type: "warning",
+          message: "您还未进行任何创建",
+        });
+        return;
+      }
+
       var roadcnt = 0;
       var road_inf = [];
       var cn1, cn2, volume;
@@ -813,7 +859,12 @@ export default {
       myFormData.append("caseMode", "地图模式");
 
       myFormData.append("InitCityData", city_infor);
-      myFormData.append("InitRoadData", road_inf);
+
+      if (roadcnt == 0) {
+        myFormData.append("InitRoadData", "NULL");
+      } else {
+        myFormData.append("InitRoadData", road_inf);
+      }
 
       myFormData.append("CityPosition", "Empty");
 

@@ -420,7 +420,7 @@ export default {
         })
         .then(
           (response) => (
-            alert(JSON.stringify(response.data.data)),
+            // alert(JSON.stringify(response.data.data)),
             (this.content = response.data.data),
             (this.paginate = response.data.pagination),
             (this.pageSize = response.data.pageSize),

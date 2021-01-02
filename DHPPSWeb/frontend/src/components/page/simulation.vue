@@ -1,11 +1,9 @@
 <template>
   <div id="simulation">
-    <div class="layui-layout layui-layout-admin">
+    <!-- <div class="layui-layout layui-layout-admin">
       <div class="layui-header">
         <div class="layui-logo">LOGO</div>
         <div class="layui-logotext">高传染性疾病预测系统</div>
-        <!-- <div class="layui-logo">高传染性疾病预测系统</div> -->
-        <!-- 头部区域（可配合layui已有的水平导航） -->
         <ul class="layui-nav layui-layout-right">
           <li class="layui-nav-item" style="line-height: 20px">
             <el-avatar shape="circle" :size="30" :fit="fit" :src="url"></el-avatar>
@@ -17,7 +15,10 @@
           </li>
         </ul>
       </div>
-    </div>
+    </div> -->
+    <header>
+      <h1>数据可视化</h1>
+    </header>
 
     <canvas
       id="myCanvas"
@@ -1289,9 +1290,24 @@ export default {
 <style scoped>
 @import "../../assets/layui/css/layui.css";
 
-/* body {
+body {
   overflow: hidden;
-} */
+}
+
+header {
+  position: relative;
+  height: 1.25rem;
+  background: url("../../assets/img/head_bg.png") no-repeat;
+  height: 50px;
+  width: 100%;
+  background-size: 100% 100%;
+}
+
+h1 {
+  font-style: 0.475rem;
+  color: #fff;
+  text-align: center;
+}
 
 .layui-nav-tree .layui-nav-item a {
   font-weight: bold;

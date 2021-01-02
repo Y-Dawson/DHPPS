@@ -47,9 +47,7 @@
       </div>
 
       <div class="toMy">
-        <router-link
-          :to="{ path: '/Userprofile' }"
-          style="margin-left: 10px; float: left"
+        <router-link :to="{ path: '/Userprofile' }" style="margin-left: 10px; float: left"
           >个人中心</router-link
         >
       </div>
@@ -64,7 +62,13 @@
       @click="ShowCity"
     ></canvas>
 
-    <el-form ref="cityFormRef" :model="cityForm" :rules="cityFormRule">
+    <el-form
+      ref="cityFormRef"
+      :model="cityForm"
+      :rules="cityFormRule"
+      style="position: relative"
+      @submit.native.prevent
+    >
       <ul class="tools-wrapper">
         <li>
           <el-form-item class="new-pointer">
@@ -782,6 +786,19 @@
 </template>
 
 <script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
+
+<script type="text/javascript">
+document.οnkeydοwn = function () {
+  var myEvent = event ? event : window.event ? window.event : null;
+  var keycode = myEvent.keyCode;
+  if (myEvent.keyCode == 13) {
+    console.log("接收到回车");
+    myEvent.keyCode = 9;
+    myEvent.returnValue = false;
+  }
+};
+</script>
+
 <script>
 import g_Global from "../../global_vue.js";
 // import { flexible } from "../../assets/js/flexible.js";
@@ -790,6 +807,7 @@ var echarts = require("echarts");
 import "../../../node_modules/echarts/lib/chart/map/china.js";
 
 var citycnt = 1;
+var nowcitycnt = 1;
 var linecnt = 1;
 var concnt = 0;
 var cn = 0;
@@ -933,10 +951,12 @@ export default {
     // this.userId = this.params.userId;
 
     citycnt = 1;
+    nowcitycnt = 1;
     linecnt = 1;
     if (this.params.caseName != 999) {
       console.log("从模拟界面返回");
       citycnt = this.params.citynum + 1;
+      nowcitycnt = citycnt;
       linecnt = 1;
       var cnt = 0;
       for (var j in this.params.CityPosition) {
@@ -967,6 +987,7 @@ export default {
         this.SetButton(nu);
 
         citycnt = nu + 1;
+        nowcitycnt = citycnt;
       }
 
       for (var j in this.params.InitRoadData) {
@@ -1099,6 +1120,15 @@ export default {
       this.sc = false;
       this.mc = false;
 
+      if (nowcitycnt == 1) {
+        this.$message({
+          type: "warning",
+          message: "您还未进行任何创建",
+        });
+        this.bs = false;
+        return;
+      }
+
       this.BeginToSimulation().then((response) => {});
     },
 
@@ -1112,6 +1142,15 @@ export default {
       this.bs = false;
       this.mc = false;
 
+      if (nowcitycnt == 1) {
+        this.$message({
+          type: "warning",
+          message: "您还未进行任何创建",
+        });
+        this.sc = false;
+        return;
+      }
+
       this.SaveConfirm().then((response) => {});
     },
 
@@ -1124,20 +1163,17 @@ export default {
       this.bs = false;
       this.sc = false;
       this.$router.push({
-        path: "/caseView",
-        query: { userId: this.userId },
+        path: "/UserCase",
       });
     },
 
     GetUserIdentity() {
       axios
         .post("/apis/backend/getIdentity/")
-        .then(
-          (response) => {
-            this.userId = response.data.userId;
-            // alert(JSON.stringify(response.data)),
-          }
-        )
+        .then((response) => {
+          this.userId = response.data.userId;
+          // alert(JSON.stringify(response.data)),
+        })
         .catch(function (error) {
           // alert(JSON.stringify(error.response.data.message));
           alert("获取用户身份失败");
@@ -1437,7 +1473,7 @@ export default {
           var initpop = 0;
           var initinfect = 0;
           var loopcnt = 0;
-          var citycnt = 0;
+          var trcitycnt = 0;
           for (var cid in this.city_po) {
             loopcnt += 1;
             if (loopcnt == 1) {
@@ -1446,14 +1482,15 @@ export default {
             }
             if (loopcnt == 2) {
               initinfect = this.city_po[cid].substring(7);
-              citycnt += 1;
+              trcitycnt += 1;
               var s =
                 "cityname:" + cn + ",initpop:" + initpop + ",initinfect:" + initinfect;
               city_infor.push(s);
               loopcnt = 0;
             }
           }
-          myFormData.append("citynum", citycnt);
+
+          myFormData.append("citynum", trcitycnt);
 
           var roadcnt = 0;
           var road_inf = [];
@@ -1475,7 +1512,13 @@ export default {
           myFormData.append("caseMode", "自定模式");
 
           myFormData.append("InitCityData", city_infor);
-          myFormData.append("InitRoadData", road_inf);
+
+          if (roadcnt == 0) {
+            myFormData.append("InitRoadData", "NULL");
+          }
+          else{
+            myFormData.append("InitRoadData", road_inf);
+          }
 
           var city_position = [];
           loopcnt = 0;
@@ -1513,7 +1556,7 @@ export default {
                   params: JSON.stringify({
                     userId: this.userId,
                     caseName: 99,
-                    citynum: citycnt,
+                    citynum: trcitycnt,
                     roadnum: roadcnt,
                     InitCityData: city_infor,
                     InitRoadData: road_inf,
@@ -1559,7 +1602,7 @@ export default {
           var initpop = 0;
           var initinfect = 0;
           var loopcnt = 0;
-          var citycnt = 0;
+          var trcitycnt = 0;
           for (var cid in this.city_po) {
             loopcnt += 1;
             if (loopcnt == 1) {
@@ -1568,14 +1611,14 @@ export default {
             }
             if (loopcnt == 2) {
               initinfect = this.city_po[cid].substring(7);
-              citycnt += 1;
+              trcitycnt += 1;
               var s =
                 "cityname:" + cn + ",initpop:" + initpop + ",initinfect:" + initinfect;
               city_infor.push(s);
               loopcnt = 0;
             }
           }
-          myFormData.append("citynum", citycnt);
+          myFormData.append("citynum", trcitycnt);
 
           var roadcnt = 0;
           var road_inf = [];
@@ -1597,7 +1640,13 @@ export default {
           myFormData.append("caseMode", "自定模式");
 
           myFormData.append("InitCityData", city_infor);
-          myFormData.append("InitRoadData", road_inf);
+
+          if (roadcnt == 0) {
+            myFormData.append("InitRoadData", "NULL");
+          }
+          else{
+            myFormData.append("InitRoadData", road_inf);
+          }
 
           var city_position = [];
           loopcnt = 0;
@@ -1625,8 +1674,7 @@ export default {
           axios
             .post("/apis/backend/saveCase/", myFormData)
             .then((response) => {
-              alert(response);
-              alert(JSON.stringify(response));
+              // alert(JSON.stringify(response));
               // alert("保存案例");
             })
             .catch(function (error) {
@@ -2020,6 +2068,8 @@ export default {
             type: "success",
             message: "删除成功!",
           });
+
+          nowcitycnt--;
         })
         .catch(() => {
           this.dp = false;
@@ -2112,8 +2162,8 @@ export default {
 
       var cz = "初始感染人数:" + this.cityForm.beginInfected;
       var ibi = parseInt(this.cityForm.beginInfected);
-      if (ibi < 0 || ibi > 100) {
-        this.$alert("初始感染人数应在0~100内", "创建失败", {
+      if (ibi < 1 || ibi > 100) {
+        this.$alert("初始感染人数应在1~100内", "创建失败", {
           confirmButtonText: "确定",
           callback: (action) => {
             this.$message({
@@ -2141,6 +2191,7 @@ export default {
       this.DrawRoadMap();
 
       citycnt++;
+      nowcitycnt++;
       // console.log(typeof(this.city_po));
     },
 
@@ -2591,6 +2642,11 @@ canvas {
   float: left;
 }
 
+.img-list {
+  position: absolute;
+  z-index: 1;
+}
+
 .img-list .city {
   display: block;
   position: absolute;
@@ -2612,6 +2668,7 @@ canvas {
 .img-list .city img {
   height: 75px;
   width: 75px;
+  z-index: 999;
 }
 
 .img-list .city:hover .city-infor {
@@ -2639,12 +2696,18 @@ canvas {
   margin-left: 95px;
 }
 
+.line_list {
+  position: absolute;
+  z-index: 1;
+}
+
 .line_list .road_line {
   display: block;
   position: absolute;
   height: 5px;
-  background-color: #000;
+  background-color: pink;
   /* margin-left: 5000px;
   margin-top: 5000px; */
+  z-index: 2;
 }
 </style>
