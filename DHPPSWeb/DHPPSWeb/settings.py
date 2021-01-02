@@ -95,6 +95,18 @@ DATABASES = {
     }
 }
 
+# Settings Of REST_FRAMEWROK
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'backend.authentication.MyAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'backend.permission.UserPermission',
+        'backend.permission.AdminPermission',
+        'backend.permission.SuperAdminPermission',
+    )
+}
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators

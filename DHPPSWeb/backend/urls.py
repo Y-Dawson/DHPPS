@@ -71,41 +71,41 @@ urlpatterns = [
     # 有参数：get=retrieve one,put=partial_update one,delete=delete one
     path('case/<int:pk>/', views.CaseViewSet.as_view({'get': 'retrieve', 'put': 'partial_update', 'delete': 'destroy'})),
 
-    # 关于CityPosition的请求
-    # 无参数：get=list all,post=create new
-    path('citypos/', views.CityPosViewSet.as_view({'get': 'list', 'post': 'create'})),
-    # 有参数：get=retrieve one,put=partial_update one,delete=delete one
-    path('citypos/<int:pk>/', views.CityPosViewSet.as_view({'get': 'retrieve', 'put': 'partial_update', 'delete': 'destroy'})),
+    # # 关于CityPosition的请求
+    # # 无参数：get=list all,post=create new
+    # path('citypos/', views.CityPosViewSet.as_view({'get': 'list', 'post': 'create'})),
+    # # 有参数：get=retrieve one,put=partial_update one,delete=delete one
+    # path('citypos/<int:pk>/', views.CityPosViewSet.as_view({'get': 'retrieve', 'put': 'partial_update', 'delete': 'destroy'})),
 
-    # 关于DailyForecastData的请求
-    # 无参数：get=list all,post=create new
-    path('dailyfore/', views.DailyForeViewSet.as_view({'get': 'list', 'post': 'create'})),
-    # 有参数：get=retrieve one,put=partial_update one,delete=delete one
-    path('dailyfore/<int:pk>/', views.DailyForeViewSet.as_view({'get': 'retrieve', 'put': 'partial_update', 'delete': 'destroy'})),
+    # # 关于DailyForecastData的请求
+    # # 无参数：get=list all,post=create new
+    # path('dailyfore/', views.DailyForeViewSet.as_view({'get': 'list', 'post': 'create'})),
+    # # 有参数：get=retrieve one,put=partial_update one,delete=delete one
+    # path('dailyfore/<int:pk>/', views.DailyForeViewSet.as_view({'get': 'retrieve', 'put': 'partial_update', 'delete': 'destroy'})),
 
-    # 关于InitCityData的请求
-    # 无参数：get=list all,post=create new
-    path('initcity/', views.InitCityViewSet.as_view({'get': 'list', 'post': 'create'})),
-    # 有参数：get=retrieve one,put=partial_update one,delete=delete one
-    path('initcity/<int:pk>/', views.InitCityViewSet.as_view({'get': 'retrieve', 'put': 'partial_update', 'delete': 'destroy'})),
+    # # 关于InitCityData的请求
+    # # 无参数：get=list all,post=create new
+    # path('initcity/', views.InitCityViewSet.as_view({'get': 'list', 'post': 'create'})),
+    # # 有参数：get=retrieve one,put=partial_update one,delete=delete one
+    # path('initcity/<int:pk>/', views.InitCityViewSet.as_view({'get': 'retrieve', 'put': 'partial_update', 'delete': 'destroy'})),
 
-    # 关于InitRoadData的请求
-    # 无参数：get=list all,post=create new
-    path('initroad/', views.InitRoadViewSet.as_view({'get': 'list', 'post': 'create'})),
-    # 有参数：get=retrieve one,put=partial_update one,delete=delete one
-    path('initroad/<int:pk>/', views.InitRoadViewSet.as_view({'get': 'retrieve', 'put': 'partial_update', 'delete': 'destroy'})),
+    # # 关于InitRoadData的请求
+    # # 无参数：get=list all,post=create new
+    # path('initroad/', views.InitRoadViewSet.as_view({'get': 'list', 'post': 'create'})),
+    # # 有参数：get=retrieve one,put=partial_update one,delete=delete one
+    # path('initroad/<int:pk>/', views.InitRoadViewSet.as_view({'get': 'retrieve', 'put': 'partial_update', 'delete': 'destroy'})),
 
-    # 关于LoginData的请求
-    # 无参数：get=list all,post=create new
-    path('LoginData/', views.LoginViewSet.as_view({'get': 'list', 'post': 'create'})),
-    # 有参数：get=retrieve one,put=partial_update one,delete=delete one
-    path('LoginData/<int:pk>/', views.LoginViewSet.as_view({'get': 'retrieve', 'put': 'partial_update', 'delete': 'destroy'})),
+    # # 关于LoginData的请求
+    # # 无参数：get=list all,post=create new
+    # path('LoginData/', views.LoginViewSet.as_view({'get': 'list', 'post': 'create'})),
+    # # 有参数：get=retrieve one,put=partial_update one,delete=delete one
+    # path('LoginData/<int:pk>/', views.LoginViewSet.as_view({'get': 'retrieve', 'put': 'partial_update', 'delete': 'destroy'})),
 
-    # 关于ModelData的请求
-    # 无参数：get=list all,post=create new
-    path('model/', views.ModelViewSet.as_view({'get': 'list', 'post': 'create'})),
-    # 有参数：get=retrieve one,put=partial_update one,delete=delete one
-    path('model/<int:pk>/', views.ModelViewSet.as_view({'get': 'retrieve', 'put': 'partial_update', 'delete': 'destroy'})),
+    # # 关于ModelData的请求
+    # # 无参数：get=list all,post=create new
+    # path('model/', views.ModelViewSet.as_view({'get': 'list', 'post': 'create'})),
+    # # 有参数：get=retrieve one,put=partial_update one,delete=delete one
+    # path('model/<int:pk>/', views.ModelViewSet.as_view({'get': 'retrieve', 'put': 'partial_update', 'delete': 'destroy'})),
 
     # 关于PersonalProfile的请求
     # 无参数：get=list all,post=create new
@@ -118,5 +118,4 @@ urlpatterns = [
     path('theme/', views.ThemeViewSet.as_view({'get': 'list', 'post': 'create'})),
     # 有参数：get=retrieve one,put=partial_update one,delete=delete one
     path('theme/<int:pk>/', views.ThemeViewSet.as_view({'get': 'retrieve', 'put': 'partial_update', 'delete': 'destroy'})),
-
 ]

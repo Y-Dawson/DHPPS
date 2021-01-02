@@ -25,6 +25,8 @@ from rest_framework.permissions import IsAuthenticated
 import datetime
 from dateutil.relativedelta import relativedelta
 import secrets
+from backend import permission
+from backend import authentication
 # Create your views here.
 
 logger = logging.getLogger("django")
@@ -118,7 +120,7 @@ def GetIdentity(request):
         else:
             return JsonResponse({
                 "message": "请求方法无效",
-                "status": 200})
+                "status": 404})
 
 
 # 登录函数视图
@@ -1125,7 +1127,7 @@ def GetUserCaseStat(request):
         # 该接口无提交数据
         # 获取统计信息
         try:
-            nowDate = timezone.now().date()
+            nowDate = timezone.now().date().replace(day=1)
             pastLimitDate = nowDate + relativedelta(months=-5)
 
             jsonList = []
@@ -1164,6 +1166,8 @@ def GetUserCaseStat(request):
 class AccountViewSet(viewsets.ModelViewSet):
     queryset = models.AccountInformation.objects.all()
     serializer_class = customSerializers.AccountInformationSerializer
+    authentication_classes = [authentication.MyAuthentication]
+    permission_classes = [permission.AdminPermission, permission.SuperAdminPermission]
 
 
 class CaseViewSet(viewsets.ModelViewSet):
@@ -1174,6 +1178,8 @@ class CaseViewSet(viewsets.ModelViewSet):
     filter_class = filters.CaseFilter
     ordering_fields = ('caseName', 'initTotal', 'initTotalInfected', 'cityNumber', 'roadNumber',)
     ordering = ('caseId',)
+    authentication_classes = [authentication.MyAuthentication]
+    permission_classes = [permission.UserPermission, permission.AdminPermission, permission.SuperAdminPermission]
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -1182,42 +1188,15 @@ class CaseViewSet(viewsets.ModelViewSet):
         return super(CaseViewSet, self).destroy(request, *args, **kwargs)
 
 
-class CityPosViewSet(viewsets.ModelViewSet):
-    queryset = models.CityPosition.objects.all()
-    serializer_class = customSerializers.CitypositionSerializer
-
-
-class DailyForeViewSet(viewsets.ModelViewSet):
-    queryset = models.DailyForecastData.objects.all()
-    serializer_class = customSerializers.DailyforecastdataSerializer
-
-
-class InitCityViewSet(viewsets.ModelViewSet):
-    queryset = models.InitCityData.objects.all()
-    serializer_class = customSerializers.InitcitydataSerializer
-
-
-class InitRoadViewSet(viewsets.ModelViewSet):
-    queryset = models.InitRoadData.objects.all()
-    serializer_class = customSerializers.InitroaddataSerializer
-
-
-class LoginViewSet(viewsets.ModelViewSet):
-    queryset = models.LoginData.objects.all()
-    serializer_class = customSerializers.LogindataSerializer
-
-
-class ModelViewSet(viewsets.ModelViewSet):
-    queryset = models.ModelData.objects.all()
-    serializer_class = customSerializers.ModeldataSerializer
-
-
 class PersonalProfileViewSet(viewsets.ModelViewSet):
     queryset = models.PersonalProfile.objects.all()
     serializer_class = customSerializers.PersonalProfileSerializer
+    authentication_classes = [authentication.MyAuthentication]
+    permission_classes = [permission.UserPermission, permission.AdminPermission, permission.SuperAdminPermission]
 
 
 class ThemeViewSet(viewsets.ModelViewSet):
-    authentication_classes = [SessionAuthentication]
+    authentication_classes = [authentication.MyAuthentication]
+    permission_classes = [permission.UserPermission, permission.AdminPermission, permission.SuperAdminPermission]
     queryset = models.Theme.objects.all()
     serializer_class = customSerializers.ThemeSerializer
