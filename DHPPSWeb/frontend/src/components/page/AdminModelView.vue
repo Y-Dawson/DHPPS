@@ -107,36 +107,61 @@
         <div class="container-fluid">
           
           <div class="row box animated bounceInRight" id="f" v-if="show" >
-            <div class="col-sm-2 col-lg-4">
+            <div class="col-sm-2 col-lg-12">
               <div
                 class="iq-card"
-                @click="fade1"
-                style="background-color:rgb(150, 188, 245)"
               >
                 <div class="iq-card-header d-flex justify-content-between">
                   <div class="iq-header-title">
                     <h4 class="card-title">Convlution</h4>
                   </div>
+                  <div class="chat-header-icons d-flex">
+                  <a
+                    class="chat-icon-phone iq-bg-primary"
+                    style="width: 80px; font-size: 14px; margin-top: 18px"
+                    @click="fade1"
+                  >
+                    查看详情
+                  </a>
+                </div>
                 </div>
                 <div class="iq-card-body">在泛函分析中，卷积、旋积或摺积(英语：Convolution)是通过两个函数f和g 生成第三个函数的一种数学算子，表征函数f与g经过翻转和平移的重叠部分函数值乘积对重叠长度的积分。</div>
               </div>
             </div>
-            <div class="col-sm-2 col-lg-4">
-              <div class="iq-card" @click="fade2" style="background-color: rgb(125, 201, 224)">
+            <div class="col-sm-2 col-lg-12">
+              <div class="iq-card">
                 <div class="iq-card-header d-flex justify-content-between">
                   <div class="iq-header-title">
                     <h4 class="card-title">ConvLSTM</h4>
                   </div>
+                  <div class="chat-header-icons d-flex">
+                  <a
+                    class="chat-icon-phone iq-bg-primary"
+                    style="width: 80px; font-size: 14px; margin-top: 18px"
+                    @click="fade2"
+                  >
+                    查看详情
+                  </a>
+                </div>
                 </div>
                 <div class="iq-card-body">LSTM在时序数据的处理上能力非常强，但是如果时序数据是图像，则在LSTM的基础上加上卷积操作，对于图像的特征提取会更加有效。</div>
               </div>
             </div>
-            <div class="col-sm-2 col-lg-4">
-              <div class="iq-card" @click="fade3" style="background-color: rgb(132, 223, 215)">
+            <div class="col-sm-2 col-lg-12">
+              <div class="iq-card" >
                 <div class="iq-card-header d-flex justify-content-between">
                   <div class="iq-header-title">
                     <h4 class="card-title">SEIR</h4>
                   </div>
+                  <div class="chat-header-icons d-flex">
+                  <a
+                    class="chat-icon-phone iq-bg-primary"
+                    style="width: 80px; font-size: 14px; margin-top: 18px"
+                    @click="fade3"
+                  >
+                    查看详情
+                  </a>
+                </div>
                 </div>
                 <div class="iq-card-body">SEIR(Susceptible-Exposed-Infected-Removed)，类似于SIR，但是增加了对潜伏期的定义，因此更适用于具有一定潜伏期的传染病。状态之间的转化如下所示：</div>
               </div>
@@ -153,7 +178,7 @@
                   <div class="chat-header-icons d-flex">
                   <a
                     class="chat-icon-phone iq-bg-primary"
-                    style="width: 100px; font-size: 14px; margin-top: 18px"
+                    style="width: 80px; font-size: 14px; margin-top: 18px"
                     @click="fade11"
                   >
                     <i class="ri-reply-fill"></i>
@@ -182,7 +207,7 @@
                   <div class="chat-header-icons d-flex">
                   <a
                     class="chat-icon-phone iq-bg-primary"
-                    style="width: 100px; font-size: 14px; margin-top: 18px"
+                    style="width: 80px; font-size: 14px; margin-top: 18px"
                     @click="fade21"
                   >
                     <i class="ri-reply-fill"></i>
@@ -211,7 +236,7 @@
                   <div class="chat-header-icons d-flex">
                   <a
                     class="chat-icon-phone iq-bg-primary"
-                    style="width: 100px; font-size: 14px; margin-top: 18px"
+                    style="width: 80px; font-size: 14px; margin-top: 18px"
                     @click="fade31"
                   >
                     <i class="ri-reply-fill"></i>
@@ -264,6 +289,7 @@ import animate from "../../css/animate.css";
 export default {
   data() {
     return {
+      value:new Date(),
       // 头像
       fits: ["fill"],
       AdminUrl: "",

@@ -208,7 +208,7 @@
         style="z-index: 1"
         v-if="show"
       >
-        <div class="chat-header-icons d-flex">
+        <div class="chat-header-icons d-flex" style="padding: 5px 15px">
           <a
             href="javascript:void();"
             class="chat-icon-phone iq-bg-primary"
@@ -219,14 +219,14 @@
             返回
           </a>
         </div>
-        <div style="padding: 15px；z-index: 2">
+        <div style="padding: 15px;z-index: 2">
           <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
             <div class="layui-tab-content">
               <div class="box" style="text-align: center">
                 <div
                   class="box-card-group"
                   style="
-                    margin-left: 60px;
+                    margin-left: 10%;
                     margin-top: 20px;
                     margin-bottom:10px;
                     width: auto;
@@ -467,7 +467,8 @@ export default {
             (self.currentPageData = response.data),
             (self.totalCasePage = Math.ceil(
               self.currentPageData.pagination / self.pageCaseSize
-            ))
+            )),
+            (self.SetPages())
           )
         )
         .catch(function (error) {
@@ -504,7 +505,7 @@ export default {
       this.GetCaseContent();
     },
     SetPages() {
-      if (this.totalCasePage < 1) totalCasePage = 1;
+      if (this.totalCasePage < 1) this.totalCasePage = 1;
     },
     handleDel(UI) {
       this.$confirm("确认删除该用户吗？", "系统提示", {

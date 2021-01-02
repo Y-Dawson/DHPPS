@@ -345,6 +345,7 @@
 export default {
   data() {
     return {
+      value:new Date(),
       // 头像
       fits: ["fill"],
       url:

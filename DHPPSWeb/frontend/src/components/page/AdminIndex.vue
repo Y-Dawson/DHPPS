@@ -209,6 +209,7 @@ export default {
       },
     };
     return {
+      value:new Date(),
       // 头像
       fits: ["fill"],
       AdminUrl: "",
@@ -369,6 +370,7 @@ export default {
     getUserCaseData: function () {
       var self = this;
       axios.get("/apis/backend/userCaseStat/").then((response) => {
+        // alert(JSON.stringify(response.data)),
         this.userCaseData = response.data.UserCaseStatInfos;
         //通过遍历DataShow分别给columns 中的维度和指标 赋值；
         for (var i = 0; i < this.userCaseData.length; i++) {
