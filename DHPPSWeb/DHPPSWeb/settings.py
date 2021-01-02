@@ -73,7 +73,7 @@ TEMPLATES = [
             ],
             'builtins':[
                 'django.templatetags.static'
-            ] 
+            ]
         },
     },
 ]
@@ -97,9 +97,6 @@ DATABASES = {
 
 # Settings Of REST_FRAMEWROK
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'backend.authentication.MyAuthentication',
-    ),
     'DEFAULT_PERMISSION_CLASSES': (
         'backend.permission.UserPermission',
         'backend.permission.AdminPermission',

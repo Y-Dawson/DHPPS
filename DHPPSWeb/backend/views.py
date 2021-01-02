@@ -1166,7 +1166,6 @@ def GetUserCaseStat(request):
 class AccountViewSet(viewsets.ModelViewSet):
     queryset = models.AccountInformation.objects.all()
     serializer_class = customSerializers.AccountInformationSerializer
-    authentication_classes = [authentication.MyAuthentication]
     permission_classes = [permission.AdminPermission, permission.SuperAdminPermission]
 
 
@@ -1178,7 +1177,6 @@ class CaseViewSet(viewsets.ModelViewSet):
     filter_class = filters.CaseFilter
     ordering_fields = ('caseName', 'initTotal', 'initTotalInfected', 'cityNumber', 'roadNumber',)
     ordering = ('caseId',)
-    authentication_classes = [authentication.MyAuthentication]
     permission_classes = [permission.UserPermission, permission.AdminPermission, permission.SuperAdminPermission]
 
     def destroy(self, request, *args, **kwargs):
@@ -1191,12 +1189,10 @@ class CaseViewSet(viewsets.ModelViewSet):
 class PersonalProfileViewSet(viewsets.ModelViewSet):
     queryset = models.PersonalProfile.objects.all()
     serializer_class = customSerializers.PersonalProfileSerializer
-    authentication_classes = [authentication.MyAuthentication]
     permission_classes = [permission.UserPermission, permission.AdminPermission, permission.SuperAdminPermission]
 
 
 class ThemeViewSet(viewsets.ModelViewSet):
-    authentication_classes = [authentication.MyAuthentication]
     permission_classes = [permission.UserPermission, permission.AdminPermission, permission.SuperAdminPermission]
     queryset = models.Theme.objects.all()
     serializer_class = customSerializers.ThemeSerializer
