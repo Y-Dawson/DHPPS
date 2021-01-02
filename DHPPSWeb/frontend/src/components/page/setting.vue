@@ -807,6 +807,7 @@ var echarts = require("echarts");
 import "../../../node_modules/echarts/lib/chart/map/china.js";
 
 var citycnt = 1;
+var nowcitycnt = 1;
 var linecnt = 1;
 var concnt = 0;
 var cn = 0;
@@ -950,10 +951,12 @@ export default {
     // this.userId = this.params.userId;
 
     citycnt = 1;
+    nowcitycnt = 1;
     linecnt = 1;
     if (this.params.caseName != 999) {
       console.log("从模拟界面返回");
       citycnt = this.params.citynum + 1;
+      nowcitycnt = citycnt;
       linecnt = 1;
       var cnt = 0;
       for (var j in this.params.CityPosition) {
@@ -984,6 +987,7 @@ export default {
         this.SetButton(nu);
 
         citycnt = nu + 1;
+        nowcitycnt = citycnt;
       }
 
       for (var j in this.params.InitRoadData) {
@@ -1116,6 +1120,15 @@ export default {
       this.sc = false;
       this.mc = false;
 
+      if (nowcitycnt == 1) {
+        this.$message({
+          type: "warning",
+          message: "您还未进行任何创建",
+        });
+        this.bs = false;
+        return;
+      }
+
       this.BeginToSimulation().then((response) => {});
     },
 
@@ -1128,6 +1141,15 @@ export default {
       this.dr = false;
       this.bs = false;
       this.mc = false;
+
+      if (nowcitycnt == 1) {
+        this.$message({
+          type: "warning",
+          message: "您还未进行任何创建",
+        });
+        this.sc = false;
+        return;
+      }
 
       this.SaveConfirm().then((response) => {});
     },
@@ -1451,7 +1473,7 @@ export default {
           var initpop = 0;
           var initinfect = 0;
           var loopcnt = 0;
-          var citycnt = 0;
+          var trcitycnt = 0;
           for (var cid in this.city_po) {
             loopcnt += 1;
             if (loopcnt == 1) {
@@ -1460,14 +1482,15 @@ export default {
             }
             if (loopcnt == 2) {
               initinfect = this.city_po[cid].substring(7);
-              citycnt += 1;
+              trcitycnt += 1;
               var s =
                 "cityname:" + cn + ",initpop:" + initpop + ",initinfect:" + initinfect;
               city_infor.push(s);
               loopcnt = 0;
             }
           }
-          myFormData.append("citynum", citycnt);
+
+          myFormData.append("citynum", trcitycnt);
 
           var roadcnt = 0;
           var road_inf = [];
@@ -1489,7 +1512,13 @@ export default {
           myFormData.append("caseMode", "自定模式");
 
           myFormData.append("InitCityData", city_infor);
-          myFormData.append("InitRoadData", road_inf);
+
+          if (roadcnt == 0) {
+            myFormData.append("InitRoadData", "NULL");
+          }
+          else{
+            myFormData.append("InitRoadData", road_inf);
+          }
 
           var city_position = [];
           loopcnt = 0;
@@ -1527,7 +1556,7 @@ export default {
                   params: JSON.stringify({
                     userId: this.userId,
                     caseName: 99,
-                    citynum: citycnt,
+                    citynum: trcitycnt,
                     roadnum: roadcnt,
                     InitCityData: city_infor,
                     InitRoadData: road_inf,
@@ -1573,7 +1602,7 @@ export default {
           var initpop = 0;
           var initinfect = 0;
           var loopcnt = 0;
-          var citycnt = 0;
+          var trcitycnt = 0;
           for (var cid in this.city_po) {
             loopcnt += 1;
             if (loopcnt == 1) {
@@ -1582,14 +1611,14 @@ export default {
             }
             if (loopcnt == 2) {
               initinfect = this.city_po[cid].substring(7);
-              citycnt += 1;
+              trcitycnt += 1;
               var s =
                 "cityname:" + cn + ",initpop:" + initpop + ",initinfect:" + initinfect;
               city_infor.push(s);
               loopcnt = 0;
             }
           }
-          myFormData.append("citynum", citycnt);
+          myFormData.append("citynum", trcitycnt);
 
           var roadcnt = 0;
           var road_inf = [];
@@ -1611,7 +1640,13 @@ export default {
           myFormData.append("caseMode", "自定模式");
 
           myFormData.append("InitCityData", city_infor);
-          myFormData.append("InitRoadData", road_inf);
+
+          if (roadcnt == 0) {
+            myFormData.append("InitRoadData", "NULL");
+          }
+          else{
+            myFormData.append("InitRoadData", road_inf);
+          }
 
           var city_position = [];
           loopcnt = 0;
@@ -2033,6 +2068,8 @@ export default {
             type: "success",
             message: "删除成功!",
           });
+
+          nowcitycnt--;
         })
         .catch(() => {
           this.dp = false;
@@ -2154,6 +2191,7 @@ export default {
       this.DrawRoadMap();
 
       citycnt++;
+      nowcitycnt++;
       // console.log(typeof(this.city_po));
     },
 
@@ -2604,6 +2642,11 @@ canvas {
   float: left;
 }
 
+.img-list {
+  position: absolute;
+  z-index: 1;
+}
+
 .img-list .city {
   display: block;
   position: absolute;
@@ -2653,12 +2696,18 @@ canvas {
   margin-left: 95px;
 }
 
+.line_list {
+  position: absolute;
+  z-index: 1;
+}
+
 .line_list .road_line {
   display: block;
   position: absolute;
   height: 5px;
-  background-color: #000;
+  background-color: pink;
   /* margin-left: 5000px;
   margin-top: 5000px; */
+  z-index: 2;
 }
 </style>

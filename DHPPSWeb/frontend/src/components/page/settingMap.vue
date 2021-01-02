@@ -277,7 +277,10 @@ export default {
     console.log("道路信息：", this.params.InitRoadData);
 
     if (this.params.caseName != 999) {
-      console.log("从地图模拟页面返回"); 
+      console.log("从地图模拟页面返回");
+
+      citycnt = this.params.citynum;
+      roadcnt = this.params.roadnum;
 
       var cn, totp, initinf;
       for (var i in this.params.InitCityData) {
@@ -302,6 +305,9 @@ export default {
         var s = cn1 + "-" + cn2 + ":" + vo;
         this.road_di.push(s);
       }
+    } else {
+      citycnt = 0;
+      roadcnt = 0;
     }
 
     this.drawMap();
@@ -602,6 +608,8 @@ export default {
         }
       }
 
+      citycnt += 1;
+
       this.isShow3 = false;
     },
 
@@ -647,7 +655,7 @@ export default {
 
       var value = parseInt(this.ruleForm.volumn);
       if (value < 1 || value > 100) {
-        this.$alert("人流量应在5~100内", "连接失败", {
+        this.$alert("人流量应在1~100内", "连接失败", {
           confirmButtonText: "确定",
           callback: (action) => {
             this.$message({
@@ -698,10 +706,20 @@ export default {
         }
       }
 
+      roadcnt -= 1;
+
       this.isShow4 = false;
     },
 
     save_case() {
+      if (citycnt == 0) {
+        this.$message({
+          type: "warning",
+          message: "您还未进行任何创建",
+        });
+        return;
+      }
+
       this.$prompt("请输入此案例名称", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -754,7 +772,12 @@ export default {
           myFormData.append("caseMode", "地图模式");
 
           myFormData.append("InitCityData", city_infor);
-          myFormData.append("InitRoadData", road_inf);
+
+          if (roadcnt == 0) {
+            myFormData.append("InitRoadData", "NULL");
+          } else {
+            myFormData.append("InitRoadData", road_inf);
+          }
 
           myFormData.append("CityPosition", "Empty");
 
@@ -808,6 +831,16 @@ export default {
       }
       myFormData.append("citynum", citycnt);
 
+      console.log("citycnt", citycnt);
+
+      if (citycnt == 0) {
+        this.$message({
+          type: "warning",
+          message: "您还未进行任何创建",
+        });
+        return;
+      }
+
       var roadcnt = 0;
       var road_inf = [];
       var cn1, cn2, volume;
@@ -826,7 +859,12 @@ export default {
       myFormData.append("caseMode", "地图模式");
 
       myFormData.append("InitCityData", city_infor);
-      myFormData.append("InitRoadData", road_inf);
+
+      if (roadcnt == 0) {
+        myFormData.append("InitRoadData", "NULL");
+      } else {
+        myFormData.append("InitRoadData", road_inf);
+      }
 
       myFormData.append("CityPosition", "Empty");
 
