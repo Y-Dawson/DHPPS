@@ -20,21 +20,26 @@ import logging
 import json
 from django.db.models.signals import pre_delete
 from django.forms.models import model_to_dict
-from rest_framework.permissions import IsAuthenticated
 import datetime
 from dateutil.relativedelta import relativedelta
 import secrets
-from backend import permission
-from rest_framework.permissions import IsAuthenticated
+from django.utils.decorators import method_decorator
 # Create your views here.
 
 logger = logging.getLogger("django")
 
-'''
-@receiver(pre_delete, sender=models.Personalprofile)
-def handle_camera_deleted(instance: models.Personalprofile, **_):
-    instance.file.delete(save=False)
-'''
+
+# 登录验证函数，通过method_decorator作为装饰器装饰给各个视图
+def LoginAuthenticate(function):
+    def authenticate(request, *args, **kwargs):
+        if request.COOKIES.get('sessionid', None):
+            if request.session.get("isLogin", None):
+                return function(request, *args, **kwargs)
+            else:
+                return JsonResponse({"message": "您尚未登录，请先登录", "status": 404})
+        else:
+            return JsonResponse({"message": "无登录信息，请先登录", "status": 404})
+    return authenticate
 
 
 # 返回渲染主页，其后由前端负责跳转逻辑
@@ -78,24 +83,6 @@ class DateEnconding(json.JSONEncoder):
     def default(self, o):
         if isinstance(o, datetime.date):
             return o.strftime('%Y/%m/%d')
-
-
-# 登录检测装饰器
-def LoginRequired(view_func):
-    # 登录判断装饰器
-    def wrapper(request, *view_args, **view_kwargs):
-        if request.COOKIES.get("userId", None):
-            userId = request.COOKIES.get("userId", None)
-            print('get cookie [{}]'.format(userId))
-        # 判断用户是否登录,session验证
-        if request.session.get("isLogin", None):
-            userId = request.session.get("userId", None)
-            print('get session userId is [{}]'.format(userId))
-            return view_func(request, *view_args, **view_kwargs)
-        else:
-            # 用户未登录,返回信息
-            return JsonResponse({"message": "还未登录", "status": 404})
-    return wrapper
 
 
 # 身份信息获取函数
@@ -818,63 +805,6 @@ def StartSimulate(request):
     return JsonResponse({"message": "该接口不支持此方法", "status": 404})
 
 
-# 图形验证码生成类
-class ImageCodeView(View):
-    # 该函数为view中函数重写，函数名不可更改
-    def get(self, request):
-        # 1.接受uuid
-        uuid = request.GET.get('uuid')
-        # 2.验证uuid
-        if not uuid:
-            return HttpResponseForbidden('uuid无效')
-        # 3.生成图片的文本、数据
-        code, image = captcha.generate_captcha()
-        try:
-            # 4.连接到redis
-            redisClient = get_redis_connection('verifyCode')
-            # 5.生成redis管道
-            pipeline = redisClient.pipeline()
-            # 6.保存图片文本，用于后续与用户输入值对比，设置过期时间
-            pipeline.setex(uuid, 180, code)
-            # 7.传递指令
-            pipeline.execute()
-        except Exception:
-            pass
-        # 8.后台显示验证码信息
-        logger.info('verifyText:{}'.format(code))
-        # 9.响应：输出图片数据
-        return JsonResponse(image, content_type='image/png')
-
-    # 该函数为view中函数重写，函数名不可更改
-    def post(self, request):
-        # 1.接受uuid
-        uuid = request.POST.get('uuid')
-        inputCode = request.POST.get('code')
-        # 2.验证uuid
-        if not uuid:
-            return HttpResponseForbidden('uuid无效')
-        message = "表单值不合法"
-        status = 404
-        try:
-            # 3.连接到redis
-            redisClient = get_redis_connection('verifyCode')
-            # 4.生成redis管道
-            pipeline = redisClient.pipeline()
-            # 5.获得验证码
-            code = pipeline.setex.get('uuid')
-            # 6.比较验证码
-            message
-            if inputCode == code:
-                message = "验证码正确"
-                status = 200
-            else:
-                message = "验证码错误"
-                status = 404
-        except Exception:
-            message = "没有获取到验证码"
-        return JsonResponse({"message": message, "status": status})
-
-
 # 返回所有案例信息
 # 根据caseId发送对应案例的所有相关信息，包括城市，城市位置，道路信息
 # 发送成功，返回消息和200状态码
@@ -950,7 +880,10 @@ def GetUserInfos(request):
     if request.method == "GET":
         pageSize = request.GET.get("pageSize")
         page = request.GET.get("page")
-        accountInfos = models.AccountInformation.objects.select_related("personalprofile").all().exclude(authority="超级管理员").order_by('userId')
+        accountInfos = models.AccountInformation.objects\
+            .select_related("personalprofile").all()\
+            .exclude(authority="超级管理员")\
+            .order_by('userId')
         accountPaginator = paginator.Paginator(accountInfos, pageSize)
         if page == "":
             page = 1
@@ -988,7 +921,10 @@ def GetGeneralUserInfos(request):
     elif request.method == "GET":
         pageSize = request.GET.get("pageSize")
         page = request.GET.get("page")
-        generalUserInfos = models.AccountInformation.objects.select_related("personalprofile").filter(authority="普通用户").order_by('userId')
+        generalUserInfos = models.AccountInformation.objects\
+            .select_related("personalprofile")\
+            .filter(authority="普通用户")\
+            .order_by('userId')
         accountPaginator = paginator.Paginator(generalUserInfos, pageSize)
         if page == "":
             page = 1
@@ -1024,7 +960,10 @@ def GetAdminInfos(request):
     elif request.method == "GET":
         pageSize = request.GET.get("pageSize")
         page = request.GET.get("page")
-        adminUserInfos = models.AccountInformation.objects.select_related("personalprofile").filter(authority="管理员").order_by('userId')
+        adminUserInfos = models.AccountInformation.objects\
+            .select_related("personalprofile")\
+            .filter(authority="管理员")\
+            .order_by('userId')
         accountPaginator = paginator.Paginator(adminUserInfos, pageSize)
         if page == "":
             page = 1
@@ -1162,12 +1101,13 @@ def GetUserCaseStat(request):
 
 
 # 以下类均为继承ModelViewSet类的视图集类，其中成员变量均为继承而来
+@method_decorator(LoginAuthenticate, name='dispatch')
 class AccountViewSet(viewsets.ModelViewSet):
     queryset = models.AccountInformation.objects.all()
     serializer_class = customSerializers.AccountInformationSerializer
-    permission_classes = [IsAuthenticated, permission.AdminPermission, permission.SuperAdminPermission]
 
 
+@method_decorator(LoginAuthenticate, name='dispatch')
 class CaseViewSet(viewsets.ModelViewSet):
     queryset = models.CaseData.objects.all()
     serializer_class = customSerializers.CaseDataSerializer
@@ -1176,7 +1116,6 @@ class CaseViewSet(viewsets.ModelViewSet):
     filter_class = filters.CaseFilter
     ordering_fields = ('caseName', 'initTotal', 'initTotalInfected', 'cityNumber', 'roadNumber',)
     ordering = ('caseId',)
-    permission_classes = [IsAuthenticated, permission.UserPermission, permission.AdminPermission, permission.SuperAdminPermission]
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -1185,13 +1124,13 @@ class CaseViewSet(viewsets.ModelViewSet):
         return super(CaseViewSet, self).destroy(request, *args, **kwargs)
 
 
+@method_decorator(LoginAuthenticate, name='dispatch')
 class PersonalProfileViewSet(viewsets.ModelViewSet):
     queryset = models.PersonalProfile.objects.all()
     serializer_class = customSerializers.PersonalProfileSerializer
-    permission_classes = [IsAuthenticated, permission.UserPermission, permission.AdminPermission, permission.SuperAdminPermission]
 
 
+@method_decorator(LoginAuthenticate, name='dispatch')
 class ThemeViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated, permission.UserPermission, permission.AdminPermission, permission.SuperAdminPermission]
     queryset = models.Theme.objects.all()
     serializer_class = customSerializers.ThemeSerializer

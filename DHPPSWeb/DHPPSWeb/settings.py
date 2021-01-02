@@ -91,17 +91,13 @@ DATABASES = {
         'HOST': '127.0.0.1',  # 数据库地址，本机 ip 地址 127.0.0.1
         'PORT': 3306,  # 端口
         'USER': 'root',  # 数据库用户
-        'PASSWORD': 'root',  # 数据库密码
+        'PASSWORD': 'z3876390',  # 数据库密码
     }
 }
 
 # Settings Of REST_FRAMEWROK
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': (
-        'backend.permission.UserPermission',
-        'backend.permission.AdminPermission',
-        'backend.permission.SuperAdminPermission',
-    )
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.AutoSchema',
 }
 
 

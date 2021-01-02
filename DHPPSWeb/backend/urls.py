@@ -1,6 +1,5 @@
 from django.urls import path
 from rest_framework.routers import DefaultRouter
-
 from backend import views
 
 
@@ -41,9 +40,6 @@ urlpatterns = [
 
     # 开始模拟请求
     path('startSimulate/', views.StartSimulate, name="startSimulate"),
-
-    # 图形验证码请求
-    path('imageCode/', views.ImageCodeView.as_view()),
 
     # 请求对应caseId的案例信息
     path('getCaseInfo/', views.GetCaseInfos, name="getCaseInfo"),
@@ -118,4 +114,6 @@ urlpatterns = [
     path('theme/', views.ThemeViewSet.as_view({'get': 'list', 'post': 'create'})),
     # 有参数：get=retrieve one,put=partial_update one,delete=delete one
     path('theme/<int:pk>/', views.ThemeViewSet.as_view({'get': 'retrieve', 'put': 'partial_update', 'delete': 'destroy'})),
+    # # 接口文档
+    # path('docs/', include_docs_urls(title='DHPPS-Backend-doc'))
 ]
