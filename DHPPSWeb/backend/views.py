@@ -20,13 +20,11 @@ import logging
 import json
 from django.db.models.signals import pre_delete
 from django.forms.models import model_to_dict
-from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 import datetime
 from dateutil.relativedelta import relativedelta
 import secrets
 from backend import permission
-from backend import authentication
 # Create your views here.
 
 logger = logging.getLogger("django")
