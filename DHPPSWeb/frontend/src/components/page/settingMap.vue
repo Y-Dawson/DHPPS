@@ -553,13 +553,43 @@ export default {
             callback: (action) => {
               this.$message({
                 type: "info",
-                message: `action: ${action}`,
+                message: "请重新创建",
               });
             },
           });
           this.isShow1 = false;
           return;
         }
+      }
+
+      var ipp = parseInt(this.ruleForm.to_pop);
+      if (ipp < 100 || ipp > 1000000) {
+        this.$alert("城市人口应在100~1000000内", "创建失败", {
+          confirmButtonText: "确定",
+          callback: (action) => {
+            this.$message({
+              type: "info",
+              message: "请重新创建",
+            });
+          },
+        });
+        this.isShow1 = false;
+        return;
+      }
+
+      var ibi = parseInt(this.ruleForm.begin_inf);
+      if (ibi < 1 || ibi > parseInt(ipp * 0.3)) {
+        this.$alert("初始感染人数应至少为1人且不可多于总人口的30%", "创建失败", {
+          confirmButtonText: "确定",
+          callback: (action) => {
+            this.$message({
+              type: "info",
+              message: "请重新创建",
+            });
+          },
+        });
+        this.isShow1 = false;
+        return;
       }
 
       var s =
@@ -884,7 +914,6 @@ export default {
             path: "/simulationMap",
             query: {
               params: JSON.stringify({
-                userId: this.userId,
                 caseName: 99,
                 citynum: citycnt,
                 roadnum: roadcnt,
