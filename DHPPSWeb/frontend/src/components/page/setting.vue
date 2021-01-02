@@ -66,6 +66,7 @@
       ref="cityFormRef"
       :model="cityForm"
       :rules="cityFormRule"
+      style="position: relative"
       @submit.native.prevent
     >
       <ul class="tools-wrapper">
@@ -2124,8 +2125,8 @@ export default {
 
       var cz = "初始感染人数:" + this.cityForm.beginInfected;
       var ibi = parseInt(this.cityForm.beginInfected);
-      if (ibi < 0 || ibi > 100) {
-        this.$alert("初始感染人数应在0~100内", "创建失败", {
+      if (ibi < 1 || ibi > 100) {
+        this.$alert("初始感染人数应在1~100内", "创建失败", {
           confirmButtonText: "确定",
           callback: (action) => {
             this.$message({
@@ -2624,6 +2625,7 @@ canvas {
 .img-list .city img {
   height: 75px;
   width: 75px;
+  z-index: 999;
 }
 
 .img-list .city:hover .city-infor {
