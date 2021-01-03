@@ -282,6 +282,7 @@ export default {
       citycnt = this.params.citynum;
       roadcnt = this.params.roadnum;
 
+      var nowcnt = 0;
       var cn, totp, initinf;
       for (var i in this.params.InitCityData) {
         var te = this.params.InitCityData[i].split(":");
@@ -292,6 +293,12 @@ export default {
         initinf = te[3];
         var s = cn + ":总人口:" + totp + ",初始感染数:" + initinf;
         this.city_po.push(s);
+
+        var newa=new Array();
+        newa["id"]=nowcnt;
+        newa["name"]=cn;
+        this.used_city1.push(newa);
+        this.used_city2.push(newa);
       }
 
       var cn1, cn2, vo;
@@ -753,8 +760,8 @@ export default {
       this.$prompt("请输入此案例名称", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        inputPattern: /^[\u4e00-\u9fa5_a-zA-Z0-9]+$/,
-        inputErrorMessage: "案例名称格式不正确",
+        inputPattern: /^[\u4e00-\u9fa5_a-zA-Z0-9]{1,3}$/,
+        inputErrorMessage: "案例名称可为汉字、英文字母和数字，长度为1到3个字符",
       })
         .then(({ value }) => {
           var myFormData = new FormData();
@@ -819,7 +826,10 @@ export default {
             .post("/apis/backend/saveCase/", myFormData)
             .then((response) => {
               // alert(JSON.stringify(response));
-              alert("保存案例");
+              this.$message({
+                type: "success",
+                message: "保存成功",
+              });
             })
             .catch(function (error) {
               // alert(JSON.stringify(response));

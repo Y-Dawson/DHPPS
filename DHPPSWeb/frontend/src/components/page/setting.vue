@@ -1186,9 +1186,24 @@ export default {
       this.dr = false;
       this.bs = false;
       this.sc = false;
-      this.$router.push({
-        path: "/UserCase",
-      });
+
+      this.$confirm("请确保您已保存案例，此操作将会丢失您在此页面上的所有编辑内容, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          this.$router.push({
+            path: "/UserCase",
+          });
+        })
+        .catch(() => {
+          this.mc = false;
+          this.$message({
+            type: "info",
+            message: "已取消跳转",
+          });
+        });
     },
 
     GetUserIdentity() {
@@ -1607,8 +1622,8 @@ export default {
       this.$prompt("请输入此案例名称", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        inputPattern: /^[\u4e00-\u9fa5_a-zA-Z0-9]+$/,
-        inputErrorMessage: "案例名称格式不正确",
+        inputPattern: /^[\u4e00-\u9fa5_a-zA-Z0-9]{1,3}$/,
+        inputErrorMessage: "案例名称可为汉字、英文字母和数字，长度为1到3个字符",
       })
         .then(({ value }) => {
           this.sc = false;
@@ -1696,7 +1711,10 @@ export default {
             .post("/apis/backend/saveCase/", myFormData)
             .then((response) => {
               // alert(JSON.stringify(response));
-              // alert("保存案例");
+              this.$message({
+                type: "success",
+                message: "保存成功",
+              });
             })
             .catch(function (error) {
               // alert(JSON.stringify(response));

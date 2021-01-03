@@ -83,7 +83,7 @@
                 <div
                   class="box-card-group"
                   style="
-                    margin-left: 60px;
+                    margin-left: 40px;
                     margin-top: 20px;
                     margin-bottom:10px;
                     width: auto;
@@ -91,7 +91,7 @@
                     text-align: left;
                   ">
                   <el-col
-                    :span="7"
+                    :span="8"
                     v-for="(item, index) in currentPageData.data"
                     :key="index"
                   >
@@ -100,7 +100,7 @@
                         <i v-if="item.caseMode === '自定模式'"
                           class="el-icon el-icon-location-outline"
                           style="
-                            margin-right: 10px;
+                            margin-right: 2px;
                             font-size: 38px;
                             color: rgb(173, 173, 173);
                           "
@@ -108,12 +108,12 @@
                         <i v-else-if="item.caseMode === '地图模式'"
                           class="el-icon el-icon-map-location"
                           style="
-                            margin-right: 10px;
+                            margin-right: 2px;
                             font-size: 38px;
                             color: rgb(173, 173, 173);
                           "
                         ></i>
-                        <span id="returnContent">{{ item.caseName }}</span>
+                        <span id="returnContent" style="font-size:16px;">{{ item.caseName }}</span>
                         <div
                           style="
                             font-size: 18px;
@@ -241,6 +241,10 @@ export default {
           alert("获取用户身份失败");
         });
     },
+    GetFirstPage(){
+      this.currentCasePage=1
+      this.GetCaseContent()
+    },
     //上一页
     GetPrevCasePage() {
       if (this.currentCasePage == 1) return;
@@ -304,7 +308,8 @@ export default {
         )
         .catch(function (error) {
           // 请求失败处理
-          alert('数据请求失败了')
+          // alert('数据请求失败了')
+          this.GetCaseContent()
         });
     },
     // 案例编辑
@@ -415,7 +420,8 @@ export default {
           this.$message({
               type: "success",
               message: "删除成功!",
-          })
+          }),
+          this.GetFirstPage()
           // this.DelayReload()
         ))
         .catch(function (error) {
@@ -467,9 +473,10 @@ export default {
 /* 案例块样式 */
 .box-card {
   border-radius: 14px;
-  width: 250px;
+  width: 280px;
   /* float: left; */
   margin-right: 40px;
+  margin-left: 10px;
   margin-bottom: 20px;
 }
 .reset {
