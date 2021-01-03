@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'backend',
-    'captcha',
     'django_filters',
 ]
 
@@ -91,9 +90,11 @@ DATABASES = {
         'HOST': '127.0.0.1',  # 数据库地址，本机 ip 地址 127.0.0.1
         'PORT': 3306,  # 端口
         'USER': 'root',  # 数据库用户
-        'PASSWORD': '1125wcjlg',  # 数据库密码
+        'PASSWORD': 'z3876390',  # 数据库密码
     }
 }
+# Set the path of initial data files
+FIXTURE_DIRS = (os.path.join(BASE_DIR, 'fixtures', ), )
 
 # Settings Of REST_FRAMEWROK
 REST_FRAMEWORK = {
@@ -119,12 +120,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
-# CAPTCHA Settings
-CAPTCHA_IMAGE_SIZE = (80, 45)   # 设置 captcha 图片大小
-CAPTCHA_LENGTH = 4   # 字符个数
-CAPTCHA_TIMEOUT = 3   # 超时(minutes)
-CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.random_char_challenge'
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/

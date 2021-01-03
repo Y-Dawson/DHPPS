@@ -12,23 +12,29 @@ from _datetime import date
 from django.utils import timezone
 
 
-class Theme(models.Model):
-    themeNo = models.AutoField(db_column='themeNo', primary_key=True)  # Field name made lowercase.
-    themeName = models.CharField(db_column='themeName', max_length=50)  # Field name made lowercase.
-    themeColour = models.CharField(db_column='themeColour', max_length=7)
+class CaseMode(models.Model):
+    modeNo = models.AutoField(db_column='authorityNo', primary_key=True)  # Field name made lowercase.
+    modeValue = models.CharField(db_column='authorityValue', max_length=8)  # Field name made lowercase.
 
     class Meta:
         # managed = False
-        db_table = 'theme'
+        db_table = 'CaseMode'
+
+class Authority(models.Model):
+    authorityNo = models.AutoField(db_column='authorityNo', primary_key=True)  # Field name made lowercase.
+    authorityValue = models.CharField(db_column='authorityValue', max_length=10)  # Field name made lowercase.
+
+    class Meta:
+        # managed = False
+        db_table = 'Authority'
 
 
 class AccountInformation(models.Model):
     userId = models.AutoField(db_column='userId', primary_key=True)  # Field name made lowercase.
-    themeNo = models.ForeignKey(Theme, models.DO_NOTHING, db_column='themeNo')  # Field name made lowercase.
     createDate = models.DateField(db_column='createDate', default=timezone.now)  # Field name made lowercase.
     remark = models.CharField(max_length=200, default='无备注')
     caseNumber = models.IntegerField(db_column='caseNumber', default=0)  # Field name made lowercase.
-    authority = models.CharField(max_length=50, default='普通用户')
+    authority = models.ForeignKey(Authority, models.CASCADE, db_column='authority', default='1')
 
     class Meta:
         # managed = False
@@ -39,7 +45,8 @@ class CaseData(models.Model):
     caseId = models.AutoField(db_column='caseId', primary_key=True)  # Field name made lowercase.
     userId = models.ForeignKey(AccountInformation, models.CASCADE, db_column='userId')  # Field name made lowercase.
     caseName = models.CharField(db_column='caseName', max_length=50, default='未命名')  # Field name made lowercase.
-    caseMode = models.CharField(db_column='caseMode', max_length=10)
+
+    caseMode = models.ForeignKey(CaseMode, models.CASCADE, db_column='caseMode')
     caseCreateDate = models.DateField(db_column='caseCreateDate', default=timezone.now)  # Field name made lowercase.
     cityNumber = models.IntegerField(db_column='cityNumber')  # Field name made lowercase.
     roadNumber = models.IntegerField(db_column='roadNumber')  # Field name made lowercase.
@@ -104,16 +111,6 @@ class LoginData(models.Model):
     class Meta:
         # managed = False
         db_table = 'LoginData'
-
-
-class ModelData(models.Model):
-    layerId = models.AutoField(db_column='layerId', primary_key=True)  # Field name made lowercase.
-    layerName = models.CharField(db_column='layerName', max_length=20)  # Field name made lowercase.
-    layerParm = models.CharField(db_column='layerParm', max_length=20)  # Field name made lowercase.
-
-    class Meta:
-        # managed = False
-        db_table = 'ModelData'
 
 
 def UserDirectoryPath(instance, filename):
