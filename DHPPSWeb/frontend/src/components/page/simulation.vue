@@ -162,9 +162,9 @@
             <img
               src="../../assets/layui/images/city.gif"
               alt=""
-              @click="outp('ci' + o)"
+              @click="outp('cityinf' + o)"
             />
-            <div class="city-infor">
+            <div class="city-infor" :id="'cityinf' + o">
               <div v-for="j in row_cnt[o]" :key="j">
                 <span v-for="k in people_cnt[o][j]" :key="k" class="text item">
                   <i
@@ -663,6 +663,11 @@ export default {
       cityentity.style.left = x + "px";
       cityentity.style.top = y + "px";
 
+      this.changePosition(ci);
+
+      console.log("x", x);
+      console.log("y", y);
+
       console.log("cityID", cid);
     }
 
@@ -735,7 +740,6 @@ export default {
           path: "/setting",
           query: {
             params: JSON.stringify({
-              userId: this.userId,
               caseName: this.casename,
               citynum: this.citycnt,
               roadnum: this.linecnt,
@@ -816,8 +820,8 @@ export default {
       }
 
       var ll = document.getElementById("line" + linecnt);
-      ll.style.left = (ttcx1 + ttcx2) / 2 - parseInt(dis) / 2 + 20 + "px";
-      ll.style.top = (ttcy1 + ttcy2) / 2 + 50 + "px";
+      ll.style.left = (ttcx1 + ttcx2) / 2 - parseInt(dis) / 2 + 30 + "px";
+      ll.style.top = (ttcy1 + ttcy2) / 2 + 100 + "px";
       ll.style.transition = "width 2s";
       ll.style.width = parseInt(dis) + "px";
       ll.style.transform = "rotate(" + rotang + "deg)";
@@ -922,18 +926,18 @@ export default {
         // console.log("row", this.row_cnt[i]);
         nowcnt += 1;
         ccnt = this.GetNum(this.cityname[i]);
-        console.log("ccnt", ccnt);
-        console.log("nowcnt", nowcnt);
-        console.log("typeofnowcnt", typeof nowcnt);
-        console.log("row_cnt", this.row_cnt);
-        console.log("row_cnt[nowcnt]", this.row_cnt[ccnt]);
+        // console.log("ccnt", ccnt);
+        // console.log("nowcnt", nowcnt);
+        // console.log("typeofnowcnt", typeof nowcnt);
+        // console.log("row_cnt", this.row_cnt);
+        // console.log("row_cnt[nowcnt]", this.row_cnt[ccnt]);
         for (var j = 1; j <= this.row_cnt[ccnt]; j++) {
           if (j < this.row_cnt[ccnt]) {
             for (var k = 1; k <= 8; k++) {
               var iid = "i" + ccnt + j + k;
-              console.log("iid", iid);
+              // console.log("iid", iid);
               var iidentity = document.getElementById(iid);
-              console.log("iidentity", iidentity);
+              // console.log("iidentity", iidentity);
               iidentity.style.color = "green";
               // console.log("iid", iid);
             }
@@ -990,7 +994,7 @@ export default {
             for (var k = 1; k <= 8; k++) {
               var iid = "i" + ccnt + j + k;
               var iidentity = document.getElementById(iid);
-              console.log("iidentity", iidentity);
+              // console.log("iidentity", iidentity);
               iidentity.style.color = "red";
             }
             inf_cnt -= 8;
@@ -998,7 +1002,7 @@ export default {
             for (var k = 1; k <= inf_cnt; k++) {
               var iid = "i" + ccnt + j + k;
               var iidentity = document.getElementById(iid);
-              console.log("iidentity", iidentity);
+              // console.log("iidentity", iidentity);
               iidentity.style.color = "red";
             }
             break;
@@ -1007,8 +1011,39 @@ export default {
       }
     },
 
-    outp(data) {
-      alert(data);
+    outp(e) {
+      var cinf = document.getElementById(e);
+      console.log("cinf", cinf);
+      if (cinf.style.display != "none") {
+        cinf.style.display = "none";
+      } else {
+        cinf.style.display = "block";
+      }
+      console.log("dis", cinf.style.display);
+    },
+
+    changePosition(e) {
+      console.log("改变位置");
+
+      var cnum = this.GetNum(e);
+      var cinf = "cityinf" + cnum;
+      var cid = this.GetID(e);
+      var ci = document.getElementById(cinf);
+      var c = document.getElementById(cid);
+
+      console.log("cid", cid);
+
+      ci.style.marginTop = -240 + "px";
+      ci.style.marginLeft = 75 + "px";
+
+      var ct = c.style.top;
+      console.log("ct", ct);
+      var tct = parseInt(ct.substring(0, ct.length - 2));
+      console.log("tct", tct);
+      if (tct < 150) {
+        console.log("你的top不对劲");
+        ci.style.marginTop = -90 - tct + "px";
+      }
     },
 
     prepareDraw(nowday) {
@@ -1246,7 +1281,7 @@ export default {
             bottom: "5%",
             dimension: 2,
             min: 0,
-            max: 1000,
+            max: 100,
             itemHeight: 120,
 
             precision: 0.1,
@@ -1626,6 +1661,11 @@ canvas {
   float: left;
 }
 
+.img-list {
+  position: absolute;
+  z-index: 6;
+}
+
 .img-list .city {
   display: block;
   position: absolute;
@@ -1634,18 +1674,20 @@ canvas {
 }
 
 .img-list .city .city-infor {
+  position: absolute;
+  display: block;
   height: 185px;
   width: 190px;
-  margin-top: -220px;
-  margin-left: 60px;
+  margin-top: -240px;
+  margin-left: 75px;
   border: 1px solid rgb(187, 187, 187);
   background-color: #ffffff;
   z-index: 9999;
 }
 
 .img-list .city img {
-  height: 75px;
-  width: 75px;
+  height: 100px;
+  width: 100px;
 }
 
 .line_list .road_line {
@@ -1663,7 +1705,7 @@ canvas {
   position: absolute;
   width: 800px;
   margin-left: 325px;
-  margin-top: 550px;
+  margin-top: 600px;
 }
 
 .cityicon {

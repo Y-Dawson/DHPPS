@@ -583,7 +583,6 @@ export default {
         path: "/settingMap",
         query: {
           params: JSON.stringify({
-            userId: this.userId,
             caseName: this.caseName,
             citynum: this.citynum,
             roadnum: this.roadnum,
