@@ -24,14 +24,14 @@
       "model":"backend.CaseMode",
       "pk":1,
       "fields":{
-         "authorityValue":"自定模式"
+         "modeValue":"自定模式"
       }
    },
    {
       "model":"backend.CaseMode",
       "pk":2,
       "fields":{
-         "authorityValue":"地图模式"
+         "modeValue":"地图模式"
       }
    }
  ]

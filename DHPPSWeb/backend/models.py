@@ -13,16 +13,17 @@ from django.utils import timezone
 
 
 class CaseMode(models.Model):
-    modeNo = models.AutoField(db_column='authorityNo', primary_key=True)  # Field name made lowercase.
-    modeValue = models.CharField(db_column='authorityValue', max_length=8)  # Field name made lowercase.
+    modeNo = models.AutoField(db_column='modeNo', primary_key=True)  # Field name made lowercase.
+    modeValue = models.CharField(db_column='modeValue', max_length=20)  # Field name made lowercase.
 
     class Meta:
         # managed = False
         db_table = 'CaseMode'
 
+
 class Authority(models.Model):
     authorityNo = models.AutoField(db_column='authorityNo', primary_key=True)  # Field name made lowercase.
-    authorityValue = models.CharField(db_column='authorityValue', max_length=10)  # Field name made lowercase.
+    authorityValue = models.CharField(db_column='authorityValue', max_length=20)  # Field name made lowercase.
 
     class Meta:
         # managed = False

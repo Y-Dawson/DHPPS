@@ -94,7 +94,7 @@ DATABASES = {
     }
 }
 # Set the path of initial data files
-FIXTURE_DIRS = (BASE_DIR.joinpath('fixtures', ), )
+FIXTURE_DIRS = (os.path.join(BASE_DIR, 'fixtures', ), )
 
 # Settings Of REST_FRAMEWROK
 REST_FRAMEWORK = {
@@ -138,7 +138,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR.joinpath('/frontend/static')
+STATIC_ROOT = os.path.join(BASE_DIR, '/frontend/static')
 STATICFILES_DIRS = [
     ('css', os.path.join(STATIC_ROOT, 'css').replace('\\', '/')),
     ('js', os.path.join(STATIC_ROOT, 'js').replace('\\', '/')),
@@ -148,7 +148,7 @@ STATICFILES_DIRS = [
 ]
 
 # 配置文件存储目录
-MEDIA_ROOT = BASE_DIR.joinpath('media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # 配置浏览器访问文件的地址：http://127.0.0.1:8000/media/...
 MEDIA_URL = '/media/'
 # 以上表示浏览器传来的url以media开头的，django统一到MEDIA_ROOT配置的目录下去找
