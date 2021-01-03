@@ -241,6 +241,10 @@ export default {
           alert("获取用户身份失败");
         });
     },
+    GetFirstPage(){
+      this.currentCasePage=1
+      this.GetCaseContent()
+    },
     //上一页
     GetPrevCasePage() {
       if (this.currentCasePage == 1) return;
@@ -304,7 +308,8 @@ export default {
         )
         .catch(function (error) {
           // 请求失败处理
-          alert('数据请求失败了')
+          // alert('数据请求失败了')
+          this.GetCaseContent()
         });
     },
     // 案例编辑
@@ -415,7 +420,8 @@ export default {
           this.$message({
               type: "success",
               message: "删除成功!",
-          })
+          }),
+          this.GetFirstPage()
           // this.DelayReload()
         ))
         .catch(function (error) {
