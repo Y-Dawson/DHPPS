@@ -1607,8 +1607,8 @@ export default {
       this.$prompt("请输入此案例名称", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        inputPattern: /^[\u4e00-\u9fa5_a-zA-Z0-9]+$/,
-        inputErrorMessage: "案例名称格式不正确",
+        inputPattern: /^[\u4e00-\u9fa5_a-zA-Z0-9]{1,3}$/,
+        inputErrorMessage: "案例名称可为汉字、英文字母和数字，长度为1到3个字符",
       })
         .then(({ value }) => {
           this.sc = false;
