@@ -9,7 +9,7 @@ from django.db.models import F, Avg, Max, Min, Count, Sum
 from backend import models
 from backend import customSerializers
 from backend.sendSms import SendSms
-from backend.returnDataSimulator import model
+from backend.simulate import returnDataSimulator
 from django.http import HttpResponseForbidden, JsonResponse
 from backend.captcha.captcha import captcha
 from django_redis import get_redis_connection
@@ -37,6 +37,34 @@ def LoginAuthenticate(function):
                 return function(request, *args, **kwargs)
             else:
                 return JsonResponse({"message": "您尚未登录，请先登录", "status": 404})
+        else:
+            return JsonResponse({"message": "无登录信息，请先登录", "status": 404})
+    return authenticate
+
+
+# 管理员验证函数，通过method_decorator作为装饰器装饰给各个视图
+def AdminAuthenticate(function):
+    def authenticate(request, *args, **kwargs):
+        if request.COOKIES.get('sessionid', None):
+            authority = request.session.get("userAuthority", None)
+            if authority == "管理员" or authority == "超级管理员":
+                return function(request, *args, **kwargs)
+            else:
+                return JsonResponse({"message": "您的权限不足，无法访问此页面", "status": 404})
+        else:
+            return JsonResponse({"message": "无登录信息，请先登录", "status": 404})
+    return authenticate
+
+
+# 超级管理员验证函数，通过method_decorator作为装饰器装饰给各个视图
+def SuperAdminAuthenticate(function):
+    def authenticate(request, *args, **kwargs):
+        if request.COOKIES.get('sessionid', None):
+            authority = request.session.get("userAuthority", None)
+            if authority == "超级管理员":
+                return function(request, *args, **kwargs)
+            else:
+                return JsonResponse({"message": "您的权限不足，无法访问此页面", "status": 404})
         else:
             return JsonResponse({"message": "无登录信息，请先登录", "status": 404})
     return authenticate
@@ -685,7 +713,11 @@ def StartSimulate(request):
                 print('########################################################')
                 return JsonResponse({"message": "案例保存失败，数据库出错", "status": 404})
             # 调用模型函数，传入参数，获得返回值
-            dailyInfectMatrix = model(initPopList, dayNum)
+            dailyInfectMatrix = returnDataSimulator.GetPredict(
+                popuList=initPopList,
+                transMatrix=initRoadList,
+                infectedList=initInfectedList
+                )
 
             # 构造发回数据
             DailyForecastData = []
@@ -779,7 +811,11 @@ def StartSimulate(request):
                 print('########################################################')
                 return JsonResponse({"message": "案例保存失败，数据库出错", "status": 404})
             # 调用模型函数，传入参数，获得返回值
-            dailyInfectMatrix = model(initPopList, dayNum)
+            dailyInfectMatrix = returnDataSimulator.GetPredict(
+                popuList=initPopList,
+                transMatrix=initRoadList,
+                infectedList=initInfectedList
+                )
 
             # 构造发回数据
             DailyForecastData = []
