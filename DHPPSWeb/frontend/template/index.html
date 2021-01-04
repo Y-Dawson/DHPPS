@@ -31,9 +31,9 @@
 	<link href="{% static 'css/coloring.css' %}" rel="stylesheet" type="text/css">
 
     <!-- RS5.0 Stylesheet -->
-    <link href="{% static 'static/revolution/css/settings.css' %}" rel="stylesheet" type="text/css">
-    <link href="{% static 'static/revolution/css/layers.css' %}" rel="stylesheet" type="text/css">
-    <link href="{% static 'static/revolution/css/navigation.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'revolution/css/settings.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'revolution/css/layers.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'revolution/css/navigation.css' %}" rel="stylesheet" type="text/css">
     <link href="{% static 'css/rev-settings.css' %}" rel="stylesheet" type="text/css">
     <style>
         #citypng:hover{
@@ -63,18 +63,13 @@
                             <div class="header-col left">
                                 <!-- logo begin -->
                                 <div id="logo">
-                                    <a href="http://127.0.0.1:8000/backend/homepage/"><img alt=""  src="{% static 'images/logo.png' %}"></a>
+                                    <a href="http://47.112.227.85/backend/homepage/"><img alt=""  src="{% static 'images/logo.png' %}"></a>
                                 </div>
                                 <!-- logo close -->
                             </div>
                             <div class="header-col mid">
-                                <!-- mainmenu begin -->
-                                <!-- <ul id="mainmenu">
-                                    <li><a href="index.html">Home</a>
-									</li>
-                                </ul> -->
                                 <div class="col-right">
-                                    <a class="btn-custom" href="http://localhost:8080/"><i class="fa fa-lock"></i> Login</a>
+                                    <a class="btn-custom" href="http://47.112.227.85/index"><i class="fa fa-lock"></i> Login</a>
                                 </div>
                             </div>
                         </div>
@@ -171,7 +166,7 @@
             </section>
 
 
-            <section id="section-testimonial" class="no-top no-bottom text-light" data-bgimage="url(static/images/background/3.png) center" data-stellar-background-ratio=".9" >
+            <section id="section-testimonial" class="no-top no-bottom text-light"  data-stellar-background-ratio=".9" >
                 <div class="overlay-bg">
                     <div class="text-center" data-scroll-reveal="enter bottom" style="text-align: center;">
                         <h2><span class="uptitle id-color-2" >Case View</span>案例展示</h2>
@@ -182,9 +177,10 @@
                             <div class="de_testi opt-2">
                                 <blockquote>
                                     <div class="content" style="border: 1px rgb(184, 184, 184) solid;">
-                                        <img alt="" src="{% static 'images/people/5.jpg' %}">
-                                        <h3 style="margin: 10px 10px 0px 10px;color: rgb(90, 90, 90);">案例1</h3>
-                                        <p style="margin: 0px 10px 0px 10px;font-size: 12px;">Thanks to the support team, they are very helpfull. This company provide customers great solution, that makes them best.
+                                        <img alt="" src="{% static 'images/people/8.jpg' %}">
+                                        <h3 style="margin: 10px 10px 0px 10px;color: rgb(90, 90, 90);">自定模式</h3>
+                                        <p style="margin: 0px 10px 0px 10px;font-size: 12px;">在自定模式下，我们为您提供了“新建节点”、“连接节点”、“删除节点”、“删除道路”、“开始模拟”、“保存案例”、“我的案例”选项；
+                                            您可选择我们提供的选项在画布上创建城市及城市间道路并设置城市的信息及人流量信息
                                         </p>
                                     </div>
                                 </blockquote>
@@ -194,7 +190,32 @@
                             <div class="de_testi opt-2">
                                 <blockquote>
                                     <div class="content" style="border: 1px rgb(184, 184, 184) solid;">
-                                        <img alt="" src="{% static 'images/people/6.jpg' %}">
+                                        <img alt="" src="{% static 'images/people/9.jpg' %}">
+                                        <h3 style="margin: 10px 10px 0px 10px;color: rgb(90, 90, 90);">自定模式</h3>
+                                        <p style="margin: 0px 10px 0px 10px;font-size: 12px;">当创建完毕后,可以在左侧看到已设置好的数据，您可以点击“开始模拟”，我们将为您展示基于您设定信息所模拟出的各个城市的感染情况
+                                        </p>
+                                    </div>
+                                </blockquote>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="de_testi opt-2">
+                                <blockquote>
+                                    <div class="content" style="border: 1px rgb(184, 184, 184) solid;">
+                                        <img alt="" src="{% static 'images/people/10.jpg' %}">
+                                        <h3 style="margin: 10px 10px 0px 10px;color: rgb(90, 90, 90);">自定模式模拟</h3>
+                                        <p style="margin: 0px 10px 0px 10px;font-size: 12px;">在模拟页面中，每一个城市都会有一个信息框显示该城市的感染情况，一个绿色图标代表100个健康人口，一个红色图标代表100个患病人口
+                                            <br>在模拟页面的一侧，我们提供城市信息图表和道路信息图表，城市信息图表中显示当天所有城市的人口、感染人数和新增感染人数，而在道路信息表中则通过散点图的形式展示城市间的人流量信息
+                                        </p>
+                                    </div>
+                                </blockquote>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="de_testi opt-2">
+                                <blockquote>
+                                    <div class="content" style="border: 1px rgb(184, 184, 184) solid;">
+                                        <img alt="" src="{% static 'images/people/5.jpg' %}">
                                         <h3 style="margin: 10px 10px 0px 10px;color: rgb(90, 90, 90);">地图模式</h3>
                                         <p style="margin: 0px 10px 0px 10px;font-size: 12px;">您可在中国地图中选择省会城市设置城市信息及城市间的航线，并进行模拟查看城市感染人口信息和感染人口占比
                                         </p>
@@ -206,33 +227,10 @@
                             <div class="de_testi opt-2">
                                 <blockquote>
                                     <div class="content" style="border: 1px rgb(184, 184, 184) solid;">
-                                        <img alt="" src="{% static 'images/people/7.jpg' %}">
-                                        <h3 style="margin: 10px 10px 0px 10px;color: rgb(90, 90, 90);">模拟趋势</h3>
-                                        <p style="margin: 0px 10px 0px 10px;font-size: 12px;">Thanks to the support team, they are very helpfull. This company provide customers great solution, that makes them best.
-                                        </p>
-                                    </div>
-                                </blockquote>
-                            </div>
-                        </div>
-                        <div class="item">
-                            <div class="de_testi opt-2">
-                                <blockquote>
-                                    <div class="content" style="border: 1px rgb(184, 184, 184) solid;">
-                                        <img alt="" src="{% static 'images/people/5.jpg' %}">
-                                        <h3 style="margin: 10px 10px 0px 10px;color: rgb(90, 90, 90);">案例1</h3>
-                                        <p style="margin: 0px 10px 0px 10px;font-size: 12px;">Thanks to the support team, they are very helpfull. This company provide customers great solution, that makes them best.
-                                        </p>
-                                    </div>
-                                </blockquote>
-                            </div>
-                        </div>
-                        <div class="item">
-                            <div class="de_testi opt-2">
-                                <blockquote>
-                                    <div class="content" style="border: 1px rgb(184, 184, 184) solid;">
                                         <img alt="" src="{% static 'images/people/6.jpg' %}">
-                                        <h3 style="margin: 10px 10px 0px 10px;color: rgb(90, 90, 90);">地图模式</h3>
-                                        <p style="margin: 0px 10px 0px 10px;font-size: 12px;">您可在中国地图中选择省会城市设置城市信息及城市间的航线，并进行模拟查看城市感染人口信息和感染人口占比
+                                        <h3 style="margin: 10px 10px 0px 10px;color: rgb(90, 90, 90);">地图模式模拟</h3>
+                                        <p style="margin: 0px 10px 0px 10px;font-size: 12px;">在模拟页面中，在左侧的中国地图上，可以看到您设置的城市和航线信息，
+                                            而在右侧我们提供每个城市的病例人数的折线图以及感染人数占比的饼形图
                                         </p>
                                     </div>
                                 </blockquote>
@@ -242,12 +240,12 @@
                 </div>
             </section>
 
-            <section id="section-testimonial" class="no-top no-bottom text-light" data-bgimage="url(static/images/background/3.png) center" data-stellar-background-ratio=".2">
+            <section id="section-testimonial" class="no-top no-bottom text-light"  data-stellar-background-ratio=".2">
                 <div class="overlay-bg">
                     <div class="text-center" style="text-align: center;">
                         <h2><span class="uptitle id-color-2">Testimonial</span>算法模型展示</h2>
                         <div class="spacer-20"></div>
-                        <a class="btn-custom" href="http://127.0.0.1:8000/backend/homepage/model">Learn More</a>
+                        <a class="btn-custom" href="http://47.112.227.85/backend/homepage/model/">Learn More</a>
                     </div>
                     
                 </div>
@@ -261,7 +259,8 @@
                             data-scroll-reveal="enter left after 0.1s">
                                 <h2>自定模式</h2>
                                 <p class="lead">您可选择我们提供的工具在画布上任意创建城市及城市间道路，并进行模拟查看感染人数等数据
-                                    <br>在自定模式下，我们为您提供了“新建节点”、“连接节点”、“删除节点”、“删除道路”、“开始模拟”、“保存案例”、“我的案例”选项，您可选择我们提供的选项在画布上创建城市及城市间道路并设置城市的信息及人流量信息，当您已经创建完毕后,您可以点击“开始模拟”，我们将为您展示基于您设定信息所模拟出的各个城市的感染情况。
+                                    <br>在自定模式下，我们为您提供了“新建节点”、“连接节点”、“删除节点”、“删除道路”、“开始模拟”、“保存案例”、“我的案例”选项，
+                                    您可选择我们提供的选项在画布上创建城市及城市间道路并设置城市的信息及人流量信息，当您已经创建完毕后,您可以点击“开始模拟”，我们将为您展示基于您设定信息所模拟出的各个城市的感染情况。
                                 </p>
                             </div>
                         </div>
@@ -324,27 +323,17 @@
 
                     <div class="row">
                         <div class="col-md-6 sm-text-center mb-sm-30">
-                            <div class="mt10">&copy; Copyright 2020 - Uhost by Designesia</div>
+                            <div class="mt10">&copy; DHPPS</div>
                         </div>
                     </div>
                 </div>
 
             </footer>
             <!-- footer close -->
-
-            <!-- 加载时页面 -->
-            <!-- <div id="preloader">
-                <div class="spinner">
-                    <div class="bounce1"></div>
-                    <div class="bounce2"></div>
-                    <div class="bounce3"></div>
-                </div>
-            </div> -->
         </div>		
 
         <!-- Javascript Files
     ================================================== -->
-    "{% static 'images/misc/Cmap.png' %}"
         <script src="{% static 'js/jquery.min.js' %}"></script>
         <script src="{% static 'js/bootstrap.min.js' %}"></script>
         <!-- <script src="{% static 'js/wow.min.js"></script> -->
