@@ -930,10 +930,8 @@ def GetUserInfos(request):
         jsonList = []
         for accountInfo in pageInfos:
             accountInfoDict = model_to_dict(accountInfo)
-            # print("rawData", accountInfo.personalprofile.GetAvatarUrl())
             profileDict = model_to_dict(accountInfo.personalprofile)
             profileDict["avatar"] = accountInfo.personalprofile.GetAvatarUrl()
-            # print("profileDict", profileDict["avatar"])
             jsonList.append({**accountInfoDict, **profileDict})
         jsonRes = json.loads(json.dumps(jsonList, cls=DateEnconding))
         print(jsonRes)
