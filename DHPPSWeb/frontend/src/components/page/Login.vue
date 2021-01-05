@@ -54,7 +54,7 @@ export default {
       ifLogin:'',
       loginMassege:'',
       userId:'',
-      userAuthority:"",
+      userAuthority:1,
       loginForm: {
       account: "",
       password: "",
