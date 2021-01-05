@@ -806,7 +806,7 @@ export default {
             console.log("rs", s);
           }
           myFormData.append("roadnum", roadcnt);
-          myFormData.append("caseMode", "地图模式");
+          myFormData.append("caseMode", 2);
 
           myFormData.append("InitCityData", city_infor);
 
@@ -896,7 +896,7 @@ export default {
         console.log("rs", s);
       }
       myFormData.append("roadnum", roadcnt);
-      myFormData.append("caseMode", "地图模式");
+      myFormData.append("caseMode", 2);
 
       myFormData.append("InitCityData", city_infor);
 
