@@ -165,13 +165,13 @@ def Signin(request):
                     # 若相同，设置登录状态为True，设置登录id为userId，登录权限为对应权限
                     request.session['isLogin'] = True
                     request.session['userId'] = accountInfo.userId
-                    request.session['userAuthority'] = accountInfo.authority
+                    request.session['userAuthority'] = accountInfo.authority.authorityNo
                     print(request.session.get('userId', None))
                     response = JsonResponse({
                         "message": "登录成功",
                         "status": 200,
                         "userId": accountInfo.userId,
-                        "userAuthority": accountInfo.authority
+                        "userAuthority": accountInfo.authority.authorityNo
                         })
                     # response["Access-Control-Allow-Credentials"] = "true"
                     # response["Access-Control-Allow-Methods"] = 'GET, POST, PATCH, PUT, OPTIONS'
@@ -861,7 +861,7 @@ def GetCaseInfos(request):
                 cases["caseName"] = caseInfo.caseName
                 cases["cityNum"] = caseInfo.cityNumber
                 cases["roadNum"] = caseInfo.roadNumber
-                cases["caseMode"] = caseInfo.caseMode
+                cases["caseMode"] = caseInfo.caseMode.modeNo
 
                 cityList = []
                 cityPosList = []
@@ -872,7 +872,7 @@ def GetCaseInfos(request):
                     cityCase["initInfect"] = cityInfos[cityIdx].initInfect
                     cityList.append(cityCase)
 
-                    if caseInfo.caseMode == "1":
+                    if caseInfo.caseMode.modeNo == 1:
                         cityPosCase = {}
                         cityPosCase["cityName"] = cityInfos[cityIdx].cityName
                         cityPosCase["x"] = cityInfos[cityIdx].cityposition.x
@@ -889,7 +889,7 @@ def GetCaseInfos(request):
                         roadList.append(roadCase)
                     cases["InitRoadData"] = roadList
                 cases["InitCityData"] = cityList
-                if caseInfo.caseMode == "1":
+                if caseInfo.caseMode.modeNo == 1:
                     cases["CityPosition"] = cityPosList
 
                 return JsonResponse({"message": "成功返回数据", "cases": cases, "status": 200})
