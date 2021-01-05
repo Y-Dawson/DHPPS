@@ -165,13 +165,13 @@ def Signin(request):
                     # 若相同，设置登录状态为True，设置登录id为userId，登录权限为对应权限
                     request.session['isLogin'] = True
                     request.session['userId'] = accountInfo.userId
-                    request.session['userAuthority'] = accountInfo.authority
+                    request.session['userAuthority'] = accountInfo.authority.authorityNo
                     print(request.session.get('userId', None))
                     response = JsonResponse({
                         "message": "登录成功",
                         "status": 200,
                         "userId": accountInfo.userId,
-                        "userAuthority": accountInfo.authority
+                        "userAuthority": accountInfo.authority.authorityNo
                         })
                     # response["Access-Control-Allow-Credentials"] = "true"
                     # response["Access-Control-Allow-Methods"] = 'GET, POST, PATCH, PUT, OPTIONS'
