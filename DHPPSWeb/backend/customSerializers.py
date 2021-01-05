@@ -1,6 +1,18 @@
 from rest_framework import serializers
 from backend.models import AccountInformation, CaseData, CityPosition, DailyForecastData
-from backend.models import InitCityData, InitRoadData, LoginData, ModelData, PersonalProfile, Theme
+from backend.models import InitCityData, InitRoadData, LoginData, Authority, PersonalProfile, CaseMode
+
+
+class CaseModeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CaseMode
+        fields = '__all__'
+
+
+class AuthoritySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Authority
+        fields = '__all__'
 
 
 class AccountInformationSerializer(serializers.ModelSerializer):
@@ -45,19 +57,7 @@ class LogindataSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class ModeldataSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ModelData
-        fields = '__all__'
-
-
 class PersonalProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = PersonalProfile
-        fields = '__all__'
-
-
-class ThemeSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Theme
         fields = '__all__'

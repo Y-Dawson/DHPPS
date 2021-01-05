@@ -409,6 +409,18 @@ export default {
         road_data.push(newb);
       }
 
+      for (var j in this.citynamelist) {
+        var newa = new Array();
+        var c1 = {};
+        var c2 = {};
+        c1["name"] = this.citynamelist[j];
+        c2["name"] = this.citynamelist[j];
+        c2["value"] = 0;
+        newa.push(c1);
+        newa.push(c2);
+        road_data.push(newa);
+      }
+
       var XAData = road_data;
       console.log("mapData", mapData);
       console.log("XAData", XAData);

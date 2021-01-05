@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 import os
+import mimetypes
+mimetypes.add_type("text/css", ".css", True)
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -40,7 +42,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'backend',
-    'captcha',
     'django_filters',
 ]
 
@@ -62,7 +63,7 @@ ROOT_URLCONF = 'DHPPSWeb.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['frontend'],
+        'DIRS': [os.path.join(BASE_DIR, 'frontend')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -91,9 +92,15 @@ DATABASES = {
         'HOST': '127.0.0.1',  # 数据库地址，本机 ip 地址 127.0.0.1
         'PORT': 3306,  # 端口
         'USER': 'root',  # 数据库用户
+<<<<<<< HEAD
         'PASSWORD': 'root',  # 数据库密码
+=======
+        'PASSWORD': 'z3876390',  # 数据库密码
+>>>>>>> edf2436c081a5f7f76d17d01a80c64c550f30d38
     }
 }
+# Set the path of initial data files
+FIXTURE_DIRS = (os.path.join(BASE_DIR, 'fixtures', ), )
 
 # Settings Of REST_FRAMEWROK
 REST_FRAMEWORK = {
@@ -118,13 +125,7 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
-
-# CAPTCHA Settings
-CAPTCHA_IMAGE_SIZE = (80, 45)   # 设置 captcha 图片大小
-CAPTCHA_LENGTH = 4   # 字符个数
-CAPTCHA_TIMEOUT = 3   # 超时(minutes)
-CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.random_char_challenge'
+ALLOWED_HOSTS = ['*']
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
@@ -143,11 +144,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, '/frontend/static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'frontend/static')
 STATICFILES_DIRS = [
-    ('css', os.path.join(STATIC_ROOT, 'css').replace('\\', '/')),
-    ('js', os.path.join(STATIC_ROOT, 'js').replace('\\', '/')),
-    ('images', os.path.join(STATIC_ROOT, 'images').replace('\\', '/')),
     os.path.join(BASE_DIR, "frontend/dist/static"),
     os.path.join(BASE_DIR, "frontend/template/static"),
 ]

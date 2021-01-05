@@ -12,7 +12,6 @@ from backend.sendSms import SendSms
 # from backend.simulate import returnDataSimulator
 from backend import returnDataSimulator
 from django.http import HttpResponseForbidden, JsonResponse
-from backend.captcha.captcha import captcha
 from django_redis import get_redis_connection
 from django.utils import timezone
 from django.core import serializers, paginator
@@ -1166,9 +1165,3 @@ class CaseViewSet(viewsets.ModelViewSet):
 class PersonalProfileViewSet(viewsets.ModelViewSet):
     queryset = models.PersonalProfile.objects.all()
     serializer_class = customSerializers.PersonalProfileSerializer
-
-
-@method_decorator(LoginAuthenticate, name='dispatch')
-class ThemeViewSet(viewsets.ModelViewSet):
-    queryset = models.Theme.objects.all()
-    serializer_class = customSerializers.ThemeSerializer

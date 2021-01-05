@@ -59,7 +59,7 @@
      </el-form>
      
     </div>
-    <a class="back" href="http://127.0.0.1:8000/backend/homepage/">回到首页</a>
+    <a class="back" href="http://47.112.227.85/backend/homepage/">回到首页</a>
     <!-- <router-link to='index.html'>点击跳转</router-link> -->
   </div>
 </template>
