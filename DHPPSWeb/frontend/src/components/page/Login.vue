@@ -1,23 +1,5 @@
 <template>
   <div class="login" >
-    <!-- <vue-particles
-        color="#fff"
-        :particleOpacity="0.7"
-        :particlesNumber="60"
-        shapeType="star"
-        :particleSize="4"
-        linesColor="#fff"
-        :linesWidth="1"
-        :lineLinked="true"
-        :lineOpacity="0.4"
-        :linesDistance="150"
-        :moveSpeed="2"
-        :hoverEffect="true"
-        hoverMode="grab"
-        :clickEffect="true"
-        clickMode="push"
-      >
-      </vue-particles> -->
     <div class="ms-login">
       <div class="ms-title">高传染性疾病预测系统</div>
         <el-form :model="loginForm" :rules="loginFormRules" ref="loginFormRef" class="ms-content" action="">
@@ -72,7 +54,7 @@ export default {
       ifLogin:'',
       loginMassege:'',
       userId:'',
-      userAuthority:"",
+      userAuthority:1,
       loginForm: {
       account: "",
       password: "",
@@ -113,7 +95,7 @@ export default {
         // this.$cookies.get(keyName)
         // alert(this.$cookies.get(sessionid))
         this.$message.success("登录成功！");
-        if(this.userAuthority=="普通用户"){
+        if(this.userAuthority==1){
           this.$router.push({
             path:'/UserIndex',
             query:{
@@ -123,7 +105,7 @@ export default {
             },
           });
         }
-        else if(this.userAuthority=="管理员"||this.userAuthority=="超级管理员"){
+        else if(this.userAuthority==2||this.userAuthority==3){
           this.$router.push({
             path:'/AdminIndex'
           });
@@ -168,7 +150,7 @@ export default {
       // alert(this.ifLogin)
       if(this.ifLogin=="返回数据成功"){
         this.$message("你已经登陆")
-        if(userAuthority=="普通用户"){
+        if(userAuthority==1){
           this.$router.push({
               path:'/UserIndex',
               query:{
