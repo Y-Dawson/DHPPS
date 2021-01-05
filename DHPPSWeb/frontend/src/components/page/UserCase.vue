@@ -97,7 +97,7 @@
                   >
                     <el-card class="box-card">
                       <div slot="header" class="clearfix">
-                        <i v-if="item.caseMode === '自定模式'"
+                        <i v-if="item.caseMode === 1"
                           class="el-icon el-icon-location-outline"
                           style="
                             margin-right: 2px;
@@ -105,7 +105,7 @@
                             color: rgb(173, 173, 173);
                           "
                         ></i>
-                        <i v-else-if="item.caseMode === '地图模式'"
+                        <i v-else-if="item.caseMode === 2"
                           class="el-icon el-icon-map-location"
                           style="
                             margin-right: 2px;
@@ -192,7 +192,6 @@ export default {
     return {
       value:new Date(),
       userId:'',
-      isMap:'',//是否是地图模式
       //判断是否已登录状态
       ifLogin:"",
       // 头像

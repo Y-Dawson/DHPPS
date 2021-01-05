@@ -42,42 +42,41 @@
 export default {
   data() {
     return {
-      ifLogin: "",
-      loginMassege: "",
-      userId: "",
-      userAuthority: "",
+      ifLogin: '',
+      loginMassege: '',
+      userId: '',
+      userAuthority: '',
       loginForm: {
-        account: "",
-        password: "",
-      },
-    };
+        account: '',
+        password: ''
+      }
+    }
   },
   mounted: function () {
-    this.GetUserIdentity();
   },
   methods: {
-      toSetting: function(){
-          this.$router.push({
-            path:'/setting',
-            query:{
-              params:JSON.stringify({
-                caseName: 999
-              })
-            },
-          });
-      },
-      toSettingMap: function(){
-          this.$router.push({
-            path:'/settingMap',
-            query:{
-              params:JSON.stringify({
-                caseName: 999
-              })
-            },
-          });
-      }
-  },
-};
+    toSetting: function() {
+      this.$router.push({
+        path: '/setting',
+        query: {
+          params: JSON.stringify({
+            caseName: 999
+          })
+        }
+      })
+    },
+    toSettingMap: function() {
+      this.$router.push({
+        path: '/settingMap',
+        query: {
+          params: JSON.stringify({
+            caseName: 999
+          })
+        }
+      })
+    }
+  }
+}
 // document.write(location.href);
 </script>
 <style>

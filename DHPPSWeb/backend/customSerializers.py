@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from backend.models import AccountInformation, CaseData, CityPosition, DailyForecastData
 from backend.models import InitCityData, InitRoadData, LoginData, Authority, PersonalProfile, CaseMode
-
+from rest_framework.serializers import SerializerMethodField
 
 class CaseModeSerializer(serializers.ModelSerializer):
     class Meta:
@@ -58,6 +58,11 @@ class LogindataSerializer(serializers.ModelSerializer):
 
 
 class PersonalProfileSerializer(serializers.ModelSerializer):
+    avatar_url = serializers.SerializerMethodField()
+
+    def get_avatar_url(self, obj):
+        return "http://47.112.227.85:8000" + obj.avatar.url
+
     class Meta:
         model = PersonalProfile
         fields = '__all__'
