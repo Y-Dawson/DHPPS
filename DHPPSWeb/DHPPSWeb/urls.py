@@ -27,7 +27,6 @@ urlpatterns = [
     path('index/', TemplateView.as_view(template_name="index.html")),
     path('backend/', include('backend.urls')),
     path('docs/', include_docs_urls(title="apisDocs")),
-    re_path(r"^media/(?P<path>.*)/", serve, {"document_root": settings.MEDIA_ROOT}),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
