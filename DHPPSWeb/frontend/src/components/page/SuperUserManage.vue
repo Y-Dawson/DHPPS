@@ -615,7 +615,7 @@ export default {
         .post("/apis/backend/getIdentity/")
         .then((response) => {
           this.AdminId = response.data.userId;
-          if (response.data.authority == "超级管理员") {
+          if (response.data.authority == 3) {
             this.authorityShow = true;
             this.getMyContent();
             this.getUserContent();
@@ -638,7 +638,7 @@ export default {
         .then(
           (response) => (
             (self.MyContent = response.data),
-            (this.AdminUrl = self.MyContent.avatar)
+            (this.AdminUrl = self.MyContent.avatar_url)
           )
         )
         .catch(function (error) {

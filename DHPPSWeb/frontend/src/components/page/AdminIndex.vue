@@ -215,7 +215,7 @@ export default {
       AdminUrl: "",
       MyContent: [],
       AdminId: "",
-      AdminAuthority: "",
+      AdminAuthority: 1,
       authorityShow: false,
       sexData: [],
       cityData: [],
@@ -294,8 +294,8 @@ export default {
           this.AdminId = response.data.userId;
           this.AdminAuthority = response.data.authority;
           if (
-            response.data.authority == "管理员" ||
-            response.data.authority == "超级管理员"
+            response.data.authority == 2 ||
+            response.data.authority == 3
           ) {
             this.authorityShow = true;
             this.getMyContent();
@@ -320,7 +320,7 @@ export default {
         .get("/apis/backend/profile/" + this.AdminId + "/")
         .then((response) => {
           (self.MyContent = response.data),
-            (this.AdminUrl = self.MyContent.avatar);
+            (this.AdminUrl = self.MyContent.avatar_url);
         })
         .catch(function (error) {
           // 请求失败处理
@@ -384,11 +384,11 @@ export default {
       });
     },
     adminOrSuperAdmin: function () {
-      if (this.AdminAuthority == "超级管理员") {
+      if (this.AdminAuthority == 3) {
         this.$router.push({
           path: "/SuperUserManage",
         });
-      } else if (this.AdminAuthority == "管理员") {
+      } else if (this.AdminAuthority == 2) {
         this.$router.push({
           path: "/AdminUserManage",
         });

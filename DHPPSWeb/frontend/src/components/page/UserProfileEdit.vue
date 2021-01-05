@@ -535,8 +535,8 @@ export default {
         .then(
           (response) => (
             self.MyContent = response.data,
-            this.imageUrl = self.MyContent.avatar,
-            this.changingUrl=self.MyContent.avatar,
+            this.imageUrl = self.MyContent.avatar_url,
+            this.changingUrl=self.MyContent.avatar_url,
             this.ruleForm.name=this.MyContent.userName,
             this.ruleForm.email=this.MyContent.email,
             this.ruleForm.radio=this.MyContent.sex,
