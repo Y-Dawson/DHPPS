@@ -192,7 +192,7 @@ export default {
     return {
       value:new Date(),
       userId:'',
-      isMap:'',//是否是地图模式
+      isMap:0,//是否是地图模式
       //判断是否已登录状态
       ifLogin:"",
       // 头像

@@ -1,23 +1,5 @@
 <template>
   <div class="login" >
-    <!-- <vue-particles
-        color="#fff"
-        :particleOpacity="0.7"
-        :particlesNumber="60"
-        shapeType="star"
-        :particleSize="4"
-        linesColor="#fff"
-        :linesWidth="1"
-        :lineLinked="true"
-        :lineOpacity="0.4"
-        :linesDistance="150"
-        :moveSpeed="2"
-        :hoverEffect="true"
-        hoverMode="grab"
-        :clickEffect="true"
-        clickMode="push"
-      >
-      </vue-particles> -->
     <div class="ms-login">
       <div class="ms-title">高传染性疾病预测系统</div>
         <el-form :model="loginForm" :rules="loginFormRules" ref="loginFormRef" class="ms-content" action="">
