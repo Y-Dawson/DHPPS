@@ -204,7 +204,7 @@
       </div>
       <div
         id="content-page"
-        class="content-page"
+        class="content-page box animated pulse"
         style="z-index: 1"
         v-if="show"
       >
@@ -443,9 +443,12 @@ export default {
         });
     },
     SwitchPage: function (UI) {
-      (this.UserId = UI), (this.show = true);
+      (this.UserId = UI),
+      this.currentCasePage=1,
       this.GetCaseContent();
       this.SetPages();
+      (this.show = true);
+      
     },
     ClosePage: function () {
       this.show = false;
@@ -454,6 +457,7 @@ export default {
     //获取案例内容
     GetCaseContent: function () {
       var self = this;
+      alert(this.UserId),
       axios
         .get("/apis/backend/case/", {
           params: {
@@ -463,13 +467,20 @@ export default {
           },
         })
         .then(
-          (response) => (
-            (self.currentPageData = response.data),
-            (self.totalCasePage = Math.ceil(
-              self.currentPageData.pagination / self.pageCaseSize
-            )),
-            (self.SetPages())
+          (response) => 
+          (
+            (this.currentPageData = response.data),
+            (this.totalCasePage = Math.ceil(response.data.pagination / response.data.pageSize)),
+            this.SetPages()
           )
+          // (
+          //   alert(JSON.stringify(response.data)),
+          //   (self.currentPageData = response.data),
+          //   (self.totalCasePage = Math.ceil(
+          //     self.currentPageData.pagination / self.pageCaseSize
+          //   )),
+          //   (self.SetPages())
+          // )
         )
         .catch(function (error) {
           // 请求失败处理
