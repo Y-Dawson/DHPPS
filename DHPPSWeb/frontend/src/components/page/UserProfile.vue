@@ -233,7 +233,7 @@ export default {
       Url: "",
       MyContent: [],
       userId: "",
-      userAuthority:"",
+      userAuthority:1,
       ifAdmin:false
     };
   },
@@ -258,7 +258,7 @@ export default {
     },
     //判断是否管理员
     Admin(){
-      if(this.userAuthority=="管理员"||this.userAuthority=="超级管理员"){
+      if(this.userAuthority==2||this.userAuthority==3){
         this.ifAdmin=true
       }
     },
