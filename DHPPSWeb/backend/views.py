@@ -47,7 +47,7 @@ def AdminAuthenticate(function):
     def authenticate(request, *args, **kwargs):
         if request.COOKIES.get('sessionid', None):
             authority = request.session.get("userAuthority", None)
-            if authority == "管理员" or authority == "超级管理员":
+            if authority == "2" or authority == "3":
                 return function(request, *args, **kwargs)
             else:
                 return JsonResponse({"message": "您的权限不足，无法访问此页面", "status": 404})
@@ -61,7 +61,7 @@ def SuperAdminAuthenticate(function):
     def authenticate(request, *args, **kwargs):
         if request.COOKIES.get('sessionid', None):
             authority = request.session.get("userAuthority", None)
-            if authority == "超级管理员":
+            if authority == "3":
                 return function(request, *args, **kwargs)
             else:
                 return JsonResponse({"message": "您的权限不足，无法访问此页面", "status": 404})
@@ -298,7 +298,7 @@ def Signup(request):
             # 当一切都OK的情况下，创建新用户
             try:
                 newAccountInfo = models.AccountInformation.objects.create(
-                    themeNo=models.Theme.objects.filter(themeNo=1).first()
+                    authority=models.Authority.objects.filter(authorityNo=1).first()
                 )
 
                 salt = secrets.token_hex(4)
@@ -433,7 +433,7 @@ def SaveCase(request):
             return JsonResponse({"message": "表单未填写完整", "status": 404})
         # 案例计数：初始人口与初始感染人口
 
-        if (caseMode == "自定模式"):
+        if (caseMode == "1"):
             initTotalNum = 0
             initTotalInfectedNum = 0
             initCityDataList = InitCityData.split(",")
@@ -458,7 +458,7 @@ def SaveCase(request):
                     newCase = models.CaseData.objects.create(
                         userId=models.AccountInformation.objects.filter(userId=userId).first(),
                         caseName=caseName,
-                        caseMode=caseMode,
+                        caseMode=models.CaseMode.objects.filter(modeNo=1).first(),
                         cityNumber=int(cityNum),
                         roadNumber=int(roadNum),
                         initTotal=initTotalNum,
@@ -525,7 +525,7 @@ def SaveCase(request):
                 # print('e.message:\t', e.message)
                 print('########################################################')
                 return JsonResponse({"message": "保存案例失败", "status": 404})
-        elif (caseMode == "地图模式"):
+        elif (caseMode == "2"):
             initTotalNum = 0
             initTotalInfectedNum = 0
             initCityDataList = InitCityData.split(",")
@@ -548,7 +548,7 @@ def SaveCase(request):
                     newCase = models.CaseData.objects.create(
                         userId=models.AccountInformation.objects.filter(userId=userId).first(),
                         caseName=caseName,
-                        caseMode=caseMode,
+                        caseMode=models.CaseMode.objects.filter(modeNo=2).first(),
                         cityNumber=int(cityNum),
                         roadNumber=int(roadNum),
                         initTotal=initTotalNum,
@@ -632,7 +632,7 @@ def StartSimulate(request):
         if not(userId and caseName and cityNum and roadNum and InitCityData and InitRoadData and CityPosition and dayNum):
             return JsonResponse({"message": "表单未填写完整", "status": 404})
 
-        if (caseMode == "自定模式"):
+        if (caseMode == "1"):
             # 案例计数：初始人口与初始感染人口
             initTotalNum = 0
             initTotalInfectedNum = 0
@@ -739,7 +739,7 @@ def StartSimulate(request):
                     dayCase.append(cityCase)
                 DailyForecastData.append(dayCase)
             return JsonResponse({"DailyForecastData": DailyForecastData, "status": 200})
-        elif (caseMode == "地图模式"):
+        elif (caseMode == "2"):
             # 案例计数：初始人口与初始感染人口
             initTotalNum = 0
             initTotalInfectedNum = 0
@@ -872,7 +872,7 @@ def GetCaseInfos(request):
                     cityCase["initInfect"] = cityInfos[cityIdx].initInfect
                     cityList.append(cityCase)
 
-                    if caseInfo.caseMode == "自定模式":
+                    if caseInfo.caseMode == "1":
                         cityPosCase = {}
                         cityPosCase["cityName"] = cityInfos[cityIdx].cityName
                         cityPosCase["x"] = cityInfos[cityIdx].cityposition.x
@@ -889,7 +889,7 @@ def GetCaseInfos(request):
                         roadList.append(roadCase)
                     cases["InitRoadData"] = roadList
                 cases["InitCityData"] = cityList
-                if caseInfo.caseMode == "自定模式":
+                if caseInfo.caseMode == "1":
                     cases["CityPosition"] = cityPosList
 
                 return JsonResponse({"message": "成功返回数据", "cases": cases, "status": 200})
@@ -919,7 +919,7 @@ def GetUserInfos(request):
         page = request.GET.get("page")
         accountInfos = models.AccountInformation.objects\
             .select_related("personalprofile").all()\
-            .exclude(authority="超级管理员")\
+            .exclude(authority=3)\
             .order_by('userId')
         accountPaginator = paginator.Paginator(accountInfos, pageSize)
         if page == "":
@@ -960,7 +960,7 @@ def GetGeneralUserInfos(request):
         page = request.GET.get("page")
         generalUserInfos = models.AccountInformation.objects\
             .select_related("personalprofile")\
-            .filter(authority="普通用户")\
+            .filter(authority=1)\
             .order_by('userId')
         accountPaginator = paginator.Paginator(generalUserInfos, pageSize)
         if page == "":
@@ -999,7 +999,7 @@ def GetAdminInfos(request):
         page = request.GET.get("page")
         adminUserInfos = models.AccountInformation.objects\
             .select_related("personalprofile")\
-            .filter(authority="管理员")\
+            .filter(authority=2)\
             .order_by('userId')
         accountPaginator = paginator.Paginator(adminUserInfos, pageSize)
         if page == "":
@@ -1036,7 +1036,7 @@ def GetTopCityInfos(request):
         # 获取统计信息
         try:
             cityInfos = models.InitCityData.objects\
-                        .filter(caseId__caseMode="地图模式")\
+                        .filter(caseId__caseMode=2)\
                         .values("cityName")\
                         .annotate(cityCount=Count("cityName"))\
                         .order_by('cityName')
