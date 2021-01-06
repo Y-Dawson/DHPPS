@@ -58,9 +58,11 @@ class LogindataSerializer(serializers.ModelSerializer):
 
 
 class PersonalProfileSerializer(serializers.ModelSerializer):
-    avatar_url = serializers.SerializerMethodField()
+    # 为头像URL生成一个只读字段，返回给前端
+    avatarUrl = serializers.SerializerMethodField("GetAvatarUrl")
 
-    def get_avatar_url(self, obj):
+    # DRF对于只读字段SerializerMethodField的生成函数
+    def GetAvatarUrl(self, obj):
         return "http://47.112.227.85" + obj.avatar.url
 
     class Meta:

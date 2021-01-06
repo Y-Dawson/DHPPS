@@ -931,7 +931,7 @@ def GetUserInfos(request):
         for accountInfo in pageInfos:
             accountInfoDict = model_to_dict(accountInfo)
             profileDict = model_to_dict(accountInfo.personalprofile)
-            profileDict["avatar"] = accountInfo.personalprofile.GetAvatarUrl()
+            profileDict["avatarUrl"] = accountInfo.personalprofile.GetAvatarUrl()
             jsonList.append({**accountInfoDict, **profileDict})
         jsonRes = json.loads(json.dumps(jsonList, cls=DateEnconding))
         print(jsonRes)
@@ -970,7 +970,7 @@ def GetGeneralUserInfos(request):
         for accountInfo in pageInfos:
             accountInfoDict = model_to_dict(accountInfo)
             profileDict = model_to_dict(accountInfo.personalprofile)
-            profileDict["avatar"] = accountInfo.personalprofile.GetAvatarUrl()
+            profileDict["avatarUrl"] = accountInfo.personalprofile.GetAvatarUrl()
             jsonList.append({**accountInfoDict, **profileDict})
         jsonRes = json.loads(json.dumps(jsonList, cls=DateEnconding))
         print(jsonRes)
@@ -1009,7 +1009,7 @@ def GetAdminInfos(request):
         for accountInfo in pageInfos:
             accountInfoDict = model_to_dict(accountInfo)
             profileDict = model_to_dict(accountInfo.personalprofile)
-            profileDict["avatar"] = accountInfo.personalprofile.GetAvatarUrl()
+            profileDict["avatarUrl"] = accountInfo.personalprofile.GetAvatarUrl()
             jsonList.append({**accountInfoDict, **profileDict})
         jsonRes = json.loads(json.dumps(jsonList, cls=DateEnconding))
         print(jsonRes)

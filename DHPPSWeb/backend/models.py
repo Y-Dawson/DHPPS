@@ -132,7 +132,7 @@ class PersonalProfile(models.Model):
     birth = models.DateField(default=date(1900, 1, 1))
 
     def GetAvatarUrl(self):
-        return "http://47.112.227.85:8000/media/" + str(self.avatar)
+        return "http://47.112.227.85/media/" + str(self.avatar)
 
     class Meta:
         # managed = False
