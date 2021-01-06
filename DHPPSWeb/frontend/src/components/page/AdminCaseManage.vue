@@ -169,9 +169,6 @@
                   </div>
                   <hr />
                   <div class="row justify-content-between mt-3">
-                    <div id="user-list-page-info" class="col-md-6">
-                      <span>Showing 1 to 5 of 5 entries</span>
-                    </div>
                     <div class="col-md-6">
                       <nav aria-label="Page navigation example">
                         <ul class="pagination justify-content-end mb-0">

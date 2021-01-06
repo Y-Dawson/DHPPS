@@ -206,18 +206,6 @@
                   </div>
                   <hr />
                   <div class="row justify-content-between mt-3">
-                    <div id="user-list-page-info" class="col-md-6">
-                      <span>Showing 1 to 5 of 5 entries</span>
-                    </div>
-                    <!-- <div class="paginate">
-                        <button class="primaryb" @click="prevPage()">
-                        上一页
-                        </button>
-                        <span>第{{currentPage}}页/共{{totalPage}}页</span>
-                        <button class="primaryb" @click="nextPage()">
-                        下一页
-                        </button>
-                    </div> -->
                     <div class="col-md-6">
                       <nav aria-label="Page navigation example">
                         <ul class="pagination justify-content-end mb-0">
