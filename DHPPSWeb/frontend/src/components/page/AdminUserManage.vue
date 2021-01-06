@@ -440,7 +440,7 @@ export default {
         })
         .then(
           (response) => (
-            // alert(JSON.stringify(response.data.data)),
+            alert(JSON.stringify(response.data.data)),
             (this.content = response.data.data),
             (this.paginate = response.data.pagination),
             (this.pageSize = response.data.pageSize),
@@ -455,10 +455,6 @@ export default {
     },
     PostUserMessage: function (UI) {
       var self = this;
-      if(this.desc.length>150) {
-        this.$message("字数超过150，请重新输入");
-        return;
-      }
       if ($("#RemarkMessage").val() !== "") {
         self.UserRemark = $("#RemarkMessage").val();
       }
