@@ -155,7 +155,7 @@
                           <td class="text-center">
                             <div class="avatar avatar-md">
                               <img
-                                :src="item.avatar_url"
+                                :src="item.avatar"
                                 class="img-fluid rounded mr-3"
                               />
                             </div>
@@ -303,7 +303,7 @@
                           <td class="text-center">
                             <div class="avatar avatar-md">
                               <img
-                                :src="item.avatar_url"
+                                :src="item.avatar"
                                 class="img-fluid rounded mr-3"
                               />
                             </div>
@@ -463,6 +463,10 @@
                 class="form-control"
                 id="RemarkMessage"
                 rows="4"
+                placeholder="请输入备注......（最多输入100个字）"
+                @input="descInput"
+                v-model="desc"
+                maxlength="100"
               ></textarea>
             </div>
             <div class="form-group">
@@ -533,6 +537,10 @@
                 class="form-control"
                 id="RemarkMessage"
                 rows="4"
+                placeholder="请输入备注......（最多输入100个字）"
+                @input="descInput"
+                v-model="desc"
+                maxlength="100"
               ></textarea>
             </div>
             <div class="form-group">
@@ -670,18 +678,20 @@ export default {
     },
     PostUserMessage: function (UI) {
       var self = this;
-        if($("#RemarkMessage").val()!=="") {
-        self.UserRemark=$("#RemarkMessage").val();
+        if(this.desc.length>150) {
+        this.$message("字数超过150，请重新输入");
+        return;
       }
-      if($("#selected").val()=="管理员") {
-        self.UserAuthority=2;
+      if ($("#RemarkMessage").val() !== "") {
+        self.UserRemark = $("#RemarkMessage").val();
       }
-      else if($("#selected").val()=="普通用户") {
-        self.UserAuthority=1;
-      }
-      else if($("#RemarkMessage").val()=="") {
+      if ($("#selected").val() == "管理员") {
+        self.UserAuthority = 2;
+      } else if ($("#selected").val() == "普通用户") {
+        self.UserAuthority = 1;
+      } else if ($("#RemarkMessage").val() == "") {
         this.$message("请选择需要修改的内容");
-          return;
+        return;
       }
         axios
           .put("/apis/backend/accountInfo/" + UI + "/", {
@@ -790,18 +800,20 @@ export default {
       },
     PostStaffMessage: function (UI) {
       var self = this;
-      if($("#RemarkMessage").val()!=="") {
-        self.UserRemark=$("#RemarkMessage").val();
+      if(this.desc.length>150) {
+        this.$message("字数超过150，请重新输入");
+        return;
       }
-      if($("#selected").val()=="管理员") {
-        self.UserAuthority=2;
+      if ($("#RemarkMessage").val() !== "") {
+        self.StaffRemark = $("#RemarkMessage").val();
       }
-      else if($("#selected").val()=="普通用户") {
-        self.UserAuthority=1;
-      }
-      else if($("#RemarkMessage").val()=="") {
+      if ($("#selected").val() == "管理员") {
+        self.StaffAuthority = 2;
+      } else if ($("#selected").val() == "普通用户") {
+        self.StaffAuthority = 1;
+      } else if ($("#RemarkMessage").val() == "") {
         this.$message("请选择需要修改的内容");
-          return;
+        return;
       }
         axios
           .put("/apis/backend/accountInfo/" + UI + "/", {

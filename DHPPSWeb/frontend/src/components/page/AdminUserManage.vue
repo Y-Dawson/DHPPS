@@ -313,9 +313,9 @@
                 placeholder="请输入备注......（最多输入100个字）"
                 @input="descInput"
                 v-model="desc"
-                maxlength="150"
+                maxlength="100"
               ></textarea>
-              <span>{{ txtVal }}/500</span>
+              <!-- <span>{{ txtVal }}/500</span> -->
             </div>
             <div class="form-group">
               <label for="exampleFormControlTextarea1">权限</label>
