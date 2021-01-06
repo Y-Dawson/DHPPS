@@ -240,7 +240,7 @@
                   >
                     <el-card class="box-card">
                       <div slot="header" class="clearfix">
-                        <i v-if="item.caseMode === '自定模式'"
+                        <i v-if="item.caseMode === 1"
                           class="el-icon el-icon-location-outline"
                           style="
                             margin-right: 10px;
@@ -248,7 +248,7 @@
                             color: rgb(173, 173, 173);
                           "
                         ></i>
-                        <i v-else-if="item.caseMode === '地图模式'"
+                        <i v-else-if="item.caseMode === 2"
                           class="el-icon el-icon-map-location"
                           style="
                             margin-right: 10px;
