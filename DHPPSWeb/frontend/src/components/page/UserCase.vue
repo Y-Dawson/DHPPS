@@ -315,10 +315,9 @@ export default {
     Edit: function (id) {
       var self = this;
       let data = new FormData();
-      // alert(id)
       data.append("caseId", id);
       axios
-        .post("apis/backend/getCaseInfo/", data)
+        .post("/apis/backend/getCaseInfo/", data)
         .then((response) => {
           self.cases = response.data.cases;
           // alert(JSON.stringify(self.cases)),
