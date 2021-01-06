@@ -167,7 +167,7 @@
                           <td class="text-center">
                             <div class="avatar avatar-md">
                               <img
-                                :src="item.avatar_url"
+                                :src="item.avatar"
                                 class="img-fluid rounded mr-3"
                               />
                             </div>
@@ -325,7 +325,7 @@
                           <td class="text-center">
                             <div class="avatar avatar-md">
                               <img
-                                :src="item.avatar_url"
+                                :src="item.avatar"
                                 class="img-fluid rounded mr-3"
                               />
                             </div>
@@ -503,7 +503,7 @@
             <div class="form-group">
               <label for="exampleFormControlTextarea1">权限</label>
               <select id="selected" v-model="selected" name="authority">
-                <option value="普通用户">普通用户</option>
+                <option value="普通用户" selected="selected">普通用户</option>
                 <option value="管理员">管理员</option>
               </select>
             </div>
@@ -578,7 +578,7 @@
               <label for="exampleFormControlTextarea1">权限</label>
               <select id="selected2" v-model="selected2" name="authority">
                 <option value="普通用户">普通用户</option>
-                <option value="管理员">管理员</option>
+                <option value="管理员" selected2="selected2">管理员</option>
               </select>
             </div>
             <div style="text-align: right">
@@ -717,8 +717,6 @@ export default {
       }
       if ($("#selected").val() == "管理员") {
         self.UserAuthority = 2;
-      } else if ($("#selected").val() == "普通用户") {
-        self.UserAuthority = 1;
       } else if ($("#RemarkMessage").val() == "") {
         this.$message("请选择需要修改的内容");
         return;
@@ -740,10 +738,6 @@ export default {
         });
     },
     UserEdit: function (UI, UN, UR, UA, show) {
-      // ($("#RemarkMessage").val() = ""),
-      //   ($("#selected").val() = ""),
-      $("#RemarkMessage").val(""),
-      $("#selected").val("")
         (this.UserId = UI),
         (this.UserName = UN),
         (this.UserRemark = UR),
@@ -845,9 +839,7 @@ export default {
       if ($("#RemarkMessage2").val() !== "") {
         self.StaffRemark = $("#RemarkMessage2").val();
       }
-      if ($("#selected2").val() == "管理员") {
-        self.StaffAuthority = 2;
-      } else if ($("#selected2").val() == "普通用户") {
+      if ($("#selected2").val() == "普通用户") {
         self.StaffAuthority = 1;
       } else if ($("#RemarkMessage2").val() == "") {
         this.$message("请选择需要修改的内容");
@@ -919,10 +911,6 @@ export default {
       if (this.totalStaffPage == 0) this.totalStaffPage = 1;
     },
     StaffEdit: function (UI, UN, UR, UA, show) {
-      // ($("#RemarkMessage2").val() = ""),
-      //   ($("#selected2").val() = ""),
-      $("#RemarkMessage2").val(""),
-      $("#selected2").val("")
       (this.StaffId = UI),
         (this.StaffName = UN),
         (this.StaffRemark = UR),

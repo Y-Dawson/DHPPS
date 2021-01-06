@@ -144,7 +144,7 @@
                           <td>
                             <div class="avatar avatar-md">
                               <img
-                                :src="item.avatar_url"
+                                :src="item.avatar"
                                 class="img-fluid rounded mr-3"
                                 alt="user"
                               />
@@ -320,7 +320,7 @@
             <div class="form-group">
               <label for="exampleFormControlTextarea1">权限</label>
               <select id="selected" v-model="selected" name="authority">
-                <option value="普通用户">普通用户</option>
+                <option value="普通用户" selected="selected">普通用户</option>
                 <option value="管理员">管理员</option>
               </select>
             </div>
