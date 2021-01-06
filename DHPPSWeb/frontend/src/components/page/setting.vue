@@ -1,45 +1,5 @@
 <template>
   <div id="setting">
-    <!-- <div class="layui-layout layui-layout-admin">
-      <div class="layui-header">
-        <div class="layui-logo">LOGO</div>
-        <div class="layui-logotext">高传染性疾病预测系统</div>
-        <ul class="layui-nav layui-layout-right">
-          <li class="layui-nav-item theme">
-            <i class="layui-icon layui-icon-theme"></i>
-            <div class="theme-wrapper"></div>
-          </li>
-
-          <li class="layui-nav-item" style="line-height: 40px">
-            <router-link
-              :to="{
-                path: '/settingMap',
-                query: { params: JSON.stringify({ userId: userId, caseName: 999 }) },
-              }"
-              style="margin-left: 10px; float: left"
-              >地图模式</router-link
-            >
-          </li>
-
-          <li class="layui-nav-item" style="line-height: 40px">
-            <router-link
-              :to="{ path: '/Userprofile', query: { userId: userId } }"
-              style="margin-left: 10px; float: left"
-              >个人中心</router-link
-            >
-          </li>
-          <li class="layui-nav-item" style="line-height: 20px">
-            <el-avatar shape="circle" :size="30" :fit="fit" :src="url"></el-avatar>
-          </li>
-          <li class="layui-nav-item">
-            <a href="javascript:;">
-              <span>用户名</span>
-            </a>
-          </li>
-        </ul>
-      </div>
-    </div> -->
-
     <header>
       <h1>自定模式</h1>
       <div class="toDIY">
@@ -811,6 +771,12 @@ var nowcitycnt = 1;
 var linecnt = 1;
 var concnt = 0;
 var cn = 0;
+var numReg = /^[0-9]*$/;
+var numRe = new RegExp(numReg);
+var cityUsed = [];
+var cName = [];
+var cPeople = [];
+var cInf = [];
 
 export default {
   data() {
@@ -954,6 +920,17 @@ export default {
     console.log("城市坐标：", this.params.CityPosition);
     // this.userId = this.params.userId;
 
+    for (var i = 0; i <= 10; i++) {
+      //每次调整这个数组里的东西，然后存储信息也是分开存储，在需要的时候按照这个数组的布尔值要
+      //初始化、新增城市、删除城市
+      cityUsed.push(false);
+      cName.push(1);
+      cPeople.push(1);
+      cInf.push(1);
+      this.SetButtonToFalse(i);
+    }
+    console.log("this.cityused", cityUsed);
+
     citycnt = 1;
     nowcitycnt = 1;
     linecnt = 1;
@@ -1061,6 +1038,15 @@ export default {
         this.city_po.push(s);
         s = "初始感染人数:" + initIn;
         this.city_po.push(s);
+
+        var n = this.GetNum(cityna);
+
+        cName[n] = cityna;
+        cPeople[n] = initpo;
+        cInf[n] = initIn;
+        cityUsed[n] = true;
+
+        this.SetButtonToFalse(n);
 
         this.cityname.push(cityna);
         this.citypeople.push(initpo);
@@ -1187,11 +1173,15 @@ export default {
       this.bs = false;
       this.sc = false;
 
-      this.$confirm("请确保您已保存案例，此操作将会丢失您在此页面上的所有编辑内容, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-      })
+      this.$confirm(
+        "请确保您已保存案例，此操作将会丢失您在此页面上的所有编辑内容, 是否继续?",
+        "提示",
+        {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        }
+      )
         .then(() => {
           this.$router.push({
             path: "/UserCase",
@@ -1738,7 +1728,9 @@ export default {
       this.$set(g_Global, cityleft, e.pageX);
       this.$set(g_Global, citytop, e.pageY);
       if (this.np == true) {
-        if (citycnt == 11) {
+        var nowc = parseInt(this.GetUnused());
+        console.log("nowc",nowc);
+        if (nowc == 11) {
           this.$message({
             type: "warning",
             message: "您创建的城市已经达到上限，您可以进行模拟、保存案例或者尝试地图模式",
@@ -1755,7 +1747,7 @@ export default {
           return;
         }
 
-        var c = "ci" + citycnt;
+        var c = "ci" + nowc;
         console.log(c);
         var ci = document.getElementById(c);
         var cl = e.pageX - 50;
@@ -2135,8 +2127,6 @@ export default {
             console.log("roadVol", this.roadVol);
           }
 
-          this.DrawRoadMap();
-
           console.log("c", c);
 
           c.style.left = 10000 + "px";
@@ -2148,6 +2138,15 @@ export default {
           });
 
           nowcitycnt--;
+
+          var n = this.GetNum(e);
+          cityUsed[n] = false;
+          console.log("de_used", cityUsed);
+
+          this.UpdateData();
+          this.SetButtonToFalse(n);
+          this.DrawMap();
+          this.DrawRoadMap();
         })
         .catch(() => {
           this.dp = false;
@@ -2217,7 +2216,32 @@ export default {
       // console.log("city_Name:" + this.cityForm.cityName);
       console.log("city_population:" + this.cityForm.population);
       console.log("city_Infected:" + this.cityForm.beginInfected);
-      var cn = this.GetName(citycnt);
+      var n = this.GetNum(e);
+      var cn = this.GetName(n);
+
+      if (!numRe.test(this.cityForm.population)) {
+        this.$message({
+          type: "error",
+          message: "请输入数字",
+        });
+        this.cityForm.population = "";
+        this.cityForm.beginInfected = "";
+        c.style.left = 10000 + "px";
+        c.style.top = 10000 + "px";
+        return;
+      }
+
+      if (!numRe.test(this.cityForm.beginInfected)) {
+        this.$message({
+          type: "error",
+          message: "请输入数字",
+        });
+        this.cityForm.population = "";
+        this.cityForm.beginInfected = "";
+        c.style.left = 10000 + "px";
+        c.style.top = 10000 + "px";
+        return;
+      }
 
       var cy = cn + ": 总人口:" + this.cityForm.population;
       var ipp = parseInt(this.cityForm.population);
@@ -2257,14 +2281,27 @@ export default {
         return;
       }
 
-      this.cityname.push(cn);
-      this.citypeople.push(this.cityForm.population);
-      this.cityInf.push(this.cityForm.beginInfected);
+      var n = this.GetNum(e);
+      cName[n] = cn;
+      cPeople[n] = ipp;
+      cInf[n] = ibi;
+      // this.cityname[n]=cn;
+      // this.citypeople[n]=ipp;
+      // this.cityInf[n]=ibi;
+
+      // this.cityname.push(cn);
+      // this.citypeople.push(this.cityForm.population);
+      // this.cityInf.push(this.cityForm.beginInfected);
       this.city_po.push(cy);
       this.city_po.push(cz);
 
+      cityUsed[n] = true;
+      console.log("cityused", cityUsed);
+      console.log("cityname", this.cityname);
+
       this.SetButton(citycnt);
 
+      this.UpdateData();
       this.DrawMap();
       this.DrawRoadMap();
 
@@ -2354,6 +2391,19 @@ export default {
       if (n == 10) this.isdisabled10 = true;
     },
 
+    SetButtonToFalse(n) {
+      if (n == 1) this.isdisabled1 = false;
+      if (n == 2) this.isdisabled2 = false;
+      if (n == 3) this.isdisabled3 = false;
+      if (n == 4) this.isdisabled4 = false;
+      if (n == 5) this.isdisabled5 = false;
+      if (n == 6) this.isdisabled6 = false;
+      if (n == 7) this.isdisabled7 = false;
+      if (n == 8) this.isdisabled8 = false;
+      if (n == 9) this.isdisabled9 = false;
+      if (n == 10) this.isdisabled10 = false;
+    },
+
     toMapModel() {
       this.$router.push({
         path: "/settingMap",
@@ -2368,7 +2418,8 @@ export default {
 
     correctCity() {
       if (this.alreadyConfirm == false) {
-        var c = "ci" + citycnt;
+        var n = this.GetUnused();
+        var c = "ci" + n;
         console.log(c);
         var ci = document.getElementById(c);
         ci.style.left = 10000 + "px";
@@ -2391,6 +2442,29 @@ export default {
       if (tct < 150) {
         console.log("你的top不对劲");
         ci.style.marginTop = -tct + "px";
+      }
+    },
+
+    GetUnused() {
+      for (var i = 1; i <= 10; i++) {
+        console.log("cityused", cityUsed[i]);
+        if (cityUsed[i] == false) {
+          return i;
+        }
+      }
+      return 99;
+    },
+
+    UpdateData() {
+      this.cityname = [];
+      this.citypeople = [];
+      this.cityInf = [];
+      for (var i = 1; i <= 10; i++) {
+        if (cityUsed[i] == true) {
+          this.cityname.push(cName[i]);
+          this.citypeople.push(cPeople[i]);
+          this.cityInf.push(cInf[i]);
+        }
       }
     },
   },

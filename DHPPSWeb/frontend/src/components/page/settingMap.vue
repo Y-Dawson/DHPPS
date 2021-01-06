@@ -217,6 +217,8 @@ import "../../../node_modules/echarts/lib/chart/map/china.js";
 
 var citycnt = 0;
 var roadcnt = 0;
+var numReg = /^[0-9]*$/;
+var numRe = new RegExp(numReg);
 
 export default {
   data() {
@@ -569,6 +571,28 @@ export default {
         }
       }
 
+      if (!numRe.test(this.ruleForm.to_pop)) {
+        this.isShow1 = false;
+        this.$message({
+          type: "error",
+          message: "请输入数字",
+        });
+        this.ruleForm.to_pop = "";
+        this.ruleForm.begin_inf = "";
+        return;
+      }
+
+      if (!numRe.test(this.ruleForm.begin_inf)) {
+        this.isShow1 = false;
+        this.$message({
+          type: "error",
+          message: "请输入数字",
+        });
+        this.ruleForm.to_pop = "";
+        this.ruleForm.begin_inf = "";
+        return;
+      }
+
       var ipp = parseInt(this.ruleForm.to_pop);
       if (ipp < 100 || ipp > 1000000) {
         this.$alert("城市人口应在100~1000000内", "创建失败", {
@@ -599,8 +623,7 @@ export default {
         return;
       }
 
-      var s =
-        cn + ":总人口:" + this.ruleForm.to_pop + ",初始感染数:" + this.ruleForm.begin_inf;
+      var s = cn + ":总人口:" + ipp + ",初始感染数:" + ibi;
       this.city_po.push(s);
       this.isShow1 = false;
       citycnt += 1;
@@ -728,6 +751,16 @@ export default {
         }
       }
 
+      if (!numRe.test(this.ruleForm.volumn)) {
+        this.$message({
+          type: "error",
+          message: "请输入数字",
+        });
+        this.ruleForm.volumn="";
+        this.isShow2 = false;
+        return;
+      }
+
       var value = parseInt(this.ruleForm.volumn);
       if (value < 1 || value > 100) {
         this.$alert("人流量应在1~100内", "连接失败", {
@@ -812,7 +845,7 @@ export default {
 
       var wait_delete = [];
 
-      console.log("前road_data",this.road_data);
+      console.log("前road_data", this.road_data);
 
       for (var i in this.road_data) {
         if (
@@ -829,7 +862,7 @@ export default {
         this.road_data.splice(twd[i], 1);
       }
 
-      console.log("后road_data",this.road_data);
+      console.log("后road_data", this.road_data);
       this.drawMap();
     },
 

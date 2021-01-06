@@ -35,13 +35,13 @@
 
       <div class="column">
         <div class="panel">
-          <h2>折线图</h2>
+          <h2>各城市感染人数折线图</h2>
           <div class="chart" id="line"></div>
           <div class="panel-footer"></div>
         </div>
 
         <div class="panel">
-          <h2>饼形图</h2>
+          <h2>各城市感染人数饼形图</h2>
           <div class="chart" id="pie"></div>
           <div class="panel-footer"></div>
         </div>
