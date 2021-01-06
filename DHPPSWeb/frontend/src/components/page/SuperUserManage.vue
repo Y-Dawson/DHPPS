@@ -155,7 +155,7 @@
                           <td class="text-center">
                             <div class="avatar avatar-md">
                               <img
-                                :src="item.avatar"
+                                :src="item.avatar_url"
                                 class="img-fluid rounded mr-3"
                               />
                             </div>
@@ -303,7 +303,7 @@
                           <td class="text-center">
                             <div class="avatar avatar-md">
                               <img
-                                :src="item.avatar"
+                                :src="item.avatar_url"
                                 class="img-fluid rounded mr-3"
                               />
                             </div>
@@ -670,12 +670,19 @@ export default {
     },
     PostUserMessage: function (UI) {
       var self = this;
-        if($("#RemarkMessage").val()!=="") self.UserRemark=$("#RemarkMessage").val();
-        if($("#selected").val()=="管理员"||$("#selected").val()=="普通用户") self.UserAuthority=$("#selected").val();
-        else if($("#RemarkMessage").val() =="") {
-          this.$message("请选择需要修改的内容");
+        if($("#RemarkMessage").val()!=="") {
+        self.UserRemark=$("#RemarkMessage").val();
+      }
+      if($("#selected").val()=="管理员") {
+        self.UserAuthority=2;
+      }
+      else if($("#selected").val()=="普通用户") {
+        self.UserAuthority=1;
+      }
+      else if($("#RemarkMessage").val()=="") {
+        this.$message("请选择需要修改的内容");
           return;
-        }
+      }
         axios
           .put("/apis/backend/accountInfo/" + UI + "/", {
             remark: self.UserRemark,
@@ -783,12 +790,19 @@ export default {
       },
     PostStaffMessage: function (UI) {
       var self = this;
-      if($("#RemarkMessage").val()!=="") self.StaffRemark=$("#RemarkMessage").val();
-        if($("#selected").val()=="管理员"||$("#selected").val()=="普通用户") self.StaffAuthority=$("#selected").val();
-        else if($("#RemarkMessage").val() =="") {
-          this.$message("请选择需要修改的内容");
+      if($("#RemarkMessage").val()!=="") {
+        self.UserRemark=$("#RemarkMessage").val();
+      }
+      if($("#selected").val()=="管理员") {
+        self.UserAuthority=2;
+      }
+      else if($("#selected").val()=="普通用户") {
+        self.UserAuthority=1;
+      }
+      else if($("#RemarkMessage").val()=="") {
+        this.$message("请选择需要修改的内容");
           return;
-        }
+      }
         axios
           .put("/apis/backend/accountInfo/" + UI + "/", {
             remark: self.StaffRemark,

@@ -1,5 +1,5 @@
 <template>
-  <div  v-if="authorityShow" style="background-color: rgb(235, 234, 250)">
+  <div v-if="authorityShow" style="background-color: rgb(235, 234, 250)">
     <div class="wrapper">
       <!-- Sidebar  -->
       <div class="iq-sidebar" style="z-index: 1">
@@ -13,7 +13,7 @@
                 <router-link
                   class="iq-waves-effect"
                   :to="{
-                    path: '/AdminIndex'
+                    path: '/AdminIndex',
                   }"
                   ><i class="ri-home-4-line"></i><span>首页</span></router-link
                 >
@@ -34,9 +34,10 @@
                 <router-link
                   class="iq-waves-effect"
                   :to="{
-                    path: '/AdminCaseManage'
+                    path: '/AdminCaseManage',
                   }"
-                  ><i class="ri-home-4-line"></i><span>案例管理</span></router-link
+                  ><i class="ri-home-4-line"></i
+                  ><span>案例管理</span></router-link
                 >
               </li>
               <li>
@@ -91,7 +92,11 @@
               </li>
               <li>
                 <a class="d-flex align-items-center">
-                  <img :src="AdminUrl" class="img-fluid rounded mr-3" alt="user" />
+                  <img
+                    :src="AdminUrl"
+                    class="img-fluid rounded mr-3"
+                    alt="user"
+                  />
                   <div class="caption">
                     <h6 class="mb-0 line-height">{{ MyContent.userName }}</h6>
                   </div>
@@ -139,7 +144,7 @@
                           <td>
                             <div class="avatar avatar-md">
                               <img
-                                :src="item.avatar"
+                                :src="item.avatar_url"
                                 class="img-fluid rounded mr-3"
                                 alt="user"
                               />
@@ -173,7 +178,13 @@
                                 title=""
                                 data-original-title="Edit"
                                 @click="
-                                  UserEdit(item.userId, item.userName, item.remark, item.authority, true)
+                                  UserEdit(
+                                    item.userId,
+                                    item.userName,
+                                    item.remark,
+                                    item.authority,
+                                    true
+                                  )
                                 "
                               >
                                 <i class="ri-pencil-line"></i>
@@ -299,7 +310,12 @@
                 class="form-control"
                 id="RemarkMessage"
                 rows="4"
+                placeholder="请输入备注......（最多输入100个字）"
+                @input="descInput"
+                v-model="desc"
+                maxlength="150"
               ></textarea>
+              <span>{{ txtVal }}/500</span>
             </div>
             <div class="form-group">
               <label for="exampleFormControlTextarea1">权限</label>
@@ -345,7 +361,7 @@
 export default {
   data() {
     return {
-      value:new Date(),
+      value: new Date(),
       // 头像
       fits: ["fill"],
       url:
@@ -354,7 +370,7 @@ export default {
       content: [],
       MyContent: [],
       AdminId: "",
-      authorityShow:false,
+      authorityShow: false,
       //分页
       totalPage: 1, // 统共页数，默认为1
       currentPage: 1, //当前页数 ，默认为1
@@ -363,10 +379,13 @@ export default {
       //用户编辑的id和昵称
       UserId: "",
       UserName: "",
-      UserRemark:"",
-      UserAuthority:1,
+      UserRemark: "",
+      UserAuthority: 1,
       showModal: false,
       radioVal: "普通用户",
+
+      txtVal: 0,
+      desc: "",
     };
   },
   created: function () {
@@ -380,7 +399,7 @@ export default {
         .post("/apis/backend/getIdentity/")
         .then((response) => {
           this.AdminId = response.data.userId;
-          if (response.data.authority == 2 ||response.data.authority==3) {
+          if (response.data.authority == 2 || response.data.authority == 3) {
             this.authorityShow = true;
             this.getMyContent();
             this.getUserContent();
@@ -436,30 +455,43 @@ export default {
     },
     PostUserMessage: function (UI) {
       var self = this;
-      if($("#RemarkMessage").val()!=="") self.UserRemark=$("#RemarkMessage").val();
-        if($("#selected").val()=="管理员"||$("#selected").val()=="普通用户") self.UserAuthority=$("#selected").val();
-        else if($("#RemarkMessage").val() =="") {
-          this.$message("请选择需要修改的内容");
-          return;
-        }
-        axios
-          .put("/apis/backend/accountInfo/" + UI + "/", {
-            remark: self.UserRemark,
-            authority: self.UserAuthority
-          })
-          .then(
-            (response) => (
-              this.$message("修改成功"),
-              this.getUserContent(),
-              this.CloseUserEdit()
-            )
+      if(this.desc.length>150) {
+        this.$message("字数超过150，请重新输入");
+        return;
+      }
+      if ($("#RemarkMessage").val() !== "") {
+        self.UserRemark = $("#RemarkMessage").val();
+      }
+      if ($("#selected").val() == "管理员") {
+        self.UserAuthority = 2;
+      } else if ($("#selected").val() == "普通用户") {
+        self.UserAuthority = 1;
+      } else if ($("#RemarkMessage").val() == "") {
+        this.$message("请选择需要修改的内容");
+        return;
+      }
+      axios
+        .put("/apis/backend/accountInfo/" + UI + "/", {
+          remark: self.UserRemark,
+          authority: self.UserAuthority,
+        })
+        .then(
+          (response) => (
+            this.$message("修改成功"),
+            this.getUserContent(),
+            this.CloseUserEdit()
           )
-          .catch(function (error) {
-            alert("数据发送失败");
-          });
+        )
+        .catch(function (error) {
+          alert("数据发送失败");
+        });
     },
     UserEdit: function (UI, UN, UR, UA, show) {
-      (this.UserId = UI), (this.UserName = UN), (this.UserRemark=UR), (this.UserAuthority=UA), (this.showModal = show);
+      (this.UserId = UI),
+        (this.UserName = UN),
+        (this.UserRemark = UR),
+        (this.UserAuthority = UA),
+        (this.showModal = show);
     },
     CloseUserEdit: function (show) {
       this.showModal = show;
@@ -514,6 +546,9 @@ export default {
           alert("数据发送失败");
           console.log(error.response);
         });
+    },
+    descInput: function () {
+      this.txtVal = this.desc.length;
     },
   },
 };
