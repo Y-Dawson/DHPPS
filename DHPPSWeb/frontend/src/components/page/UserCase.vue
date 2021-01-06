@@ -362,7 +362,7 @@ export default {
             console.log("s:", s);
             city_pos.push(s);
           }
-          if(this.caseMode==1){
+          if(this.caseMode== 1){
             this.$router.push({
             path: "/setting",
             query: {
@@ -378,7 +378,7 @@ export default {
             },
           });
           }
-          else{
+          else if(this.caseMode== 2){
             // alert(this.caseMode)
             this.$router.push({
             path: "/settingMap",
@@ -411,7 +411,7 @@ export default {
       var self = this;
       // alert(id);
       axios
-        .delete("apis/backend/case/" + id+ "/")
+        .delete("/apis/backend/case/" + id+ "/")
         .then((response) => (
           self.currentPageData = response.data,
           this.GetCaseContent(),
