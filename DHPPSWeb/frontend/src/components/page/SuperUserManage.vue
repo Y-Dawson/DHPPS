@@ -167,7 +167,7 @@
                           <td class="text-center">
                             <div class="avatar avatar-md">
                               <img
-                                :src="item.avatar"
+                                :src="item.avatar_url"
                                 class="img-fluid rounded mr-3"
                               />
                             </div>
@@ -325,7 +325,7 @@
                           <td class="text-center">
                             <div class="avatar avatar-md">
                               <img
-                                :src="item.avatar"
+                                :src="item.avatar_url"
                                 class="img-fluid rounded mr-3"
                               />
                             </div>

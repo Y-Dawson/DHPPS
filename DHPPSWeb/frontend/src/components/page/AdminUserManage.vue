@@ -144,7 +144,7 @@
                           <td>
                             <div class="avatar avatar-md">
                               <img
-                                :src="item.avatar"
+                                :src="item.avatar_url"
                                 class="img-fluid rounded mr-3"
                                 alt="user"
                               />
