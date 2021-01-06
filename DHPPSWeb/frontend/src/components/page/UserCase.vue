@@ -200,7 +200,7 @@ export default {
       MyContent: [],
       contentList: [],
       cases: [],
-      caseMode:'',
+      caseMode:1,
       //分页
       restCase:0,
       totalCasePage: 1, // 统共页数，默认为1
@@ -362,7 +362,7 @@ export default {
             console.log("s:", s);
             city_pos.push(s);
           }
-          if(this.caseMode=="自定模式"){
+          if(this.caseMode==1){
             this.$router.push({
             path: "/setting",
             query: {
