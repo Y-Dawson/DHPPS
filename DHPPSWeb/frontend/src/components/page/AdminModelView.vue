@@ -339,7 +339,7 @@ export default {
         .get("/apis/backend/profile/" + this.AdminId + "/")
         .then((response) => {
           (self.MyContent = response.data),
-            (this.AdminUrl = self.MyContent.avatar_url);
+            (this.AdminUrl = self.MyContent.avatarUrl);
         })
         .catch(function (error) {
           // 请求失败处理
