@@ -273,7 +273,7 @@ export default {
         .then(
           (response) => (
             self.MyContent = response.data,
-            this.imageUrl = self.MyContent.avatar_url,
+            this.imageUrl = self.MyContent.avatarUrl,
             this.GetCaseContent()
             // alert(JSON.stringify(self.MyContent))
           )

@@ -291,7 +291,7 @@ export default {
           (response) => (
             (self.MyContent = response.data),
             // alert(JSON.stringify(response.data)),
-            (this.Url = self.MyContent.avatar_url)
+            (this.Url = self.MyContent.avatarUrl)
           )
         )
         .catch(function (error) {

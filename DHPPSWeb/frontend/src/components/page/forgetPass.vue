@@ -13,7 +13,7 @@
                 id="phonenum"
                 class="MyInput"
               >
-              <i slot="prefix" class="el-input__icon el-icon-user"></i>
+              <i slot="prefix" class="el-input__icon el-icon-phone"></i>
               </el-input>
             </el-form-item>
           </div>
@@ -30,7 +30,7 @@
                 id="securitt_code"
                 class="MyInput"
               >
-              <i slot="prefix" class="el-input__icon el-icon-user"></i>
+              <i slot="prefix" class="el-input__icon el-icon-s-promotion"></i>
               </el-input>
             </el-form-item>
             <el-form-item>
@@ -51,7 +51,7 @@
                 id="password"
                 class="MyInput"
               >
-              <i slot="prefix" class="el-input__icon el-icon-user"></i>
+              <i slot="prefix" class="el-input__icon el-icon-lock"></i>
               </el-input>
             </el-form-item>
           </div>
@@ -70,7 +70,7 @@
                 id="password2"
                 class="MyInput"
               >
-              <i slot="prefix" class="el-input__icon el-icon-user"></i>
+              <i slot="prefix" class="el-input__icon el-icon-lock"></i>
               </el-input>
             </el-form-item>
           </div>
