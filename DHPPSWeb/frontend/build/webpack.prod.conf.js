@@ -132,6 +132,7 @@ if (config.build.productionGzip) {
         ')$'
       ),
       threshold: 10240,
+      // deleteOriginalAssets:true,
       minRatio: 0.8
     })
   )
