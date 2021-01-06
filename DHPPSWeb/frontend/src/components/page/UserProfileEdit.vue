@@ -375,10 +375,10 @@ export default {
         return callback(new Error("请输入昵称"));
       }
       setTimeout(() => {
-        let reg = /^[(a-zA-Z0-9\u4e00-\u9fa5){1}_#]{1,20}$/;
+        let reg = /^[(a-zA-Z0-9\u4e00-\u9fa5){1}_#]{1,10}$/;
         if (value == "" || !reg.test(value)) {
           callback(
-            new Error("昵称限1-20个字符，支持中英文、数字、减号或下划线")
+            new Error("昵称限1-10个字符，支持中英文、数字、减号或下划线")
           );
         } else {
           callback();
@@ -464,7 +464,7 @@ export default {
         email: "",
         radio: "",
         delivery: false,
-        value1: "",
+        value1: "2000-01-01",
         addr: "",
 
         prePass: "",
