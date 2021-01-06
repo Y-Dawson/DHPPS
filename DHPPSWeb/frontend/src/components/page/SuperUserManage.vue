@@ -167,7 +167,7 @@
                           <td class="text-center">
                             <div class="avatar avatar-md">
                               <img
-                                :src="item.avatar_url"
+                                :src="item.avatarUrl"
                                 class="img-fluid rounded mr-3"
                               />
                             </div>
@@ -325,7 +325,7 @@
                           <td class="text-center">
                             <div class="avatar avatar-md">
                               <img
-                                :src="item.avatar_url"
+                                :src="item.avatarUrl"
                                 class="img-fluid rounded mr-3"
                               />
                             </div>
@@ -680,7 +680,7 @@ export default {
         .then(
           (response) => (
             (self.MyContent = response.data),
-            (this.AdminUrl = self.MyContent.avatar_url)
+            (this.AdminUrl = self.MyContent.avatarUrl)
           )
         )
         .catch(function (error) {
