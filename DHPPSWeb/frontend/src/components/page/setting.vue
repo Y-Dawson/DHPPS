@@ -1548,7 +1548,7 @@ export default {
             road_inf.push(s);
           }
           myFormData.append("roadnum", roadcnt);
-          myFormData.append("caseMode", "自定模式");
+          myFormData.append("caseMode", 1);
 
           myFormData.append("InitCityData", city_infor);
 
@@ -1674,7 +1674,7 @@ export default {
             road_inf.push(s);
           }
           myFormData.append("roadnum", roadcnt);
-          myFormData.append("caseMode", "自定模式");
+          myFormData.append("caseMode", 1);
 
           myFormData.append("InitCityData", city_infor);
 

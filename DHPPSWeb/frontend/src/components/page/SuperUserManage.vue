@@ -13,7 +13,7 @@
                 <router-link
                   class="iq-waves-effect"
                   :to="{
-                    path: '/AdminIndex'
+                    path: '/AdminIndex',
                   }"
                   ><i class="ri-home-4-line"></i><span>首页</span></router-link
                 >
@@ -34,9 +34,10 @@
                 <router-link
                   class="iq-waves-effect"
                   :to="{
-                    path: '/AdminCaseManage'
+                    path: '/AdminCaseManage',
                   }"
-                  ><i class="ri-home-4-line"></i><span>案例管理</span></router-link
+                  ><i class="ri-home-4-line"></i
+                  ><span>案例管理</span></router-link
                 >
               </li>
               <li>
@@ -86,7 +87,11 @@
               </li>
               <li>
                 <a class="d-flex align-items-center">
-                  <img :src="AdminUrl" class="img-fluid rounded mr-3" alt="user" />
+                  <img
+                    :src="AdminUrl"
+                    class="img-fluid rounded mr-3"
+                    alt="user"
+                  />
                   <div class="caption">
                     <h6 class="mb-0 line-height">{{ MyContent.userName }}</h6>
                   </div>
@@ -101,27 +106,34 @@
       <div id="content-page" class="content-page" style="z-index: 1">
         <div class="container-fluid">
           <div class="row">
-
             <div class="col-lg-12" v-if="!show">
-                     <div class="iq-card">
-                        <div class="iq-card-body p-0">
-                           <div class="iq-edit-list">
-                              <ul class="iq-edit-profile d-flex nav nav-pills">
-                                 <li class="col-md-6 p-0">
-                                    <a class="nav-link active" data-toggle="pill" @click="CloseEditPWD()">
-                                       用户管理
-                                    </a>
-                                 </li>
-                                 <li class="col-md-6 p-0">
-                                    <a class="nav-link" data-toggle="pill" @click="ShowPage()">
-                                       员工管理
-                                    </a>
-                                 </li>
-                              </ul>
-                           </div>
-                        </div>
-                     </div>
+              <div class="iq-card">
+                <div class="iq-card-body p-0">
+                  <div class="iq-edit-list">
+                    <ul class="iq-edit-profile d-flex nav nav-pills">
+                      <li class="col-md-6 p-0">
+                        <a
+                          class="nav-link active"
+                          data-toggle="pill"
+                          @click="CloseEditPWD()"
+                        >
+                          用户管理
+                        </a>
+                      </li>
+                      <li class="col-md-6 p-0">
+                        <a
+                          class="nav-link"
+                          data-toggle="pill"
+                          @click="ShowPage()"
+                        >
+                          员工管理
+                        </a>
+                      </li>
+                    </ul>
                   </div>
+                </div>
+              </div>
+            </div>
             <div class="col-sm-12" v-if="!show">
               <div class="iq-card">
                 <div class="iq-card-body">
@@ -188,7 +200,13 @@
                                 title=""
                                 data-original-title="Edit"
                                 @click="
-                                  UserEdit(item.userId, item.userName, item.remark, item.authority, true)
+                                  UserEdit(
+                                    item.userId,
+                                    item.userName,
+                                    item.remark,
+                                    item.authority,
+                                    true
+                                  )
                                 "
                               >
                                 <i class="ri-pencil-line"></i>
@@ -251,25 +269,29 @@
             </div>
 
             <div class="col-lg-12" v-if="show">
-                     <div class="iq-card">
-                        <div class="iq-card-body p-0">
-                           <div class="iq-edit-list">
-                              <ul class="iq-edit-profile d-flex nav nav-pills">
-                                 <li class="col-md-6 p-0">
-                                    <a class="nav-link" data-toggle="pill" @click="ClosePage()">
-                                       用户管理
-                                    </a>
-                                 </li>
-                                 <li class="col-md-6 p-0">
-                                    <a class="nav-link active" data-toggle="pill">
-                                       员工管理
-                                    </a>
-                                 </li>
-                              </ul>
-                           </div>
-                        </div>
-                     </div>
+              <div class="iq-card">
+                <div class="iq-card-body p-0">
+                  <div class="iq-edit-list">
+                    <ul class="iq-edit-profile d-flex nav nav-pills">
+                      <li class="col-md-6 p-0">
+                        <a
+                          class="nav-link"
+                          data-toggle="pill"
+                          @click="ClosePage()"
+                        >
+                          用户管理
+                        </a>
+                      </li>
+                      <li class="col-md-6 p-0">
+                        <a class="nav-link active" data-toggle="pill">
+                          员工管理
+                        </a>
+                      </li>
+                    </ul>
                   </div>
+                </div>
+              </div>
+            </div>
             <div class="col-sm-12" v-if="show">
               <div class="iq-card">
                 <div class="iq-card-body">
@@ -336,7 +358,13 @@
                                 title=""
                                 data-original-title="Edit"
                                 @click="
-                                  StaffEdit(item.userId, item.userName, item.remark, item.authority, true)
+                                  StaffEdit(
+                                    item.userId,
+                                    item.userName,
+                                    item.remark,
+                                    item.authority,
+                                    true
+                                  )
                                 "
                               >
                                 <i class="ri-pencil-line"></i>
@@ -384,11 +412,15 @@
                           </li>
                           <li class="page-item">
                             <a class="page-link"
-                              >第{{ currentStaffPage }}页/共{{ totalStaffPage }}页</a
+                              >第{{ currentStaffPage }}页/共{{
+                                totalStaffPage
+                              }}页</a
                             >
                           </li>
                           <li class="page-item">
-                            <a class="page-link" @click="nextStaffPage()">Next</a>
+                            <a class="page-link" @click="nextStaffPage()"
+                              >Next</a
+                            >
                           </li>
                         </ul>
                       </nav>
@@ -397,7 +429,6 @@
                 </div>
               </div>
             </div>
-
           </div>
         </div>
       </div>
@@ -463,12 +494,16 @@
                 class="form-control"
                 id="RemarkMessage"
                 rows="4"
+                placeholder="请输入备注......（最多输入100个字）"
+                @input="descInput"
+                v-model="desc"
+                maxlength="100"
               ></textarea>
             </div>
             <div class="form-group">
               <label for="exampleFormControlTextarea1">权限</label>
               <select id="selected" v-model="selected" name="authority">
-                <option value="普通用户">普通用户</option>
+                <option value="普通用户" selected="selected">普通用户</option>
                 <option value="管理员">管理员</option>
               </select>
             </div>
@@ -531,15 +566,19 @@
               <label for="exampleFormControlTextarea1">备注</label>
               <textarea
                 class="form-control"
-                id="RemarkMessage"
+                id="RemarkMessage2"
                 rows="4"
+                placeholder="请输入备注......（最多输入100个字）"
+                @input="descInput"
+                v-model="desc"
+                maxlength="100"
               ></textarea>
             </div>
             <div class="form-group">
               <label for="exampleFormControlTextarea1">权限</label>
-              <select id="selected" v-model="selected" name="authority">
+              <select id="selected2" v-model="selected2" name="authority">
                 <option value="普通用户">普通用户</option>
-                <option value="管理员">管理员</option>
+                <option value="管理员" selected2="selected2">管理员</option>
               </select>
             </div>
             <div style="text-align: right">
@@ -578,7 +617,7 @@ export default {
       contentStaff: [],
       MyContent: [],
       AdminId: "",
-      authorityShow:false,
+      authorityShow: false,
       //分页
       totalPage: 1, // 统共页数，默认为1
       currentPage: 1, //当前页数 ，默认为1
@@ -592,16 +631,19 @@ export default {
       //用户编辑的id和昵称
       UserId: "",
       UserName: "",
-      UserRemark:"",
-      UserAuthority:"",
+      UserRemark: "",
+      UserAuthority: "",
       StaffId: "",
       StaffName: "",
       StaffRemark: "",
-      StaffAuthority:"",
+      StaffAuthority: "",
       showModal: false,
       radioVal: "普通用户",
       show: false,
-      showStaff:false
+      showStaff: false,
+
+      txtVal: 0,
+      desc: "",
     };
   },
   created: function () {
@@ -615,7 +657,7 @@ export default {
         .post("/apis/backend/getIdentity/")
         .then((response) => {
           this.AdminId = response.data.userId;
-          if (response.data.authority == "超级管理员") {
+          if (response.data.authority == 3) {
             this.authorityShow = true;
             this.getMyContent();
             this.getUserContent();
@@ -638,7 +680,7 @@ export default {
         .then(
           (response) => (
             (self.MyContent = response.data),
-            (this.AdminUrl = self.MyContent.avatar)
+            (this.AdminUrl = self.MyContent.avatar_url)
           )
         )
         .catch(function (error) {
@@ -670,30 +712,37 @@ export default {
     },
     PostUserMessage: function (UI) {
       var self = this;
-        if($("#RemarkMessage").val()!=="") self.UserRemark=$("#RemarkMessage").val();
-        if($("#selected").val()=="管理员"||$("#selected").val()=="普通用户") self.UserAuthority=$("#selected").val();
-        else if($("#RemarkMessage").val() =="") {
-          this.$message("请选择需要修改的内容");
-          return;
-        }
-        axios
-          .put("/apis/backend/accountInfo/" + UI + "/", {
-            remark: self.UserRemark,
-            authority: self.UserAuthority,
-          })
-          .then(
-            (response) => (
-              this.$message("修改成功"),
-              this.getUserContent(),
-              this.CloseUserEdit(false)
-            )
+      if ($("#RemarkMessage").val() !== "") {
+        self.UserRemark = $("#RemarkMessage").val();
+      }
+      if ($("#selected").val() == "管理员") {
+        self.UserAuthority = 2;
+      } else if ($("#RemarkMessage").val() == "") {
+        this.$message("请选择需要修改的内容");
+        return;
+      }
+      axios
+        .put("/apis/backend/accountInfo/" + UI + "/", {
+          remark: self.UserRemark,
+          authority: self.UserAuthority,
+        })
+        .then(
+          (response) => (
+            this.$message("修改成功"),
+            this.getUserContent(),
+            this.CloseUserEdit(false)
           )
-          .catch(function (error) {
-            alert("数据发送失败");
-          });
+        )
+        .catch(function (error) {
+          alert("数据发送失败");
+        });
     },
     UserEdit: function (UI, UN, UR, UA, show) {
-      (this.UserId = UI), (this.UserName = UN), (this.UserRemark=UR), (this.UserAuthority=UA), (this.showModal = show);
+        (this.UserId = UI),
+        (this.UserName = UN),
+        (this.UserRemark = UR),
+        (this.UserAuthority = UA),
+        (this.showModal = show);
     },
     CloseUserEdit: function (show) {
       this.showModal = show;
@@ -750,117 +799,123 @@ export default {
         });
     },
 
-    ShowPage(){
-      this.show=true;
+    ShowPage() {
+      this.show = true;
       this.getStaffContent();
     },
     ClosePage() {
-      this.show=false;
+      this.show = false;
       this.getUserContent();
     },
 
-
     getStaffContent: function () {
-        var self = this;
-        axios
-          .get("/apis/backend/adminManage/",{
-            params:{
-              pageSize: 10,
-              page: self.currentStaffPage
-            }
-          })
-          .then(response => (
-            self.contentStaff = response.data.data,
-            self.paginateStaff=response.data.pagination,
-            self.pageStaffSize=response.data.pageSize,
-            self.totalStaffPage=Math.ceil(self.paginateStaff / self.pageStaffSize),
+      var self = this;
+      axios
+        .get("/apis/backend/adminManage/", {
+          params: {
+            pageSize: 10,
+            page: self.currentStaffPage,
+          },
+        })
+        .then(
+          (response) => (
+            (self.contentStaff = response.data.data),
+            (self.paginateStaff = response.data.pagination),
+            (self.pageStaffSize = response.data.pageSize),
+            (self.totalStaffPage = Math.ceil(
+              self.paginateStaff / self.pageStaffSize
+            )),
             this.testStaffPage()
             // alert(JSON.stringify(response))
-          ))
-          .catch(function (error) { // 请求失败处理
-            alert("数据请求失败wdnmd");
-          });
-      },
+          )
+        )
+        .catch(function (error) {
+          // 请求失败处理
+          alert("数据请求失败wdnmd");
+        });
+    },
     PostStaffMessage: function (UI) {
       var self = this;
-      if($("#RemarkMessage").val()!=="") self.StaffRemark=$("#RemarkMessage").val();
-        if($("#selected").val()=="管理员"||$("#selected").val()=="普通用户") self.StaffAuthority=$("#selected").val();
-        else if($("#RemarkMessage").val() =="") {
-          this.$message("请选择需要修改的内容");
-          return;
-        }
-        axios
-          .put("/apis/backend/accountInfo/" + UI + "/", {
-            remark: self.StaffRemark,
-            authority: self.StaffAuthority,
-          })
-          .then(
-            (response) => (
-              this.$message("修改成功"),
-              this.ShowPage(),
-              this.CloseStaffEdit()
-            )
-          )
-          .catch(function (error) {
-            alert("数据发送失败");
-          });
-    },
-      handleStaffDel(id) {
-        this.$confirm("确认删除该用户吗？","系统提示",{
-          confirmButtonText:"确定",
-          cancelButtonText:"取消",
-          type:"warning"
+      if ($("#RemarkMessage2").val() !== "") {
+        self.StaffRemark = $("#RemarkMessage2").val();
+      }
+      if ($("#selected2").val() == "普通用户") {
+        self.StaffAuthority = 1;
+      } else if ($("#RemarkMessage2").val() == "") {
+        this.$message("请选择需要修改的内容");
+        return;
+      }
+      axios
+        .put("/apis/backend/accountInfo/" + UI + "/", {
+          remark: self.StaffRemark,
+          authority: self.StaffAuthority,
         })
-          .then(()=>{
-            this.deleteStaffContent(id);
-            this.$message({
-              type:"success",
-              message:"删除成功！"
-            });
-          })
-          .catch(()=>{
-            this.$message({
-              type:"info",
-              message:"取消删除！"
-            });
-          })
-      },
-      deleteStaffContent: function (id) {
-        var self = this;
-        // var date = $("#input1").val();
-        axios
-          .delete('/apis/backend/accountInfo/'+id+'/',{
-              
-          })
-          .then(response => (
-            self.contentStaff = response,
-            self.getStaffContent()
-            // alert(JSON.stringify(response))
-          ))
-          .catch(function (error) {
-            alert("数据发送失败");
-            console.log(error.response);
+        .then(
+          (response) => (
+            this.$message("修改成功"), this.ShowPage(), this.CloseStaffEdit()
+          )
+        )
+        .catch(function (error) {
+          alert("数据发送失败");
+        });
+    },
+    handleStaffDel(id) {
+      this.$confirm("确认删除该用户吗？", "系统提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          this.deleteStaffContent(id);
+          this.$message({
+            type: "success",
+            message: "删除成功！",
           });
-        },
-        //上一页
-        prevStaffPage() {
-            if (this.currentStaffPage == 1) return;
-             this.currentStaffPage--;
-             this.getStaffContent();
-            
-        },
-        // 下一页
-        nextStaffPage() {
-            if (this.currentStaffPage == this.totalStaffPage) return ;
-             this.currentStaffPage++;
-             this.getStaffContent();
-            
-        },
-      testStaffPage:function(){
-        if(this.totalStaffPage==0) this.totalStaffPage=1;
-      },
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "取消删除！",
+          });
+        });
+    },
+    deleteStaffContent: function (id) {
+      var self = this;
+      // var date = $("#input1").val();
+      axios
+        .delete("/apis/backend/accountInfo/" + id + "/", {})
+        .then(
+          (response) => (
+            (self.contentStaff = response), self.getStaffContent()
+            // alert(JSON.stringify(response))
+          )
+        )
+        .catch(function (error) {
+          alert("数据发送失败");
+          console.log(error.response);
+        });
+    },
+    //上一页
+    prevStaffPage() {
+      if (this.currentStaffPage == 1) return;
+      this.currentStaffPage--;
+      this.getStaffContent();
+    },
+    // 下一页
+    nextStaffPage() {
+      if (this.currentStaffPage == this.totalStaffPage) return;
+      this.currentStaffPage++;
+      this.getStaffContent();
+    },
+    testStaffPage: function () {
+      if (this.totalStaffPage == 0) this.totalStaffPage = 1;
+    },
     StaffEdit: function (UI, UN, UR, UA, show) {
-      (this.StaffId = UI), (this.StaffName = UN), (this.StaffRemark=UR), (this.StaffAuthority=UA), (this.showStaff = show);
+      (this.StaffId = UI),
+        (this.StaffName = UN),
+        (this.StaffRemark = UR),
+        (this.StaffAuthority = UA),
+        (this.showStaff = show);
     },
     CloseStaffEdit: function (show) {
       this.showStaff = show;

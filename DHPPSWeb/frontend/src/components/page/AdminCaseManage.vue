@@ -240,7 +240,7 @@
                   >
                     <el-card class="box-card">
                       <div slot="header" class="clearfix">
-                        <i v-if="item.caseMode === '自定模式'"
+                        <i v-if="item.caseMode === 1"
                           class="el-icon el-icon-location-outline"
                           style="
                             margin-right: 10px;
@@ -248,7 +248,7 @@
                             color: rgb(173, 173, 173);
                           "
                         ></i>
-                        <i v-else-if="item.caseMode === '地图模式'"
+                        <i v-else-if="item.caseMode === 2"
                           class="el-icon el-icon-map-location"
                           style="
                             margin-right: 10px;
@@ -350,7 +350,7 @@ export default {
       url:
         "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
       AdminUrl: "",
-      AdminAuthority: "",
+      AdminAuthority: 1,
       authorityShow: false,
       //用户信息列表
       content: [],
@@ -389,8 +389,8 @@ export default {
           this.AdminId = response.data.userId;
           this.AdminAuthority = response.data.authority;
           if (
-            response.data.authority == "管理员" ||
-            response.data.authority == "超级管理员"
+            response.data.authority == 2 ||
+            response.data.authority == 3
           ) {
             this.authorityShow = true;
             this.getMyContent(), this.getUserContent();
@@ -412,7 +412,7 @@ export default {
         .then(
           (response) => (
             (self.MyContent = response.data),
-            (this.AdminUrl = self.MyContent.avatar)
+            (this.AdminUrl = self.MyContent.avatar_url)
           )
         )
         .catch(function (error) {
@@ -555,11 +555,11 @@ export default {
         });
     },
     adminOrSuperAdmin: function () {
-      if (this.AdminAuthority == "超级管理员") {
+      if (this.AdminAuthority == 3) {
         this.$router.push({
           path: "/SuperUserManage",
         });
-      } else if (this.AdminAuthority == "管理员") {
+      } else if (this.AdminAuthority == 2) {
         this.$router.push({
           path: "/AdminUserManage",
         });

@@ -235,6 +235,8 @@ export default {
       selected3: "",
       selected4: "",
 
+      road_data: [],
+
       isShow1: false,
       isShow2: false,
       isShow3: false,
@@ -294,9 +296,9 @@ export default {
         var s = cn + ":总人口:" + totp + ",初始感染数:" + initinf;
         this.city_po.push(s);
 
-        var newa=new Array();
-        newa["id"]=nowcnt;
-        newa["name"]=cn;
+        var newa = new Array();
+        newa["id"] = nowcnt;
+        newa["name"] = cn;
         this.used_city1.push(newa);
         this.used_city2.push(newa);
       }
@@ -359,9 +361,7 @@ export default {
 
       var XAData = [[{ name: "西安" }, { name: "西安", value: 0 }]];
 
-      var XNData = [];
-
-      var YCData = [];
+      XAData = this.road_data;
 
       var planePath =
         "path://M1705.06,1318.313v-89.254l-319.9-221.799l0.073-208.063c0.521-84.662-26.629-121.796-63.961-121.491c-37.332-0.305-64.482,36.829-63.961,121.491l0.073,208.063l-319.9,221.799v89.254l330.343-157.288l12.238,241.308l-134.449,92.931l0.531,42.034l175.125-42.917l175.125,42.917l0.531-42.034l-134.449-92.931l12.238-241.308L1705.06,1318.313z";
@@ -613,6 +613,18 @@ export default {
       this.used_city2.push(newc);
       console.log("city1:", this.used_city1);
       console.log("city2:", this.used_city2);
+
+      var newa = new Array();
+      var c1 = {};
+      var c2 = {};
+      c1["name"] = cn;
+      c2["name"] = cn;
+      c2["value"] = 0;
+      newa.push(c1);
+      newa.push(c2);
+      this.road_data.push(newa);
+
+      this.drawMap();
     },
 
     reduce_city() {
@@ -645,9 +657,35 @@ export default {
         }
       }
 
-      citycnt += 1;
+      for (var i in this.road_di) {
+        var tr = this.road_di[i].split(":");
+        var ttr = tr[0].split("-");
+        if (ttr[0] == cn || ttr[1] == cn) {
+          this.road_di[i] = "";
+        }
+      }
+
+      citycnt -= 1;
 
       this.isShow3 = false;
+
+      // console.log("road_data",this.road_data);
+
+      var wait_delete = [];
+
+      for (var i in this.road_data) {
+        if (this.road_data[i][0]["name"] == cn || this.road_data[i][1]["name"] == cn) {
+          // this.road_data.splice(i,1);
+          wait_delete.push(i);
+        }
+      }
+      var twd = wait_delete.reverse();
+      for (var i in twd) {
+        this.road_data.splice(twd[i], 1);
+      }
+
+      // console.log("后road_data",this.road_data);
+      this.drawMap();
     },
 
     add_road() {
@@ -705,7 +743,7 @@ export default {
         return;
       }
 
-      var s = cn1 + "-" + cn2 + ":" + this.ruleForm.volumn;
+      var s = cn1 + "-" + cn2 + ":" + value;
       var rn = cn1 + "-" + cn2;
       console.log(s);
       this.road_di.push(s);
@@ -720,6 +758,29 @@ export default {
       this.used_road.push(newc);
 
       this.isShow2 = false;
+
+      var newa = new Array();
+      var newb = new Array();
+      var c1 = {};
+      var c2 = {};
+      var c3 = {};
+      var c4 = {};
+
+      c1["name"] = cn1;
+      c2["name"] = cn2;
+      c2["value"] = value;
+      newa.push(c1);
+      newa.push(c2);
+      this.road_data.push(newa);
+
+      c3["name"] = cn2;
+      c4["name"] = cn1;
+      c4["value"] = value;
+      newb.push(c3);
+      newb.push(c4);
+      this.road_data.push(newb);
+
+      this.drawMap();
     },
 
     reduce_road() {
@@ -746,6 +807,30 @@ export default {
       roadcnt -= 1;
 
       this.isShow4 = false;
+
+      var tr = rn.split("-");
+
+      var wait_delete = [];
+
+      console.log("前road_data",this.road_data);
+
+      for (var i in this.road_data) {
+        if (
+          (this.road_data[i][0]["name"] == tr[0] &&
+            this.road_data[i][1]["name"] == tr[1]) ||
+          (this.road_data[i][0]["name"] == tr[1] && this.road_data[i][1]["name"] == tr[0])
+        ) {
+          // this.road_data.splice(i,1);
+          wait_delete.push(i);
+        }
+      }
+      var twd = wait_delete.reverse();
+      for (var i in twd) {
+        this.road_data.splice(twd[i], 1);
+      }
+
+      console.log("后road_data",this.road_data);
+      this.drawMap();
     },
 
     save_case() {
@@ -806,7 +891,7 @@ export default {
             console.log("rs", s);
           }
           myFormData.append("roadnum", roadcnt);
-          myFormData.append("caseMode", "地图模式");
+          myFormData.append("caseMode", 2);
 
           myFormData.append("InitCityData", city_infor);
 
@@ -896,7 +981,7 @@ export default {
         console.log("rs", s);
       }
       myFormData.append("roadnum", roadcnt);
-      myFormData.append("caseMode", "地图模式");
+      myFormData.append("caseMode", 2);
 
       myFormData.append("InitCityData", city_infor);
 

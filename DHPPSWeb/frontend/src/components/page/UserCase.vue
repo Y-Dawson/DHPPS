@@ -200,7 +200,7 @@ export default {
       MyContent: [],
       contentList: [],
       cases: [],
-      caseMode:'',
+      caseMode:1,
       //分页
       restCase:0,
       totalCasePage: 1, // 统共页数，默认为1
@@ -273,7 +273,7 @@ export default {
         .then(
           (response) => (
             self.MyContent = response.data,
-            this.imageUrl = self.MyContent.avatar,
+            this.imageUrl = self.MyContent.avatar_url,
             this.GetCaseContent()
             // alert(JSON.stringify(self.MyContent))
           )
@@ -315,10 +315,9 @@ export default {
     Edit: function (id) {
       var self = this;
       let data = new FormData();
-      // alert(id)
       data.append("caseId", id);
       axios
-        .post("apis/backend/getCaseInfo/", data)
+        .post("/apis/backend/getCaseInfo/", data)
         .then((response) => {
           self.cases = response.data.cases;
           // alert(JSON.stringify(self.cases)),
@@ -363,7 +362,7 @@ export default {
             console.log("s:", s);
             city_pos.push(s);
           }
-          if(this.caseMode=="自定模式"){
+          if(this.caseMode== 1){
             this.$router.push({
             path: "/setting",
             query: {
@@ -379,7 +378,7 @@ export default {
             },
           });
           }
-          else{
+          else if(this.caseMode== 2){
             // alert(this.caseMode)
             this.$router.push({
             path: "/settingMap",
@@ -412,7 +411,7 @@ export default {
       var self = this;
       // alert(id);
       axios
-        .delete("apis/backend/case/" + id+ "/")
+        .delete("/apis/backend/case/" + id+ "/")
         .then((response) => (
           self.currentPageData = response.data,
           this.GetCaseContent(),
