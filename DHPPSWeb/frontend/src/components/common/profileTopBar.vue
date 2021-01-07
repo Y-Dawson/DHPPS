@@ -84,11 +84,10 @@ export default {
         .then(
           (response =>
             self.content = response.data
-            //alert(JSON.stringify(response))
         ))
         .catch(function (error) {
           // 请求失败处理
-          alert("数据请求失败wdnmd");
+          this.$message.error("数据获取失败")
         });
     },
     setbut:function(a){
@@ -110,12 +109,10 @@ export default {
             self.acontent = response.data,
             self.isAdmin=self.acontent.authority,
             self.setbut(this.isAdmin)
-            // alert(self.isAdmin)
-            //alert(JSON.stringify(response))
         ))
         .catch(function (error) {
           // 请求失败处理
-          alert("数据请求失败wdnmd");
+          this.$message.error("数据获取失败")
         });
     }
   }

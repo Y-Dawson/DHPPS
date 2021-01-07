@@ -243,10 +243,8 @@ export default {
     checkPhone: function () {
       this.$refs["signupForm"].validateField("phone", (err) => {
         if (err) {
-          console.log("未通过");
           return;
         } else {
-          console.log("已通过");
           this.getVerifyCode();
         }
       });
@@ -317,7 +315,7 @@ export default {
         if (valid) {
           this.postAccount();
         } else {
-          console.log("error submit!!");
+          this.$message.error("提交失败")
           return false;
         }
       });

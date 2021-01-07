@@ -384,7 +384,7 @@ export default {
           }
         })
         .catch(function (error) {
-          alert("获取用户身份失败");
+          this.$message.error("数据获取失败")
         });
     },
     getMyContent: function () {
@@ -399,7 +399,7 @@ export default {
         )
         .catch(function (error) {
           // 请求失败处理
-          alert("数据请求失败wdnmd");
+          this.$message.error("数据获取失败")
         });
     },
     getUserContent: function () {
@@ -421,7 +421,7 @@ export default {
         )
         .catch(function (error) {
           // 请求失败处理
-          alert("数据请求失败wdnmd");
+          this.$message.error("数据获取失败")
         });
     },
     SwitchPage: function (UI) {
@@ -439,7 +439,6 @@ export default {
     //获取案例内容
     GetCaseContent: function () {
       var self = this;
-      // alert(this.UserId),
       axios
         .get("/apis/backend/case/", {
           params: {
@@ -455,18 +454,9 @@ export default {
             (this.totalCasePage = Math.ceil(response.data.pagination / response.data.pageSize)),
             this.SetPages()
           )
-          // (
-          //   alert(JSON.stringify(response.data)),
-          //   (self.currentPageData = response.data),
-          //   (self.totalCasePage = Math.ceil(
-          //     self.currentPageData.pagination / self.pageCaseSize
-          //   )),
-          //   (self.SetPages())
-          // )
         )
         .catch(function (error) {
-          // 请求失败处理
-          alert("数据请求失败");
+          this.$message.error("数据获取失败")
         });
     },
 
@@ -528,12 +518,10 @@ export default {
         .then(
           (response) => (
             (self.content = response), self.getUserContent()
-            // alert(JSON.stringify(response))
           )
         )
         .catch(function (error) {
-          alert("数据发送失败");
-          console.log(error.response);
+          this.$message.error("数据发送失败")
         });
     },
     adminOrSuperAdmin: function () {

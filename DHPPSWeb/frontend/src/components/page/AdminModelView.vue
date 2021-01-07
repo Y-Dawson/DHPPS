@@ -314,8 +314,7 @@ export default {
           }
         })
         .catch(function (error) {
-          alert(JSON.stringify(error));
-          alert("获取用户身份失败");
+          this.$message.error("数据获取失败")
         });
     },
     getMyContent: function () {
@@ -328,7 +327,7 @@ export default {
         })
         .catch(function (error) {
           // 请求失败处理
-          alert("数据请求失败wdnmd");
+          this.$message.error("数据获取失败")
         });
     },
     adminOrSuperAdmin: function () {

@@ -151,10 +151,8 @@ export default {
     checkPhone: function () {
       this.$refs["forgetForm"].validateField("phone", (err) => {
         if (err) {
-          console.log("未通过");
           return;
         } else {
-          console.log("已通过");
           this.getVerifyCode();
         }
       });
@@ -190,14 +188,12 @@ export default {
         .then(
           (response) => (
             (self.content = response.data),
-            alert(JSON.stringify(response.data)),
             self.returnmessage=response.data.message,
             self.phoneIsValid()            
           )
         )
         .catch(function (error) {
-          alert("数据发送失败");
-          console.log(error.response);
+          this.$message.error("数据发送失败")
         });
     },
     forgetPass: function () {
@@ -209,15 +205,12 @@ export default {
       axios
         .post('/apis/backend/forgetPwd/', data)
         .then(response => (
-          alert(JSON.stringify(response.data) ),
           self.returnData = response.data,
           self.returnmessage=response.data.message,
-          // alert(self.returnmessage),
           self.skip()
         ))
         .catch(function (error) {
-          alert("获取失败");
-          console.log(error.response);
+          this.$message.error("数据获取失败")
         });
     },
     submitForm(formName) {
@@ -225,7 +218,7 @@ export default {
         if (valid) {
           this.forgetPass()
         } else {
-          console.log('error submit!!')
+          this.$message.error("提交失败")
           return false
         }
       });

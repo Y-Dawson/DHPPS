@@ -567,7 +567,6 @@ document.οnkeydοwn = function () {
   var myEvent = event ? event : window.event ? window.event : null;
   var keycode = myEvent.keyCode;
   if (myEvent.keyCode == 13) {
-    console.log("接收到回车");
     myEvent.keyCode = 9;
     myEvent.returnValue = false;
   }
@@ -646,8 +645,7 @@ export default {
           }
         })
         .catch(function (error) {
-          // alert(JSON.stringify(error.response.data.message));
-          alert("获取用户身份失败");
+          this.$message.error("数据获取失败")
         });
     },
     getMyContent: function () {
@@ -661,8 +659,7 @@ export default {
           )
         )
         .catch(function (error) {
-          // 请求失败处理
-          alert("数据请求失败wdnmd");
+          this.$message.error("数据获取失败")
         });
     },
     getUserContent: function () {
@@ -684,7 +681,7 @@ export default {
         )
         .catch(function (error) {
           // 请求失败处理
-          alert("数据请求失败wdnmd");
+          this.$message.error("数据获取失败")
         });
     },
     PostUserMessage: function (UI) {
@@ -713,7 +710,7 @@ export default {
           )
         )
         .catch(function (error) {
-          alert("数据发送失败");
+          this.$message.error("数据发送失败")
         });
     },
     UserEdit: function (UI, UN, UR, UA, show) {
@@ -771,12 +768,10 @@ export default {
         .then(
           (response) => (
             (self.content = response), self.getUserContent()
-            // alert(JSON.stringify(response))
           )
         )
         .catch(function (error) {
-          alert("数据发送失败");
-          console.log(error.response);
+          this.$message.error("数据发送失败")
         });
     },
 
@@ -807,12 +802,11 @@ export default {
               self.paginateStaff / self.pageStaffSize
             )),
             this.testStaffPage()
-            // alert(JSON.stringify(response))
           )
         )
         .catch(function (error) {
           // 请求失败处理
-          alert("数据请求失败wdnmd");
+          this.$message.error("数据获取失败")
         });
     },
     PostStaffMessage: function (UI) {
@@ -839,7 +833,7 @@ export default {
           )
         )
         .catch(function (error) {
-          alert("数据发送失败");
+          this.$message.error("数据发送失败")
         });
     },
     handleStaffDel(id) {
@@ -870,12 +864,10 @@ export default {
         .then(
           (response) => (
             (self.contentStaff = response), self.getStaffContent()
-            // alert(JSON.stringify(response))
           )
         )
         .catch(function (error) {
-          alert("数据发送失败");
-          console.log(error.response);
+          this.$message.error("数据发送失败")
         });
     },
     //上一页

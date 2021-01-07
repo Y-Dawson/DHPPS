@@ -319,7 +319,6 @@ document.οnkeydοwn = function () {
   var myEvent = event ? event : window.event ? window.event : null;
   var keycode = myEvent.keyCode;
   if (myEvent.keyCode == 13) {
-    console.log("接收到回车");
     myEvent.keyCode = 9;
     myEvent.returnValue = false;
   }
@@ -379,8 +378,6 @@ export default {
       this.$nextTick(function () {
         var div = document.querySelector(".main-container");
         div.style.height = window.innerHeight - 10 + "px";
-        console.log("mounted: ", div);
-        console.log("mounted: ", window.innerHeight);
       });
     },
     //获取管理员身份
@@ -410,8 +407,7 @@ export default {
           }
         })
         .catch(function (error) {
-          // alert(JSON.stringify(error.response.data.message));
-          alert("获取用户身份失败");
+          this.$message.error("数据获取失败")
         });
     },
     getMyContent: function () {
@@ -425,8 +421,7 @@ export default {
           )
         )
         .catch(function (error) {
-          // 请求失败处理
-          alert("数据请求失败wdnmd");
+          this.$message.error("数据获取失败")
         });
     },
     getUserContent: function () {
@@ -439,7 +434,6 @@ export default {
         })
         .then(
           (response) => (
-            // alert(JSON.stringify(response.data.data)),
             (this.content = response.data.data),
             (this.paginate = response.data.pagination),
             (this.pageSize = response.data.pageSize),
@@ -448,8 +442,7 @@ export default {
           )
         )
         .catch(function (error) {
-          // 请求失败处理
-          alert("数据请求失败wdnmd");
+          this.$message.error("数据获取失败")
         });
     },
     PostUserMessage: function (UI) {
@@ -478,7 +471,7 @@ export default {
           )
         )
         .catch(function (error) {
-          alert("数据发送失败");
+          this.$message.error("数据发送失败")
         });
     },
     UserEdit: function (UI, UN, UR, UA, show) {
@@ -536,12 +529,10 @@ export default {
         .then(
           (response) => (
             (self.content = response), self.getUserContent()
-            // alert(JSON.stringify(response))
           )
         )
         .catch(function (error) {
-          alert("数据发送失败");
-          console.log(error.response);
+          this.$message.error("数据发送失败")
         });
     },
     // descInput: function () {
