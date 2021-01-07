@@ -284,6 +284,8 @@ export default {
     console.log("初始城市信息：", this.params.InitCityData);
     console.log("道路信息：", this.params.InitRoadData);
 
+    this.road_data = [];
+
     if (this.params.caseName != 999) {
       console.log("从地图模拟页面返回");
 
@@ -319,6 +321,26 @@ export default {
         vo = tr[3];
         var s = cn1 + "-" + cn2 + ":" + vo;
         this.road_di.push(s);
+
+        var newb=new Array();
+        var c1={};
+        var c2={};
+        c1["name"]=cn1;
+        c2["name"]=cn2;
+        c2["value"]=vo;
+        newb.push(c1);
+        newb.push(c2);
+        this.road_data.push(newb);
+
+        var newc=new Array();
+        var c3={};
+        var c4={};
+        c3["name"]=cn2;
+        c4["name"]=cn1;
+        c4["value"]=vo;
+        newc.push(c3);
+        newc.push(c4);
+        this.road_data.push(newc);
       }
     } else {
       citycnt = 0;
@@ -543,6 +565,12 @@ export default {
         .post("/apis/backend/getIdentity/")
         .then((response) => {
           this.userId = response.data.userId;
+          if (response.data.message != "返回数据成功") {
+            this.$message("您尚未登录");
+            this.$router.push({
+              path: "/Login",
+            });
+          }
           // alert(JSON.stringify(response.data)),
         })
         .catch(function (error) {

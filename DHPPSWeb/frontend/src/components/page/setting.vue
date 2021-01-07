@@ -1205,6 +1205,12 @@ export default {
         .post("/apis/backend/getIdentity/")
         .then((response) => {
           this.userId = response.data.userId;
+          if (response.data.message != "返回数据成功") {
+            this.$message("您尚未登录");
+            this.$router.push({
+              path:'/Login'
+            })
+          }
           // alert(JSON.stringify(response.data)),
         })
         .catch(function (error) {
@@ -1479,7 +1485,7 @@ export default {
       })
         .then(({ value }) => {
           var d = parseInt(value);
-          console.log("day",d);
+          console.log("day", d);
           if (d < 5 || d > 100) {
             this.$alert("模拟天数应在5~100内", "模拟失败", {
               confirmButtonText: "确定",
@@ -2222,7 +2228,10 @@ export default {
       console.log("city_population:" + this.cityForm.population);
       console.log("city_Infected:" + this.cityForm.beginInfected);
 
-      if(this.cityForm.population.length==0||this.cityForm.beginInfected.length==0){
+      if (
+        this.cityForm.population.length == 0 ||
+        this.cityForm.beginInfected.length == 0
+      ) {
         this.$message({
           type: "error",
           message: "您的输入为空，无法创建",
