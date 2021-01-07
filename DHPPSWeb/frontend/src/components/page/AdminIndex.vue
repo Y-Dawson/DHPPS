@@ -161,27 +161,6 @@
         </div>
       </div>
     </div>
-    <!-- Wrapper END -->
-    <!-- Footer -->
-    <footer class="bg-white iq-footer" style="z-index: 1">
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-lg-6">
-            <ul class="list-inline mb-0">
-              <li class="list-inline-item">
-                <a href="privacy-policy.html">Privacy Policy</a>
-              </li>
-              <li class="list-inline-item">
-                <a href="terms-of-service.html">Terms of Use</a>
-              </li>
-            </ul>
-          </div>
-          <div class="col-lg-6 text-right">
-            Copyright 2020 <a href="#">Vito</a> All Rights Reserved.
-          </div>
-        </div>
-      </div>
-    </footer>
 
     <!-- </div> -->
   </div>
@@ -310,7 +289,7 @@ export default {
           }
         })
         .catch(function (error) {
-          alert(JSON.stringify(error));
+          // alert(JSON.stringify(error));
           alert("获取用户身份失败");
         });
     },
@@ -402,7 +381,6 @@ export default {
 @import "https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css";
 @import "../../css/bootstrap.min.css";
 @import "../../css/typography.css";
-@import "../../css/style.css";
 @import "../../css/animate.css";
 /* @import "../../images/favicon.ico"; */
 @import "../../css/style.css";
