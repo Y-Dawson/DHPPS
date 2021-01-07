@@ -124,7 +124,7 @@
                       <thead>
                         <tr style="text-align: center">
                           <th style="width: 8%">ID</th>
-                          <th style="width: 5%">头像</th>
+                          <th style="width: 10%">头像</th>
                           <th style="width: 10%">昵称</th>
                           <th style="width: 10%">手机号</th>
                           <th style="width: 10%">邮箱</th>
@@ -287,7 +287,7 @@
             <div class="form-group">
               <label for="exampleFormControlTextarea1">权限</label>
               <select id="selected" v-model="selected" name="authority">
-                <option value="普通用户" selected="selected">普通用户</option>
+                <option value="普通用户">普通用户</option>
                 <option value="管理员">管理员</option>
               </select>
             </div>
@@ -360,10 +360,10 @@ export default {
       UserRemark: "",
       UserAuthority: 1,
       showModal: false,
-      radioVal: "普通用户",
 
       txtVal: 0,
       desc: "",
+      selected: "",
     };
   },
   created: function () {
@@ -467,6 +467,8 @@ export default {
         });
     },
     UserEdit: function (UI, UN, UR, UA, show) {
+      this.desc="",
+      this.selected="",
       (this.UserId = UI),
         (this.UserName = UN),
         (this.UserRemark = UR),

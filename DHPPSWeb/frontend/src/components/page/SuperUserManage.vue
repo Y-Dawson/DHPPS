@@ -456,14 +456,14 @@
                 rows="4"
                 placeholder="请输入备注......（最多输入100个字）"
                 @input="descInput"
-                v-model="desc"
+                v-model="descUser"
                 maxlength="100"
               ></textarea>
             </div>
             <div class="form-group">
               <label for="exampleFormControlTextarea1">权限</label>
               <select id="selected" v-model="selected" name="authority">
-                <option value="普通用户" selected="selected">普通用户</option>
+                <option value="普通用户">普通用户</option>
                 <option value="管理员">管理员</option>
               </select>
             </div>
@@ -530,7 +530,7 @@
                 rows="4"
                 placeholder="请输入备注......（最多输入100个字）"
                 @input="descInput"
-                v-model="desc"
+                v-model="descAdmin"
                 maxlength="100"
               ></textarea>
             </div>
@@ -538,19 +538,19 @@
               <label for="exampleFormControlTextarea1">权限</label>
               <select id="selected2" v-model="selected2" name="authority">
                 <option value="普通用户">普通用户</option>
-                <option value="管理员" selected2="selected2">管理员</option>
+                <option value="管理员">管理员</option>
               </select>
             </div>
             <div style="text-align: right">
               <button
-                type="submit"
+                type="button"
                 class="btn btn-primary"
                 @click="PostStaffMessage(StaffId)"
               >
                 提交
               </button>
               <button
-                type="submit"
+                type="button"
                 class="btn iq-bg-danger"
                 @click="CloseStaffEdit(false)"
               >
@@ -609,12 +609,14 @@ export default {
       StaffRemark: "",
       StaffAuthority: "",
       showModal: false,
-      radioVal: "普通用户",
       show: false,
       showStaff: false,
 
       txtVal: 0,
-      desc: "",
+      descUser: "",
+      descAdmin: "",
+      selected: "",
+      selected2: "",
     };
   },
   created: function () {
@@ -715,6 +717,8 @@ export default {
         });
     },
     UserEdit: function (UI, UN, UR, UA, show) {
+      this.descUser="",
+      this.selected="",
         (this.UserId = UI),
         (this.UserName = UN),
         (this.UserRemark = UR),
@@ -888,6 +892,8 @@ export default {
       if (this.totalStaffPage == 0) this.totalStaffPage = 1;
     },
     StaffEdit: function (UI, UN, UR, UA, show) {
+      this.descAdmin="",
+      this.selected2="",
       (this.StaffId = UI),
         (this.StaffName = UN),
         (this.StaffRemark = UR),
