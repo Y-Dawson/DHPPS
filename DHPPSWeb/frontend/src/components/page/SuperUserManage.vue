@@ -228,7 +228,7 @@
                   </div>
                   <hr />
                   <div class="row justify-content-between mt-3">
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                       <nav aria-label="Page navigation example">
                         <ul class="pagination justify-content-end mb-0">
                           <li class="page-item">
@@ -374,7 +374,7 @@
                   </div>
                   <hr />
                   <div class="row justify-content-between mt-3">
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                       <nav aria-label="Page navigation example">
                         <ul class="pagination justify-content-end mb-0">
                           <li class="page-item">
