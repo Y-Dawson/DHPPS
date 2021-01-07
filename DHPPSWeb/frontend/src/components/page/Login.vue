@@ -1,5 +1,5 @@
 <template>
-  <div class="login" >
+  <div v-if="ifShow" class="login" >
     <div class="ms-login">
       <div class="ms-title">高传染性疾病预测系统</div>
         <el-form :model="loginForm" :rules="loginFormRules" ref="loginFormRef" class="ms-content" action="">
@@ -51,6 +51,7 @@
 export default {
   data() {
     return {
+      ifShow:false,
       ifLogin:'',
       loginMassege:'',
       userId:'',
@@ -165,6 +166,9 @@ export default {
             path:'/AdminIndex'
           });
         }
+      }
+      else{
+        ifShow=true
       }
     },
     postContent: function () {
