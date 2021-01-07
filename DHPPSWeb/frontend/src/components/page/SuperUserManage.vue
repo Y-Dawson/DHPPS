@@ -469,14 +469,14 @@
             </div>
             <div style="text-align: right">
               <button
-                type="submit"
+                type="button"
                 class="btn btn-primary"
                 @click="PostUserMessage(UserId)"
               >
                 提交
               </button>
               <button
-                type="submit"
+                type="button"
                 class="btn iq-bg-danger"
                 @click="CloseUserEdit(false)"
               >
