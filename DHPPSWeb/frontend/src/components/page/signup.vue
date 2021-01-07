@@ -226,7 +226,7 @@ export default {
         ],
         email: [
           { required: true, validator: checkemail, trigger: "blur" },
-          { min: 7, max: 20, message: "请输入正确的邮箱", trigger: "blur" },
+          { min: 7, max: 30, message: "请输入正确的邮箱", trigger: "blur" },
         ],
         phone: [
           { required: true, validator: checkphone, trigger: "blur" },

@@ -278,7 +278,6 @@
                 id="RemarkMessage"
                 rows="4"
                 placeholder="请输入备注......（最多输入100个字）"
-                @input="descInput"
                 v-model="desc"
                 maxlength="100"
               ></textarea>
@@ -369,7 +368,21 @@ export default {
   created: function () {
     this.getMyIdentity();
   },
+  mounted: function () {
+    this.setScrollBar();
+    // 浏览器缩放，更新ScrollBar位置
+    window.addEventListener("resize", this.setScrollBar);
+  },
+
   methods: {
+    setScrollBar() {
+      this.$nextTick(function () {
+        var div = document.querySelector(".main-container");
+        div.style.height = window.innerHeight - 10 + "px";
+        console.log("mounted: ", div);
+        console.log("mounted: ", window.innerHeight);
+      });
+    },
     //获取管理员身份
     getMyIdentity() {
       var self = this;
@@ -377,13 +390,15 @@ export default {
         .post("/apis/backend/getIdentity/")
         .then((response) => {
           this.AdminId = response.data.userId;
-          if(response.data.message=="未登录") {
+          if (response.data.message == "未登录") {
             this.$message("您尚未登录");
             this.$router.push({
               path: "/Login",
             });
-          }
-          else if (response.data.authority == 2 || response.data.authority == 3) {
+          } else if (
+            response.data.authority == 2 ||
+            response.data.authority == 3
+          ) {
             this.authorityShow = true;
             this.getMyContent();
             this.getUserContent();
@@ -467,9 +482,9 @@ export default {
         });
     },
     UserEdit: function (UI, UN, UR, UA, show) {
-      this.desc="",
-      this.selected="",
-      (this.UserId = UI),
+      (this.desc = ""),
+        (this.selected = ""),
+        (this.UserId = UI),
         (this.UserName = UN),
         (this.UserRemark = UR),
         (this.UserAuthority = UA),
@@ -529,9 +544,9 @@ export default {
           console.log(error.response);
         });
     },
-    descInput: function () {
-      this.txtVal = this.desc.length;
-    },
+    // descInput: function () {
+    //   this.txtVal = this.desc.length;
+    // },
   },
 };
 </script>

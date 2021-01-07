@@ -455,7 +455,6 @@
                 id="RemarkMessage"
                 rows="4"
                 placeholder="请输入备注......（最多输入100个字）"
-                @input="descInput"
                 v-model="descUser"
                 maxlength="100"
               ></textarea>
@@ -529,7 +528,6 @@
                 id="RemarkMessage2"
                 rows="4"
                 placeholder="请输入备注......（最多输入100个字）"
-                @input="descInput"
                 v-model="descAdmin"
                 maxlength="100"
               ></textarea>
@@ -696,6 +694,8 @@ export default {
       }
       if ($("#selected").val() == "管理员") {
         self.UserAuthority = 2;
+      } else if ($("#selected").val() == "普通用户") {
+        self.UserAuthority = 1;
       } else if ($("#RemarkMessage").val() == "") {
         this.$message("请选择需要修改的内容");
         return;
@@ -822,6 +822,8 @@ export default {
       }
       if ($("#selected2").val() == "普通用户") {
         self.StaffAuthority = 1;
+      } else if ($("#selected2").val() == "管理员") {
+        self.StaffAuthority = 2;
       } else if ($("#RemarkMessage2").val() == "") {
         this.$message("请选择需要修改的内容");
         return;
