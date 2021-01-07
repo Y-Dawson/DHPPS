@@ -1,5 +1,5 @@
 <template>
-  <div class="login">
+  <div v-if="Show" class="login">
     <div class="ms-login">
       <div style="border-bottom: 1px solid #ddd;">
         <a class="ms-title" style="margin-left:200px">高传染性疾病预测系统</a>
@@ -52,6 +52,7 @@ export default {
   data() {
     return {
       ifLogin: '',
+      Show:false,
       loginMassege: '',
       userId: '',
       userAuthority: '',
@@ -61,9 +62,34 @@ export default {
       }
     }
   },
-  mounted: function () {
+  created: function () {
+    this.getMyIdentity();
   },
   methods: {
+    //获取管理员身份
+    getMyIdentity: function () {
+      var self = this;
+      axios
+        .post("/apis/backend/getIdentity/")
+        .then((response) => {
+          this.userId = response.data.userId;
+          this.userAuthority = response.data.authority;
+          // Show=true;
+          if(response.data.message=="未登录") {
+            this.$message("您尚未登录");
+            this.$router.push({
+              path: "/Login",
+            });
+          }
+          else {
+            Show=true;
+          }
+        })
+        .catch(function (error) {
+          // alert(JSON.stringify(error));
+          alert("获取用户身份失败");
+        });
+    },
     toUserProfile: function() {
       this.$router.push({
         path: '/UserProfile',

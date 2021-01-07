@@ -377,7 +377,13 @@ export default {
         .post("/apis/backend/getIdentity/")
         .then((response) => {
           this.AdminId = response.data.userId;
-          if (response.data.authority == 2 || response.data.authority == 3) {
+          if(response.data.message=="未登录") {
+            this.$message("您尚未登录");
+            this.$router.push({
+              path: "/Login",
+            });
+          }
+          else if (response.data.authority == 2 || response.data.authority == 3) {
             this.authorityShow = true;
             this.getMyContent();
             this.getUserContent();
