@@ -474,7 +474,7 @@ export default {
       rules: {
         name: [{ required: true, validator: checkanme, trigger: "blur" }],
         phone: [{ required: true, validator: checkphone, trigger: "blur" }],
-        email: [{ required: true, validator: checkemail, trigger: "change" }],
+        email: [{ min: 7, max: 30, required: true, validator: checkemail, trigger: "change" }],
         type: [
           {
             type: "array",
