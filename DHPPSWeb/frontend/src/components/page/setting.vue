@@ -85,7 +85,7 @@
               v-bind:class="{ active1: dr }"
               @click="
                 dr = !dr;
-                DeleteRoad(dr);
+                Delete_Road(dr);
               "
             >
               <i class="layui-icon layui-icon-fonts-clear"></i>
@@ -201,19 +201,19 @@
       </ul>
 
       <ul class="line_list">
-        <li>
+        <li v-for="o in initline + 50" :key="o">
           <div
-            id="line1"
+            :id="'line' + o"
             class="road_line"
             :style="{
               left: lineleft + 'px',
               top: linetop + 'px',
             }"
-            @click="DeleteRoad('line1')"
+            @click="DeleteRoad('line' + o)"
           ></div>
         </li>
 
-        <li>
+        <!-- <li>
           <div
             id="line2"
             class="road_line"
@@ -343,7 +343,7 @@
             }"
             @click="DeleteRoad('line12')"
           ></div>
-        </li>
+        </li> -->
       </ul>
 
       <ul class="img-list">
@@ -785,6 +785,7 @@ export default {
       url: "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
 
       userId: "",
+      initline: 0,
 
       np: false,
       cp: false,
@@ -837,20 +838,6 @@ export default {
       road_c1: "",
       road_c2: "",
       ci: ["ci1", "ci2", "ci3", "ci4", "ci5", "ci6", "ci7", "ci8", "ci9", "ci10"],
-      ri: [
-        "line1",
-        "line2",
-        "line3",
-        "line4",
-        "line5",
-        "line6",
-        "line7",
-        "line8",
-        "line9",
-        "line10",
-        "line11",
-        "line12",
-      ],
 
       cityname: [],
       citypeople: [],
@@ -969,8 +956,8 @@ export default {
         this.city_po.push(s);
 
         var n = this.GetCityNum(cityna);
-        console.log("这是n",n);
-        console.log("cityna",cityna);
+        console.log("这是n", n);
+        console.log("cityna", cityna);
 
         cName[n] = cityna;
         cPeople[n] = initpo;
@@ -984,7 +971,7 @@ export default {
         this.cityInf.push(initIn);
       }
 
-      console.log("used",cityUsed);
+      console.log("used", cityUsed);
 
       for (var j in this.params.CityPosition) {
         var te = this.params.CityPosition[j].split(",");
@@ -1108,7 +1095,7 @@ export default {
       this.mc = false;
     },
 
-    DeleteRoad(dr) {
+    Delete_Road(dr) {
       console.log("可以删除边了");
       this.correctCity();
       concnt = 0;
@@ -1212,8 +1199,8 @@ export default {
           if (response.data.message != "返回数据成功") {
             this.$message("您尚未登录");
             this.$router.push({
-              path:'/Login'
-            })
+              path: "/Login",
+            });
           }
           // alert(JSON.stringify(response.data)),
         })
@@ -2113,9 +2100,10 @@ export default {
               const dy = Math.abs(dcy1 - dcy2);
               var dis = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
 
-              for (var k in this.ri) {
-                console.log("lineID：", this.ri[k]);
-                var tr = document.getElementById(this.ri[k]);
+              for (var k = 1; k <= linecnt; k++) {
+                var nowl="line"+k;
+                console.log("lineID：", nowl);
+                var tr = document.getElementById(nowl);
                 var td = parseInt(dis);
                 var wi = tr.style.width;
                 var tw = wi.substring(0, wi.length - 2);
@@ -2449,6 +2437,7 @@ export default {
 
     correctCity() {
       if (this.alreadyConfirm == false) {
+        console.log("有城市需要修正位置");
         var n = this.GetUnused();
         var c = "ci" + n;
         console.log(c);
