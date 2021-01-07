@@ -1,5 +1,5 @@
 <template>
-  <div style="background-color: rgb(235, 234, 250)">
+  <div v-if="ifShow" style="background-color: rgb(235, 234, 250)">
     <div class="wrapper">
       <!-- Sidebar  -->
       <div class="iq-sidebar" style="z-index: 1">
@@ -438,6 +438,7 @@ export default {
       }
     };
     return {
+      ifShow=false,
       value: new Date(),
       userId:'',
       show: false,
@@ -503,6 +504,7 @@ export default {
   methods: {
     Show(){
       if(this.ifLogin=="返回数据成功"){
+        this.ifShow=true
         this.getMyContent()
       }
       else{
