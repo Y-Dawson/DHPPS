@@ -201,6 +201,12 @@ export default {
         .post("/apis/backend/getIdentity/")
         .then((response) => {
           this.userId = response.data.userId;
+          if (response.data.message != "返回数据成功") {
+            this.$message("您尚未登录");
+            this.$router.push({
+              path:'/Login'
+            })
+          }
           // alert(JSON.stringify(response.data)),
         })
         .catch(function (error) {
