@@ -82,7 +82,7 @@ export default {
             });
           }
           else {
-            Show=true;
+            this.Show=true;
           }
         })
         .catch(function (error) {
