@@ -129,7 +129,7 @@ class PersonalProfile(models.Model):
     sex = models.CharField(max_length=10, default='保密')
     address = models.CharField(max_length=200, default='保密')
     email = models.CharField(db_column='Email', max_length=50, default='保密')  # Field name made lowercase.
-    birth = models.DateField(default=date(1900, 1, 1))
+    birth = models.DateField(default=timezone.now().date())
 
     def GetAvatarUrl(self):
         return "http://47.112.227.85/media/" + str(self.avatar)
