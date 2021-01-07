@@ -284,14 +284,10 @@ export default {
             (self.content = response.data),
             self.returnmessage=response.data.message,
             self.phoneIsValid()            
-            // alert(self.returnmessage),
-            // self.skip()
-            // alert(JSON.stringify(response.data.message))
           )
         )
         .catch(function (error) {
-          alert("数据发送失败");
-          console.log(error.response);
+          this.$message.error("数据发送失败")
         });
     },
     postAccount: function () {
@@ -309,14 +305,11 @@ export default {
           (response) => (
             (self.content = response.data),
             (self.returnmessage = response.data.message),
-            // alert(self.returnmessage),
             self.skip()
-            // alert(JSON.stringify(response.data.message))
           )
         )
         .catch(function (error) {
-          alert("数据发送失败");
-          console.log(error.response);
+          this.$message.error("数据发送失败")
         });
     },
     submitForm(formName) {

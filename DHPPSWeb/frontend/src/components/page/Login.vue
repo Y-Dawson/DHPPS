@@ -91,10 +91,7 @@ export default {
       window.location.href="index.html"
     },
     submitMessage(){
-      // alert(this.loginMassege)
       if(this.loginMassege=="登录成功"){
-        // this.$cookies.get(keyName)
-        // alert(this.$cookies.get(sessionid))
         this.$message.success("登录成功！");
         if(this.userAuthority==1){
           this.$router.push({
@@ -131,24 +128,18 @@ export default {
       axios
         .post("/apis/backend/getIdentity/")
         .then(response => (
-          //  alert(JSON.stringify(response)),
            self.userId=response.data.userId,
            self.userAuthority=response.data.authority,
            self.ifLogin=response.data.message,
-          //  alert(JSON.stringify(response.data)),
            self.JumpPage(self.userAuthority)
-          //  alert(self.ifLogin)
           )
         )
         .catch(function (error) {
-          // alert(JSON.stringify(error.response.data.message));
-          alert("数据发送失败");
-          console.log(error.response);
+          this.$message.error("数据发送失败")
         });
     },
     //判断用户是否需要再次登陆
     JumpPage:function(userAuthority){
-      // alert(this.ifLogin)
       if(this.ifLogin=="返回数据成功"){
         this.$message("你已经登陆")
         if(userAuthority==1){
@@ -183,15 +174,11 @@ export default {
             self.loginMassege=response.data.message,
             self.userId=response.data.userId,
             self.userAuthority=response.data.userAuthority,
-            // alert("数据发送"),
-            // alert(JSON.stringify(response.data.message)),
             self.submitMessage()
           )
         )
         .catch(function (error) {
-          // alert(JSON.stringify(error.response.data.message));
-          alert("数据发送失败");
-          console.log(error.response);
+          this.$message.error("数据发送失败")
         });
     },
     login() {
