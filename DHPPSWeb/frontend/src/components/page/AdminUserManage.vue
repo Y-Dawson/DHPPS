@@ -315,6 +315,17 @@
   </div>
 </template>
 
+<script type="text/javascript">
+document.οnkeydοwn = function () {
+  var myEvent = event ? event : window.event ? window.event : null;
+  var keycode = myEvent.keyCode;
+  if (myEvent.keyCode == 13) {
+    console.log("接收到回车");
+    myEvent.keyCode = 9;
+    myEvent.returnValue = false;
+  }
+};
+</script>
 <script>
 // import custom from "../../js/custom.js";
 // import smooth from "../../js/smooth-scrollbar.js";
