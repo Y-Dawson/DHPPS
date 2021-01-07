@@ -81,7 +81,7 @@ export default {
       },
     };
   },
-  mounted:function(){
+  created:function(){
     this.GetUserIdentity();
     // this.JumpPage();
   },
