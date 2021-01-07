@@ -1,7 +1,16 @@
 <template>
   <div class="login">
     <div class="ms-login">
-      <div class="ms-title">高传染性疾病预测系统</div>
+      <div style="border-bottom: 1px solid #ddd;">
+        <a class="ms-title" style="margin-left:200px">高传染性疾病预测系统</a>
+        <el-button
+            type="primary"
+            @click="toUserProfile"
+            style="margin-left:90px"
+            >个人中心</el-button
+          >
+      </div>
+      
       <div class="ms-content" style="border-bottom: 1px solid #ddd">
         <div class="ms-content1">
           <div style="font-size: 20px; color: #fff; margin-top: 50px">
@@ -55,6 +64,11 @@ export default {
   mounted: function () {
   },
   methods: {
+    toUserProfile: function() {
+      this.$router.push({
+        path: '/UserProfile',
+      })
+    },
     toSetting: function() {
       this.$router.push({
         path: '/setting',
@@ -137,7 +151,7 @@ export default {
   text-align: center;
   font-size: 20px;
   color: #fff;
-  border-bottom: 1px solid #ddd;
+  
 }
 .ms-content {
   width: 100%;
