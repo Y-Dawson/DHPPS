@@ -1,22 +1,22 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 // import HelloWorld from '@/components/HelloWorld'
-import Login from '@/components/page/Login'
-import signup from '@/components/page/signup'
-import setting from '@/components/page/setting'
-import forgetPass from '@/components/page/forgetPass'
-import simulation from '@/components/page/simulation'
-import AdminUserManage from '@/components/page/AdminUserManage'
-import AdminCaseManage from '@/components/page/AdminCaseManage'
-import AdminIndex from '@/components/page/AdminIndex'
-import UserProfile from '@/components/page/UserProfile'
-import UserProfileEdit from '@/components/page/UserProfileEdit'
-import SuperUserManage from '@/components/page/SuperUserManage'
-import AdminModelView from '@/components/page/AdminModelView'
-import UserCase from '@/components/page/UserCase'
-import settingMap from '@/components/page/settingMap'
-import simulationMap from '@/components/page/simulationMap'
-import UserIndex from '@/components/page/UserIndex'
+const Login =()=>import("@/components/page/Login")
+const signup =()=>import("@/components/page/signup")
+const setting =()=>import("@/components/page/setting")
+const forgetPass =()=>import("@/components/page/forgetPass")
+const simulation =()=>import("@/components/page/simulation")
+const AdminUserManage =()=>import("@/components/page/AdminUserManage")
+const AdminCaseManage =()=>import("@/components/page/AdminCaseManage")
+const AdminIndex =()=>import("@/components/page/AdminIndex")
+const UserProfile =()=>import("@/components/page/UserProfile")
+const UserProfileEdit =()=>import("@/components/page/UserProfileEdit")
+const SuperUserManage =()=>import("@/components/page/SuperUserManage")
+const AdminModelView =()=>import("@/components/page/AdminModelView")
+const UserCase =()=>import("@/components/page/UserCase")
+const settingMap =()=>import("@/components/page/settingMap")
+const simulationMap =()=>import("@/components/page/simulationMap")
+const UserIndex =()=>import("@/components/page/UserIndex")
 
 Vue.use(Router)
 
@@ -25,7 +25,7 @@ export default new Router({
     {
       path: '/',
       name: 'Login',
-      component: Login
+      component:Login
     },
     {path:'/Login', component: Login},
     {path:'/signup', component: signup},
