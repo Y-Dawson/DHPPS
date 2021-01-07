@@ -786,6 +786,7 @@ export default {
     },
 
     DrawLine(ci1, ci2) {
+      console.log("画条线");
       var c1 = document.getElementById(ci1);
       var c2 = document.getElementById(ci2);
 

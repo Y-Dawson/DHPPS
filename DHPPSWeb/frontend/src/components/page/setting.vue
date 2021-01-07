@@ -33,7 +33,7 @@
         <li>
           <el-form-item class="new-pointer">
             <button
-              type="primary"
+              type="button"
               v-bind:class="{ active1: np }"
               @click="
                 np = !np;
@@ -944,6 +944,48 @@ export default {
       nowcitycnt = citycnt;
       linecnt = 1;
       var cnt = 0;
+      for (var j in this.params.InitCityData) {
+        var ci = this.params.InitCityData[j].split(",");
+        var tt, cityna, initpo, initIn;
+        cnt = 0;
+        for (var k in ci) {
+          cnt += 1;
+          if (cnt == 1) {
+            tt = ci[k].split(":");
+            cityna = tt[1];
+          }
+          if (cnt == 2) {
+            tt = ci[k].split(":");
+            initpo = tt[1];
+          }
+          if (cnt == 3) {
+            tt = ci[k].split(":");
+            initIn = tt[1];
+          }
+        }
+        var s = cityna + ": 总人口:" + initpo;
+        this.city_po.push(s);
+        s = "初始感染人数:" + initIn;
+        this.city_po.push(s);
+
+        var n = this.GetCityNum(cityna);
+        console.log("这是n",n);
+        console.log("cityna",cityna);
+
+        cName[n] = cityna;
+        cPeople[n] = initpo;
+        cInf[n] = initIn;
+        cityUsed[n] = true;
+
+        this.SetButtonToFalse(n);
+
+        this.cityname.push(cityna);
+        this.citypeople.push(initpo);
+        this.cityInf.push(initIn);
+      }
+
+      console.log("used",cityUsed);
+
       for (var j in this.params.CityPosition) {
         var te = this.params.CityPosition[j].split(",");
         var tt, ci, x, y, cid;
@@ -1018,44 +1060,6 @@ export default {
       }
 
       console.log("roadVol", this.roadVol);
-
-      for (var j in this.params.InitCityData) {
-        var ci = this.params.InitCityData[j].split(",");
-        var tt, cityna, initpo, initIn;
-        cnt = 0;
-        for (var k in ci) {
-          cnt += 1;
-          if (cnt == 1) {
-            tt = ci[k].split(":");
-            cityna = tt[1];
-          }
-          if (cnt == 2) {
-            tt = ci[k].split(":");
-            initpo = tt[1];
-          }
-          if (cnt == 3) {
-            tt = ci[k].split(":");
-            initIn = tt[1];
-          }
-        }
-        var s = cityna + ": 总人口:" + initpo;
-        this.city_po.push(s);
-        s = "初始感染人数:" + initIn;
-        this.city_po.push(s);
-
-        var n = this.GetNum(cityna);
-
-        cName[n] = cityna;
-        cPeople[n] = initpo;
-        cInf[n] = initIn;
-        cityUsed[n] = true;
-
-        this.SetButtonToFalse(n);
-
-        this.cityname.push(cityna);
-        this.citypeople.push(initpo);
-        this.cityInf.push(initIn);
-      }
 
       this.DrawMap();
       this.DrawRoadMap();
@@ -2393,16 +2397,16 @@ export default {
     },
 
     GetCityNum(n) {
-      if (n == "A") return 0;
-      if (n == "B") return 1;
-      if (n == "C") return 2;
-      if (n == "D") return 3;
-      if (n == "E") return 4;
-      if (n == "F") return 5;
-      if (n == "G") return 6;
-      if (n == "H") return 7;
-      if (n == "I") return 8;
-      if (n == "J") return 9;
+      if (n == "A") return 1;
+      if (n == "B") return 2;
+      if (n == "C") return 3;
+      if (n == "D") return 4;
+      if (n == "E") return 5;
+      if (n == "F") return 6;
+      if (n == "G") return 7;
+      if (n == "H") return 8;
+      if (n == "I") return 9;
+      if (n == "J") return 10;
     },
 
     SetButton(n) {
