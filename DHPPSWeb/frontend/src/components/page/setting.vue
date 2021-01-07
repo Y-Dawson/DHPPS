@@ -920,6 +920,10 @@ export default {
     console.log("城市坐标：", this.params.CityPosition);
     // this.userId = this.params.userId;
 
+    cityUsed = [];
+    cName = [];
+    cPeople = [];
+    cInf = [];
     for (var i = 0; i <= 10; i++) {
       //每次调整这个数组里的东西，然后存储信息也是分开存储，在需要的时候按照这个数组的布尔值要
       //初始化、新增城市、删除城市
@@ -1729,8 +1733,8 @@ export default {
       this.$set(g_Global, citytop, e.pageY);
       if (this.np == true) {
         var nowc = parseInt(this.GetUnused());
-        console.log("nowc",nowc);
-        if (nowc == 11) {
+        console.log("nowc", nowc);
+        if (nowc == 99) {
           this.$message({
             type: "warning",
             message: "您创建的城市已经达到上限，您可以进行模拟、保存案例或者尝试地图模式",
