@@ -1479,6 +1479,7 @@ export default {
       })
         .then(({ value }) => {
           var d = parseInt(value);
+          console.log("day",d);
           if (d < 5 || d > 100) {
             this.$alert("模拟天数应在5~100内", "模拟失败", {
               confirmButtonText: "确定",
@@ -1571,7 +1572,7 @@ export default {
           }
           myFormData.append("CityPosition", city_position);
 
-          myFormData.append("daynum", parseInt(value) + 1);
+          myFormData.append("daynum", d + 1);
 
           for (var value of myFormData.values()) {
             console.log(value);
@@ -1592,7 +1593,7 @@ export default {
                     InitCityData: city_infor,
                     InitRoadData: road_inf,
                     CityPosition: city_position,
-                    Daynum: value,
+                    Daynum: d,
                     DailyInfected: response,
                   }),
                 },
@@ -2220,6 +2221,19 @@ export default {
       // console.log("city_Name:" + this.cityForm.cityName);
       console.log("city_population:" + this.cityForm.population);
       console.log("city_Infected:" + this.cityForm.beginInfected);
+
+      if(this.cityForm.population.length==0||this.cityForm.beginInfected.length==0){
+        this.$message({
+          type: "error",
+          message: "您的输入为空，无法创建",
+        });
+        this.cityForm.population = "";
+        this.cityForm.beginInfected = "";
+        c.style.left = 10000 + "px";
+        c.style.top = 10000 + "px";
+        return;
+      }
+
       var n = this.GetNum(e);
       var cn = this.GetName(n);
 

@@ -556,7 +556,7 @@ export default {
     console.log("模拟天数：", this.params.Daynum);
     console.log("每日跨度：", this.daily_step);
 
-    for (var i = 0; i < parseInt(this.params.Daynum); i++) {
+    for (var i = 0; i < parseInt(this.params.Daynum) + 1; i++) {
       for (var j = 0; j < parseInt(this.params.citynum); j++) {
         this.AddInformation(
           foreData[i][j]["cityName"],

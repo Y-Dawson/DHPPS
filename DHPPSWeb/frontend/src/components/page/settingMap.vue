@@ -61,6 +61,7 @@
         ref="ruleForm"
         label-width="100px"
         class="druleForm"
+        @submit.native.prevent
       >
         <el-form-item>
           <label class="authority">选择城市： </label>
@@ -119,6 +120,7 @@
         ref="ruleForm"
         label-width="100px"
         class="druleForm"
+        @submit.native.prevent
       >
         <el-form-item>
           <label class="authority">选择城市： </label>
@@ -142,6 +144,7 @@
         ref="ruleForm"
         label-width="100px"
         class="druleForm"
+        @submit.native.prevent
       >
         <el-form-item>
           <label class="authority">选择城市1： </label>
@@ -178,6 +181,7 @@
         ref="ruleForm"
         label-width="100px"
         class="druleForm"
+        @submit.native.prevent
       >
         <el-form-item>
           <label class="authority">选择航线： </label>
@@ -571,6 +575,21 @@ export default {
         }
       }
 
+      if (
+        this.ruleForm.to_pop.length == 0 ||
+        this.ruleForm.begin_inf.length == 0 ||
+        cn.length == 0
+      ) {
+        this.isShow1 = false;
+        this.$message({
+          type: "error",
+          message: "您的输入不完整，无法创建",
+        });
+        this.ruleForm.to_pop = "";
+        this.ruleForm.begin_inf = "";
+        return;
+      }
+
       if (!numRe.test(this.ruleForm.to_pop)) {
         this.isShow1 = false;
         this.$message({
@@ -719,6 +738,16 @@ export default {
       var cn1 = document.getElementById("selectedcity1").value;
       var cn2 = document.getElementById("selectedcity2").value;
 
+      if (this.ruleForm.volumn.length == 0 || cn1.length == 0 || cn2.length == 0) {
+        this.isShow2 = false;
+        this.$message({
+          type: "error",
+          message: "您的输入不完整，无法创建",
+        });
+        this.ruleForm.volumn = "";
+        return;
+      }
+
       if (cn1 == cn2) {
         this.$alert("请选择两个不同的城市", "创建失败", {
           confirmButtonText: "确定",
@@ -756,7 +785,7 @@ export default {
           type: "error",
           message: "请输入数字",
         });
-        this.ruleForm.volumn="";
+        this.ruleForm.volumn = "";
         this.isShow2 = false;
         return;
       }

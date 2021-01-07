@@ -212,7 +212,7 @@ export default {
     drawLine() {
       var myChart = echarts.init(document.getElementById("line"));
       var option = {
-        color: ["#00f2f1", "#ed3f35"],
+        color: ["#00f2f1", "#ed3f35", "#1089E7", "#F57474", "#56D0E3", "#F8B448", "#8B78F6"],
         tooltip: {
           trigger: "axis",
         },
@@ -619,13 +619,16 @@ li {
   list-style: none;
 }
 
+body{
+  overflow: hidden;
+}
 /* @font-face {
     font-family: 'electronicFont';
     src: url('../../assets/layui/font/DS-DIGIT.TTF');
 } */
 
 #simulationMap {
-  background: url(../../assets/img/bg.jpg) no-repeat top center;
+  /* background: url(../../assets/img/bg.jpg) no-repeat top center; */
   line-height: 1.15;
   height: 720px;
   width: 100%;
@@ -649,11 +652,13 @@ h1 {
 
 h2 {
   height: 0.6rem;
-  line-height: 0.6rem;
+  /* line-height: 0.6rem; */
   text-align: center;
-  color: #fff;
+  color: #000;
   font-size: 20px;
   font-weight: 400;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 header .stop {
@@ -774,7 +779,7 @@ header .stop {
   flex: 1;
   line-height: 50px;
   font-size: 40px;
-  color: #ffeb7b;
+  color: #ff9f7f;
   text-align: center;
   /* font-family: "electronicFont"; */
 }
@@ -818,7 +823,7 @@ header .stop {
 .no .no-bd ul li {
   flex: 1;
   text-align: center;
-  color: rgba(255, 255, 255, 0.7);
+  color: #000;
   font-size: 18px;
   height: 12px;
   padding-top: 2px;
