@@ -272,7 +272,13 @@ export default {
         .then((response) => {
           this.AdminId = response.data.userId;
           this.AdminAuthority = response.data.authority;
-          if (
+          if(response.data.message=="未登录") {
+            this.$message("您尚未登录");
+            this.$router.push({
+              path: "/Login",
+            });
+          }
+          else if (
             response.data.authority == 2 ||
             response.data.authority == 3
           ) {
