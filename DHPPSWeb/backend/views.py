@@ -1203,6 +1203,38 @@ class LinearRegression(torch.nn.Module):
         out = self.hidden(out)
         return out
 
+path=os.getcwd()
+path = path+'/backend/simulate/'
+rateModel = torch.load(path+'rate.pth')
+daysModel = torch.load(path+'days.pth')
+IncubPeriod=3.22 
+DurMildInf=15.04 
+FracMild=0.1  
+FracSevere=0.95 
+FracCritical=0.05 
+CFR=0.97 
+TimeICUDeath=1.072 
+DurHosp=10.275 
+N=1000
+b=np.zeros(4) 
+g=np.zeros(4) 
+p=np.zeros(3)
+a=1/IncubPeriod
+u=(1/TimeICUDeath)*(CFR/FracCritical)
+g[3]=(1/TimeICUDeath)-u
+p[2]=(1/DurHosp)*(FracCritical/(FracCritical+FracSevere))
+g[2]=(1/DurHosp)-p[2]
+g[1]=(1/DurMildInf)*FracMild
+p[1]=(1/DurMildInf)-g[1]
+b=2.5e-4*np.array([1,1,1,1]) 
+R0=N*((b[1]/(p[1]+g[1]))+(p[1]/(p[1]+g[1]))*(b[2]/(p[2]+g[2])+ (p[2]/(p[2]+g[2]))*(b[3]/(u+g[3]))))
+tmax=160
+tvec=np.arange(0,tmax,1)
+ic=np.zeros(6)
+ic[0]=1
+soln=odeint(seir,ic,tvec,args=(b,a,g,p,u,N))
+soln=np.hstack((N-np.sum(soln,axis=1,keepdims=True),soln))
+casePer = [i[2]+i[3]+i[4] for i in soln]
 
 def weights_init(m):
     classname = m.__class__.__name__
@@ -1335,40 +1367,6 @@ def seir(y,t,b,a,g,p,u,N):
     dy[5]=u*y[3] #D
 
     return dy
-
-
-path=os.getcwd()
-path = path+'/backend/simulate/'
-rateModel = torch.load(path+'rate.pth')
-daysModel = torch.load(path+'days.pth')
-IncubPeriod=3.22 
-DurMildInf=15.04 
-FracMild=0.1  
-FracSevere=0.95 
-FracCritical=0.05 
-CFR=0.97 
-TimeICUDeath=1.072 
-DurHosp=10.275 
-N=1000
-b=np.zeros(4) 
-g=np.zeros(4) 
-p=np.zeros(3)
-a=1/IncubPeriod
-u=(1/TimeICUDeath)*(CFR/FracCritical)
-g[3]=(1/TimeICUDeath)-u
-p[2]=(1/DurHosp)*(FracCritical/(FracCritical+FracSevere))
-g[2]=(1/DurHosp)-p[2]
-g[1]=(1/DurMildInf)*FracMild
-p[1]=(1/DurMildInf)-g[1]
-b=2.5e-4*np.array([1,1,1,1]) 
-R0=N*((b[1]/(p[1]+g[1]))+(p[1]/(p[1]+g[1]))*(b[2]/(p[2]+g[2])+ (p[2]/(p[2]+g[2]))*(b[3]/(u+g[3]))))
-tmax=160
-tvec=np.arange(0,tmax,1)
-ic=np.zeros(6)
-ic[0]=1
-soln=odeint(seir,ic,tvec,args=(b,a,g,p,u,N))
-soln=np.hstack((N-np.sum(soln,axis=1,keepdims=True),soln))
-casePer = [i[2]+i[3]+i[4] for i in soln]
 
 
 def AcquireData(population,transport,infected):
