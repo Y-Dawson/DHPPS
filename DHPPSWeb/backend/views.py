@@ -812,6 +812,7 @@ def StartSimulate(request):
                 print('########################################################')
                 return JsonResponse({"message": "案例保存失败，数据库出错", "status": 404})
             # 调用函数以执行外部模型，通过命令行参数传入对应参数，获得返回预测值
+            print("cityNum", cityNum)
             dailyInfectMatrix = SendParamsToCmd(
                 popuList=initPopList,
                 transMatrix=initRoadList,
@@ -829,12 +830,11 @@ def StartSimulate(request):
                     cityCase = {}
                     cityCase["cityName"] = cityNameList[cityIdx]
                     cityCase["population"] = initPopList[cityIdx]
+                    cityCase["infected"] = int(dailyInfectMatrix[cityIdx][dayCount])
 
                     if (dayCount == 0):
-                        cityCase["infected"] = initInfectedList[cityIdx]
-                        cityCase["dailyinfected"] = int(dailyInfectMatrix[cityIdx][dayCount])
+                        cityCase["dailyinfected"] = 0
                     else:
-                        cityCase["infected"] = int(dailyInfectMatrix[cityIdx][dayCount])+initInfectedList[cityIdx]
                         cityCase["dailyinfected"] = int(dailyInfectMatrix[cityIdx][dayCount]) - int(dailyInfectMatrix[cityIdx][dayCount-1])
 
                     dayCase.append(cityCase)
