@@ -178,6 +178,7 @@ def Signin(request):
                 else:
                     return JsonResponse({"message": "密码错误", "status": 404})
             except Exception as e:
+                print(timezone.now())
                 print('str(Exception):\t', str(Exception))
                 print('str(e):\t\t', str(e))
                 print('repr(e):\t', repr(e))
@@ -319,6 +320,7 @@ def Signup(request):
                 message = "注册成功"
                 status = 200
             except Exception as e:
+                print(timezone.now())
                 print('str(Exception):\t', str(Exception))
                 print('str(e):\t\t', str(e))
                 print('repr(e):\t', repr(e))
@@ -517,6 +519,7 @@ def SaveCase(request):
                     models.AccountInformation.objects.filter(userId=userId).update(caseNumber=F("caseNumber") + 1)
                 return JsonResponse({"message": "保存案例成功", "status": 200, "caseId": newCase.caseId})
             except Exception as e:
+                print(timezone.now())
                 print('str(Exception):\t', str(Exception))
                 print('str(e):\t\t', str(e))
                 print('repr(e):\t', repr(e))
@@ -599,6 +602,7 @@ def SaveCase(request):
                     models.AccountInformation.objects.filter(userId=userId).update(caseNumber=F("caseNumber") + 1)
                 return JsonResponse({"message": "保存案例成功", "status": 200, "caseId": newCase.caseId})
             except Exception as e:
+                print(timezone.now())
                 print('str(Exception):\t', str(Exception))
                 print('str(e):\t\t', str(e))
                 print('repr(e):\t', repr(e))
@@ -705,6 +709,7 @@ def StartSimulate(request):
                             initRoadList[destination][departure] = volume
                         roadCount += 1
             except Exception as e:
+                print(timezone.now())
                 print('str(Exception):\t', str(Exception))
                 print('str(e):\t\t', str(e))
                 print('repr(e):\t', repr(e))
@@ -806,6 +811,7 @@ def StartSimulate(request):
                             initRoadList[destination][departure] = volume
                         roadCount += 1
             except Exception as e:
+                print(timezone.now())
                 print('str(Exception):\t', str(Exception))
                 print('str(e):\t\t', str(e))
                 print('repr(e):\t', repr(e))
@@ -899,6 +905,7 @@ def GetCaseInfos(request):
 
                 return JsonResponse({"message": "成功返回数据", "cases": cases, "status": 200})
             except Exception as e:
+                print(timezone.now())
                 print('str(Exception):\t', str(Exception))
                 print('str(e):\t\t', str(e))
                 print('repr(e):\t', repr(e))
@@ -939,7 +946,7 @@ def GetUserInfos(request):
             profileDict["avatarUrl"] = accountInfo.personalprofile.GetAvatarUrl()
             jsonList.append({**accountInfoDict, **profileDict})
         jsonRes = json.loads(json.dumps(jsonList, cls=DateEnconding))
-        print(jsonRes)
+        # print(jsonRes)
         return JsonResponse({
             'data': jsonRes,
             'pagination': accountPaginator.count,
