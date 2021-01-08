@@ -35,6 +35,7 @@ from functools import reduce
 import torch.nn as nn
 from torch.autograd import Variable
 import torch
+from backend.simulate.model import LinearRegression
 # Create your views here.
 
 logger = logging.getLogger("django")
