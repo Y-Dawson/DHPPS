@@ -1,9 +1,7 @@
-# import pandas as pd
 import torch
 import os
 import csv
 import numpy as np
-import matplotlib.pyplot as plt
 from scipy.integrate import odeint
 from functools  import reduce
 import torch.nn as nn
