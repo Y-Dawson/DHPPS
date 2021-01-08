@@ -6,5 +6,5 @@
     <thread>2<thread>
     <daemonize>uwsgi.log</daemonize><!-- 日志文件 -->
     <buffer-size>65536</buffer-size>
-    <disable-logging>true<disable-logging> 
+    <disable-logging>true</disable-logging>
 </uwsgi>
