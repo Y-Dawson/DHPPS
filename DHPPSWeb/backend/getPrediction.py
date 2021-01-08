@@ -17,7 +17,7 @@ def SendParamsToCmd(popuList, transMatrix, infectedList):
         result = subprocess.check_output(
             ['python3.7', path, popuListStr, transMatrixStr, infectedListStr],
             stdin=subprocess.PIPE,
-            stderr=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
         )
         print(result)
         resultList = eval(result)
