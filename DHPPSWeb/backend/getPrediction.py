@@ -8,7 +8,7 @@ def SendParamsToCmd(popuList, transMatrix, infectedList):
     transMatrixStr = json.dumps(transMatrix)
     infectedListStr = json.dumps(infectedList)
 
-    path = os.getcwd()+"/DHPPSWeb/backend/simulate/"+"model.py"
+    path = os.getcwd()+"/backend/simulate/"+"model.py"
     print(path)
 
     result = subprocess.Popen(
