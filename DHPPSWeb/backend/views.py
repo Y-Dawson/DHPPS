@@ -8,8 +8,8 @@ from django.db.models import F, Count
 from backend import models
 from backend import customSerializers
 from backend.sendSms import SendSms
-# from backend.simulate.model import
-from backend import returnDataSimulator
+# from backend import returnDataSimulator
+from backend.getPrediction import SendParamsToCmd
 from django.http import JsonResponse
 from django_redis import get_redis_connection
 from django.utils import timezone
@@ -710,13 +710,12 @@ def StartSimulate(request):
                 print('repr(e):\t', repr(e))
                 print('########################################################')
                 return JsonResponse({"message": "案例保存失败，数据库出错", "status": 404})
-            # 调用模型函数，传入参数，获得返回值
-            # dailyInfectMatrix = GetPredict(
-            #     popuList=initPopList,
-            #     transMatrix=initRoadList,
-            #     infectedList=initInfectedList
-            #     )
-            dailyInfectMatrix = returnDataSimulator.model(inputList=initPopList, length=dayNum)
+            # 调用函数以执行外部模型，通过命令行参数传入对应参数，获得返回预测值
+            dailyInfectMatrix = SendParamsToCmd(
+                popuList=initPopList,
+                transMatrix=initRoadList,
+                infectedList=initInfectedList
+                )
 
             # 构造发回数据
             DailyForecastData = []
@@ -809,14 +808,13 @@ def StartSimulate(request):
                 # print('e.message:\t', e.message)
                 print('########################################################')
                 return JsonResponse({"message": "案例保存失败，数据库出错", "status": 404})
-            # 调用模型函数，传入参数，获得返回值
-            # dailyInfectMatrix = GetPredict(
-            #     popuList=initPopList,
-            #     transMatrix=initRoadList,
-            #     infectedList=initInfectedList
-            #     )
+            # 调用函数以执行外部模型，通过命令行参数传入对应参数，获得返回预测值
+            dailyInfectMatrix = SendParamsToCmd(
+                popuList=initPopList,
+                transMatrix=initRoadList,
+                infectedList=initInfectedList
+                )
 
-            dailyInfectMatrix = returnDataSimulator.model(inputList=initPopList, length=dayNum)
             # 构造发回数据
             DailyForecastData = []
             for dayCount in range(dayNum):

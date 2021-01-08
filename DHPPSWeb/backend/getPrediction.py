@@ -8,7 +8,7 @@ def SendParamsToCmd(popuList, transMatrix, infectedList):
     transMatrixStr = json.dumps(transMatrix)
     infectedListStr = json.dumps(infectedList)
 
-    path = os.getcwd()+"/simulate/"+"model.py"
+    path = os.getcwd()+"/DHPPSWeb/backend/simulate/"+"model.py"
     print(path)
 
     result = subprocess.Popen(
@@ -19,17 +19,8 @@ def SendParamsToCmd(popuList, transMatrix, infectedList):
     )
     result.wait()
     resultStr = result.stdout.read()
-    print(resultStr)
     resultList = eval(resultStr)
+    if (not isinstance(resultList, list)):
+        resultList = list("Return a non-list result!")
     print(resultList)
-    if (isinstance(resultList, list)):
-        return resultList
-    else:
-        return list("Return a non-list result!")
-
-
-if __name__ == "__main__":
-    SendParamsToCmd(
-        popuList=[2000, 400],
-        transMatrix=[[50, 60], [120, 40]],
-        infectedList=[100, 256])
+    return resultList
