@@ -644,8 +644,11 @@ export default {
             });
           }
         })
-        .catch(function (error) {
-          this.$message.error("数据获取失败")
+        .catch(() => {
+          this.$message({
+            type: "error",
+            message: "数据获取失败",
+          });
         });
     },
     getMyContent: function () {
@@ -658,8 +661,11 @@ export default {
             (this.AdminUrl = self.MyContent.avatarUrl)
           )
         )
-        .catch(function (error) {
-          this.$message.error("数据获取失败")
+        .catch(() => {
+          this.$message({
+            type: "error",
+            message: "数据获取失败",
+          });
         });
     },
     getUserContent: function () {
@@ -679,9 +685,11 @@ export default {
             this.testPage()
           )
         )
-        .catch(function (error) {
-          // 请求失败处理
-          this.$message.error("数据获取失败")
+        .catch(() => {
+          this.$message({
+            type: "error",
+            message: "数据获取失败",
+          });
         });
     },
     PostUserMessage: function (UI) {
@@ -709,8 +717,11 @@ export default {
             this.CloseUserEdit(false)
           )
         )
-        .catch(function (error) {
-          this.$message.error("数据发送失败")
+        .catch(() => {
+          this.$message({
+            type: "error",
+            message: "数据发送失败",
+          });
         });
     },
     UserEdit: function (UI, UN, UR, UA, show) {
@@ -770,8 +781,11 @@ export default {
             (self.content = response), self.getUserContent()
           )
         )
-        .catch(function (error) {
-          this.$message.error("数据发送失败")
+        .catch(() => {
+          this.$message({
+            type: "error",
+            message: "数据发送失败",
+          });
         });
     },
 
@@ -804,9 +818,11 @@ export default {
             this.testStaffPage()
           )
         )
-        .catch(function (error) {
-          // 请求失败处理
-          this.$message.error("数据获取失败")
+        .catch(() => {
+          this.$message({
+            type: "error",
+            message: "数据获取失败",
+          });
         });
     },
     PostStaffMessage: function (UI) {
@@ -832,8 +848,11 @@ export default {
             this.$message("修改成功"), this.ShowPage(), this.CloseStaffEdit()
           )
         )
-        .catch(function (error) {
-          this.$message.error("数据发送失败")
+        .catch(() => {
+          this.$message({
+            type: "error",
+            message: "数据发送失败",
+          });
         });
     },
     handleStaffDel(id) {
@@ -866,8 +885,11 @@ export default {
             (self.contentStaff = response), self.getStaffContent()
           )
         )
-        .catch(function (error) {
-          this.$message.error("数据发送失败")
+        .catch(() => {
+          this.$message({
+            type: "error",
+            message: "数据发送失败",
+          });
         });
     },
     //上一页

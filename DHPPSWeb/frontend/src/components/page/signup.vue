@@ -284,8 +284,11 @@ export default {
             self.phoneIsValid()            
           )
         )
-        .catch(function (error) {
-          this.$message.error("数据发送失败")
+        .catch(() => {
+          this.$message({
+            type: "error",
+            message: "数据发送失败",
+          });
         });
     },
     postAccount: function () {
@@ -306,8 +309,11 @@ export default {
             self.skip()
           )
         )
-        .catch(function (error) {
-          this.$message.error("数据发送失败")
+        .catch(() => {
+          this.$message({
+            type: "error",
+            message: "数据发送失败",
+          });
         });
     },
     submitForm(formName) {
@@ -315,7 +321,7 @@ export default {
         if (valid) {
           this.postAccount();
         } else {
-          this.$message.error("提交失败")
+          this.$message("提交失败")
           return false;
         }
       });

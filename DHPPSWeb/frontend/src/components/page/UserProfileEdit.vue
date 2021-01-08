@@ -526,8 +526,11 @@ export default {
           //  this.getMyContent()
           )
         )
-        .catch(function (error) {
-          this.$message.error("数据请求失败")
+        .catch(() => {
+          this.$message({
+            type: "error",
+            message: "数据获取失败",
+          });
         });
     },
     getMyContent: function () {
@@ -546,9 +549,11 @@ export default {
             this.ruleForm.value1=this.MyContent.birth
           )
         )
-        .catch(function (error) {
-          // 请求失败处理
-          this.$message.error("数据请求失败")
+        .catch(() => {
+          this.$message({
+            type: "error",
+            message: "数据获取失败",
+          });
         });
     },
     delayReload:function(){
@@ -577,8 +582,11 @@ export default {
             // this.$message.success("修改成功")
           )
         )
-        .catch(function (error) {
-          this.$message.error("数据请求失败")
+        .catch(() => {
+          this.$message({
+            type: "error",
+            message: "数据获取失败",
+          });
         });
     },
     submitForm(formName) {
@@ -586,7 +594,7 @@ export default {
         if (valid) {
           this.putContent(this.userId)
         } else {
-          this.$message.error("修改失败");
+          this.$message("修改失败");
           return false;
         }
       });
@@ -600,10 +608,10 @@ export default {
       const isLt2M = file.size / 1024 / 1024 < 2;
 
       if (!isJPG) {
-        this.$message.error("上传头像图片只能是 JPG 格式!");
+        this.$message("上传头像图片只能是 JPG 格式!");
       }
       if (!isLt2M) {
-        this.$message.error("上传头像图片大小不能超过 2MB!");
+        this.$message("上传头像图片大小不能超过 2MB!");
       }
       return isJPG && isLt2M;
     },
@@ -612,12 +620,12 @@ export default {
     },
     submitMessage: function () {
       if (this.passMassege == "账号原密码错误") {
-        this.$message.error("原密码错误");
+        this.$message("原密码错误");
       } else if (this.passMassege == "修改成功") {
         this.$message.success("修改密码成功");
         this.PWDresetForm('ruleForm')
       } else {
-        this.$message.error("修改失败");
+        this.$message("修改失败");
       }
     },
     changePass: function () {
@@ -636,9 +644,11 @@ export default {
             self.submitMessage()
           )
         )
-        .catch(function (error) {
-          // 请求失败处理
-          this.$message.error("数据请求失败")
+        .catch(() => {
+          this.$message({
+            type: "error",
+            message: "数据获取失败",
+          });
         });
     },
     PWDsubmitForm(formName) {
@@ -646,7 +656,7 @@ export default {
         if (valid) {
           this.changePass();
         } else {
-          this.$message.error("提交失败")
+          this.$message("提交失败")
           return false;
         }
       });

@@ -85,8 +85,11 @@ export default {
             this.Show=true;
           }
         })
-        .catch(function (error) {
-          this.$message.error("数据获取失败")
+        .catch(() => {
+          this.$message({
+            type: "error",
+            message: "数据获取失败",
+          });
         });
     },
     toUserProfile: function() {

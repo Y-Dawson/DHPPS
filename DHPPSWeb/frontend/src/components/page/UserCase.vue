@@ -237,8 +237,11 @@ export default {
            this.Show()
           )
         )
-        .catch(function (error) {
-          this.$message.error("数据发送失败")
+        .catch(() => {
+          this.$message({
+            type: "error",
+            message: "数据发送失败",
+          });
         });
     },
     GetFirstPage(){
@@ -276,9 +279,11 @@ export default {
             this.GetCaseContent()
           )
         )
-        .catch(function (error) {
-          // 请求失败处理
-          this.$message.error("数据发送失败")
+        .catch(() => {
+          this.$message({
+            type: "error",
+            message: "数据发送失败",
+          });
         });
     },
     //获取案例内容
@@ -302,8 +307,11 @@ export default {
             this.SetPages()
           )
         )
-        .catch(function (error) {
-          this.$message.error("数据请求失败")
+        .catch(() => {
+          this.$message({
+            type: "error",
+            message: "数据请求失败",
+          });
           this.GetCaseContent()
         });
     },
@@ -386,8 +394,11 @@ export default {
           }
           
         })
-        .catch(function (error) {
-          this.$message.error("数据请求失败")
+        .catch(() => {
+          this.$message({
+            type: "error",
+            message: "数据请求失败",
+          });
         });
     },
     DelayReload:function(){
@@ -409,8 +420,11 @@ export default {
           this.GetFirstPage()
           // this.DelayReload()
         ))
-        .catch(function (error) {
-          this.$message.error("数据发送失败")
+        .catch(() => {
+          this.$message({
+            type: "error",
+            message: "数据获取失败",
+          });
         });
     },
     Open(id) {
