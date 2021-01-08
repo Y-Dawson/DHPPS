@@ -3,12 +3,13 @@ import torch
 import os
 import csv
 import numpy as np
+import matplotlib.pyplot as plt
 from scipy.integrate import odeint
 from functools  import reduce
 import torch.nn as nn
 from torch.autograd import Variable
 import torch
-
+import sys
 
 def weights_init(m):
     classname = m.__class__.__name__
@@ -165,7 +166,7 @@ def seir(y,t,b,a,g,p,u,N):
 
     return dy
 path=os.getcwd()
-path = path+'/backend/simulate/'
+path = path+'/'
 rateModel = torch.load(path+'rate.pth')
 daysModel = torch.load(path+'days.pth')
 IncubPeriod=3.22 
@@ -244,5 +245,7 @@ def AcquireAllData(popuList,transMatrix,infectedList):
 
 def GetPredict(popuList,transMatrix,infectedList):
     return AcquireAllData(popuList,transMatrix,infectedList)
-
-print(GetPredict([2000,4000],[[50,60],[120,40]],[100,256]))
+  
+if __name__ == '__main__':
+  #print(GetPredict([2000,4000],[[50,60],[120,40]],[100,256]))
+  print(GetPredict(eval(sys.argv[1]),eval(sys.argv[2]),eval(sys.argv[3])))
