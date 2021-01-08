@@ -1415,3 +1415,5 @@ def AcquireAllData(popuList,transMatrix,infectedList):
 
 def GetPredict(popuList,transMatrix,infectedList):
     return AcquireAllData(popuList,transMatrix,infectedList)
+
+print(GetPredict([2000,4000],[[50,60],[120,40]],[100,256]))
