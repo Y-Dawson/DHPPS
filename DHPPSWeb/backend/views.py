@@ -1174,11 +1174,10 @@ import os
 import csv
 import numpy as np
 from scipy.integrate import odeint
-from functools  import reduce
+from functools import reduce
 import torch.nn as nn
 from torch.autograd import Variable
 import torch
-from model import LinearRegression
 
 def weights_init(m):
     classname = m.__class__.__name__
