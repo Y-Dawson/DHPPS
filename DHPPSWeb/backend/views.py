@@ -713,12 +713,12 @@ def StartSimulate(request):
                 print('########################################################')
                 return JsonResponse({"message": "案例保存失败，数据库出错", "status": 404})
             # 调用模型函数，传入参数，获得返回值
-            # dailyInfectMatrix = returnDataSimulator.GetPredict(
-            #     popuList=initPopList,
-            #     transMatrix=initRoadList,
-            #     infectedList=initInfectedList
-            #     )
-            dailyInfectMatrix = returnDataSimulator.model(inputList=initPopList, length=dayNum)
+            dailyInfectMatrix = returnDataSimulator.GetPredict(
+                popuList=initPopList,
+                transMatrix=initRoadList,
+                infectedList=initInfectedList
+                )
+            # dailyInfectMatrix = returnDataSimulator.model(inputList=initPopList, length=dayNum)
 
             # 构造发回数据
             DailyForecastData = []
@@ -812,12 +812,13 @@ def StartSimulate(request):
                 print('########################################################')
                 return JsonResponse({"message": "案例保存失败，数据库出错", "status": 404})
             # 调用模型函数，传入参数，获得返回值
-            # dailyInfectMatrix = returnDataSimulator.GetPredict(
-            #     popuList=initPopList,
-            #     transMatrix=initRoadList,
-            #     infectedList=initInfectedList
-            #     )
-            dailyInfectMatrix = returnDataSimulator.model(inputList=initPopList, length=dayNum)
+            dailyInfectMatrix = returnDataSimulator.GetPredict(
+                popuList=initPopList,
+                transMatrix=initRoadList,
+                infectedList=initInfectedList
+                )
+            
+            # dailyInfectMatrix = returnDataSimulator.model(inputList=initPopList, length=dayNum)
             # 构造发回数据
             DailyForecastData = []
             for dayCount in range(dayNum):
