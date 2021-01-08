@@ -19,9 +19,11 @@ def SendParamsToCmd(popuList, transMatrix, infectedList):
             stdin=subprocess.PIPE,
             stderr=subprocess.STDOUT,
         )
-        print(result)
-        print(len(result))
+        # print(result)
+        # print(len(result))
         resultList = eval(result)
+        # print(len(resultList))
+        # print(len(resultList[0]))
         if (not isinstance(resultList, list)):
             resultList = list("Return a non-list result!")
         # print(resultList)

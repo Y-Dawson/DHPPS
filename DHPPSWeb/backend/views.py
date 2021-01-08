@@ -164,7 +164,7 @@ def Signin(request):
                     request.session['isLogin'] = True
                     request.session['userId'] = accountInfo.userId
                     request.session['userAuthority'] = accountInfo.authority.authorityNo
-                    print(request.session.get('userId', None))
+                    # print(request.session.get('userId', None))
                     response = JsonResponse({
                         "message": "登录成功",
                         "status": 200,
@@ -229,7 +229,7 @@ def RequestSmsCode(request):
         if (redisClient.get(phoneNum+"Flag") is not None):
             return JsonResponse({"message": "冷却中，请60秒后重新申请", "status": 404})
         code, message, result = SendSms(phoneNum)
-        print(phoneNum, "result is", message)
+        # print(phoneNum, "result is", message)
         if str(result) == "OK":
             try:
                 # 4.连接到redis
@@ -264,19 +264,19 @@ def Signup(request):
         email = request.POST.get('email', None)
         password = request.POST.get('password', None)
         verifyCode = request.POST.get('verifyCode', None)
-        print({
-            "userName": userName,
-            'phoneNum': phoneNum,
-            'email': email,
-            "password": password,
-            'verifyCode': verifyCode
-        })
+        # print({
+        #     "userName": userName,
+        #     'phoneNum': phoneNum,
+        #     'email': email,
+        #     "password": password,
+        #     'verifyCode': verifyCode
+        # })
         message = "请检查填写的内容！"
         status = 404
 
         redisClient = get_redis_connection('smsCode')
         verifyCodeInCache = redisClient.get(phoneNum)
-        print(verifyCodeInCache)
+        # print(verifyCodeInCache)
         if verifyCodeInCache is None:
             return JsonResponse({"message": "尚未申请短信验证码", "status": 404})
         verifyCodeInCache = verifyCodeInCache.decode('ascii')
@@ -373,15 +373,15 @@ def ForgetPwd(request):
         verifyCode = request.POST.get('verifyCode', None)
         newPassword = request.POST.get('newPassword', None)
 
-        print({
-            'phoneNum': phoneNum,
-            "newPassword": newPassword,
-            'verifyCode': verifyCode
-        })
+        # print({
+        #     'phoneNum': phoneNum,
+        #     "newPassword": newPassword,
+        #     'verifyCode': verifyCode
+        # })
         redisClient = get_redis_connection('smsCode')
-        print(phoneNum)
+        # print(phoneNum)
         verifyCodeInCache = redisClient.get(phoneNum)
-        print(verifyCodeInCache)
+        # print(verifyCodeInCache)
         if verifyCodeInCache is None:
             return JsonResponse({"message": "尚未申请短信验证码", "status": 404})
         verifyCodeInCache = verifyCodeInCache.decode('ascii')
@@ -811,7 +811,6 @@ def StartSimulate(request):
                 print('########################################################')
                 return JsonResponse({"message": "案例保存失败，数据库出错", "status": 404})
             # 调用函数以执行外部模型，通过命令行参数传入对应参数，获得返回预测值
-            print("cityNum", cityNum)
             dailyInfectMatrix = SendParamsToCmd(
                 popuList=initPopList,
                 transMatrix=initRoadList,
@@ -975,7 +974,7 @@ def GetGeneralUserInfos(request):
             profileDict["avatarUrl"] = accountInfo.personalprofile.GetAvatarUrl()
             jsonList.append({**accountInfoDict, **profileDict})
         jsonRes = json.loads(json.dumps(jsonList, cls=DateEnconding))
-        print(jsonRes)
+        # print(jsonRes)
         return JsonResponse({
             'data': jsonRes,
             'pagination': accountPaginator.count,
@@ -1014,7 +1013,7 @@ def GetAdminInfos(request):
             profileDict["avatarUrl"] = accountInfo.personalprofile.GetAvatarUrl()
             jsonList.append({**accountInfoDict, **profileDict})
         jsonRes = json.loads(json.dumps(jsonList, cls=DateEnconding))
-        print(jsonRes)
+        # print(jsonRes)
         return JsonResponse({
             'data': jsonRes,
             'pagination': accountPaginator.count,
@@ -1047,7 +1046,7 @@ def GetTopCityInfos(request):
                 cityInfoDict = {"cityName": cityInfo["cityName"], "cityCount": cityInfo["cityCount"]}
                 jsonList.append({**cityInfoDict})
             jsonRes = json.loads(json.dumps(jsonList, cls=DateEnconding))
-            print(jsonRes)
+            # print(jsonRes)
         except Exception as e:
             print('str(Exception):\t', str(Exception))
             print('str(e):\t\t', str(e))
@@ -1079,7 +1078,7 @@ def GetSexNum(request):
                 sexInfoDict = {"sex": sexInfo["sex"], "sexCount": sexInfo["sexCount"]}
                 jsonList.append({**sexInfoDict})
             jsonRes = json.loads(json.dumps(jsonList, cls=DateEnconding))
-            print(jsonRes)
+            # print(jsonRes)
         except Exception as e:
             print('str(Exception):\t', str(Exception))
             print('str(e):\t\t', str(e))
@@ -1125,7 +1124,7 @@ def GetUserCaseStat(request):
                 jsonList.append({**statInfoDict})
                 pastLimitDate = pastLimitDate + relativedelta(months=+1)
             jsonRes = json.loads(json.dumps(jsonList, cls=DateEnconding))
-            print(jsonRes)
+            # print(jsonRes)
         except Exception as e:
             print('str(Exception):\t', str(Exception))
             print('str(e):\t\t', str(e))
