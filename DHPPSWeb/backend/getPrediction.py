@@ -8,7 +8,7 @@ def SendParamsToCmd(popuList, transMatrix, infectedList):
     transMatrixStr = json.dumps(transMatrix, separators=(',', ':'))
     infectedListStr = json.dumps(infectedList, separators=(',', ':'))
 
-    path = os.path.abspath('.')+"/simulate/"+"model.py"
+    path = os.path.abspath('.')+"/backend/simulate/"+"model.py"
     # print(path)
     # print(popuListStr)
     # print(transMatrixStr)
