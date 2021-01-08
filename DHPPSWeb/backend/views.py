@@ -9,7 +9,7 @@ from django.db.models import F, Avg, Max, Min, Count, Sum
 from backend import models
 from backend import customSerializers
 from backend.sendSms import SendSms
-from backend.simulate import returnDataSimulator
+# from backend.simulate import returnDataSimulator
 # from backend import returnDataSimulator
 from django.http import HttpResponseForbidden, JsonResponse
 from django_redis import get_redis_connection
