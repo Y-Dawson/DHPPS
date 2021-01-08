@@ -274,8 +274,11 @@ export default {
             this.Admin()
           )
         )
-        .catch(function (error) {
-          this.$message.error("数据请求失败")
+        .catch(() => {
+          this.$message({
+            type: "error",
+            message: "数据请求失败",
+          });
         });
     },
     getMyContent: function () {
@@ -288,8 +291,11 @@ export default {
             (this.Url = self.MyContent.avatarUrl)
           )
         )
-        .catch(function (error) {
-          this.$message.error("数据请求失败")
+        .catch(() => {
+          this.$message({
+            type: "error",
+            message: "数据请求失败",
+          });
         });
     },
     handleLogout: function () {
@@ -317,9 +323,14 @@ export default {
     },
     logout: function () {
       var self = this;
-      axios.get("/apis/backend/logout/").catch(function (error) {
-        this.$message.error("数据请求失败")
-      });
+      axios
+      .get("/apis/backend/logout/")
+      .catch(() => {
+          this.$message({
+            type: "error",
+            message: "数据获取失败",
+          });
+        });
     },
   },
 };

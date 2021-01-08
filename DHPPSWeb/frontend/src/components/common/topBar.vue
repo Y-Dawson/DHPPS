@@ -75,7 +75,7 @@ export default {
         )
         .catch(function (error) {
           // 请求失败处理
-          this.$message.error("数据获取失败")
+          this.$message("数据获取失败")
         });
     }
   },

@@ -294,8 +294,11 @@ export default {
             });
           }
         })
-        .catch(function (error) {
-          this.$message.error("数据获取失败")
+        .catch(() => {
+          this.$message({
+            type: "error",
+            message: "数据获取失败",
+          });
         });
     },
     getMyContent: function () {
@@ -306,9 +309,11 @@ export default {
           (self.MyContent = response.data),
             (this.AdminUrl = self.MyContent.avatarUrl);
         })
-        .catch(function (error) {
-          // 请求失败处理
-          this.$message.error("数据获取失败")
+        .catch(() => {
+          this.$message({
+            type: "error",
+            message: "数据获取失败",
+          });
         });
     },
     getSexData: function () {
@@ -326,9 +331,11 @@ export default {
             });
           }
         })
-        .catch(function (error) {
-          // 请求失败处理
-          this.$message.error("数据获取失败")
+        .catch(() => {
+          this.$message({
+            type: "error",
+            message: "数据获取失败",
+          });
         });
     },
     getCityData: function () {
@@ -346,9 +353,11 @@ export default {
             });
           }
         })
-        .catch(function (error) {
-          // 请求失败处理
-          this.$message.error("数据获取失败")
+        .catch(() => {
+          this.$message({
+            type: "error",
+            message: "数据获取失败",
+          });
         });
     },
     getUserCaseData: function () {

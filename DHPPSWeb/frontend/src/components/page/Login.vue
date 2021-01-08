@@ -111,10 +111,10 @@ export default {
       }
       else{
         if(this.loginMassege=="密码错误"){
-          this.$message.error("密码错误")
+          this.$message("密码错误")
         }
         if(this.loginMassege=="该账号不存在"){
-          this.$message.error("该账号不存在")
+          this.$message("该账号不存在")
         }
       }
     
@@ -124,7 +124,7 @@ export default {
     },
     //获取用户登陆状态
     GetUserIdentity(){
-      var self=this
+      var self=this;
       axios
         .post("/apis/backend/getIdentity/")
         .then(response => (
@@ -134,8 +134,14 @@ export default {
            self.JumpPage(self.userAuthority)
           )
         )
-        .catch(function (error) {
-          this.$message.error("数据发送失败")
+        // .catch(function (error) {
+        //   this.$message("数据发送失败")
+        // });
+        .catch(() => {
+          this.$message({
+            type: "error",
+            message: "数据发送失败",
+          });
         });
     },
     //判断用户是否需要再次登陆
@@ -159,7 +165,7 @@ export default {
         }
       }
       else{
-        ifShow=true
+        this.ifShow=true
       }
     },
     postContent: function () {
@@ -177,8 +183,11 @@ export default {
             self.submitMessage()
           )
         )
-        .catch(function (error) {
-          this.$message.error("数据发送失败")
+        .catch(() => {
+          this.$message({
+            type: "error",
+            message: "数据发送失败",
+          });
         });
     },
     login() {

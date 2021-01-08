@@ -383,8 +383,11 @@ export default {
             });
           }
         })
-        .catch(function (error) {
-          this.$message.error("数据获取失败")
+        .catch(() => {
+          this.$message({
+            type: "error",
+            message: "数据发送失败",
+          });
         });
     },
     getMyContent: function () {
@@ -397,9 +400,11 @@ export default {
             (this.AdminUrl = self.MyContent.avatarUrl)
           )
         )
-        .catch(function (error) {
-          // 请求失败处理
-          this.$message.error("数据获取失败")
+        .catch(() => {
+          this.$message({
+            type: "error",
+            message: "数据获取失败",
+          });
         });
     },
     getUserContent: function () {
@@ -419,9 +424,11 @@ export default {
             this.testPage()
           )
         )
-        .catch(function (error) {
-          // 请求失败处理
-          this.$message.error("数据获取失败")
+        .catch(() => {
+          this.$message({
+            type: "error",
+            message: "数据获取失败",
+          });
         });
     },
     SwitchPage: function (UI) {
@@ -455,8 +462,11 @@ export default {
             this.SetPages()
           )
         )
-        .catch(function (error) {
-          this.$message.error("数据获取失败")
+        .catch(() => {
+          this.$message({
+            type: "error",
+            message: "数据获取失败",
+          });
         });
     },
 
@@ -520,8 +530,11 @@ export default {
             (self.content = response), self.getUserContent()
           )
         )
-        .catch(function (error) {
-          this.$message.error("数据发送失败")
+        .catch(() => {
+          this.$message({
+            type: "error",
+            message: "数据发送失败",
+          });
         });
     },
     adminOrSuperAdmin: function () {
