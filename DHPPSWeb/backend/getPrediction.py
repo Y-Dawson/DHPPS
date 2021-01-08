@@ -4,13 +4,15 @@ import os
 
 
 def SendParamsToCmd(popuList, transMatrix, infectedList):
-    popuListStr = json.dumps(popuList)
-    transMatrixStr = json.dumps(transMatrix)
-    infectedListStr = json.dumps(infectedList)
+    popuListStr = json.dumps(popuList, separators=(',',':'))
+    transMatrixStr = json.dumps(transMatrix, separators=(',',':'))
+    infectedListStr = json.dumps(infectedList, separators=(',',':'))
 
     path = os.getcwd()+"/backend/simulate/"+"model.py"
     print(path)
-
+    print(popuListStr)
+    print(transMatrixStr)
+    print(infectedListStr)
     result = subprocess.Popen(
         ['python3.7', path, popuListStr, transMatrixStr, infectedListStr],
         stdin=subprocess.PIPE,
