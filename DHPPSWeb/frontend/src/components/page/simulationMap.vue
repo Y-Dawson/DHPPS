@@ -314,17 +314,17 @@ export default {
           trigger: "item",
           formatter: "{a} <br/>{b} : {c} ({d}%)",
         },
-        legend: {
-          textStyle: {
-            color: "rgba(255,255,255,.5)",
-            fontSize: "12",
-          },
-          left: "center",
-          bottom: "0%",
-          itemWidth: 10,
-          itemHeight: 10,
-          data: this.citynamelist,
-        },
+        // legend: {
+        //   textStyle: {
+        //     color: "rgba(255,255,255,.5)",
+        //     fontSize: "12",
+        //   },
+        //   left: "center",
+        //   bottom: "0%",
+        //   itemWidth: 10,
+        //   itemHeight: 10,
+        //   data: this.citynamelist,
+        // },
         series: [
           {
             name: "地区分布",
