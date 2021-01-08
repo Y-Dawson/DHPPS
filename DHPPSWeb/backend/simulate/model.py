@@ -164,7 +164,7 @@ def seir(y,t,b,a,g,p,u,N):
 
     return dy
 path=os.getcwd()
-path = path+'/DHPPSWeb/backend/simulate/'
+path = path+'/simulate/'
 rateModel = torch.load(path+'rate.pth')
 daysModel = torch.load(path+'days.pth')
 IncubPeriod=3.22 

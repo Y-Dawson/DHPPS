@@ -29,3 +29,4 @@ def SendParamsToCmd(popuList, transMatrix, infectedList):
         print('returncode:', exc.returncode)
         print('cmd:', exc.cmd)
         print('output:', exc.output)
+        return list("Return a non-list result!")
