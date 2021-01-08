@@ -965,10 +965,15 @@ export default {
         cityUsed[n] = true;
 
         this.SetButtonToFalse(n);
+      }
 
-        this.cityname.push(cityna);
-        this.citypeople.push(initpo);
-        this.cityInf.push(initIn);
+      this.UpdateData();
+      for (var i = 1; i <= 10; i++) {
+        if (cityUsed[i] == true) {
+          this.cityname.push(cName[i]);
+          this.citypeople.push(cPeople[i]);
+          this.cityInf.push(cInf[i]);
+        }
       }
 
       console.log("used", cityUsed);
@@ -1757,6 +1762,10 @@ export default {
         ci.style.left = cl + "px";
         ci.style.top = ct + "px";
 
+        var framenum="cityinf"+nowc;
+        var frame=document.getElementById(framenum);
+        frame.style.display="block";
+
         console.log("ex", e.pageX);
         console.log("ey", e.pageY);
         console.log("cileft", ci.style.left);
@@ -2101,7 +2110,7 @@ export default {
               var dis = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
 
               for (var k = 1; k <= linecnt; k++) {
-                var nowl="line"+k;
+                var nowl = "line" + k;
                 console.log("lineID：", nowl);
                 var tr = document.getElementById(nowl);
                 var td = parseInt(dis);
@@ -2241,7 +2250,7 @@ export default {
       if (!numRe.test(this.cityForm.population)) {
         this.$message({
           type: "error",
-          message: "请输入数字",
+          message: "请输入整数",
         });
         this.cityForm.population = "";
         this.cityForm.beginInfected = "";
@@ -2253,7 +2262,7 @@ export default {
       if (!numRe.test(this.cityForm.beginInfected)) {
         this.$message({
           type: "error",
-          message: "请输入数字",
+          message: "请输入整数",
         });
         this.cityForm.population = "";
         this.cityForm.beginInfected = "";
@@ -2319,6 +2328,10 @@ export default {
       console.log("cityname", this.cityname);
 
       this.SetButton(citycnt);
+
+      var framenum="cityinf"+n;
+      var frame=document.getElementById(framenum);
+      frame.style.display="none";
 
       this.UpdateData();
       this.DrawMap();
