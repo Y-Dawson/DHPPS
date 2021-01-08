@@ -967,7 +967,6 @@ export default {
         this.SetButtonToFalse(n);
       }
 
-      this.UpdateData();
       for (var i = 1; i <= 10; i++) {
         if (cityUsed[i] == true) {
           this.cityname.push(cName[i]);
@@ -975,6 +974,7 @@ export default {
           this.cityInf.push(cInf[i]);
         }
       }
+      this.UpdateData();
 
       console.log("used", cityUsed);
 
@@ -1001,7 +1001,10 @@ export default {
         var cityentity = document.getElementById(cid);
         cityentity.style.left = x + "px";
         cityentity.style.top = y + "px";
+        cityentity.style.display = "block";
         var nu = this.GetNum(cid);
+        var frame = document.getElementById("cityinf" + nu);
+        frame.style.display = "none";
         nu = parseInt(nu);
         this.SetButton(nu);
 
@@ -1260,6 +1263,7 @@ export default {
       ll.style.top = (ttcy1 + ttcy2) / 2 + 50 + "px";
       ll.style.width = parseInt(dis) + "px";
       ll.style.transform = "rotate(" + rotang + "deg)";
+      ll.style.display = "block";
       linecnt += 1;
 
       console.log("画了这条线了：", linecnt);
@@ -1583,7 +1587,7 @@ export default {
           axios
             .post("/apis/backend/startSimulate/", myFormData)
             .then((response) => {
-              alert(JSON.stringify(response));
+              // alert(JSON.stringify(response));
               // alert("开始模拟");
               this.$router.push({
                 path: "/simulation",
@@ -1759,12 +1763,13 @@ export default {
         var ci = document.getElementById(c);
         var cl = e.pageX - 50;
         var ct = e.pageY - 50;
+        ci.style.display = "block";
         ci.style.left = cl + "px";
         ci.style.top = ct + "px";
 
-        var framenum="cityinf"+nowc;
-        var frame=document.getElementById(framenum);
-        frame.style.display="block";
+        var framenum = "cityinf" + nowc;
+        var frame = document.getElementById(framenum);
+        frame.style.display = "block";
 
         console.log("ex", e.pageX);
         console.log("ey", e.pageY);
@@ -1815,6 +1820,16 @@ export default {
                   message: `action: ${action}`,
                 });
               },
+            });
+            concnt = 0;
+            this.cp = false;
+            return;
+          }
+
+          if (!numRe.test(value)) {
+            this.$message({
+              type: "error",
+              message: "请输入整数",
             });
             concnt = 0;
             this.cp = false;
@@ -2121,6 +2136,7 @@ export default {
                 if (td == ttw) {
                   tr.style.left = 10000 + "px";
                   tr.style.top = 10000 + "px";
+                  tr.style.display = "none";
                 }
               }
             }
@@ -2143,6 +2159,7 @@ export default {
 
           c.style.left = 10000 + "px";
           c.style.top = 10000 + "px";
+          c.style.display = "none";
           this.dp = false;
           this.$message({
             type: "success",
@@ -2216,6 +2233,7 @@ export default {
         }
         r.style.left = 10000 + "px";
         r.style.top = 10000 + "px";
+        r.style.display = "none";
         this.dr = false;
 
         this.DrawRoadMap();
@@ -2241,6 +2259,7 @@ export default {
         this.cityForm.beginInfected = "";
         c.style.left = 10000 + "px";
         c.style.top = 10000 + "px";
+        c.style.display = "none";
         return;
       }
 
@@ -2256,6 +2275,7 @@ export default {
         this.cityForm.beginInfected = "";
         c.style.left = 10000 + "px";
         c.style.top = 10000 + "px";
+        c.style.display = "none";
         return;
       }
 
@@ -2268,6 +2288,7 @@ export default {
         this.cityForm.beginInfected = "";
         c.style.left = 10000 + "px";
         c.style.top = 10000 + "px";
+        c.style.display = "none";
         return;
       }
 
@@ -2287,6 +2308,7 @@ export default {
         this.cityForm.beginInfected = "";
         c.style.left = 10000 + "px";
         c.style.top = 10000 + "px";
+        c.style.display = "none";
         return;
       }
 
@@ -2306,6 +2328,7 @@ export default {
         this.cityForm.beginInfected = "";
         c.style.left = 10000 + "px";
         c.style.top = 10000 + "px";
+        c.style.display = "none";
         return;
       }
 
@@ -2329,9 +2352,9 @@ export default {
 
       this.SetButton(citycnt);
 
-      var framenum="cityinf"+n;
-      var frame=document.getElementById(framenum);
-      frame.style.display="none";
+      var framenum = "cityinf" + n;
+      var frame = document.getElementById(framenum);
+      frame.style.display = "none";
 
       this.UpdateData();
       this.DrawMap();
@@ -2457,6 +2480,7 @@ export default {
         var ci = document.getElementById(c);
         ci.style.left = 10000 + "px";
         ci.style.top = 10000 + "px";
+        ci.style.display = "none";
         this.alreadyConfirm = true;
       }
     },
@@ -2508,6 +2532,11 @@ export default {
 @import "../../assets/layui/css/layui.css";
 /* @import "../../assets/layui/css/remixicon.css"; */
 
+/* html {
+  position: relative;
+  overflow: hidden;
+} */
+
 body {
   overflow: hidden;
 }
@@ -2523,6 +2552,7 @@ header {
 
 h1 {
   font-style: 0.475rem;
+  font-weight: bolder;
   color: #fff;
   text-align: center;
 }
@@ -2863,7 +2893,7 @@ canvas {
 }
 
 .img-list .city {
-  display: block;
+  display: none;
   position: absolute;
   /* left: 5000px;
   top: 3000px; */
