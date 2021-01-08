@@ -717,6 +717,9 @@ def StartSimulate(request):
                 infectedList=initInfectedList
                 )
 
+            if (dailyInfectMatrix[0] == "Return a non-list result!"):
+                return JsonResponse({"message": "模型运行出错，返回了非List", "status": 404})
+
             # 构造发回数据
             DailyForecastData = []
             for dayCount in range(dayNum):
@@ -814,6 +817,9 @@ def StartSimulate(request):
                 transMatrix=initRoadList,
                 infectedList=initInfectedList
                 )
+            
+            if (dailyInfectMatrix[0] == "Return a non-list result!"):
+                return JsonResponse({"message": "模型运行出错，返回了非List", "status": 404})
 
             # 构造发回数据
             DailyForecastData = []
