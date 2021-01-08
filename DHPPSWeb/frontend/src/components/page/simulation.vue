@@ -1190,6 +1190,7 @@ header {
 h1 {
   font-style: 0.475rem;
   color: #fff;
+  font-weight: bolder;
   text-align: center;
 }
 

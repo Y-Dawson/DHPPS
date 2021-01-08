@@ -1101,7 +1101,7 @@ export default {
         .post("/apis/backend/startSimulate/", myFormData)
         .then((response) => {
           // alert(JSON.stringify(response));
-          alert("开始模拟");
+          // alert("开始模拟");
 
           this.$router.push({
             path: "/simulationMap",
