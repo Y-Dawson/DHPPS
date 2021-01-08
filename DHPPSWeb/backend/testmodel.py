@@ -10,16 +10,9 @@ def SendParamsToCmd(popuList, transMatrix, infectedList):
 
     path = os.getcwd()+"/DHPPSWeb/backend/simulate/"+"model.py"
     print(path)
-    cmdStr = ' '.join([
-        'python3.7',
-        path,
-        popuListStr,
-        transMatrixStr,
-        infectedListStr
-        ])
 
     result = subprocess.Popen(
-        cmdStr,
+        ['python3.7', path, popuListStr, transMatrixStr, infectedListStr],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
     )
