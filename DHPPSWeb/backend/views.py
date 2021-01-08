@@ -35,7 +35,6 @@ from functools import reduce
 import torch.nn as nn
 from torch.autograd import Variable
 import torch
-from backend.simulate.model import LinearRegression
 # Create your views here.
 
 logger = logging.getLogger("django")
@@ -1322,6 +1321,7 @@ class LinearRegression(torch.nn.Module):
         out = self.linear(x)
         out = self.hidden(out)
         return out
+
 
 def seir(y,t,b,a,g,p,u,N): 
     dy=[0,0,0,0,0,0]
