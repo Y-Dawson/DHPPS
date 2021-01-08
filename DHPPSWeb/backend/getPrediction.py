@@ -13,16 +13,20 @@ def SendParamsToCmd(popuList, transMatrix, infectedList):
     print(popuListStr)
     print(transMatrixStr)
     print(infectedListStr)
-    result = subprocess.Popen(
-        ['python3.7', path, popuListStr, transMatrixStr, infectedListStr],
-        stdin=subprocess.PIPE,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-    )
-    result.wait()
-    resultStr = result.stdout.read()
-    resultList = eval(resultStr)
-    if (not isinstance(resultList, list)):
-        resultList = list("Return a non-list result!")
-    print(resultList)
-    return resultList
+    try:
+        result = subprocess.check_output(
+            ['python3.7', path, popuListStr, transMatrixStr, infectedListStr],
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        print(result)
+        resultList = eval(result)
+        if (not isinstance(resultList, list)):
+            resultList = list("Return a non-list result!")
+        print(resultList)
+        return resultList
+    except subprocess.CalledProcessError as exc:
+        print('returncode:', exc.returncode)
+        print('cmd:', exc.cmd)
+        print('output:', exc.output)
