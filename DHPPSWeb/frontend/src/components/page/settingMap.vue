@@ -630,7 +630,7 @@ export default {
         this.isShow1 = false;
         this.$message({
           type: "error",
-          message: "请输入数字",
+          message: "请输入整数",
         });
         this.ruleForm.to_pop = "";
         this.ruleForm.begin_inf = "";
@@ -641,7 +641,7 @@ export default {
         this.isShow1 = false;
         this.$message({
           type: "error",
-          message: "请输入数字",
+          message: "请输入整数",
         });
         this.ruleForm.to_pop = "";
         this.ruleForm.begin_inf = "";
@@ -819,7 +819,7 @@ export default {
       if (!numRe.test(this.ruleForm.volumn)) {
         this.$message({
           type: "error",
-          message: "请输入数字",
+          message: "请输入整数",
         });
         this.ruleForm.volumn = "";
         this.isShow2 = false;

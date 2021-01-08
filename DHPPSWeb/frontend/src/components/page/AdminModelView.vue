@@ -385,7 +385,6 @@ export default {
 @import "../../css/bootstrap.min.css";
 @import "../../css/typography.css";
 @import "../../css/animate.css";
-/* @import "../../images/favicon.ico"; */
 @import "../../css/style.css";
 .avatar-md img {
   width: 38px;
