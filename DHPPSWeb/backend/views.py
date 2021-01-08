@@ -9,7 +9,7 @@ from django.db.models import F, Avg, Max, Min, Count, Sum
 from backend import models
 from backend import customSerializers
 from backend.sendSms import SendSms
-# from backend.simulate import returnDataSimulator
+# from backend.simulate.model import
 # from backend import returnDataSimulator
 from django.http import HttpResponseForbidden, JsonResponse
 from django_redis import get_redis_connection
@@ -1179,6 +1179,31 @@ class PersonalProfileViewSet(viewsets.ModelViewSet):
 
 
 # 以下为模型函数
+
+class LinearRegression1(torch.nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.linear = torch.nn.Linear(1, 1000)
+        self.hidden = torch.nn.Linear(1000, 1)
+
+    def forward(self, x):
+        out = self.linear(x)
+        out = self.hidden(out)
+        return out
+
+
+class LinearRegression(torch.nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.linear = torch.nn.Linear(1, 200)
+        self.hidden = torch.nn.Linear(200, 1)
+
+    def forward(self, x):
+        out = self.linear(x)
+        out = self.hidden(out)
+        return out
+
+
 def weights_init(m):
     classname = m.__class__.__name__
     if classname.find('Conv') != -1:
@@ -1297,30 +1322,6 @@ def train_model(model, train_data_list, train_labels_list, test_data=None, test_
         print(f'Epoch {t} train loss: {loss.item()}')   
       train_hist[t] = loss.item()
     return model.eval(), train_hist, test_hist
-
-
-class LinearRegression1(torch.nn.Module):
-    def __init__(self):
-        super().__init__()
-        self.linear = torch.nn.Linear(1, 1000)
-        self.hidden = torch.nn.Linear(1000, 1)
-
-    def forward(self, x):
-        out = self.linear(x)
-        out = self.hidden(out)
-        return out
-
-
-class LinearRegression(torch.nn.Module):
-    def __init__(self):
-        super().__init__()
-        self.linear = torch.nn.Linear(1, 200)
-        self.hidden = torch.nn.Linear(200, 1)
-
-    def forward(self, x):
-        out = self.linear(x)
-        out = self.hidden(out)
-        return out
 
 
 def seir(y,t,b,a,g,p,u,N): 
