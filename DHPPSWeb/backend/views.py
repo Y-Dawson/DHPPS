@@ -24,6 +24,17 @@ import datetime
 from dateutil.relativedelta import relativedelta
 import secrets
 from django.utils.decorators import method_decorator
+
+# 以下为模型需要的库
+import torch
+import os
+import csv
+import numpy as np
+from scipy.integrate import odeint
+from functools import reduce
+import torch.nn as nn
+from torch.autograd import Variable
+import torch
 # Create your views here.
 
 logger = logging.getLogger("django")
@@ -1168,17 +1179,6 @@ class PersonalProfileViewSet(viewsets.ModelViewSet):
 
 
 # 以下为模型函数
-# import pandas as pd
-import torch
-import os
-import csv
-import numpy as np
-from scipy.integrate import odeint
-from functools import reduce
-import torch.nn as nn
-from torch.autograd import Variable
-import torch
-
 def weights_init(m):
     classname = m.__class__.__name__
     if classname.find('Conv') != -1:
@@ -1187,98 +1187,93 @@ def weights_init(m):
         m.weight.data.normal_(1.0, 0.02)
         m.bias.data.fill_(0)
 
+
 class CLSTM_cell(nn.Module):
     def __init__(self, shape, input_chans, filter_size, num_features):
         super(CLSTM_cell, self).__init__()
-        
-        self.shape = shape#H,W
-        self.input_chans=input_chans
-        self.filter_size=filter_size
+        self.shape = shape  # H,W
+        self.input_chans = input_chans
+        self.filter_size = filter_size
         self.num_features = num_features
-        self.padding=(filter_size-1)/2
-        self.conv = nn.Conv2d(self.input_chans + self.num_features, 4*self.num_features, self.filter_size, 1, (int(self.padding),int(self.padding)))
+        self.padding = (filter_size-1)/2
+        self.conv = nn.Conv2d(self.input_chans + self.num_features, 4*self.num_features, self.filter_size, 1, (int(self.padding), int(self.padding)))
 
-    
     def forward(self, input, hidden_state):
-        hidden,c=hidden_state
-        print('inputshape:',input.shape)
-        print('hiddenshape:',hidden.shape)
+        hidden, c = hidden_state
+        print('inputshape:', input.shape)
+        print('hiddenshape:', hidden.shape)
         combined = torch.cat((input, hidden), 1)
-        A=self.conv(combined)
-        (ai,af,ao,ag)=torch.split(A,self.num_features,dim=1)
-        i=torch.sigmoid(ai)
-        f=torch.sigmoid(af)
-        o=torch.sigmoid(ao)
-        g=torch.tanh(ag)
-        
-        next_c=f*c+i*g
-        next_h=o*torch.tanh(next_c)
+        A = self.conv(combined)
+        (ai, af, ao, ag) = torch.split(A, self.num_features, dim=1)
+        i = torch.sigmoid(ai)
+        f = torch.sigmoid(af)
+        o = torch.sigmoid(ao)
+        g = torch.tanh(ag)
+
+        next_c = f*c+i*g
+        next_h = o*torch.tanh(next_c)
         return next_h, next_c
 
-    def init_hidden(self,batch_size):
-        return (Variable(torch.zeros(batch_size,self.num_features,self.shape[0],self.shape[1])),Variable(torch.zeros(batch_size,self.num_features,self.shape[0],self.shape[1])))
+    def init_hidden(self, batch_size):
+        return (Variable(torch.zeros(batch_size, self.num_features, self.shape[0], self.shape[1])), Variable(torch.zeros(batch_size, self.num_features, self.shape[0], self.shape[1])))
 
 
 class CLSTM(nn.Module):
-    def __init__(self, shape, input_chans, filter_size, num_features,num_layers):
+    def __init__(self, shape, input_chans, filter_size, num_features, num_layers):
         super(CLSTM, self).__init__()
-        
-        self.shape = shape#H,W
-        self.input_chans=input_chans
-        self.filter_size=filter_size
+
+        self.shape = shape  # H,W
+        self.input_chans = input_chans
+        self.filter_size = filter_size
         self.num_features = num_features
-        self.num_layers=num_layers
-        cell_list=[]
-        cell_list.append(CLSTM_cell(self.shape, self.input_chans, self.filter_size, self.num_features))  
-        for idcell in range(1,self.num_layers):
+        self.num_layers = num_layers
+        cell_list = []
+        cell_list.append(CLSTM_cell(self.shape, self.input_chans, self.filter_size, self.num_features))
+        for idcell in range(1, self.num_layers):
             cell_list.append(CLSTM_cell(self.shape, self.num_features, self.filter_size, self.num_features))
-        self.cell_list=nn.ModuleList(cell_list)      
-        self.Linear = nn.Linear(2700,30)
+        self.cell_list = nn.ModuleList(cell_list)
+        self.Linear = nn.Linear(2700, 30)
+
     def forward(self, input, hidden_state):
-
         current_input = input.transpose(0, 1)
-        next_hidden=[]
-        seq_len=current_input.size(0)
+        next_hidden = []
+        seq_len = current_input.size(0)
 
-        
         for idlayer in range(self.num_layers):
-
-            hidden_c=hidden_state[idlayer]
+            hidden_c = hidden_state[idlayer]
             all_output = []
-            output_inner = []            
-            for t in range(seq_len):#loop for every step
-                hidden_c=self.cell_list[idlayer](current_input[t,...],hidden_c)
+            output_inner = []
+            for t in range(seq_len):  # loop for every step
+                hidden_c = self.cell_list[idlayer](current_input[t, ...], hidden_c)
 
                 output_inner.append(hidden_c[0])
 
             next_hidden.append(hidden_c)
-            current_input = torch.cat(output_inner, 0).view(current_input.size(0), *output_inner[0].size())#seq_len,B,chans,H,W
+            current_input = torch.cat(output_inner, 0).view(current_input.size(0), *output_inner[0].size())  # seq_len,B,chans,H,W
             tempResult = current_input
             tempResult = tempResult.squeeze()
-            tempResult = tempResult.view(1,-1)
+            tempResult = tempResult.view(1, -1)
             tempResult = tempResult
-            
 
             result = self.Linear(tempResult)
 
         return result
 
-    def init_hidden(self,batch_size):
-
-        init_states=[]#this is a list of tuples
+    def init_hidden(self, batch_size):
+        init_states = []  # this is a list of tuples
         for i in range(self.num_layers):
             init_states.append(self.cell_list[i].init_hidden(batch_size))
         return init_states
 
-  
+
 def train_model(model, train_data_list, train_labels_list, test_data=None, test_labels=None):
-    loss_fn = torch.nn.MSELoss(reduction='sum').cuda()  
+    loss_fn = torch.nn.MSELoss(reduction='sum').cuda()
     optimiser = torch.optim.Adam(model.parameters(), lr=1e-3)
-    num_epochs = 600    
+    num_epochs = 600
     train_hist = np.zeros(num_epochs)
-    test_hist = np.zeros(num_epochs)    
+    test_hist = np.zeros(num_epochs)
     for t in range(num_epochs):
-      test_loss = loss_fn(train_labels_list[0],train_labels_list[0])
+      test_loss = loss_fn(train_labels_list[0], train_labels_list[0])
       for i in range(len(train_data_list)):
         train_data = train_data_list[i]
 
@@ -1303,24 +1298,26 @@ def train_model(model, train_data_list, train_labels_list, test_data=None, test_
       train_hist[t] = loss.item()
     return model.eval(), train_hist, test_hist
 
+
 class LinearRegression1(torch.nn.Module):
     def __init__(self):
         super().__init__()
-        self.linear = torch.nn.Linear(1,1000)
-        self.hidden = torch.nn.Linear(1000,1)
-        
-    def forward(self,x):
+        self.linear = torch.nn.Linear(1, 1000)
+        self.hidden = torch.nn.Linear(1000, 1)
+
+    def forward(self, x):
         out = self.linear(x)
         out = self.hidden(out)
         return out
 
+
 class LinearRegression(torch.nn.Module):
     def __init__(self):
         super().__init__()
-        self.linear = torch.nn.Linear(1,200)
-        self.hidden = torch.nn.Linear(200,1)
-        
-    def forward(self,x):
+        self.linear = torch.nn.Linear(1, 200)
+        self.hidden = torch.nn.Linear(200, 1)
+
+    def forward(self, x):
         out = self.linear(x)
         out = self.hidden(out)
         return out
@@ -1336,8 +1333,6 @@ def seir(y,t,b,a,g,p,u,N):
     dy[5]=u*y[3] #D
 
     return dy
-
-
 
 
 path=os.getcwd()
@@ -1372,8 +1367,6 @@ ic[0]=1
 soln=odeint(seir,ic,tvec,args=(b,a,g,p,u,N))
 soln=np.hstack((N-np.sum(soln,axis=1,keepdims=True),soln))
 casePer = [i[2]+i[3]+i[4] for i in soln]
-
-
 
 
 def AcquireData(population,transport,infected):
