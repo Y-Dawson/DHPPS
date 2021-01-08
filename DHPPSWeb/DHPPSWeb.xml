@@ -6,5 +6,5 @@
     <thread>2<thread>
     <daemonize>uwsgi.log</daemonize><!-- 日志文件 -->
     <buffer-size>65536</buffer-size>
-    <py-autoreload>1</py-autoreload>
+    <disable-logging>true<disable-logging> 
 </uwsgi>
