@@ -1178,7 +1178,7 @@ from functools  import reduce
 import torch.nn as nn
 from torch.autograd import Variable
 import torch
-
+from model import LinearRegression
 
 def weights_init(m):
     classname = m.__class__.__name__
@@ -1303,6 +1303,7 @@ def train_model(model, train_data_list, train_labels_list, test_data=None, test_
         print(f'Epoch {t} train loss: {loss.item()}')   
       train_hist[t] = loss.item()
     return model.eval(), train_hist, test_hist
+
 class LinearRegression1(torch.nn.Module):
     def __init__(self):
         super().__init__()
@@ -1313,6 +1314,7 @@ class LinearRegression1(torch.nn.Module):
         out = self.linear(x)
         out = self.hidden(out)
         return out
+
 class LinearRegression(torch.nn.Module):
     def __init__(self):
         super().__init__()
@@ -1323,6 +1325,7 @@ class LinearRegression(torch.nn.Module):
         out = self.linear(x)
         out = self.hidden(out)
         return out
+
 def seir(y,t,b,a,g,p,u,N): 
     dy=[0,0,0,0,0,0]
     S=N-sum(y);
@@ -1334,6 +1337,10 @@ def seir(y,t,b,a,g,p,u,N):
     dy[5]=u*y[3] #D
 
     return dy
+
+
+
+
 path=os.getcwd()
 path = path+'/backend/simulate/'
 rateModel = torch.load(path+'rate.pth')
