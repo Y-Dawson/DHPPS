@@ -1167,10 +1167,6 @@ class PersonalProfileViewSet(viewsets.ModelViewSet):
     serializer_class = customSerializers.PersonalProfileSerializer
 
 
-
-
-
-
 # 以下为模型函数
 # import pandas as pd
 import torch
@@ -1339,7 +1335,7 @@ def seir(y,t,b,a,g,p,u,N):
 
     return dy
 path=os.getcwd()
-path = path+'/'
+path = path+'/backend/simulate/'
 rateModel = torch.load(path+'rate.pth')
 daysModel = torch.load(path+'days.pth')
 IncubPeriod=3.22 
