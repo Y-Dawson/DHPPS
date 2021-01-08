@@ -1,5 +1,5 @@
 <template>
-  <div style="background-color: rgb(235, 234, 250)">
+  <div v-if="ifShow" style="background-color: rgb(235, 234, 250)">
     <div class="wrapper">
       <!-- Sidebar  -->
       <div class="iq-sidebar" style="z-index: 1">
@@ -190,6 +190,7 @@
 export default {
   data() {
     return {
+      ifShow:false,
       value:new Date(),
       userId:'',
       //判断是否已登录状态
@@ -215,6 +216,7 @@ export default {
   methods: {
     Show(){
       if(this.ifLogin=="返回数据成功"){
+        this.ifShow=true
         this.getMyContent()
       }
       else{
@@ -236,8 +238,7 @@ export default {
           )
         )
         .catch(function (error) {
-          // alert(JSON.stringify(error.response.data.message));
-          alert("获取用户身份失败");
+          this.$message.error("数据发送失败")
         });
     },
     GetFirstPage(){
@@ -263,8 +264,6 @@ export default {
       if(this.currentPageData.pagination==0){
         this.totalCasePage=1;
       }
-      // alert(this.totalCasePage)
-      // if (this.totalCasePage < 1) totalCasePage = 1;
     },
     getMyContent: function () {
       var self = this;
@@ -275,12 +274,11 @@ export default {
             self.MyContent = response.data,
             this.imageUrl = self.MyContent.avatarUrl,
             this.GetCaseContent()
-            // alert(JSON.stringify(self.MyContent))
           )
         )
         .catch(function (error) {
           // 请求失败处理
-          alert("数据请求失败wdnmd");
+          this.$message.error("数据发送失败")
         });
     },
     //获取案例内容
@@ -297,7 +295,6 @@ export default {
         .then(
           (response) => (
             self.currentPageData = response.data,
-            // alert(response.data),
             self.totalCasePage = Math.floor(
               self.currentPageData.pagination / self.pageCaseSize
             ),
@@ -306,8 +303,7 @@ export default {
           )
         )
         .catch(function (error) {
-          // 请求失败处理
-          // alert('数据请求失败了')
+          this.$message.error("数据请求失败")
           this.GetCaseContent()
         });
     },
@@ -320,10 +316,7 @@ export default {
         .post("/apis/backend/getCaseInfo/", data)
         .then((response) => {
           self.cases = response.data.cases;
-          // alert(JSON.stringify(self.cases)),
-          // console.log(JSON.stringify(self.cases));
           self.caseMode=self.cases.caseMode
-          // console.log(self.cases.InitCityData);
           var city_inf = [];
           for (var j in self.cases.InitCityData) {
             var s =
@@ -333,7 +326,6 @@ export default {
               self.cases.InitCityData[j].initPop +
               ",initinfect:" +
               self.cases.InitCityData[j].initInfect;
-            console.log("s:", s);
             city_inf.push(s);
           }
 
@@ -346,7 +338,6 @@ export default {
               self.cases.InitRoadData[j].destination +
               ",volume:" +
               self.cases.InitRoadData[j].volume;
-            console.log("s:", s);
             road_inf.push(s);
           }
 
@@ -359,7 +350,6 @@ export default {
               self.cases.CityPosition[j].x +
               ",y:" +
               self.cases.CityPosition[j].y;
-            console.log("s:", s);
             city_pos.push(s);
           }
           if(this.caseMode== 1){
@@ -379,7 +369,6 @@ export default {
           });
           }
           else if(this.caseMode== 2){
-            // alert(this.caseMode)
             this.$router.push({
             path: "/settingMap",
             query: {
@@ -398,8 +387,7 @@ export default {
           
         })
         .catch(function (error) {
-          alert(JSON.stringify(error.response));
-          alert("getCaseInfo数据请求失败wdnmd");
+          this.$message.error("数据请求失败")
         });
     },
     DelayReload:function(){
@@ -409,7 +397,6 @@ export default {
     },
     DeleteCaseContent: function (id) {
       var self = this;
-      // alert(id);
       axios
         .delete("/apis/backend/case/" + id+ "/")
         .then((response) => (
@@ -423,7 +410,7 @@ export default {
           // this.DelayReload()
         ))
         .catch(function (error) {
-          alert('数据fas失败')
+          this.$message.error("数据发送失败")
         });
     },
     Open(id) {

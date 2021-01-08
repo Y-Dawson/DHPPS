@@ -455,28 +455,27 @@
                 id="RemarkMessage"
                 rows="4"
                 placeholder="请输入备注......（最多输入100个字）"
-                @input="descInput"
-                v-model="desc"
+                v-model="descUser"
                 maxlength="100"
               ></textarea>
             </div>
             <div class="form-group">
               <label for="exampleFormControlTextarea1">权限</label>
               <select id="selected" v-model="selected" name="authority">
-                <option value="普通用户" selected="selected">普通用户</option>
+                <option value="普通用户">普通用户</option>
                 <option value="管理员">管理员</option>
               </select>
             </div>
             <div style="text-align: right">
               <button
-                type="submit"
+                type="button"
                 class="btn btn-primary"
                 @click="PostUserMessage(UserId)"
               >
                 提交
               </button>
               <button
-                type="submit"
+                type="button"
                 class="btn iq-bg-danger"
                 @click="CloseUserEdit(false)"
               >
@@ -529,8 +528,7 @@
                 id="RemarkMessage2"
                 rows="4"
                 placeholder="请输入备注......（最多输入100个字）"
-                @input="descInput"
-                v-model="desc"
+                v-model="descAdmin"
                 maxlength="100"
               ></textarea>
             </div>
@@ -538,19 +536,19 @@
               <label for="exampleFormControlTextarea1">权限</label>
               <select id="selected2" v-model="selected2" name="authority">
                 <option value="普通用户">普通用户</option>
-                <option value="管理员" selected2="selected2">管理员</option>
+                <option value="管理员">管理员</option>
               </select>
             </div>
             <div style="text-align: right">
               <button
-                type="submit"
+                type="button"
                 class="btn btn-primary"
                 @click="PostStaffMessage(StaffId)"
               >
                 提交
               </button>
               <button
-                type="submit"
+                type="button"
                 class="btn iq-bg-danger"
                 @click="CloseStaffEdit(false)"
               >
@@ -569,7 +567,6 @@ document.οnkeydοwn = function () {
   var myEvent = event ? event : window.event ? window.event : null;
   var keycode = myEvent.keyCode;
   if (myEvent.keyCode == 13) {
-    console.log("接收到回车");
     myEvent.keyCode = 9;
     myEvent.returnValue = false;
   }
@@ -609,12 +606,14 @@ export default {
       StaffRemark: "",
       StaffAuthority: "",
       showModal: false,
-      radioVal: "普通用户",
       show: false,
       showStaff: false,
 
       txtVal: 0,
-      desc: "",
+      descUser: "",
+      descAdmin: "",
+      selected: "",
+      selected2: "",
     };
   },
   created: function () {
@@ -646,8 +645,7 @@ export default {
           }
         })
         .catch(function (error) {
-          // alert(JSON.stringify(error.response.data.message));
-          alert("获取用户身份失败");
+          this.$message.error("数据获取失败")
         });
     },
     getMyContent: function () {
@@ -661,8 +659,7 @@ export default {
           )
         )
         .catch(function (error) {
-          // 请求失败处理
-          alert("数据请求失败wdnmd");
+          this.$message.error("数据获取失败")
         });
     },
     getUserContent: function () {
@@ -684,7 +681,7 @@ export default {
         )
         .catch(function (error) {
           // 请求失败处理
-          alert("数据请求失败wdnmd");
+          this.$message.error("数据获取失败")
         });
     },
     PostUserMessage: function (UI) {
@@ -694,6 +691,8 @@ export default {
       }
       if ($("#selected").val() == "管理员") {
         self.UserAuthority = 2;
+      } else if ($("#selected").val() == "普通用户") {
+        self.UserAuthority = 1;
       } else if ($("#RemarkMessage").val() == "") {
         this.$message("请选择需要修改的内容");
         return;
@@ -711,10 +710,12 @@ export default {
           )
         )
         .catch(function (error) {
-          alert("数据发送失败");
+          this.$message.error("数据发送失败")
         });
     },
     UserEdit: function (UI, UN, UR, UA, show) {
+      this.descUser="",
+      this.selected="",
         (this.UserId = UI),
         (this.UserName = UN),
         (this.UserRemark = UR),
@@ -767,12 +768,10 @@ export default {
         .then(
           (response) => (
             (self.content = response), self.getUserContent()
-            // alert(JSON.stringify(response))
           )
         )
         .catch(function (error) {
-          alert("数据发送失败");
-          console.log(error.response);
+          this.$message.error("数据发送失败")
         });
     },
 
@@ -803,12 +802,11 @@ export default {
               self.paginateStaff / self.pageStaffSize
             )),
             this.testStaffPage()
-            // alert(JSON.stringify(response))
           )
         )
         .catch(function (error) {
           // 请求失败处理
-          alert("数据请求失败wdnmd");
+          this.$message.error("数据获取失败")
         });
     },
     PostStaffMessage: function (UI) {
@@ -818,6 +816,8 @@ export default {
       }
       if ($("#selected2").val() == "普通用户") {
         self.StaffAuthority = 1;
+      } else if ($("#selected2").val() == "管理员") {
+        self.StaffAuthority = 2;
       } else if ($("#RemarkMessage2").val() == "") {
         this.$message("请选择需要修改的内容");
         return;
@@ -833,7 +833,7 @@ export default {
           )
         )
         .catch(function (error) {
-          alert("数据发送失败");
+          this.$message.error("数据发送失败")
         });
     },
     handleStaffDel(id) {
@@ -864,12 +864,10 @@ export default {
         .then(
           (response) => (
             (self.contentStaff = response), self.getStaffContent()
-            // alert(JSON.stringify(response))
           )
         )
         .catch(function (error) {
-          alert("数据发送失败");
-          console.log(error.response);
+          this.$message.error("数据发送失败")
         });
     },
     //上一页
@@ -888,6 +886,8 @@ export default {
       if (this.totalStaffPage == 0) this.totalStaffPage = 1;
     },
     StaffEdit: function (UI, UN, UR, UA, show) {
+      this.descAdmin="",
+      this.selected2="",
       (this.StaffId = UI),
         (this.StaffName = UN),
         (this.StaffRemark = UR),

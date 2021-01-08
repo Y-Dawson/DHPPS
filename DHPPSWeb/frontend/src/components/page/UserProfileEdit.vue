@@ -1,5 +1,5 @@
 <template>
-  <div style="background-color: rgb(235, 234, 250)">
+  <div v-if="ifShow" style="background-color: rgb(235, 234, 250)">
     <div class="wrapper">
       <!-- Sidebar  -->
       <div class="iq-sidebar" style="z-index: 1">
@@ -438,6 +438,7 @@ export default {
       }
     };
     return {
+      ifShow:false,
       value: new Date(),
       userId:'',
       show: false,
@@ -503,6 +504,7 @@ export default {
   methods: {
     Show(){
       if(this.ifLogin=="返回数据成功"){
+        this.ifShow=true
         this.getMyContent()
       }
       else{
@@ -525,7 +527,7 @@ export default {
           )
         )
         .catch(function (error) {
-          alert("获取用户身份失败");
+          this.$message.error("数据请求失败")
         });
     },
     getMyContent: function () {
@@ -546,7 +548,7 @@ export default {
         )
         .catch(function (error) {
           // 请求失败处理
-          alert("getMyContent数据请求失败wdnmd");
+          this.$message.error("数据请求失败")
         });
     },
     delayReload:function(){
@@ -557,7 +559,6 @@ export default {
     putContent: function () {
       var self = this;
       let data = new FormData();
-      // alert(this.image)
       data.append("avatar", this.image)
       data.append("userName",$("#inputname").val())
       data.append("birth",this.ruleForm.value1)
@@ -577,9 +578,7 @@ export default {
           )
         )
         .catch(function (error) {
-          alert(JSON.stringify(response)),
-          alert("数据发送失败")
-          console.log(error.response);
+          this.$message.error("数据请求失败")
         });
     },
     submitForm(formName) {
@@ -593,10 +592,7 @@ export default {
       });
     },
     handleAvatarSuccess(res, file, fileList) {
-      // alert("success")
       this.image = file.raw;
-      console.log("现在的图片是：");
-      console.log(file.raw);
       this.changingUrl = URL.createObjectURL(file.raw);
     },
     beforeAvatarUpload(file) {
@@ -642,8 +638,7 @@ export default {
         )
         .catch(function (error) {
           // 请求失败处理
-          alert(JSON.stringify(error.response));
-          alert("数据请求失败wdnmd");
+          this.$message.error("数据请求失败")
         });
     },
     PWDsubmitForm(formName) {
@@ -651,7 +646,7 @@ export default {
         if (valid) {
           this.changePass();
         } else {
-          console.log("error submit!!");
+          this.$message.error("提交失败")
           return false;
         }
       });

@@ -157,7 +157,7 @@
       </ul>
 
       <ul class="img-list">
-        <li v-for="o in citycnt + 100" :key="o">
+        <li v-for="o in citycnt + 20" :key="o">
           <div :id="'ci' + o" class="city" style="left: 10000px; top: 10000px">
             <img
               src="../../assets/layui/images/city.gif"
@@ -179,178 +179,15 @@
       </ul>
 
       <ul class="line_list">
-        <li>
+        <li v-for="o in initline + 50" :key="o">
           <div
-            id="line1"
+            :id="'line' + o"
             class="road_line"
             :style="{
               left: lineleft + 'px',
               top: linetop + 'px',
             }"
-          >
-            <img src="../../assets/img/road_line.png" alt="" />
-            <span></span>
-            <span></span>
-          </div>
-        </li>
-
-        <li>
-          <div
-            id="line2"
-            class="road_line"
-            :style="{
-              left: lineleft + 'px',
-              top: linetop + 'px',
-            }"
-          >
-            <img src="../../assets/img/road_line.png" alt="" />
-            <span></span>
-            <span></span>
-          </div>
-        </li>
-
-        <li>
-          <div
-            id="line3"
-            class="road_line"
-            :style="{
-              left: lineleft + 'px',
-              top: linetop + 'px',
-            }"
-          >
-            <img src="../../assets/img/road_line.png" alt="" />
-            <span></span>
-            <span></span>
-          </div>
-        </li>
-
-        <li>
-          <div
-            id="line4"
-            class="road_line"
-            :style="{
-              left: lineleft + 'px',
-              top: linetop + 'px',
-            }"
-          >
-            <img src="../../assets/img/road_line.png" alt="" /> <span></span>
-            <span></span>
-          </div>
-        </li>
-
-        <li>
-          <div
-            id="line5"
-            class="road_line"
-            :style="{
-              left: lineleft + 'px',
-              top: linetop + 'px',
-            }"
-          >
-            <img src="../../assets/img/road_line.png" alt="" />
-            <span></span>
-            <span></span>
-          </div>
-        </li>
-
-        <li>
-          <div
-            id="line6"
-            class="road_line"
-            :style="{
-              left: lineleft + 'px',
-              top: linetop + 'px',
-            }"
-          >
-            <img src="../../assets/img/road_line.png" alt="" />
-            <span></span>
-            <span></span>
-          </div>
-        </li>
-
-        <li>
-          <div
-            id="line7"
-            class="road_line"
-            :style="{
-              left: lineleft + 'px',
-              top: linetop + 'px',
-            }"
-          >
-            <img src="../../assets/img/road_line.png" alt="" />
-            <span></span>
-            <span></span>
-          </div>
-        </li>
-
-        <li>
-          <div
-            id="line8"
-            class="road_line"
-            :style="{
-              left: lineleft + 'px',
-              top: linetop + 'px',
-            }"
-          >
-            <img src="../../assets/img/road_line.png" alt="" />
-            <span></span>
-            <span></span>
-          </div>
-        </li>
-
-        <li>
-          <div
-            id="line9"
-            class="road_line"
-            :style="{
-              left: lineleft + 'px',
-              top: linetop + 'px',
-            }"
-          >
-            <img src="../../assets/img/road_line.png" alt="" />
-            <span></span>
-            <span></span>
-          </div>
-        </li>
-
-        <li>
-          <div
-            id="line10"
-            class="road_line"
-            :style="{
-              left: lineleft + 'px',
-              top: linetop + 'px',
-            }"
-          >
-            <img src="../../assets/img/road_line.png" alt="" />
-            <span></span>
-            <span></span>
-          </div>
-        </li>
-
-        <li>
-          <div
-            id="line11"
-            class="road_line"
-            :style="{
-              left: lineleft + 'px',
-              top: linetop + 'px',
-            }"
-          >
-            <img src="../../assets/img/road_line.png" alt="" />
-            <span></span>
-            <span></span>
-          </div>
-        </li>
-
-        <li>
-          <div
-            id="line12"
-            class="road_line"
-            :style="{
-              left: lineleft + 'px',
-              top: linetop + 'px',
-            }"
+            @click="DeleteRoad('line' + o)"
           >
             <img src="../../assets/img/road_line.png" alt="" />
             <span></span>
@@ -391,6 +228,8 @@ export default {
       value1: 0,
       daily_step: 0,
       day_num: 0,
+
+      initline: 0,
 
       cityx1: 0,
       cityy1: 0,
@@ -786,6 +625,7 @@ export default {
     },
 
     DrawLine(ci1, ci2) {
+      console.log("画条线");
       var c1 = document.getElementById(ci1);
       var c2 = document.getElementById(ci2);
 
@@ -833,6 +673,9 @@ export default {
       ll.style.transform = "rotate(" + rotang + "deg)";
       linecnt += 1;
 
+      console.log("ll",ll);
+      console.log("left",ll.style.left);
+      console.log("top",ll.style.top);
       // var ii=document.getElementById("img1");
       // ii.style.animation="roadmove1 3s infinite";
 

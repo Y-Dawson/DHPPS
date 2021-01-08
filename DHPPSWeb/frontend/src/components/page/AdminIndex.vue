@@ -295,8 +295,7 @@ export default {
           }
         })
         .catch(function (error) {
-          // alert(JSON.stringify(error));
-          alert("获取用户身份失败");
+          this.$message.error("数据获取失败")
         });
     },
     getMyContent: function () {
@@ -309,7 +308,7 @@ export default {
         })
         .catch(function (error) {
           // 请求失败处理
-          alert("数据请求失败wdnmd");
+          this.$message.error("数据获取失败")
         });
     },
     getSexData: function () {
@@ -329,7 +328,7 @@ export default {
         })
         .catch(function (error) {
           // 请求失败处理
-          alert("数据请求失败wdnmd");
+          this.$message.error("数据获取失败")
         });
     },
     getCityData: function () {
@@ -349,13 +348,12 @@ export default {
         })
         .catch(function (error) {
           // 请求失败处理
-          alert("数据请求失败wdnmd");
+          this.$message.error("数据获取失败")
         });
     },
     getUserCaseData: function () {
       var self = this;
       axios.get("/apis/backend/userCaseStat/").then((response) => {
-        // alert(JSON.stringify(response.data)),
         this.userCaseData = response.data.UserCaseStatInfos;
         //通过遍历DataShow分别给columns 中的维度和指标 赋值；
         for (var i = 0; i < this.userCaseData.length; i++) {
@@ -388,7 +386,6 @@ export default {
 @import "../../css/bootstrap.min.css";
 @import "../../css/typography.css";
 @import "../../css/animate.css";
-/* @import "../../images/favicon.ico"; */
 @import "../../css/style.css";
 .avatar-md img {
   width: 38px;

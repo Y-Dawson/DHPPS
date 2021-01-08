@@ -1,5 +1,5 @@
 <template>
-  <div style="background-color: rgb(235, 234, 250)">
+  <div v-if="ifShow" style="background-color: rgb(235, 234, 250)">
     <div class="wrapper">
       <!-- Sidebar  -->
       <div class="iq-sidebar" style="z-index: 1">
@@ -227,6 +227,7 @@
 export default {
   data() {
     return {
+      ifShow:false,
       value: new Date(),
       // 头像
       fits: ["fill"],
@@ -239,14 +240,11 @@ export default {
   },
   created: function () {
     this.GetUserIdentity();
-    // this.Admin()
-    // alert(this.userAuthority)
-    // alert(this.ifAdmin)
-    // this.getMyContent();
   },
   methods: {
     Show(){
       if(this.ifLogin=="返回数据成功"){
+        this.ifShow=true
         this.getMyContent()
       }
       else{
@@ -265,7 +263,6 @@ export default {
     //获取用户身份
     GetUserIdentity() {
       var self = this;
-      // alert("获取用户身份")
       axios
         .post("/apis/backend/getIdentity/")
         .then(
@@ -273,14 +270,12 @@ export default {
             self.userId = response.data.userId,
             self.userAuthority=response.data.authority,
             self.ifLogin=response.data.message,
-            // alert(JSON.stringify(response.data)),
             this.Show(),
             this.Admin()
           )
         )
         .catch(function (error) {
-          // alert(JSON.stringify(error.response.data.message));
-          alert("获取用户身份失败");
+          this.$message.error("数据请求失败")
         });
     },
     getMyContent: function () {
@@ -290,13 +285,11 @@ export default {
         .then(
           (response) => (
             (self.MyContent = response.data),
-            // alert(JSON.stringify(response.data)),
             (this.Url = self.MyContent.avatarUrl)
           )
         )
         .catch(function (error) {
-          // 请求失败处理
-          alert("getMyContent数据请求失败wdnmd");
+          this.$message.error("数据请求失败")
         });
     },
     handleLogout: function () {
@@ -325,7 +318,7 @@ export default {
     logout: function () {
       var self = this;
       axios.get("/apis/backend/logout/").catch(function (error) {
-        alert("数据请求失败wdnmd");
+        this.$message.error("数据请求失败")
       });
     },
   },

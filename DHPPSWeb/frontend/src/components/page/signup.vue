@@ -226,7 +226,7 @@ export default {
         ],
         email: [
           { required: true, validator: checkemail, trigger: "blur" },
-          { min: 7, max: 20, message: "请输入正确的邮箱", trigger: "blur" },
+          { min: 7, max: 30, message: "请输入正确的邮箱", trigger: "blur" },
         ],
         phone: [
           { required: true, validator: checkphone, trigger: "blur" },
@@ -243,10 +243,8 @@ export default {
     checkPhone: function () {
       this.$refs["signupForm"].validateField("phone", (err) => {
         if (err) {
-          console.log("未通过");
           return;
         } else {
-          console.log("已通过");
           this.getVerifyCode();
         }
       });
@@ -284,14 +282,10 @@ export default {
             (self.content = response.data),
             self.returnmessage=response.data.message,
             self.phoneIsValid()            
-            // alert(self.returnmessage),
-            // self.skip()
-            // alert(JSON.stringify(response.data.message))
           )
         )
         .catch(function (error) {
-          alert("数据发送失败");
-          console.log(error.response);
+          this.$message.error("数据发送失败")
         });
     },
     postAccount: function () {
@@ -309,14 +303,11 @@ export default {
           (response) => (
             (self.content = response.data),
             (self.returnmessage = response.data.message),
-            // alert(self.returnmessage),
             self.skip()
-            // alert(JSON.stringify(response.data.message))
           )
         )
         .catch(function (error) {
-          alert("数据发送失败");
-          console.log(error.response);
+          this.$message.error("数据发送失败")
         });
     },
     submitForm(formName) {
@@ -324,7 +315,7 @@ export default {
         if (valid) {
           this.postAccount();
         } else {
-          console.log("error submit!!");
+          this.$message.error("提交失败")
           return false;
         }
       });

@@ -124,7 +124,7 @@
                       <thead>
                         <tr style="text-align: center">
                           <th style="width: 8%">ID</th>
-                          <th style="width: 5%">头像</th>
+                          <th style="width: 10%">头像</th>
                           <th style="width: 10%">昵称</th>
                           <th style="width: 10%">手机号</th>
                           <th style="width: 10%">邮箱</th>
@@ -278,7 +278,6 @@
                 id="RemarkMessage"
                 rows="4"
                 placeholder="请输入备注......（最多输入100个字）"
-                @input="descInput"
                 v-model="desc"
                 maxlength="100"
               ></textarea>
@@ -287,20 +286,20 @@
             <div class="form-group">
               <label for="exampleFormControlTextarea1">权限</label>
               <select id="selected" v-model="selected" name="authority">
-                <option value="普通用户" selected="selected">普通用户</option>
+                <option value="普通用户">普通用户</option>
                 <option value="管理员">管理员</option>
               </select>
             </div>
             <div style="text-align: right">
               <button
-                type="submit"
+                type="button"
                 class="btn btn-primary"
                 @click="PostUserMessage(UserId)"
               >
                 提交
               </button>
               <button
-                type="submit"
+                type="button"
                 class="btn iq-bg-danger"
                 @click="CloseUserEdit(false)"
               >
@@ -320,7 +319,6 @@ document.οnkeydοwn = function () {
   var myEvent = event ? event : window.event ? window.event : null;
   var keycode = myEvent.keyCode;
   if (myEvent.keyCode == 13) {
-    console.log("接收到回车");
     myEvent.keyCode = 9;
     myEvent.returnValue = false;
   }
@@ -360,16 +358,28 @@ export default {
       UserRemark: "",
       UserAuthority: 1,
       showModal: false,
-      radioVal: "普通用户",
 
       txtVal: 0,
       desc: "",
+      selected: "",
     };
   },
   created: function () {
     this.getMyIdentity();
   },
+  mounted: function () {
+    this.setScrollBar();
+    // 浏览器缩放，更新ScrollBar位置
+    window.addEventListener("resize", this.setScrollBar);
+  },
+
   methods: {
+    setScrollBar() {
+      this.$nextTick(function () {
+        var div = document.querySelector(".main-container");
+        div.style.height = window.innerHeight - 10 + "px";
+      });
+    },
     //获取管理员身份
     getMyIdentity() {
       var self = this;
@@ -377,13 +387,15 @@ export default {
         .post("/apis/backend/getIdentity/")
         .then((response) => {
           this.AdminId = response.data.userId;
-          if(response.data.message=="未登录") {
+          if (response.data.message == "未登录") {
             this.$message("您尚未登录");
             this.$router.push({
               path: "/Login",
             });
-          }
-          else if (response.data.authority == 2 || response.data.authority == 3) {
+          } else if (
+            response.data.authority == 2 ||
+            response.data.authority == 3
+          ) {
             this.authorityShow = true;
             this.getMyContent();
             this.getUserContent();
@@ -395,8 +407,7 @@ export default {
           }
         })
         .catch(function (error) {
-          // alert(JSON.stringify(error.response.data.message));
-          alert("获取用户身份失败");
+          this.$message.error("数据获取失败")
         });
     },
     getMyContent: function () {
@@ -410,8 +421,7 @@ export default {
           )
         )
         .catch(function (error) {
-          // 请求失败处理
-          alert("数据请求失败wdnmd");
+          this.$message.error("数据获取失败")
         });
     },
     getUserContent: function () {
@@ -424,7 +434,6 @@ export default {
         })
         .then(
           (response) => (
-            // alert(JSON.stringify(response.data.data)),
             (this.content = response.data.data),
             (this.paginate = response.data.pagination),
             (this.pageSize = response.data.pageSize),
@@ -433,8 +442,7 @@ export default {
           )
         )
         .catch(function (error) {
-          // 请求失败处理
-          alert("数据请求失败wdnmd");
+          this.$message.error("数据获取失败")
         });
     },
     PostUserMessage: function (UI) {
@@ -463,11 +471,13 @@ export default {
           )
         )
         .catch(function (error) {
-          alert("数据发送失败");
+          this.$message.error("数据发送失败")
         });
     },
     UserEdit: function (UI, UN, UR, UA, show) {
-      (this.UserId = UI),
+      (this.desc = ""),
+        (this.selected = ""),
+        (this.UserId = UI),
         (this.UserName = UN),
         (this.UserRemark = UR),
         (this.UserAuthority = UA),
@@ -519,17 +529,15 @@ export default {
         .then(
           (response) => (
             (self.content = response), self.getUserContent()
-            // alert(JSON.stringify(response))
           )
         )
         .catch(function (error) {
-          alert("数据发送失败");
-          console.log(error.response);
+          this.$message.error("数据发送失败")
         });
     },
-    descInput: function () {
-      this.txtVal = this.desc.length;
-    },
+    // descInput: function () {
+    //   this.txtVal = this.desc.length;
+    // },
   },
 };
 </script>
