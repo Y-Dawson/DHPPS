@@ -163,8 +163,8 @@ def seir(y,t,b,a,g,p,u,N):
     dy[5]=u*y[3] #D
 
     return dy
-path=os.getcwd()
-path = path+'/backend/simulate/'
+path=os.path.abspath('.')
+path = path+'/'
 rateModel = torch.load(path+'rate.pth')
 daysModel = torch.load(path+'days.pth')
 IncubPeriod=3.22 
@@ -188,7 +188,7 @@ g[1]=(1/DurMildInf)*FracMild
 p[1]=(1/DurMildInf)-g[1]
 b=2.5e-4*np.array([1,1,1,1]) 
 R0=N*((b[1]/(p[1]+g[1]))+(p[1]/(p[1]+g[1]))*(b[2]/(p[2]+g[2])+ (p[2]/(p[2]+g[2]))*(b[3]/(u+g[3]))))
-tmax=160
+tmax=400
 tvec=np.arange(0,tmax,1)
 ic=np.zeros(6)
 ic[0]=1
