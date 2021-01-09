@@ -374,13 +374,13 @@ export default {
     this.params = JSON.parse(this.$route.query.params);
 
     // console.log("用户ID：", this.params.userId);
-    console.log("案例名：", this.params.caseName);
-    console.log("城市数目：", this.params.citynum);
-    console.log("道路数目：", this.params.roadnum);
-    console.log("初始城市信息：", this.params.InitCityData);
-    console.log("道路信息：", this.params.InitRoadData);
-    console.log("城市坐标：", this.params.CityPosition);
-    console.log("每日病例：", this.params.DailyInfected.data.DailyForecastData);
+    // console.log("案例名：", this.params.caseName);
+    // console.log("城市数目：", this.params.citynum);
+    // console.log("道路数目：", this.params.roadnum);
+    // console.log("初始城市信息：", this.params.InitCityData);
+    // console.log("道路信息：", this.params.InitRoadData);
+    // console.log("城市坐标：", this.params.CityPosition);
+    // console.log("每日病例：", this.params.DailyInfected.data.DailyForecastData);
     var foreData = this.params.DailyInfected.data.DailyForecastData;
 
     // this.userId = this.params.userId;
@@ -392,8 +392,8 @@ export default {
     this.city_position = this.params.CityPosition;
     this.day_num = parseInt(this.params.Daynum);
     this.daily_step = 100 / this.day_num;
-    console.log("模拟天数：", this.params.Daynum);
-    console.log("每日跨度：", this.daily_step);
+    // console.log("模拟天数：", this.params.Daynum);
+    // console.log("每日跨度：", this.daily_step);
 
     for (var i = 0; i < parseInt(this.params.Daynum) + 1; i++) {
       for (var j = 0; j < parseInt(this.params.citynum); j++) {
@@ -406,7 +406,7 @@ export default {
       }
     }
 
-    console.log("录入病例信息完毕");
+    // console.log("录入病例信息完毕");
 
     for (var i = 0; i < parseInt(this.params.citynum); i++) {
       this.cityname.push(foreData[0][i]["cityName"]);
@@ -428,12 +428,12 @@ export default {
       this.city_inf.push(newa);
     }
 
-    console.log("录入病例显示信息完毕");
+    // console.log("录入病例显示信息完毕");
 
     this.row_cnt.push(1);
 
-    console.log("citynum", this.citycnt);
-    console.log("c3inf", this.ci3_totalInfected);
+    // console.log("citynum", this.citycnt);
+    // console.log("c3inf", this.ci3_totalInfected);
 
     var nowcitycnt = 0;
     for (var i = 0; i < parseInt(this.params.citynum); i++) {
@@ -441,8 +441,8 @@ export default {
         nowcitycnt += 1;
         this.row_cnt.push(1);
         this.people_cnt.push(1);
-        console.log("i", i);
-        console.log("name", foreData[0][i]["cityName"]);
+        // console.log("i", i);
+        // console.log("name", foreData[0][i]["cityName"]);
         i -= 1;
         continue;
       }
@@ -468,14 +468,14 @@ export default {
     }
 
     this.row_cnt.push(0);
-    console.log("rc", this.row_cnt);
-    console.log("pc", this.people_cnt);
+    // console.log("rc", this.row_cnt);
+    // console.log("pc", this.people_cnt);
 
     var cnt = 0;
     for (var j in this.params.CityPosition) {
       var te = this.params.CityPosition[j].split(",");
-      console.log("te", te);
-      console.log("j", j);
+      // console.log("te", te);
+      // console.log("j", j);
       var tt, ci, x, y, cid;
       cnt = 0;
       for (var k in te) {
@@ -496,8 +496,8 @@ export default {
       cid = this.GetID(ci);
       var cityentity = document.getElementById(cid);
 
-      console.log("cityID", cid);
-      console.log("cityentity", cityentity);
+      // console.log("cityID", cid);
+      // console.log("cityentity", cityentity);
 
       cityentity.style.left = x + "px";
       cityentity.style.top = y + "px";
@@ -505,16 +505,16 @@ export default {
 
       this.changePosition(ci);
 
-      console.log("x", x);
-      console.log("y", y);
+      // console.log("x", x);
+      // console.log("y", y);
 
-      console.log("cityID", cid);
+      // console.log("cityID", cid);
     }
 
     for (var j in this.params.InitRoadData) {
-      console.log(this.params.InitRoadData[j]);
+      // console.log(this.params.InitRoadData[j]);
       var ri = this.params.InitRoadData[j].split(",");
-      console.log(ri);
+      // console.log(ri);
       var city1, city2, vol, tt, s;
       cnt = 0;
       for (var k in ri) {
@@ -536,7 +536,7 @@ export default {
       this.road_di.push(s);
       var cid1 = this.GetID(city1);
       var cid2 = this.GetID(city2);
-      console.log(cid1, cid2);
+      // console.log(cid1, cid2);
 
       var newar1 = new Array();
       newar1.push(city1);
@@ -580,7 +580,7 @@ export default {
 
     StopSimulation(ss) {
       if (this.ss == true) {
-        console.log("返回设置参数界面");
+        // console.log("返回设置参数界面");
         this.ss = false;
         this.$router.push({
           path: "/setting",
@@ -600,7 +600,7 @@ export default {
 
     FormatTooltip(val) {
       this.day = parseInt(val / this.daily_step);
-      console.log("day：", this.day);
+      // console.log("day：", this.day);
       this.changeColor(this.day);
       this.prepareDraw(this.day);
       var d = parseInt(val / this.daily_step) + 1;
@@ -626,7 +626,7 @@ export default {
     },
 
     DrawLine(ci1, ci2) {
-      console.log("画条线");
+      // console.log("画条线");
       var c1 = document.getElementById(ci1);
       var c2 = document.getElementById(ci2);
 
@@ -639,16 +639,16 @@ export default {
       var cy2 = c2.style.top;
       var tcy2 = cy2.substring(0, cy2.length - 2);
 
-      console.log("tcx1:", tcx1);
-      console.log("tcy1:", tcy1);
-      console.log("tcx2:", tcx2);
-      console.log("tcy2:", tcy2);
+      // console.log("tcx1:", tcx1);
+      // console.log("tcy1:", tcy1);
+      // console.log("tcx2:", tcx2);
+      // console.log("tcy2:", tcy2);
 
       const dx = Math.abs(tcx1 - tcx2);
       const dy = Math.abs(tcy1 - tcy2);
       var dis = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
 
-      console.log("dis:", dis);
+      // console.log("dis:", dis);
 
       var ttcx1 = parseInt(tcx1);
       var ttcx2 = parseInt(tcx2);
@@ -674,9 +674,9 @@ export default {
       ll.style.transform = "rotate(" + rotang + "deg)";
       linecnt += 1;
 
-      console.log("ll",ll);
-      console.log("left",ll.style.left);
-      console.log("top",ll.style.top);
+      // console.log("ll",ll);
+      // console.log("left",ll.style.left);
+      // console.log("top",ll.style.top);
       // var ii=document.getElementById("img1");
       // ii.style.animation="roadmove1 3s infinite";
 
@@ -805,7 +805,7 @@ export default {
               // console.log("iid", iid);
             }
           } else {
-            console.log("换行");
+            // console.log("换行");
             for (var k = 1; k <= this.people_cnt[ccnt][j]; k++) {
               var iid = "i" + ccnt + j + k;
               var iidentity = document.getElementById(iid);
@@ -876,17 +876,17 @@ export default {
 
     outp(e) {
       var cinf = document.getElementById(e);
-      console.log("cinf", cinf);
+      // console.log("cinf", cinf);
       if (cinf.style.display != "none") {
         cinf.style.display = "none";
       } else {
         cinf.style.display = "block";
       }
-      console.log("dis", cinf.style.display);
+      // console.log("dis", cinf.style.display);
     },
 
     changePosition(e) {
-      console.log("改变位置");
+      // console.log("改变位置");
 
       var cnum = this.GetNum(e);
       var cinf = "cityinf" + cnum;
@@ -894,17 +894,17 @@ export default {
       var ci = document.getElementById(cinf);
       var c = document.getElementById(cid);
 
-      console.log("cid", cid);
+      // console.log("cid", cid);
 
       ci.style.marginTop = -240 + "px";
       ci.style.marginLeft = 75 + "px";
 
       var ct = c.style.top;
-      console.log("ct", ct);
+      // console.log("ct", ct);
       var tct = parseInt(ct.substring(0, ct.length - 2));
-      console.log("tct", tct);
+      // console.log("tct", tct);
       if (tct < 150) {
-        console.log("你的top不对劲");
+        // console.log("你的top不对劲");
         ci.style.marginTop = -90 - tct + "px";
       }
     },
@@ -970,7 +970,7 @@ export default {
     },
 
     DrawMap() {
-      console.log("画个柱状图");
+      // console.log("画个柱状图");
 
       var myChart = echarts.init(document.getElementById("bar"));
 
@@ -1054,15 +1054,15 @@ export default {
     },
 
     DrawRoadMap() {
-      console.log("roadVol", this.roadVol);
+      // console.log("roadVol", this.roadVol);
 
       var myChart = echarts.init(document.getElementById("threebar"));
 
-      console.log("myChart", myChart);
+      // console.log("myChart", myChart);
 
-      console.log("cityname", this.cityname);
+      // console.log("cityname", this.cityname);
 
-      console.log("画个3D柱状图");
+      // console.log("画个3D柱状图");
 
       var dataBJ = this.roadVol;
 
@@ -1182,9 +1182,9 @@ export default {
           },
         ],
       };
-      console.log("快画完了");
+      // console.log("快画完了");
       myChart.setOption(option);
-      console.log("画完了");
+      // console.log("画完了");
     },
   },
 };

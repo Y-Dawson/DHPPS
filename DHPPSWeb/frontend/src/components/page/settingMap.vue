@@ -102,10 +102,10 @@
           </select>
         </el-form-item>
         <el-form-item label="总人口" prop="to_pop" class="e_inp">
-          <el-input v-model="ruleForm.to_pop"></el-input>
+          <el-input v-model="ruleForm.to_pop" placeholder="请输入总人口：1~1000000的整数"></el-input>
         </el-form-item>
         <el-form-item label="初始感染数" prop="begin_inf" class="e_inp">
-          <el-input v-model="ruleForm.begin_inf"></el-input>
+          <el-input v-model="ruleForm.begin_inf" placeholder="请输入初始感染数：大于1的整数且不超过该城市人口的30%"></el-input>
         </el-form-item>
 
         <el-form-item>
@@ -170,8 +170,8 @@
           </select>
         </el-form-item>
 
-        <el-form-item label="人流量" prop="volumn" class="vol">
-          <el-input v-model="ruleForm.volumn"></el-input>
+        <el-form-item label="人流量" prop="volumn" class="vol e_inp">
+          <el-input v-model="ruleForm.volumn" placeholder="请输入此路人流量（1%-100%），输入为整数，如设置为50%，请输入50"></el-input>
         </el-form-item>
 
         <el-form-item>
@@ -216,7 +216,7 @@ document.οnkeydοwn = function () {
   var myEvent = event ? event : window.event ? window.event : null;
   var keycode = myEvent.keyCode;
   if (myEvent.keyCode == 13) {
-    console.log("接收到回车");
+    // console.log("接收到回车");
     myEvent.keyCode = 9;
     myEvent.returnValue = false;
   }
@@ -266,40 +266,40 @@ export default {
       rules: {
         to_pop: [
           { required: true, message: "请输入总人口", trigger: "blur" },
-          { min: 1, max: 6, message: "人口数量应在1到100000之间", trigger: "blur" },
+          { min: 1, max: 10000000, message: "人口数量应在1到1000000之间", trigger: "blur" },
         ],
         begin_inf: [
           { required: true, message: "请输入初始感染人数", trigger: "blur" },
-          { min: 1, max: 4, message: "初始感染人数应该1到1000之间", trigger: "blur" },
+          { min: 1, max: 300000, message: "初始感染人数应该大于1且不超过人口的30%", trigger: "blur" },
         ],
         volumn: [
           { required: true, message: "请输入人流量", trigger: "blur" },
-          { min: 1, max: 3, message: "人流量应该1到100之间", trigger: "blur" },
+          { min: 1, max: 100, message: "人流量应该1到100之间", trigger: "blur" },
         ],
       },
     };
   },
 
   mounted: function () {
-    console.log("地图模式初始化");
+    // console.log("地图模式初始化");
 
     this.GetUserIdentity();
 
     this.params = JSON.parse(this.$route.query.params);
 
     // console.log("用户ID：", this.params.userId);
-    console.log("案例名：", this.params.caseName);
-    console.log("城市数目：", this.params.citynum);
-    console.log("道路数目：", this.params.roadnum);
-    console.log("初始城市信息：", this.params.InitCityData);
-    console.log("道路信息：", this.params.InitRoadData);
+    // console.log("案例名：", this.params.caseName);
+    // console.log("城市数目：", this.params.citynum);
+    // console.log("道路数目：", this.params.roadnum);
+    // console.log("初始城市信息：", this.params.InitCityData);
+    // console.log("道路信息：", this.params.InitRoadData);
 
     this.road_data = [];
 
     if (this.params.caseName != 999) {
-      console.log("从地图模拟页面返回");
+      // console.log("从地图模拟页面返回");
 
-      citycnt = this.params.citynum;
+      citycnt = parseInt(this.params.citynum);
       roadcnt = this.params.roadnum;
 
       var nowcnt = 0;
@@ -427,7 +427,7 @@ export default {
             });
           }
         }
-        console.log("res:", res[1]);
+        // console.log("res:", res[1]);
         return res;
       };
 
@@ -600,8 +600,8 @@ export default {
     add_city() {
       this.isShow1 = true;
       this.selected = "";
-      this.ruleForm.to_pop.length = "";
-      this.ruleForm.begin_inf.length = "";
+      this.ruleForm.to_pop = "";
+      this.ruleForm.begin_inf = "";
     },
 
     create_city() {
@@ -702,12 +702,12 @@ export default {
       var newc = new Array();
       newc["id"] = citycnt;
       newc["name"] = cn;
-      console.log("citycnt", citycnt);
+      // console.log("citycnt", citycnt);
 
       this.used_city1.push(newc);
       this.used_city2.push(newc);
-      console.log("city1:", this.used_city1);
-      console.log("city2:", this.used_city2);
+      // console.log("city1:", this.used_city1);
+      // console.log("city2:", this.used_city2);
 
       var newa = new Array();
       var c1 = {};
@@ -749,7 +749,7 @@ export default {
       for (var i in this.used_city1) {
         // console.log("uc1i",this.used_city1[i]);
         if (this.used_city1[i]["name"] == cn) {
-          console.log("可以删");
+          // console.log("可以删");
           this.used_city1.splice(i, 1);
           break;
         }
@@ -761,13 +761,22 @@ export default {
         }
       }
 
+      var waitTodelete = [];
       for (var i in this.road_di) {
         var tr = this.road_di[i].split(":");
         var ttr = tr[0].split("-");
         if (ttr[0] == cn || ttr[1] == cn) {
-          this.road_di[i] = "";
+          // this.road_di[i] = "";
+          waitTodelete.push(i);
         }
       }
+
+      var twtd = waitTodelete.reverse();
+      for (var i in twtd) {
+        this.road_di.splice(twtd[i], 1);
+        this.used_road.splice(twtd[i],1);
+      }
+      // console.log("delete road_di",this.road_di);
 
       citycnt -= 1;
 
@@ -783,6 +792,7 @@ export default {
           wait_delete.push(i);
         }
       }
+
       var twd = wait_delete.reverse();
       for (var i in twd) {
         this.road_data.splice(twd[i], 1);
@@ -819,7 +829,7 @@ export default {
           callback: (action) => {
             this.$message({
               type: "info",
-              message: `action: ${action}`,
+              message: "请重新创建",
             });
           },
         });
@@ -836,7 +846,7 @@ export default {
             callback: (action) => {
               this.$message({
                 type: "info",
-                message: `action: ${action}`,
+                message: "请重新创建",
               });
             },
           });
@@ -862,7 +872,7 @@ export default {
           callback: (action) => {
             this.$message({
               type: "info",
-              message: `action: ${action}`,
+              message: "请重新连接",
             });
           },
         });
@@ -872,10 +882,10 @@ export default {
 
       var s = cn1 + "-" + cn2 + ":" + value;
       var rn = cn1 + "-" + cn2;
-      console.log(s);
+      // console.log(s);
       this.road_di.push(s);
-      console.log("se1:", this.selected1);
-      console.log("se1:", this.selected2);
+      // console.log("se1:", this.selected1);
+      // console.log("se1:", this.selected2);
 
       roadcnt += 1;
       var newc = new Array();
@@ -948,7 +958,7 @@ export default {
 
       var wait_delete = [];
 
-      console.log("前road_data", this.road_data);
+      // console.log("前road_data", this.road_data);
 
       for (var i in this.road_data) {
         if (
@@ -965,7 +975,7 @@ export default {
         this.road_data.splice(twd[i], 1);
       }
 
-      console.log("后road_data", this.road_data);
+      // console.log("后road_data", this.road_data);
       this.drawMap();
     },
 
@@ -997,7 +1007,7 @@ export default {
           var initinfect = 0;
           var loopcnt = 0;
           var citycnt = 0;
-          console.log("城市信息", this.city_po);
+          // console.log("城市信息", this.city_po);
           for (var cid in this.city_po) {
             citycnt += 1;
             var tc = this.city_po[cid].split(":");
@@ -1008,7 +1018,7 @@ export default {
             var s =
               "cityname:" + cn + ",initpop:" + initpop + ",initinfect:" + initinfect;
             city_infor.push(s);
-            console.log("s", s);
+            // console.log("s", s);
           }
           myFormData.append("citynum", citycnt);
 
@@ -1024,7 +1034,7 @@ export default {
             volume = ttr[1];
             var s = "departure:" + cn1 + ",destination:" + cn2 + ",volume:" + volume;
             road_inf.push(s);
-            console.log("rs", s);
+            // console.log("rs", s);
           }
           myFormData.append("roadnum", roadcnt);
           myFormData.append("caseMode", 2);
@@ -1039,9 +1049,9 @@ export default {
 
           myFormData.append("CityPosition", "Empty");
 
-          for (var value of myFormData.values()) {
-            console.log(value);
-          }
+          // for (var value of myFormData.values()) {
+          //   console.log(value);
+          // }
 
           axios
             .post("/apis/backend/saveCase/", myFormData)
@@ -1078,7 +1088,7 @@ export default {
       var initinfect = 0;
       var loopcnt = 0;
       var citycnt = 0;
-      console.log("城市信息", this.city_po);
+      // console.log("城市信息", this.city_po);
       for (var cid in this.city_po) {
         citycnt += 1;
         var tc = this.city_po[cid].split(":");
@@ -1088,11 +1098,11 @@ export default {
         initpop = ttc[0];
         var s = "cityname:" + cn + ",initpop:" + initpop + ",initinfect:" + initinfect;
         city_infor.push(s);
-        console.log("s", s);
+        // console.log("s", s);
       }
       myFormData.append("citynum", citycnt);
 
-      console.log("citycnt", citycnt);
+      // console.log("citycnt", citycnt);
 
       if (citycnt == 0) {
         this.$message({
@@ -1107,14 +1117,16 @@ export default {
       var cn1, cn2, volume;
       for (var rid in this.road_di) {
         roadcnt += 1;
+        // console.log("road_di[rid]", this.road_di[rid]);
         var tr = this.road_di[rid].split("-");
+        // console.log("tr", tr);
         var ttr = tr[1].split(":");
         cn1 = tr[0];
         cn2 = ttr[0];
         volume = ttr[1];
         var s = "departure:" + cn1 + ",destination:" + cn2 + ",volume:" + volume;
         road_inf.push(s);
-        console.log("rs", s);
+        // console.log("rs", s);
       }
       myFormData.append("roadnum", roadcnt);
       myFormData.append("caseMode", 2);
@@ -1131,9 +1143,9 @@ export default {
 
       myFormData.append("daynum", 365);
 
-      for (var value of myFormData.values()) {
-        console.log(value);
-      }
+      // for (var value of myFormData.values()) {
+      //   console.log(value);
+      // }
 
       axios
         .post("/apis/backend/startSimulate/", myFormData)
@@ -1444,6 +1456,10 @@ header .toMy {
 .authority {
   position: absolute;
   margin-left: -75px;
+}
+
+.e_inp{
+  margin-bottom: 22px;
 }
 
 @keyframes rotate1 {
