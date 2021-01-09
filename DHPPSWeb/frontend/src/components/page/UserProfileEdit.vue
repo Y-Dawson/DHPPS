@@ -206,8 +206,8 @@
                           </el-form-item>
                           <el-form-item label="出生日期">
                             <el-date-picker
-                              clearable="false"
-                              editable="false"
+                              :clearable="false"
+                              :editable="false"
                               v-model="ruleForm.value1"
                               type="date"
                               value-format="yyyy-MM-dd"
