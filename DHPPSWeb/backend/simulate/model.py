@@ -163,10 +163,9 @@ def seir(y,t,b,a,g,p,u,N):
     dy[5]=u*y[3] #D
 
     return dy
-path=os.getcwd()
-path = path+'/'
-rateModel = torch.load(path+'rate.pth')
-daysModel = torch.load(path+'days.pth')
+path=os.path.join(os.getcwd(),'backend/simulate')
+rateModel = torch.load(os.path.join(path,'rate.pth'))
+daysModel = torch.load(os.path.join(path,'days.pth'))
 IncubPeriod=3.22 
 DurMildInf=15.04 
 FracMild=0.1  
