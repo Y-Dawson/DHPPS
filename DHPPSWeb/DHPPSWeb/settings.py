@@ -93,7 +93,7 @@ DATABASES = {
         'HOST': '127.0.0.1',  # 数据库地址，本机 ip 地址 127.0.0.1
         'PORT': 3306,  # 端口
         'USER': 'root',  # 数据库用户
-        'PASSWORD': 'z3876390',  # 数据库密码
+        'PASSWORD': 'root',  # 数据库密码
     }
 }
 # Set the path of initial data files

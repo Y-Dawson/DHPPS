@@ -26,7 +26,7 @@
                         </ul>
                      </li> -->
               <li>
-                <a class="iq-waves-effect" @click="adminOrSuperAdmin()"
+                <a class="iq-waves-effect" @click="adminOrSuperAdmin()" style="cursor:pointer;"
                   ><i class="ri-user-line"></i><span>信息管理</span></a
                 >
               </li>
@@ -36,13 +36,13 @@
                   :to="{
                     path: '/AdminCaseManage',
                   }"
-                  ><i class="ri-home-4-line"></i
+                  ><i class="ri-map-pin-line"></i
                   ><span>案例管理</span></router-link
                 >
               </li>
               <li class="active">
-                <a class="iq-waves-effect"
-                  ><i class="ri-profile-line"></i>查看模型</a
+                <a class="iq-waves-effect" style="cursor:pointer;"
+                  ><i class="ri-bar-chart-grouped-fill"></i>查看模型</a
                 >
               </li>
             </ul>
@@ -118,7 +118,7 @@
                   <div class="chat-header-icons d-flex">
                   <a
                     class="chat-icon-phone iq-bg-primary"
-                    style="width: 80px; font-size: 14px; margin-top: 18px"
+                    style="width: 80px; font-size: 14px; margin-top: 18px;cursor:pointer;"
                     @click="fade1"
                   >
                     查看详情
@@ -137,7 +137,7 @@
                   <div class="chat-header-icons d-flex">
                   <a
                     class="chat-icon-phone iq-bg-primary"
-                    style="width: 80px; font-size: 14px; margin-top: 18px"
+                    style="width: 80px; font-size: 14px; margin-top: 18px;cursor:pointer;"
                     @click="fade2"
                   >
                     查看详情
@@ -156,7 +156,7 @@
                   <div class="chat-header-icons d-flex">
                   <a
                     class="chat-icon-phone iq-bg-primary"
-                    style="width: 80px; font-size: 14px; margin-top: 18px"
+                    style="width: 80px; font-size: 14px; margin-top: 18px;cursor:pointer;"
                     @click="fade3"
                   >
                     查看详情
@@ -178,7 +178,7 @@
                   <div class="chat-header-icons d-flex">
                   <a
                     class="chat-icon-phone iq-bg-primary"
-                    style="width: 80px; font-size: 14px; margin-top: 18px"
+                    style="width: 80px; font-size: 14px; margin-top: 18px;cursor:pointer;"
                     @click="fade11"
                   >
                     <i class="ri-reply-fill"></i>
@@ -207,7 +207,7 @@
                   <div class="chat-header-icons d-flex">
                   <a
                     class="chat-icon-phone iq-bg-primary"
-                    style="width: 80px; font-size: 14px; margin-top: 18px"
+                    style="width: 80px; font-size: 14px; margin-top: 18px;cursor:pointer;"
                     @click="fade21"
                   >
                     <i class="ri-reply-fill"></i>
@@ -236,7 +236,7 @@
                   <div class="chat-header-icons d-flex">
                   <a
                     class="chat-icon-phone iq-bg-primary"
-                    style="width: 80px; font-size: 14px; margin-top: 18px"
+                    style="width: 80px; font-size: 14px; margin-top: 18px;cursor:pointer;"
                     @click="fade31"
                   >
                     <i class="ri-reply-fill"></i>

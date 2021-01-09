@@ -10,7 +10,7 @@
           <nav class="iq-sidebar-menu">
             <ul class="iq-menu" style="margin-top: 20px">
               <li class="active">
-                <a class="iq-waves-effect"
+                <a class="iq-waves-effect" style="cursor:pointer;"
                   ><i class="ri-home-4-line"></i><span>首页</span></a
                 >
               </li>
@@ -22,7 +22,7 @@
                         </ul>
                      </li> -->
               <li>
-                <a class="iq-waves-effect" @click="adminOrSuperAdmin()"
+                <a class="iq-waves-effect" @click="adminOrSuperAdmin()" style="cursor:pointer;"
                   ><i class="ri-user-line"></i><span>信息管理</span></a
                 >
               </li>
@@ -32,7 +32,7 @@
                   :to="{
                     path: '/AdminCaseManage',
                   }"
-                  ><i class="ri-home-4-line"></i
+                  ><i class="ri-map-pin-line"></i
                   ><span>案例管理</span></router-link
                 >
               </li>
@@ -42,7 +42,7 @@
                   :to="{
                     path: '/AdminModelView',
                   }"
-                  ><i class="ri-home-4-line"></i
+                  ><i class="ri-bar-chart-grouped-fill"></i
                   ><span>查看模型</span></router-link
                 >
               </li>

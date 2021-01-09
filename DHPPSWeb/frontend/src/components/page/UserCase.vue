@@ -32,8 +32,8 @@
                 >
               </li>
               <li class="active">
-                <a class="iq-waves-effect">
-                <i class="ri-file-list-line"></i
+                <a class="iq-waves-effect" style="cursor:pointer;">
+                <i class="ri-map-pin-line"></i
                   ><span>我的案例</span></a>
               </li>
             </ul>

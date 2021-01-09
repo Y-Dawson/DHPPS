@@ -26,13 +26,13 @@
                         </ul>
                      </li> -->
               <li>
-                <a class="iq-waves-effect" @click="adminOrSuperAdmin()"
+                <a class="iq-waves-effect" @click="adminOrSuperAdmin()" style="cursor:pointer;"
                   ><i class="ri-user-line"></i><span>信息管理</span></a
                 >
               </li>
               <li class="active">
-                <a class="iq-waves-effect"
-                  ><i class="ri-home-4-line"></i><span>案例管理</span></a
+                <a class="iq-waves-effect" style="cursor:pointer;"
+                  ><i class="ri-map-pin-line"></i><span>案例管理</span></a
                 >
               </li>
               <li>
@@ -41,7 +41,7 @@
                   :to="{
                     path: '/AdminModelView',
                   }"
-                  ><i class="ri-home-4-line"></i
+                  ><i class="ri-bar-chart-grouped-fill"></i
                   ><span>查看模型</span></router-link
                 >
               </li>
@@ -152,7 +152,7 @@
                             >
                               <a
                                 class="iq-bg-primary"
-                                style="width: 80px"
+                                style="width: 80px;cursor:pointer;"
                                 data-toggle="tooltip"
                                 data-placement="top"
                                 title=""
@@ -178,16 +178,17 @@
                               tabindex="-1"
                               aria-disabled="true"
                               @click="prevPage()"
+                              style="cursor:pointer;"
                               >Previous</a
                             >
                           </li>
                           <li class="page-item">
-                            <a class="page-link"
+                            <a class="page-link" style="cursor:pointer;"
                               >第{{ currentPage }}页/共{{ totalPage }}页</a
                             >
                           </li>
                           <li class="page-item">
-                            <a class="page-link" @click="nextPage()">Next</a>
+                            <a class="page-link" @click="nextPage()" style="cursor:pointer;">Next</a>
                           </li>
                         </ul>
                       </nav>
@@ -201,7 +202,7 @@
       </div>
       <div
         id="content-page"
-        class="content-page box animated pulse"
+        class="content-page"
         style="z-index: 1"
         v-if="show"
       >
@@ -209,7 +210,7 @@
           <a
             href="javascript:void();"
             class="chat-icon-phone iq-bg-primary"
-            style="width: 100px"
+            style="width: 100px;cursor:pointer;"
             @click="ClosePage()"
           >
             <i class="ri-reply-fill"></i>
@@ -292,16 +293,17 @@
                           tabindex="-1"
                           aria-disabled="true"
                           @click="GetPrevCasePage()"
+                          style="cursor:pointer;"
                           >Previous</a
                         >
                       </li>
                       <li class="page-item">
-                        <a class="page-link"
+                        <a class="page-link" style="cursor:pointer;"
                           >第{{ currentCasePage }}页/共{{ totalCasePage }}页</a
                         >
                       </li>
                       <li class="page-item">
-                        <a class="page-link" @click="GetNextCasePage()">Next</a>
+                        <a class="page-link" @click="GetNextCasePage()" style="cursor:pointer;">Next</a>
                       </li>
                     </ul>
                   </nav>
@@ -376,7 +378,8 @@ export default {
           ) {
             this.authorityShow = true;
             this.getMyContent(), this.getUserContent();
-          } else {
+          } 
+          else {
             this.$message("您没有权限进入管理员界面！");
             this.$router.push({
               path: "/UserProfile",
