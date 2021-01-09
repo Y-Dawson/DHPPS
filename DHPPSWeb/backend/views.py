@@ -728,6 +728,10 @@ def StartSimulate(request):
                 return JsonResponse({"message": "模型运行出错，返回了非List", "status": 404})
 
             # 构造发回数据
+            print("dayNum: ", dayNum)
+            print("cityNum: ", cityNum)
+            print("dayNumInFact: ", len(dailyInfectMatrix[0]))
+            print("cityNumInFact: ", len(dailyInfectMatrix))
             DailyForecastData = []
             for dayCount in range(dayNum):
                 dayCase = []
@@ -831,6 +835,10 @@ def StartSimulate(request):
                 return JsonResponse({"message": "模型运行出错，返回了非List", "status": 404})
 
             # 构造发回数据
+            print("dayNum: ", dayNum)
+            print("cityNum: ", cityNum)
+            print("dayNumInFact: ", len(dailyInfectMatrix[0]))
+            print("cityNumInFact: ", len(dailyInfectMatrix))
             DailyForecastData = []
             for dayCount in range(dayNum):
                 dayCase = []
