@@ -843,6 +843,7 @@ export default {
       citypeople: [],
       cityInf: [],
       roadVol: [],
+      lineUsed: [],
 
       cityFormRule: {
         // cityName: [
@@ -1054,6 +1055,7 @@ export default {
         this.DrawLine(cid1, cid2);
       }
 
+      console.log("this.lineUsed", this.lineUsed);
       console.log("roadVol", this.roadVol);
 
       this.DrawMap();
@@ -1264,6 +1266,14 @@ export default {
       ll.style.width = parseInt(dis) + "px";
       ll.style.transform = "rotate(" + rotang + "deg)";
       ll.style.display = "block";
+
+      var newd = {};
+      newd["A"] = this.GetNum(ci1);
+      newd["B"] = this.GetNum(ci2);
+      newd["lineid"] = "line" + linecnt;
+      this.lineUsed.push(newd);
+      // console.log("lineUsed", this.lineUsed);
+
       linecnt += 1;
 
       console.log("画了这条线了：", linecnt);
@@ -1514,19 +1524,27 @@ export default {
           var initinfect = 0;
           var loopcnt = 0;
           var trcitycnt = 0;
-          for (var cid in this.city_po) {
-            loopcnt += 1;
-            if (loopcnt == 1) {
-              cn = this.city_po[cid].substring(0, 1);
-              initpop = this.city_po[cid].substring(7);
-            }
-            if (loopcnt == 2) {
-              initinfect = this.city_po[cid].substring(7);
-              trcitycnt += 1;
-              var s =
-                "cityname:" + cn + ",initpop:" + initpop + ",initinfect:" + initinfect;
+          // for (var cid in this.city_po) {
+          //   loopcnt += 1;
+          //   if (loopcnt == 1) {
+          //     cn = this.city_po[cid].substring(0, 1);
+          //     initpop = this.city_po[cid].substring(7);
+          //   }
+          //   if (loopcnt == 2) {
+          //     initinfect = this.city_po[cid].substring(7);
+          //     trcitycnt += 1;
+          //     var s =
+          //       "cityname:" + cn + ",initpop:" + initpop + ",initinfect:" + initinfect;
+          //     city_infor.push(s);
+          //     loopcnt = 0;
+          //   }
+          // }
+
+          for (var i = 1; i <= 10; i++) {
+            if(cityUsed[i]==true){
+              var s ="cityname:" + cName[i] + ",initpop:" + cPeople[i] + ",initinfect:" + cInf[i];
               city_infor.push(s);
-              loopcnt = 0;
+              trcitycnt+=1;
             }
           }
 
@@ -1561,21 +1579,32 @@ export default {
 
           var city_position = [];
           loopcnt = 0;
-          for (var cid in this.city_po) {
-            loopcnt += 1;
-            if (loopcnt % 2 == 1) {
-              var cityName = this.city_po[cid].substring(0, 1);
-              var cityID = this.GetID(cityName);
+          // for (var cid in this.city_po) {
+          //   loopcnt += 1;
+          //   if (loopcnt % 2 == 1) {
+          //     var cityName = this.city_po[cid].substring(0, 1);
+          //     var cityID = this.GetID(cityName);
 
-              console.log("cityName:" + cityName + " cityID:" + cityID);
+          //     console.log("cityName:" + cityName + " cityID:" + cityID);
 
-              var c = document.getElementById(cityID);
-              var x = c.style.left.substring(0, c.style.left.length - 2);
-              var y = c.style.top.substring(0, c.style.top.length - 2);
-              var s = "cityname:" + cityName + ",x:" + x + ",y:" + y;
+          //     var c = document.getElementById(cityID);
+          //     var x = c.style.left.substring(0, c.style.left.length - 2);
+          //     var y = c.style.top.substring(0, c.style.top.length - 2);
+          //     var s = "cityname:" + cityName + ",x:" + x + ",y:" + y;
+          //     city_position.push(s);
+          //   }
+          // }
+          for (var i = 1; i <= 10; i++) {
+            if(cityUsed[i]==true){
+              var cp=document.getElementById("ci"+i);
+              var n = this.GetName(i);
+              var x = cp.style.left.substring(0, cp.style.left.length - 2);
+              var y = cp.style.top.substring(0, cp.style.top.length - 2);
+              var s = "cityname:" + n + ",x:" + x + ",y:" + y;
               city_position.push(s);
             }
           }
+
           myFormData.append("CityPosition", city_position);
 
           myFormData.append("daynum", d + 1);
@@ -1641,19 +1670,10 @@ export default {
           var initinfect = 0;
           var loopcnt = 0;
           var trcitycnt = 0;
-          for (var cid in this.city_po) {
-            loopcnt += 1;
-            if (loopcnt == 1) {
-              cn = this.city_po[cid].substring(0, 1);
-              initpop = this.city_po[cid].substring(7);
-            }
-            if (loopcnt == 2) {
-              initinfect = this.city_po[cid].substring(7);
-              trcitycnt += 1;
-              var s =
-                "cityname:" + cn + ",initpop:" + initpop + ",initinfect:" + initinfect;
+          for (var i = 1; i <= 10; i++) {
+            if(cityUsed[i]==true){
+              var s ="cityname:" + cName[i] + ",initpop:" + cPeople[i] + ",initinfect:" + cInf[i];
               city_infor.push(s);
-              loopcnt = 0;
             }
           }
           myFormData.append("citynum", trcitycnt);
@@ -1687,18 +1707,13 @@ export default {
 
           var city_position = [];
           loopcnt = 0;
-          for (var cid in this.city_po) {
-            loopcnt += 1;
-            if (loopcnt % 2 == 1) {
-              var cityName = this.city_po[cid].substring(0, 1);
-              var cityID = this.GetID(cityName);
-
-              console.log("cityName:" + cityName + " cityID:" + cityID);
-
-              var c = document.getElementById(cityID);
-              var x = c.style.left.substring(0, c.style.left.length - 2);
-              var y = c.style.top.substring(0, c.style.top.length - 2);
-              var s = "cityname:" + cityName + ",x:" + x + ",y:" + y;
+          for (var i = 1; i <= 10; i++) {
+            if(cityUsed[i]==true){
+              var cp=document.getElementById("ci"+i);
+              var n = this.GetName(i);
+              var x = cp.style.left.substring(0, cp.style.left.length - 2);
+              var y = cp.style.top.substring(0, cp.style.top.length - 2);
+              var s = "cityname:" + n + ",x:" + x + ",y:" + y;
               city_position.push(s);
             }
           }
@@ -1759,6 +1774,9 @@ export default {
         }
 
         var c = "ci" + nowc;
+
+        this.SetButtonToFalse(nowc);
+
         console.log(c);
         var ci = document.getElementById(c);
         var cl = e.pageX - 50;
@@ -1878,13 +1896,20 @@ export default {
           ll.style.width = parseInt(dis) + "px";
           ll.style.transform = "rotate(" + rotang + "deg)";
 
-          var ci1 = document.getElementById(this.cid1);
-          var ci2 = document.getElementById(this.cid2);
+          var newd = {};
+          newd["A"] = this.road_c1;
+          newd["B"] = this.road_c2;
+          newd["lineid"] = "line" + linecnt;
+          this.lineUsed.push(newd);
+          console.log("lineUsed", this.lineUsed);
 
-          ci1.style.left = ttcx1 + "px";
-          ci2.style.left = ttcx2 + "px";
-          ci1.style.top = ttcy1 + "px";
-          ci2.style.top = ttcy2 + "px";
+          // var ci1 = document.getElementById(this.cid1);
+          // var ci2 = document.getElementById(this.cid2);
+
+          // ci1.style.left = ttcx1 + "px";
+          // ci2.style.left = ttcx2 + "px";
+          // ci1.style.top = ttcy1 + "px";
+          // ci2.style.top = ttcy2 + "px";
 
           // ll.style.position = "absolute";
           // ll.style.zIndex = "2";
@@ -2036,6 +2061,9 @@ export default {
         type: "warning",
       })
         .then(() => {
+          for (var i in this.roadVol) {
+            console.log("i in roadvol", this.roadVol[i]);
+          }
           console.log("e", e);
           var c = document.getElementById(e);
 
@@ -2076,7 +2104,7 @@ export default {
           var city_no = e.substring(2, 3);
           var city_tno = parseInt(city_no);
           console.log("city：" + e);
-          var ce = this.GetName(city_tno);
+          var ce = cico;
           var cid;
 
           for (var j in this.road_di) {
@@ -2103,46 +2131,21 @@ export default {
               wait_delete.push(j);
               // this.road_di.splice(j, 1);
             }
+          }
 
-            if (c1 == ce || c2 == ce) {
-              console.log("cid", cid);
-              var dc = document.getElementById(cid);
-
-              var dcx1 = dc.style.left;
-              dcx1 = dcx1.substring(0, dcx1.length - 2);
-              var dcx2 = c.style.left;
-              dcx2 = dcx2.substring(0, dcx2.length - 2);
-              var dcy1 = dc.style.top;
-              dcy1 = dcy1.substring(0, dcy1.length - 2);
-              var dcy2 = c.style.top;
-              dcy2 = dcy2.substring(0, dcy2.length - 2);
-
-              console.log("dcx1：" + dcx1 + " dcy1：" + dcy1);
-              console.log("dcx2：" + dcx2 + " dcy2：" + dcy2);
-
-              const dx = Math.abs(dcx1 - dcx2);
-              const dy = Math.abs(dcy1 - dcy2);
-              var dis = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
-
-              for (var k = 1; k <= linecnt; k++) {
-                var nowl = "line" + k;
-                console.log("lineID：", nowl);
-                var tr = document.getElementById(nowl);
-                var td = parseInt(dis);
-                var wi = tr.style.width;
-                var tw = wi.substring(0, wi.length - 2);
-                var ttw = parseInt(tw);
-                console.log("dis：" + td + " width：" + ttw);
-                if (td == ttw) {
-                  tr.style.left = 10000 + "px";
-                  tr.style.top = 10000 + "px";
-                  tr.style.display = "none";
-                }
-              }
+          var cname = this.GetNum(e);
+          for (var i in this.lineUsed) {
+            if (this.lineUsed[i]["A"] == cname || this.lineUsed[i]["B"] == cname) {
+              var lin = document.getElementById(this.lineUsed[i]["lineid"]);
+              lin.style.left = 10000 + "px";
+              lin.style.top = 10000 + "px";
+              lin.style.display = "none";
             }
           }
 
           var twd = wait_delete.reverse();
+          console.log("twd", twd);
+
           console.log("人流量图变变变");
           for (var j in twd) {
             console.log("删前");

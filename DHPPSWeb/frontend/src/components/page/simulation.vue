@@ -169,7 +169,7 @@
                 <span v-for="k in people_cnt[o][j]" :key="k" class="text item">
                   <i
                     :id="'i' + o + j + k"
-                    class="layui-icon layui-icon-template-1 cityicon"
+                    class="el-icon-user-solid"
                   ></i>
                 </span>
               </div>
@@ -693,7 +693,7 @@ export default {
       if (n == "G") return "ci7";
       if (n == "H") return "ci8";
       if (n == "I") return "ci9";
-      if (n == "G") return "ci10";
+      if (n == "J") return "ci10";
       if (n == "K") return "ci11";
       if (n == "L") return "ci12";
     },
@@ -708,7 +708,7 @@ export default {
       if (n == "G") return 7;
       if (n == "H") return 8;
       if (n == "I") return 9;
-      if (n == "G") return 10;
+      if (n == "J") return 10;
       if (n == "K") return 11;
       if (n == "L") return 12;
     },
@@ -1023,7 +1023,7 @@ export default {
             data: this.cityInf,
           },
           {
-            name: "新增感染人数",
+            name: "感染人数较前一日变化",
             type: "bar",
             label: seriesLabel,
             data: this.cityNewInf,
