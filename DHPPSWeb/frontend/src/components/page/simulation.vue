@@ -449,8 +449,8 @@ export default {
       nowcitycnt += 1;
       var pop = parseInt(foreData[0][i]["population"]);
       pop = parseInt(pop / 100);
-      var temp = parseInt(pop / 8);
-      if (pop % 8 != 0) {
+      var temp = parseInt(pop / 10);
+      if (pop % 10 != 0) {
         temp += 1;
       }
       this.row_cnt.push(temp);
@@ -458,9 +458,9 @@ export default {
       newb.push(1);
       for (var j = 1; j <= temp; j++) {
         if (j < temp) {
-          newb.push(8);
+          newb.push(10);
         } else {
-          var le = pop - (temp - 1) * 8;
+          var le = pop - (temp - 1) * 10;
           newb.push(le);
         }
       }
@@ -782,7 +782,7 @@ export default {
         // console.log("row_cnt[nowcnt]", this.row_cnt[ccnt]);
         for (var j = 1; j <= this.row_cnt[ccnt]; j++) {
           if (j < this.row_cnt[ccnt]) {
-            for (var k = 1; k <= 8; k++) {
+            for (var k = 1; k <= 10; k++) {
               var iid = "i" + ccnt + j + k;
               // console.log("iid", iid);
               var iidentity = document.getElementById(iid);
@@ -839,14 +839,14 @@ export default {
         // console.log("inf_cnt", inf_cnt);
 
         for (var j = 1; j <= this.row_cnt[ccnt]; j++) {
-          if (inf_cnt > 8) {
-            for (var k = 1; k <= 8; k++) {
+          if (inf_cnt > 10) {
+            for (var k = 1; k <= 10; k++) {
               var iid = "i" + ccnt + j + k;
               var iidentity = document.getElementById(iid);
               // console.log("iidentity", iidentity);
               iidentity.style.color = "red";
             }
-            inf_cnt -= 8;
+            inf_cnt -= 10;
           } else {
             for (var k = 1; k <= inf_cnt; k++) {
               var iid = "i" + ccnt + j + k;
@@ -1533,6 +1533,10 @@ canvas {
   border: 1px solid rgb(187, 187, 187);
   background-color: #ffffff;
   z-index: 9999;
+}
+
+.city-infor i{
+  margin-right: 3px;
 }
 
 .img-list .city img {

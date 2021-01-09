@@ -13,14 +13,14 @@
           <div class="no-hd">
             <ul>
               <li>{{ total_people }}</li>
-              <li>{{ total_infected }}</li>
+              <li>{{ highest_infected }}</li>
             </ul>
           </div>
 
           <div class="no-bd">
             <ul>
               <li>总人口</li>
-              <li>总感染人数</li>
+              <li>感染人数峰值</li>
             </ul>
           </div>
         </div>
@@ -41,7 +41,7 @@
         </div>
 
         <div class="panel">
-          <h2>各城市感染人数饼形图</h2>
+          <h2>感染人数峰值各城市占比图</h2>
           <div class="chart" id="pie"></div>
           <div class="panel-footer"></div>
         </div>
@@ -66,7 +66,7 @@ export default {
   data() {
     return {
       total_people: 0,
-      total_infected: 0,
+      highest_infected: 0,
 
       citynamelist: [],
       linemap_information: [],
@@ -104,8 +104,22 @@ export default {
 
     for (var j = 0; j < parseInt(this.params.citynum); j++) {
       this.total_people += parseInt(foreData[364][j]["population"]);
-      this.total_infected += parseInt(foreData[364][j]["infected"]);
+      // this.highest_infected += parseInt(foreData[364][j]["infected"]);
     }
+
+    var maxInf = 0;
+    var d = -1;
+    for (var i = 0; i < 365; i++) {
+      var temp = 0;
+      for (var j = 0; j < parseInt(this.params.citynum); j++) {
+        temp += parseInt(foreData[i][j]["infected"]);
+      }
+      if (temp > maxInf) {
+        maxInf = temp;
+        d = i;
+      }
+    }
+    this.highest_infected = maxInf;
 
     var cn;
     for (var j in this.params.InitCityData) {
@@ -147,7 +161,7 @@ export default {
 
     for (var j in this.citynamelist) {
       var newc = {};
-      newc["value"] = foreData[364][j]["infected"];
+      newc["value"] = foreData[d][j]["infected"];
       newc["name"] = this.citynamelist[j];
       this.piemap_information.push(newc);
     }
@@ -204,8 +218,8 @@ export default {
           if (response.data.message != "返回数据成功") {
             this.$message("您尚未登录");
             this.$router.push({
-              path:'/Login'
-            })
+              path: "/Login",
+            });
           }
           // alert(JSON.stringify(response.data)),
         })
@@ -218,7 +232,15 @@ export default {
     drawLine() {
       var myChart = echarts.init(document.getElementById("line"));
       var option = {
-        color: ["#00f2f1", "#ed3f35", "#1089E7", "#F57474", "#56D0E3", "#F8B448", "#8B78F6"],
+        color: [
+          "#00f2f1",
+          "#ed3f35",
+          "#1089E7",
+          "#F57474",
+          "#56D0E3",
+          "#F8B448",
+          "#8B78F6",
+        ],
         tooltip: {
           trigger: "axis",
         },
@@ -625,7 +647,7 @@ li {
   list-style: none;
 }
 
-body{
+body {
   overflow: hidden;
 }
 /* @font-face {

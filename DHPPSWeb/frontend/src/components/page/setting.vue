@@ -2297,8 +2297,8 @@ export default {
 
       var cy = cn + ": 总人口:" + this.cityForm.population;
       var ipp = parseInt(this.cityForm.population);
-      if (ipp < 100 || ipp > 7200) {
-        this.$alert("城市人口应在100~7200内", "创建失败", {
+      if (ipp < 100 || ipp > 9000) {
+        this.$alert("城市人口应在100~9000内", "创建失败", {
           confirmButtonText: "确定",
           callback: (action) => {
             this.$message({
