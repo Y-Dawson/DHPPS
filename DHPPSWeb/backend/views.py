@@ -173,7 +173,6 @@ def Signin(request):
                 logging.error('str(Exception):\t', str(Exception))
                 logging.error('str(e):\t\t', str(e))
                 logging.error('repr(e):\t', repr(e))
-                logging.error('e.message:\t', e.args)
                 logging.error('########################################################')
                 return JsonResponse({"message": "数据库错误", "status": 404})
         else:
@@ -314,7 +313,6 @@ def Signup(request):
                 logging.error('str(Exception):\t', str(Exception))
                 logging.error('str(e):\t\t', str(e))
                 logging.error('repr(e):\t', repr(e))
-                logging.error('e.message:\t', e.args)
                 logging.error('########################################################')
 
                 return JsonResponse({"message": "数据库出错，注册失败", "status": 200})
@@ -356,7 +354,6 @@ def ChangePwd(request):
                 logging.error('str(Exception):\t', str(Exception))
                 logging.error('str(e):\t\t', str(e))
                 logging.error('repr(e):\t', repr(e))
-                logging.error('e.message:\t', e.args)
                 logging.error('########################################################')
                 return JsonResponse({"message": "数据库出错，修改密码失败", "status": 404})
         else:
@@ -416,7 +413,6 @@ def ForgetPwd(request):
                 logging.error('str(Exception):\t', str(Exception))
                 logging.error('str(e):\t\t', str(e))
                 logging.error('repr(e):\t', repr(e))
-                logging.error('e.message:\t', e.args)
                 logging.error('########################################################')
                 return JsonResponse({"message": "数据库出错，忘记密码失败", "status": 404})
         else:
@@ -617,7 +613,6 @@ def SaveCase(request):
                 logging.error('str(Exception):\t', str(Exception))
                 logging.error('str(e):\t\t', str(e))
                 logging.error('repr(e):\t', repr(e))
-                logging.error('e.message:\t', e.args)
                 logging.error('########################################################')
                 return JsonResponse({"message": "保存案例失败", "status": 404})
         else:
@@ -835,7 +830,7 @@ def StartSimulate(request):
                 logging.error('str(Exception):\t', str(Exception))
                 logging.error('str(e):\t\t', str(e))
                 logging.error('repr(e):\t', repr(e))
-                logging.error('e.message:\t', e.args)
+                
                 logging.error('########################################################')
                 return JsonResponse({"message": "案例保存失败，数据库出错", "status": 404})
             # 调用函数以执行外部模型，通过命令行参数传入对应参数，获得返回预测值
@@ -883,7 +878,6 @@ def StartSimulate(request):
                 logging.error('str(Exception):\t', str(Exception))
                 logging.error('str(e):\t\t', str(e))
                 logging.error('repr(e):\t', repr(e))
-                logging.error('e.message:\t', e.args)
                 logging.error('########################################################')
                 return JsonResponse({"message": "模拟失败，模型信息解析出错", "status": 404})
         else:
@@ -946,7 +940,6 @@ def GetCaseInfos(request):
                 logging.error('str(Exception):\t', str(Exception))
                 logging.error('str(e):\t\t', str(e))
                 logging.error('repr(e):\t', repr(e))
-                logging.error('e.message:\t', e.args)
                 logging.error('########################################################')
                 return JsonResponse({"message": "数据库出错，无法获取用户案例信息", "status": 404})
         return JsonResponse({"message": "请求参数未填写", "status": 404})
@@ -997,7 +990,6 @@ def GetUserInfos(request):
             logging.error('str(Exception):\t', str(Exception))
             logging.error('str(e):\t\t', str(e))
             logging.error('repr(e):\t', repr(e))
-            logging.error('e.message:\t', e.args)
             logging.error('########################################################')
             return JsonResponse({"message": "数据库出错，无法获取用户信息", "status": 404})
 
@@ -1048,7 +1040,6 @@ def GetGeneralUserInfos(request):
             logging.error('str(Exception):\t', str(Exception))
             logging.error('str(e):\t\t', str(e))
             logging.error('repr(e):\t', repr(e))
-            logging.error('e.message:\t', e.args)
             logging.error('########################################################')
             return JsonResponse({"message": "数据库出错，无法获取普通用户信息", "status": 404})
     else:
@@ -1098,7 +1089,6 @@ def GetAdminInfos(request):
             logging.error('str(Exception):\t', str(Exception))
             logging.error('str(e):\t\t', str(e))
             logging.error('repr(e):\t', repr(e))
-            logging.error('e.message:\t', e.args)
             logging.error('########################################################')
             return JsonResponse({"message": "数据库出错，无法获取管理员用户信息", "status": 404})
     else:
@@ -1132,7 +1122,6 @@ def GetTopCityInfos(request):
             logging.error('str(Exception):\t', str(Exception))
             logging.error('str(e):\t\t', str(e))
             logging.error('repr(e):\t', repr(e))
-            logging.error('e.message:\t', e.args)
             logging.error('########################################################')
             return JsonResponse({"message": "数据库出错，无法获取高频城市信息", "status": 404})
         return JsonResponse({"TopcityInfos": jsonRes, "status": 200})
@@ -1164,7 +1153,6 @@ def GetSexNum(request):
             logging.error('str(Exception):\t', str(Exception))
             logging.error('str(e):\t\t', str(e))
             logging.error('repr(e):\t', repr(e))
-            logging.error('e.message:\t', e.args)
             logging.error('########################################################')
             return JsonResponse({"message": "数据库出错，无法获取各性别人数", "status": 404})
         return JsonResponse({"TopcityInfos": jsonRes, "message": "信息获取成功", "status": 200})
@@ -1209,7 +1197,6 @@ def GetUserCaseStat(request):
             logging.error('str(Exception):\t', str(Exception))
             logging.error('str(e):\t\t', str(e))
             logging.error('repr(e):\t', repr(e))
-            logging.error('e.message:\t', e.args)
             logging.error('########################################################')
             return JsonResponse({"message": "数据库出错，无法获得各月注册用户数", "status": 404})
         return JsonResponse({"UserCaseStatInfos": jsonRes, "message": "信息获取成功", "status": 200})
