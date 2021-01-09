@@ -7,9 +7,7 @@
       </div>
 
       <div class="toMy">
-        <router-link :to="{ path: '/Userprofile' }" style="margin-left: 10px; float: left"
-          >个人中心</router-link
-        >
+        <button @click="toProfile">个人中心</button>
       </div>
     </header>
 
@@ -983,8 +981,8 @@ export default {
       this.$prompt("请输入此案例名称", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        inputPattern: /^[\u4e00-\u9fa5_a-zA-Z0-9]{1,3}$/,
-        inputErrorMessage: "案例名称可为汉字、英文字母和数字，长度为1到3个字符",
+        inputPattern: /^[\u4e00-\u9fa5_a-zA-Z0-9]{1,5}$/,
+        inputErrorMessage: "案例名称可为汉字、英文字母和数字，长度为1到5个字符",
       })
         .then(({ value }) => {
           var myFormData = new FormData();
@@ -1173,15 +1171,56 @@ export default {
     },
 
     toDIYModel() {
-      this.$router.push({
-        path: "/setting",
-        query: {
-          params: JSON.stringify({
-            userId: this.userId,
-            caseName: 999,
-          }),
-        },
-      });
+      this.$confirm(
+        "请确保您已保存案例，此操作将会丢失您在此页面上的所有编辑内容, 是否继续?",
+        "提示",
+        {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        }
+      )
+        .then(() => {
+          this.$router.push({
+            path: "/setting",
+            query: {
+              params: JSON.stringify({
+                caseName: 999,
+              }),
+            },
+          });
+        })
+        .catch(() => {
+          this.mc = false;
+          this.$message({
+            type: "info",
+            message: "已取消跳转",
+          });
+        });
+    },
+
+    toProfile() {
+      this.$confirm(
+        "请确保您已保存案例，此操作将会丢失您在此页面上的所有编辑内容, 是否继续?",
+        "提示",
+        {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        }
+      )
+        .then(() => {
+          this.$router.push({
+            path: "/UserProfile",
+          });
+        })
+        .catch(() => {
+          this.mc = false;
+          this.$message({
+            type: "info",
+            message: "已取消跳转",
+          });
+        });
     },
   },
 };
@@ -1246,10 +1285,11 @@ header .toMy {
   top: 5px;
 }
 
-.toMy a {
-  font-size: 20px;
+.toMy button {
+  background-color: transparent;
   color: white;
-  text-decoration: none;
+  font-size: 20px;
+  border: none;
 }
 
 .mainbox {

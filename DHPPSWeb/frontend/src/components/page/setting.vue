@@ -7,9 +7,7 @@
       </div>
 
       <div class="toMy">
-        <router-link :to="{ path: '/Userprofile' }" style="margin-left: 10px; float: left"
-          >个人中心</router-link
-        >
+        <button @click="toProfile">个人中心</button>
       </div>
     </header>
 
@@ -360,7 +358,7 @@
               DeleteCity('ci1');
             "
           >
-            <img src="../../assets/layui/images/city.png" alt="" />
+            <img src="../../assets/layui/images/city.png" title="A" alt="" />
             <div class="city-infor" id="cityinf1">
               <!-- <el-form-item prop="cityName">
                 <el-input
@@ -405,7 +403,7 @@
               DeleteCity('ci2');
             "
           >
-            <img src="../../assets/layui/images/city.png" alt="" />
+            <img src="../../assets/layui/images/city.png" title="B" alt="" />
             <div class="city-infor" id="cityinf2">
               <!-- <el-form-item prop="cityName">
                 <el-input
@@ -450,7 +448,7 @@
               DeleteCity('ci3');
             "
           >
-            <img src="../../assets/layui/images/city.png" alt="" />
+            <img src="../../assets/layui/images/city.png" title="C" alt="" />
             <div class="city-infor" id="cityinf3">
               <el-form-item prop="population" class="set_input">
                 <el-input v-model="cityForm.population" placeholder="城市人口"></el-input>
@@ -488,7 +486,7 @@
               DeleteCity('ci4');
             "
           >
-            <img src="../../assets/layui/images/city.png" alt="" />
+            <img src="../../assets/layui/images/city.png" title="D" alt="" />
             <div class="city-infor" id="cityinf4">
               <el-form-item prop="population" class="set_input">
                 <el-input v-model="cityForm.population" placeholder="城市人口"></el-input>
@@ -526,7 +524,7 @@
               DeleteCity('ci5');
             "
           >
-            <img src="../../assets/layui/images/city.png" alt="" />
+            <img src="../../assets/layui/images/city.png" title="E" alt="" />
             <div class="city-infor" id="cityinf5">
               <el-form-item prop="population" class="set_input">
                 <el-input v-model="cityForm.population" placeholder="城市人口"></el-input>
@@ -564,7 +562,7 @@
               DeleteCity('ci6');
             "
           >
-            <img src="../../assets/layui/images/city.png" alt="" />
+            <img src="../../assets/layui/images/city.png" title="F" alt="" />
             <div class="city-infor" id="cityinf6">
               <el-form-item prop="population" class="set_input">
                 <el-input v-model="cityForm.population" placeholder="城市人口"></el-input>
@@ -602,7 +600,7 @@
               DeleteCity('ci7');
             "
           >
-            <img src="../../assets/layui/images/city.png" alt="" />
+            <img src="../../assets/layui/images/city.png" title="G" alt="" />
             <div class="city-infor" id="cityinf7">
               <el-form-item prop="population" class="set_input">
                 <el-input v-model="cityForm.population" placeholder="城市人口"></el-input>
@@ -640,7 +638,7 @@
               DeleteCity('ci8');
             "
           >
-            <img src="../../assets/layui/images/city.png" alt="" />
+            <img src="../../assets/layui/images/city.png" title="H" alt="" />
             <div class="city-infor" id="cityinf8">
               <el-form-item prop="population" class="set_input">
                 <el-input v-model="cityForm.population" placeholder="城市人口"></el-input>
@@ -678,7 +676,7 @@
               DeleteCity('ci9');
             "
           >
-            <img src="../../assets/layui/images/city.png" alt="" />
+            <img src="../../assets/layui/images/city.png" title="I" alt="" />
             <div class="city-infor" id="cityinf9">
               <el-form-item prop="population" class="set_input">
                 <el-input v-model="cityForm.population" placeholder="城市人口"></el-input>
@@ -716,7 +714,7 @@
               DeleteCity('ci10');
             "
           >
-            <img src="../../assets/layui/images/city.png" alt="" />
+            <img src="../../assets/layui/images/city.png" title="J" alt="" />
             <div class="city-infor" id="cityinf10">
               <el-form-item prop="population" class="set_input">
                 <el-input v-model="cityForm.population" placeholder="城市人口"></el-input>
@@ -1132,7 +1130,7 @@ export default {
 
       var flag = false;
       for (var i = 1; i <= 10; i++) {
-        if (this.cityUsed[i] == true) {
+        if (cityUsed[i] == true) {
           flag = true;
         }
       }
@@ -1144,9 +1142,10 @@ export default {
         });
         this.sc = false;
         return;
+      } else {
+        console.log("到这了");
+        this.BeginToSimulation().then((response) => {});
       }
-
-      this.BeginToSimulation().then((response) => {});
     },
 
     SaveCase(sc) {
@@ -1673,8 +1672,8 @@ export default {
       this.$prompt("请输入此案例名称", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        inputPattern: /^[\u4e00-\u9fa5_a-zA-Z0-9]{1,3}$/,
-        inputErrorMessage: "案例名称可为汉字、英文字母和数字，长度为1到3个字符",
+        inputPattern: /^[\u4e00-\u9fa5_a-zA-Z0-9]{1,5}$/,
+        inputErrorMessage: "案例名称可为汉字、英文字母和数字，长度为1到5个字符",
       })
         .then(({ value }) => {
           this.sc = false;
@@ -2494,15 +2493,56 @@ export default {
     },
 
     toMapModel() {
-      this.$router.push({
-        path: "/settingMap",
-        query: {
-          params: JSON.stringify({
-            userId: this.userId,
-            caseName: 999,
-          }),
-        },
-      });
+      this.$confirm(
+        "请确保您已保存案例，此操作将会丢失您在此页面上的所有编辑内容, 是否继续?",
+        "提示",
+        {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        }
+      )
+        .then(() => {
+          this.$router.push({
+            path: "/settingMap",
+            query: {
+              params: JSON.stringify({
+                caseName: 999,
+              }),
+            },
+          });
+        })
+        .catch(() => {
+          this.mc = false;
+          this.$message({
+            type: "info",
+            message: "已取消跳转",
+          });
+        });
+    },
+
+    toProfile() {
+      this.$confirm(
+        "请确保您已保存案例，此操作将会丢失您在此页面上的所有编辑内容, 是否继续?",
+        "提示",
+        {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        }
+      )
+        .then(() => {
+          this.$router.push({
+            path: "/UserProfile",
+          });
+        })
+        .catch(() => {
+          this.mc = false;
+          this.$message({
+            type: "info",
+            message: "已取消跳转",
+          });
+        });
     },
 
     correctCity() {
@@ -2611,10 +2651,11 @@ header .toMy {
   top: 5px;
 }
 
-.toMy a {
-  font-size: 20px;
+.toMy button {
+  background-color: transparent;
   color: white;
-  text-decoration: none;
+  font-size: 20px;
+  border: none;
 }
 
 .layui-nav-tree .layui-nav-item a {

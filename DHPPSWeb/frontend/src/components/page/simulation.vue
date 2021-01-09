@@ -161,6 +161,7 @@
             <img
               src="../../assets/layui/images/city.gif"
               alt=""
+              :title="cityname[o-1]"
               @click="outp('cityinf' + o)"
             />
             <div class="city-infor" :id="'cityinf' + o">
@@ -500,6 +501,7 @@ export default {
 
       cityentity.style.left = x + "px";
       cityentity.style.top = y + "px";
+      cityentity.style.display = "block";
 
       this.changePosition(ci);
 
@@ -710,6 +712,19 @@ export default {
       if (n == "J") return 10;
       if (n == "K") return 11;
       if (n == "L") return 12;
+    },
+
+    getCityName(n){
+      if(n==1) return "A";
+      if(n==2) return "B";
+      if(n==3) return "C";
+      if(n==4) return "D";
+      if(n==5) return "E";
+      if(n==6) return "F";
+      if(n==7) return "G";
+      if(n==8) return "H";
+      if(n==9) return "I";
+      if(n==10) return "J";
     },
 
     AddInformation(n, popu, dinf, inf) {
@@ -1524,7 +1539,7 @@ canvas {
 }
 
 .img-list .city {
-  display: block;
+  display: none;
   position: absolute;
   /* left: 5000px;
   top: 3000px; */
