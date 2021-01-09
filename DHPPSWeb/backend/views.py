@@ -69,15 +69,6 @@ def SuperAdminAuthenticate(function):
 
 
 # 返回渲染主页，其后由前端负责跳转逻辑
-def Index(request):
-    """
-    render Index page
-    :param request: request object
-    :return: page
-    """
-    return render(request, './dist/index.html')
-
-
 def HomePage(request):
     '''
     render homepage page
@@ -87,11 +78,12 @@ def HomePage(request):
     return render(request, './template/index.html')
 
 
+# 返回渲染模型展示页，其后由前端负责跳转逻辑
 def ModelPage(request):
     '''
-    render Index page
+    render model page
     :param request: request object
-    :return: homepage
+    :return: model
     '''
     return render(request, './template/model.html')
 
@@ -164,7 +156,7 @@ def Signin(request):
                     request.session['isLogin'] = True
                     request.session['userId'] = accountInfo.userId
                     request.session['userAuthority'] = accountInfo.authority.authorityNo
-                    # print(request.session.get('userId', None))
+                    # logging.debug(request.session.get('userId', None))
                     response = JsonResponse({
                         "message": "登录成功",
                         "status": 200,
@@ -178,14 +170,16 @@ def Signin(request):
                 else:
                     return JsonResponse({"message": "密码错误", "status": 404})
             except Exception as e:
-                print(timezone.now())
-                print('str(Exception):\t', str(Exception))
-                print('str(e):\t\t', str(e))
-                print('repr(e):\t', repr(e))
-                print('########################################################')
+                logging.error('str(Exception):\t', str(Exception))
+                logging.error('str(e):\t\t', str(e))
+                logging.error('repr(e):\t', repr(e))
+                logging.error('e.message:\t', e.args)
+                logging.error('########################################################')
                 return JsonResponse({"message": "数据库错误", "status": 404})
         else:
-            return JsonResponse({"message": "填写内容不能为空", "status": 404})
+            return JsonResponse({"message": "登录表单填写不完整", "status": 404})
+    else:
+        return JsonResponse({"message": "请求方式未注册", "status": 404})
 
 
 # 登出函数视图
@@ -230,7 +224,7 @@ def RequestSmsCode(request):
         if (redisClient.get(phoneNum+"Flag") is not None):
             return JsonResponse({"message": "冷却中，请60秒后重新申请", "status": 404})
         code, message, result = SendSms(phoneNum)
-        # print(phoneNum, "result is", message)
+        # logging.debug(phoneNum, "result is", message)
         if str(result) == "OK":
             try:
                 # 4.连接到redis
@@ -257,27 +251,24 @@ def RequestSmsCode(request):
 def Signup(request):
     if request.session.get('isLogin', None):
         # 登录状态不允许注册。
-        message = "登录状态，无法注册"
-        status = 404
+        return JsonResponse({"message": "登录状态，无法注册", "status": 404})
     elif request.method == "POST":
         userName = request.POST.get('userName', None)
         phoneNum = request.POST.get('phoneNum', None)
         email = request.POST.get('email', None)
         password = request.POST.get('password', None)
         verifyCode = request.POST.get('verifyCode', None)
-        # print({
+        # logging.debug({
         #     "userName": userName,
         #     'phoneNum': phoneNum,
         #     'email': email,
         #     "password": password,
         #     'verifyCode': verifyCode
         # })
-        message = "请检查填写的内容！"
-        status = 404
 
         redisClient = get_redis_connection('smsCode')
         verifyCodeInCache = redisClient.get(phoneNum)
-        # print(verifyCodeInCache)
+        # logging.debug(verifyCodeInCache)
         if verifyCodeInCache is None:
             return JsonResponse({"message": "尚未申请短信验证码", "status": 404})
         verifyCodeInCache = verifyCodeInCache.decode('ascii')
@@ -313,21 +304,24 @@ def Signup(request):
                     phoneNumber=phoneNum,
                     email=email
                 )
-                logger.info(json.dumps(newLoginData, cls=DateEnconding))
-                logger.info(json.dumps(newUser, cls=DateEnconding))
+                logger.debug(json.dumps(newLoginData, cls=DateEnconding))
+                logger.debug(json.dumps(newUser, cls=DateEnconding))
                 redisClient.delete(phoneNum)
                 redisClient.delete(phoneNum+"Flag")
-                message = "注册成功"
-                status = 200
+
+                return JsonResponse({"message": "注册成功", "status": 200})
             except Exception as e:
-                print(timezone.now())
-                print('str(Exception):\t', str(Exception))
-                print('str(e):\t\t', str(e))
-                print('repr(e):\t', repr(e))
-                print('########################################################')
-                message = "注册失败"
-                status = 404
-    return JsonResponse({"message": message, "status": status})
+                logging.error('str(Exception):\t', str(Exception))
+                logging.error('str(e):\t\t', str(e))
+                logging.error('repr(e):\t', repr(e))
+                logging.error('e.message:\t', e.args)
+                logging.error('########################################################')
+
+                return JsonResponse({"message": "数据库出错，注册失败", "status": 200})
+        else:
+            return JsonResponse({"message": "注册表单填写不完整", "status": 404})
+    else:
+        return JsonResponse({"message": "请求方式未注册", "status": 404})
 
 
 # 修改密码函数视图
@@ -345,20 +339,30 @@ def ChangePwd(request):
         oldPassword = request.POST.get('oldPassword', None)
         newPassword = request.POST.get('newPassword', None)
         if userId and oldPassword and newPassword:
-            account = models.AccountInformation.objects.filter(userId=userId)
-            if not account.exists():
-                return JsonResponse({"message": "当前账号与浏览器记录不一致", "status": 404})
-            account = account.first()
-            # 检测账号原密码是否符合
-            if (account.logindata.userPassword == HashPwd(pwd=oldPassword, salt=account.logindata.salt)):
-                newSalt = secrets.token_hex(4)
-                encryPassword = HashPwd(pwd=newPassword, salt=newSalt)
-                models.LoginData.objects.filter(userId=userId).update(userPassword=encryPassword, salt=newSalt)
-                return JsonResponse({"message": "修改成功", "status": 200})
-            else:
-                return JsonResponse({"message": "账号原密码错误", "status": 404})
+            try:
+                account = models.AccountInformation.objects.filter(userId=userId)
+                if not account.exists():
+                    return JsonResponse({"message": "当前账号与浏览器记录不一致", "status": 404})
+                account = account.first()
+                # 检测账号原密码是否符合
+                if (account.logindata.userPassword == HashPwd(pwd=oldPassword, salt=account.logindata.salt)):
+                    newSalt = secrets.token_hex(4)
+                    encryPassword = HashPwd(pwd=newPassword, salt=newSalt)
+                    models.LoginData.objects.filter(userId=userId).update(userPassword=encryPassword, salt=newSalt)
+                    return JsonResponse({"message": "修改成功", "status": 200})
+                else:
+                    return JsonResponse({"message": "账号原密码错误", "status": 404})
+            except Exception as e:
+                logging.error('str(Exception):\t', str(Exception))
+                logging.error('str(e):\t\t', str(e))
+                logging.error('repr(e):\t', repr(e))
+                logging.error('e.message:\t', e.args)
+                logging.error('########################################################')
+                return JsonResponse({"message": "数据库出错，修改密码失败", "status": 404})
+        else:
+            return JsonResponse({"message": "修改密码表单填写不完整", "status": 404})
     else:
-        return JsonResponse({"message": "参数传递方式有误", "status": 404})
+        return JsonResponse({"message": "请求方式未注册", "status": 404})
 
 
 # 忘记密码函数视图
@@ -375,15 +379,15 @@ def ForgetPwd(request):
         verifyCode = request.POST.get('verifyCode', None)
         newPassword = request.POST.get('newPassword', None)
 
-        # print({
+        # logging.debug({
         #     'phoneNum': phoneNum,
         #     "newPassword": newPassword,
         #     'verifyCode': verifyCode
         # })
         redisClient = get_redis_connection('smsCode')
-        # print(phoneNum)
+        # logging.debug(phoneNum)
         verifyCodeInCache = redisClient.get(phoneNum)
-        # print(verifyCodeInCache)
+        # logging.debug(verifyCodeInCache)
         if verifyCodeInCache is None:
             return JsonResponse({"message": "尚未申请短信验证码", "status": 404})
         verifyCodeInCache = verifyCodeInCache.decode('ascii')
@@ -394,21 +398,31 @@ def ForgetPwd(request):
             if verifyCode and verifyCodeInCache != verifyCode:
                 return JsonResponse({"message": "短信验证码错误，请检查重试", "status": 404})
 
-            profile = models.PersonalProfile.objects.filter(phoneNumber=int(phoneNum))
-            if not profile.exists():
-                return JsonResponse({"message": "该手机未注册", "status": 404})
-            profile = profile.first()
-            account = models.AccountInformation.objects.get(userId=profile.userId.userId)
+            try:
+                profile = models.PersonalProfile.objects.filter(phoneNumber=int(phoneNum))
+                if not profile.exists():
+                    return JsonResponse({"message": "该手机未注册", "status": 404})
+                profile = profile.first()
+                account = models.AccountInformation.objects.get(userId=profile.userId.userId)
 
-            # 缺少逻辑：检测短信验证码是否正确
-            newSalt = secrets.token_hex(4)
-            encryPassword = HashPwd(pwd=newPassword, salt=newSalt)
-            models.LoginData.objects.filter(userId=account.userId).update(userPassword=encryPassword, salt=newSalt)
-            redisClient.delete(phoneNum)
-            redisClient.delete(phoneNum+"Flag")
-            return JsonResponse({"message": "修改成功", "status": 200})
+                # 缺少逻辑：检测短信验证码是否正确
+                newSalt = secrets.token_hex(4)
+                encryPassword = HashPwd(pwd=newPassword, salt=newSalt)
+                models.LoginData.objects.filter(userId=account.userId).update(userPassword=encryPassword, salt=newSalt)
+                redisClient.delete(phoneNum)
+                redisClient.delete(phoneNum+"Flag")
+                return JsonResponse({"message": "修改成功", "status": 200})
+            except Exception as e:
+                logging.error('str(Exception):\t', str(Exception))
+                logging.error('str(e):\t\t', str(e))
+                logging.error('repr(e):\t', repr(e))
+                logging.error('e.message:\t', e.args)
+                logging.error('########################################################')
+                return JsonResponse({"message": "数据库出错，忘记密码失败", "status": 404})
+        else:
+            return JsonResponse({"message": "忘记密码表单填写不完整", "status": 404})
     else:
-        return JsonResponse({"message": "参数传递方式有误", "status": 404})
+        return JsonResponse({"message": "请求方式未注册", "status": 404})
 
 
 # 存储前端发回的案例参数视图
@@ -519,12 +533,10 @@ def SaveCase(request):
                     models.AccountInformation.objects.filter(userId=userId).update(caseNumber=F("caseNumber") + 1)
                 return JsonResponse({"message": "保存案例成功", "status": 200, "caseId": newCase.caseId})
             except Exception as e:
-                print(timezone.now())
-                print('str(Exception):\t', str(Exception))
-                print('str(e):\t\t', str(e))
-                print('repr(e):\t', repr(e))
-                # print('e.message:\t', e.message)
-                print('########################################################')
+                logging.error('str(Exception):\t', str(Exception))
+                logging.error('str(e):\t\t', str(e))
+                logging.error('repr(e):\t', repr(e))
+                logging.error('########################################################')
                 return JsonResponse({"message": "保存案例失败", "status": 404})
         elif (caseMode == "2"):
             initTotalNum = 0
@@ -602,12 +614,11 @@ def SaveCase(request):
                     models.AccountInformation.objects.filter(userId=userId).update(caseNumber=F("caseNumber") + 1)
                 return JsonResponse({"message": "保存案例成功", "status": 200, "caseId": newCase.caseId})
             except Exception as e:
-                print(timezone.now())
-                print('str(Exception):\t', str(Exception))
-                print('str(e):\t\t', str(e))
-                print('repr(e):\t', repr(e))
-                # print('e.message:\t', e.message)
-                print('########################################################')
+                logging.error('str(Exception):\t', str(Exception))
+                logging.error('str(e):\t\t', str(e))
+                logging.error('repr(e):\t', repr(e))
+                logging.error('e.message:\t', e.args)
+                logging.error('########################################################')
                 return JsonResponse({"message": "保存案例失败", "status": 404})
         else:
             return JsonResponse({"message": "检测到未知的地图模式", "status": 404})
@@ -709,11 +720,10 @@ def StartSimulate(request):
                             initRoadList[destination][departure] = volume
                         roadCount += 1
             except Exception as e:
-                print(timezone.now())
-                print('str(Exception):\t', str(Exception))
-                print('str(e):\t\t', str(e))
-                print('repr(e):\t', repr(e))
-                print('########################################################')
+                logging.error('str(Exception):\t', str(Exception))
+                logging.error('str(e):\t\t', str(e))
+                logging.error('repr(e):\t', repr(e))
+                logging.error('########################################################')
                 return JsonResponse({"message": "案例保存失败，数据库出错", "status": 404})
             # 调用函数以执行外部模型，通过命令行参数传入对应参数，获得返回预测值
             dailyInfectMatrix = SendParamsToCmd(
@@ -728,27 +738,34 @@ def StartSimulate(request):
                 return JsonResponse({"message": "模型运行出错，返回了非List", "status": 404})
 
             # 构造发回数据
-            print("dayNum: ", dayNum)
-            print("cityNum: ", cityNum)
-            print("dayNumInFact: ", len(dailyInfectMatrix[0]))
-            print("cityNumInFact: ", len(dailyInfectMatrix))
-            DailyForecastData = []
-            for dayCount in range(dayNum):
-                dayCase = []
-                for cityIdx in range(cityNum):
-                    cityCase = {}
-                    cityCase["cityName"] = cityNameList[cityIdx]
-                    cityCase["population"] = initPopList[cityIdx]
-                    cityCase["infected"] = int(dailyInfectMatrix[cityIdx][dayCount])
+            # logging.debug("dayNum: ", dayNum)
+            # logging.debug("cityNum: ", cityNum)
+            # logging.debug("dayNumInFact: ", len(dailyInfectMatrix[0]))
+            # logging.debug("cityNumInFact: ", len(dailyInfectMatrix))
+            try:
+                DailyForecastData = []
+                for dayCount in range(dayNum):
+                    dayCase = []
+                    for cityIdx in range(cityNum):
+                        cityCase = {}
+                        cityCase["cityName"] = cityNameList[cityIdx]
+                        cityCase["population"] = initPopList[cityIdx]
+                        cityCase["infected"] = int(dailyInfectMatrix[cityIdx][dayCount])
 
-                    if (dayCount == 0):
-                        cityCase["dailyinfected"] = 0
-                    else:
-                        cityCase["dailyinfected"] = int(dailyInfectMatrix[cityIdx][dayCount]) - int(dailyInfectMatrix[cityIdx][dayCount-1])
+                        if (dayCount == 0):
+                            cityCase["dailyinfected"] = 0
+                        else:
+                            cityCase["dailyinfected"] = int(dailyInfectMatrix[cityIdx][dayCount]) - int(dailyInfectMatrix[cityIdx][dayCount-1])
 
-                    dayCase.append(cityCase)
-                DailyForecastData.append(dayCase)
-            return JsonResponse({"DailyForecastData": DailyForecastData, "status": 200})
+                        dayCase.append(cityCase)
+                    DailyForecastData.append(dayCase)
+                return JsonResponse({"DailyForecastData": DailyForecastData, "status": 200})
+            except Exception as e:
+                logging.error('str(Exception):\t', str(Exception))
+                logging.error('str(e):\t\t', str(e))
+                logging.error('repr(e):\t', repr(e))
+                logging.error('########################################################')
+                return JsonResponse({"message": "模拟失败，模型信息解析出错", "status": 404})
         elif (caseMode == "2"):
             # 案例计数：初始人口与初始感染人口
             initTotalNum = 0
@@ -815,12 +832,11 @@ def StartSimulate(request):
                             initRoadList[destination][departure] = volume
                         roadCount += 1
             except Exception as e:
-                print(timezone.now())
-                print('str(Exception):\t', str(Exception))
-                print('str(e):\t\t', str(e))
-                print('repr(e):\t', repr(e))
-                # print('e.message:\t', e.message)
-                print('########################################################')
+                logging.error('str(Exception):\t', str(Exception))
+                logging.error('str(e):\t\t', str(e))
+                logging.error('repr(e):\t', repr(e))
+                logging.error('e.message:\t', e.args)
+                logging.error('########################################################')
                 return JsonResponse({"message": "案例保存失败，数据库出错", "status": 404})
             # 调用函数以执行外部模型，通过命令行参数传入对应参数，获得返回预测值
             dailyInfectMatrix = SendParamsToCmd(
@@ -835,32 +851,41 @@ def StartSimulate(request):
                 return JsonResponse({"message": "模型运行出错，返回了非List", "status": 404})
 
             # 构造发回数据
-            print("dayNum: ", dayNum)
-            print("cityNum: ", cityNum)
-            print("dayNumInFact: ", len(dailyInfectMatrix[0]))
-            print("dayNumInFact: ", len(dailyInfectMatrix[1]))
-            print("dayNumInFact: ", len(dailyInfectMatrix[2]))
-            print("cityNumInFact: ", len(dailyInfectMatrix))
-            DailyForecastData = []
-            for dayCount in range(dayNum):
-                dayCase = []
-                for cityIdx in range(cityNum):
-                    cityCase = {}
-                    cityCase["cityName"] = cityNameList[cityIdx]
-                    cityCase["population"] = initPopList[cityIdx]
-                    # print("Get day num: ", dayCount)
-                    # print("Get city num:", cityIdx)
-                    # print("value: ", dailyInfectMatrix[cityIdx][dayCount])
-                    cityCase["infected"] = int(dailyInfectMatrix[cityIdx][dayCount])
+            try:
+                # logging.debug("dayNum: ", dayNum)
+                # logging.debug("cityNum: ", cityNum)
+                # logging.debug("dayNumInFact: ", len(dailyInfectMatrix[0]))
+                # logging.debug("dayNumInFact: ", len(dailyInfectMatrix[1]))
+                # logging.debug("dayNumInFact: ", len(dailyInfectMatrix[2]))
+                # logging.debug("cityNumInFact: ", len(dailyInfectMatrix))
+                DailyForecastData = []
+                for dayCount in range(dayNum):
+                    dayCase = []
+                    for cityIdx in range(cityNum):
+                        cityCase = {}
+                        cityCase["cityName"] = cityNameList[cityIdx]
+                        cityCase["population"] = initPopList[cityIdx]
+                        # logging.debug("Get day num: ", dayCount)
+                        # logging.debug("Get city num:", cityIdx)
+                        # logging.debug("value: ", dailyInfectMatrix[cityIdx][dayCount])
+                        cityCase["infected"] = int(dailyInfectMatrix[cityIdx][dayCount])
 
-                    if (dayCount == 0):
-                        cityCase["dailyinfected"] = 0
-                    else:
-                        cityCase["dailyinfected"] = int(dailyInfectMatrix[cityIdx][dayCount]) - int(dailyInfectMatrix[cityIdx][dayCount-1])
+                        if (dayCount == 0):
+                            cityCase["dailyinfected"] = 0
+                        else:
+                            cityCase["dailyinfected"] = int(dailyInfectMatrix[cityIdx][dayCount]) - int(dailyInfectMatrix[cityIdx][dayCount-1])
 
-                    dayCase.append(cityCase)
-                DailyForecastData.append(dayCase)
-            return JsonResponse({"DailyForecastData": DailyForecastData, "status": 200})
+                        dayCase.append(cityCase)
+                    DailyForecastData.append(dayCase)
+                return JsonResponse({"DailyForecastData": DailyForecastData, "status": 200})
+
+            except Exception as e:
+                logging.error('str(Exception):\t', str(Exception))
+                logging.error('str(e):\t\t', str(e))
+                logging.error('repr(e):\t', repr(e))
+                logging.error('e.message:\t', e.args)
+                logging.error('########################################################')
+                return JsonResponse({"message": "模拟失败，模型信息解析出错", "status": 404})
         else:
             return JsonResponse({"message": "检测到未知的地图模式", "status": 404})
     return JsonResponse({"message": "该接口不支持此方法", "status": 404})
@@ -918,13 +943,12 @@ def GetCaseInfos(request):
 
                 return JsonResponse({"message": "成功返回数据", "cases": cases, "status": 200})
             except Exception as e:
-                print(timezone.now())
-                print('str(Exception):\t', str(Exception))
-                print('str(e):\t\t', str(e))
-                print('repr(e):\t', repr(e))
-                # print('e.message:\t', e.message)
-                print('########################################################')
-                return JsonResponse({"message": "数据库出错", "status": 404})
+                logging.error('str(Exception):\t', str(Exception))
+                logging.error('str(e):\t\t', str(e))
+                logging.error('repr(e):\t', repr(e))
+                logging.error('e.message:\t', e.args)
+                logging.error('########################################################')
+                return JsonResponse({"message": "数据库出错，无法获取用户案例信息", "status": 404})
         return JsonResponse({"message": "请求参数未填写", "status": 404})
     else:
         return JsonResponse({"message": "请求方法未注册", "status": 404})
@@ -940,32 +964,43 @@ def GetUserInfos(request):
     #     return JsonResponse({"message": "你还未登录", "status": 404})
     # el
     if request.method == "GET":
-        pageSize = request.GET.get("pageSize")
-        page = request.GET.get("page")
-        accountInfos = models.AccountInformation.objects\
-            .select_related("personalprofile").all()\
-            .exclude(authority=3)\
-            .order_by('userId')
-        accountPaginator = paginator.Paginator(accountInfos, pageSize)
-        if page == "":
-            page = 1
-        else:
-            page = int(page)
-        pageInfos = accountPaginator.page(page)
-        jsonList = []
-        for accountInfo in pageInfos:
-            accountInfoDict = model_to_dict(accountInfo)
-            profileDict = model_to_dict(accountInfo.personalprofile)
-            profileDict["avatarUrl"] = accountInfo.personalprofile.GetAvatarUrl()
-            jsonList.append({**accountInfoDict, **profileDict})
-        jsonRes = json.loads(json.dumps(jsonList, cls=DateEnconding))
-        # print(jsonRes)
-        return JsonResponse({
-            'data': jsonRes,
-            'pagination': accountPaginator.count,
-            'pageSize': accountPaginator.per_page,
-            'page': pageInfos.start_index() // accountPaginator.per_page + 1
-        })
+        pageSize = request.GET.get("pageSize", None)
+        page = request.GET.get("page", None)
+        if not (pageSize and page):
+            return JsonResponse({"message": "请设定分页大小和分页页数", "status": 404})
+
+        try:
+            accountInfos = models.AccountInformation.objects\
+                .select_related("personalprofile").all()\
+                .exclude(authority=3)\
+                .order_by('userId')
+            accountPaginator = paginator.Paginator(accountInfos, pageSize)
+            if page == "":
+                page = 1
+            else:
+                page = int(page)
+            pageInfos = accountPaginator.page(page)
+            jsonList = []
+            for accountInfo in pageInfos:
+                accountInfoDict = model_to_dict(accountInfo)
+                profileDict = model_to_dict(accountInfo.personalprofile)
+                profileDict["avatarUrl"] = accountInfo.personalprofile.GetAvatarUrl()
+                jsonList.append({**accountInfoDict, **profileDict})
+            jsonRes = json.loads(json.dumps(jsonList, cls=DateEnconding))
+            return JsonResponse({
+                'data': jsonRes,
+                'pagination': accountPaginator.count,
+                'pageSize': accountPaginator.per_page,
+                'page': pageInfos.start_index() // accountPaginator.per_page + 1
+            })
+        except Exception as e:
+            logging.error('str(Exception):\t', str(Exception))
+            logging.error('str(e):\t\t', str(e))
+            logging.error('repr(e):\t', repr(e))
+            logging.error('e.message:\t', e.args)
+            logging.error('########################################################')
+            return JsonResponse({"message": "数据库出错，无法获取用户信息", "status": 404})
+
     else:
         return JsonResponse({"message": "请求方法未注册", "status": 404})
 
@@ -981,30 +1016,41 @@ def GetGeneralUserInfos(request):
     elif request.method == "GET":
         pageSize = request.GET.get("pageSize")
         page = request.GET.get("page")
-        generalUserInfos = models.AccountInformation.objects\
-            .select_related("personalprofile")\
-            .filter(authority=1)\
-            .order_by('userId')
-        accountPaginator = paginator.Paginator(generalUserInfos, pageSize)
-        if page == "":
-            page = 1
-        else:
-            page = int(page)
-        pageInfos = accountPaginator.page(page)
-        jsonList = []
-        for accountInfo in pageInfos:
-            accountInfoDict = model_to_dict(accountInfo)
-            profileDict = model_to_dict(accountInfo.personalprofile)
-            profileDict["avatarUrl"] = accountInfo.personalprofile.GetAvatarUrl()
-            jsonList.append({**accountInfoDict, **profileDict})
-        jsonRes = json.loads(json.dumps(jsonList, cls=DateEnconding))
-        # print(jsonRes)
-        return JsonResponse({
-            'data': jsonRes,
-            'pagination': accountPaginator.count,
-            'pageSize': accountPaginator.per_page,
-            'page': pageInfos.start_index() // accountPaginator.per_page + 1
-        })
+        if not (pageSize and page):
+            return JsonResponse({"message": "请设定分页大小和分页页数", "status": 404})
+
+        try:
+            generalUserInfos = models.AccountInformation.objects\
+                .select_related("personalprofile")\
+                .filter(authority=1)\
+                .order_by('userId')
+            accountPaginator = paginator.Paginator(generalUserInfos, pageSize)
+            if page == "":
+                page = 1
+            else:
+                page = int(page)
+            pageInfos = accountPaginator.page(page)
+            jsonList = []
+            for accountInfo in pageInfos:
+                accountInfoDict = model_to_dict(accountInfo)
+                profileDict = model_to_dict(accountInfo.personalprofile)
+                profileDict["avatarUrl"] = accountInfo.personalprofile.GetAvatarUrl()
+                jsonList.append({**accountInfoDict, **profileDict})
+            jsonRes = json.loads(json.dumps(jsonList, cls=DateEnconding))
+            # logging.debug(jsonRes)
+            return JsonResponse({
+                'data': jsonRes,
+                'pagination': accountPaginator.count,
+                'pageSize': accountPaginator.per_page,
+                'page': pageInfos.start_index() // accountPaginator.per_page + 1
+            })
+        except Exception as e:
+            logging.error('str(Exception):\t', str(Exception))
+            logging.error('str(e):\t\t', str(e))
+            logging.error('repr(e):\t', repr(e))
+            logging.error('e.message:\t', e.args)
+            logging.error('########################################################')
+            return JsonResponse({"message": "数据库出错，无法获取普通用户信息", "status": 404})
     else:
         return JsonResponse({"message": "请求方法未注册", "status": 404})
 
@@ -1020,30 +1066,41 @@ def GetAdminInfos(request):
     elif request.method == "GET":
         pageSize = request.GET.get("pageSize")
         page = request.GET.get("page")
-        adminUserInfos = models.AccountInformation.objects\
-            .select_related("personalprofile")\
-            .filter(authority=2)\
-            .order_by('userId')
-        accountPaginator = paginator.Paginator(adminUserInfos, pageSize)
-        if page == "":
-            page = 1
-        else:
-            page = int(page)
-        pageInfos = accountPaginator.page(page)
-        jsonList = []
-        for accountInfo in pageInfos:
-            accountInfoDict = model_to_dict(accountInfo)
-            profileDict = model_to_dict(accountInfo.personalprofile)
-            profileDict["avatarUrl"] = accountInfo.personalprofile.GetAvatarUrl()
-            jsonList.append({**accountInfoDict, **profileDict})
-        jsonRes = json.loads(json.dumps(jsonList, cls=DateEnconding))
-        # print(jsonRes)
-        return JsonResponse({
-            'data': jsonRes,
-            'pagination': accountPaginator.count,
-            'pageSize': accountPaginator.per_page,
-            'page': pageInfos.start_index() // accountPaginator.per_page + 1
-        })
+        if not (pageSize and page):
+            return JsonResponse({"message": "请设定分页大小和分页页数", "status": 404})
+
+        try:
+            adminUserInfos = models.AccountInformation.objects\
+                .select_related("personalprofile")\
+                .filter(authority=2)\
+                .order_by('userId')
+            accountPaginator = paginator.Paginator(adminUserInfos, pageSize)
+            if page == "":
+                page = 1
+            else:
+                page = int(page)
+            pageInfos = accountPaginator.page(page)
+            jsonList = []
+            for accountInfo in pageInfos:
+                accountInfoDict = model_to_dict(accountInfo)
+                profileDict = model_to_dict(accountInfo.personalprofile)
+                profileDict["avatarUrl"] = accountInfo.personalprofile.GetAvatarUrl()
+                jsonList.append({**accountInfoDict, **profileDict})
+            jsonRes = json.loads(json.dumps(jsonList, cls=DateEnconding))
+            # logging.debug(jsonRes)
+            return JsonResponse({
+                'data': jsonRes,
+                'pagination': accountPaginator.count,
+                'pageSize': accountPaginator.per_page,
+                'page': pageInfos.start_index() // accountPaginator.per_page + 1
+            })
+        except Exception as e:
+            logging.error('str(Exception):\t', str(Exception))
+            logging.error('str(e):\t\t', str(e))
+            logging.error('repr(e):\t', repr(e))
+            logging.error('e.message:\t', e.args)
+            logging.error('########################################################')
+            return JsonResponse({"message": "数据库出错，无法获取管理员用户信息", "status": 404})
     else:
         return JsonResponse({"message": "请求方法未注册", "status": 404})
 
@@ -1070,14 +1127,14 @@ def GetTopCityInfos(request):
                 cityInfoDict = {"cityName": cityInfo["cityName"], "cityCount": cityInfo["cityCount"]}
                 jsonList.append({**cityInfoDict})
             jsonRes = json.loads(json.dumps(jsonList, cls=DateEnconding))
-            # print(jsonRes)
+            # logging.debug(jsonRes)
         except Exception as e:
-            print('str(Exception):\t', str(Exception))
-            print('str(e):\t\t', str(e))
-            print('repr(e):\t', repr(e))
-            # print('e.message:\t', e.message)
-            print('########################################################')
-            return JsonResponse({"message": "案例保存失败，数据库出错", "status": 404})
+            logging.error('str(Exception):\t', str(Exception))
+            logging.error('str(e):\t\t', str(e))
+            logging.error('repr(e):\t', repr(e))
+            logging.error('e.message:\t', e.args)
+            logging.error('########################################################')
+            return JsonResponse({"message": "数据库出错，无法获取高频城市信息", "status": 404})
         return JsonResponse({"TopcityInfos": jsonRes, "status": 200})
     else:
         return JsonResponse({"message": "请求方法未注册", "status": 404})
@@ -1102,14 +1159,14 @@ def GetSexNum(request):
                 sexInfoDict = {"sex": sexInfo["sex"], "sexCount": sexInfo["sexCount"]}
                 jsonList.append({**sexInfoDict})
             jsonRes = json.loads(json.dumps(jsonList, cls=DateEnconding))
-            # print(jsonRes)
+            # logging.debug(jsonRes)
         except Exception as e:
-            print('str(Exception):\t', str(Exception))
-            print('str(e):\t\t', str(e))
-            print('repr(e):\t', repr(e))
-            # print('e.message:\t', e.message)
-            print('########################################################')
-            return JsonResponse({"message": "信息获取失败，数据库出错", "status": 404})
+            logging.error('str(Exception):\t', str(Exception))
+            logging.error('str(e):\t\t', str(e))
+            logging.error('repr(e):\t', repr(e))
+            logging.error('e.message:\t', e.args)
+            logging.error('########################################################')
+            return JsonResponse({"message": "数据库出错，无法获取各性别人数", "status": 404})
         return JsonResponse({"TopcityInfos": jsonRes, "message": "信息获取成功", "status": 200})
     else:
         return JsonResponse({"message": "请求方法未注册", "status": 404})
@@ -1119,10 +1176,9 @@ def GetSexNum(request):
 # 发送成功，返回消息和200状态码
 # 发送失败，返回消息和404状态码
 def GetUserCaseStat(request):
-    # if not request.session.get('isLogin', None):
-    #     return JsonResponse({"message": "你还未登录，获取用户案例统计信息需要先登录", "status": 404})
-    # el
-    if request.method == "GET":
+    if not request.session.get('isLogin', None):
+        return JsonResponse({"message": "你还未登录，获取用户案例统计信息需要先登录", "status": 404})
+    elif request.method == "GET":
         # 该接口无提交数据
         # 获取统计信息
         try:
@@ -1148,14 +1204,14 @@ def GetUserCaseStat(request):
                 jsonList.append({**statInfoDict})
                 pastLimitDate = pastLimitDate + relativedelta(months=+1)
             jsonRes = json.loads(json.dumps(jsonList, cls=DateEnconding))
-            # print(jsonRes)
+            # logging.debug(jsonRes)
         except Exception as e:
-            print('str(Exception):\t', str(Exception))
-            print('str(e):\t\t', str(e))
-            print('repr(e):\t', repr(e))
-            # print('e.message:\t', e.message)
-            print('########################################################')
-            return JsonResponse({"message": "信息获取失败，数据库出错", "status": 404})
+            logging.error('str(Exception):\t', str(Exception))
+            logging.error('str(e):\t\t', str(e))
+            logging.error('repr(e):\t', repr(e))
+            logging.error('e.message:\t', e.args)
+            logging.error('########################################################')
+            return JsonResponse({"message": "数据库出错，无法获得各月注册用户数", "status": 404})
         return JsonResponse({"UserCaseStatInfos": jsonRes, "message": "信息获取成功", "status": 200})
     else:
         return JsonResponse({"message": "请求方法未注册", "status": 404})
