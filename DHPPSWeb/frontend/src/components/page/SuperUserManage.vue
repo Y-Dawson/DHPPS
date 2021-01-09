@@ -26,7 +26,7 @@
                         </ul>
                      </li> -->
               <li class="active">
-                <a class="iq-waves-effect"
+                <a class="iq-waves-effect" style="cursor:pointer;"
                   ><i class="ri-user-line"></i><span>信息管理</span></a
                 >
               </li>
@@ -36,7 +36,7 @@
                   :to="{
                     path: '/AdminCaseManage',
                   }"
-                  ><i class="ri-home-4-line"></i
+                  ><i class="ri-map-pin-line"></i
                   ><span>案例管理</span></router-link
                 >
               </li>
@@ -46,7 +46,7 @@
                   :to="{
                     path: '/AdminModelView',
                   }"
-                  ><i class="ri-home-4-line"></i
+                  ><i class="ri-bar-chart-grouped-fill"></i
                   ><span>查看模型</span></router-link
                 >
               </li>
@@ -121,6 +121,7 @@
                           class="nav-link active"
                           data-toggle="pill"
                           @click="CloseEditPWD()"
+                          style="cursor:pointer;"
                         >
                           用户管理
                         </a>
@@ -130,6 +131,7 @@
                           class="nav-link"
                           data-toggle="pill"
                           @click="ShowPage()"
+                          style="cursor:pointer;"
                         >
                           员工管理
                         </a>
@@ -211,6 +213,7 @@
                                     true
                                   )
                                 "
+                                style="cursor:pointer;"
                               >
                                 <i class="ri-pencil-line"></i>
                               </a>
@@ -221,6 +224,7 @@
                                 title=""
                                 data-original-title="Delete"
                                 @click="handleDel(item.userId)"
+                                style="cursor:pointer;"
                                 ><i class="ri-delete-bin-line"></i
                               ></a>
                             </div>
@@ -240,16 +244,17 @@
                               tabindex="-1"
                               aria-disabled="true"
                               @click="prevPage()"
+                              style="cursor:pointer;"
                               >Previous</a
                             >
                           </li>
                           <li class="page-item">
-                            <a class="page-link"
+                            <a class="page-link" style="cursor:pointer;"
                               >第{{ currentPage }}页/共{{ totalPage }}页</a
                             >
                           </li>
                           <li class="page-item">
-                            <a class="page-link" @click="nextPage()">Next</a>
+                            <a class="page-link" @click="nextPage()" style="cursor:pointer;">Next</a>
                           </li>
                         </ul>
                       </nav>
@@ -269,12 +274,13 @@
                           class="nav-link"
                           data-toggle="pill"
                           @click="ClosePage()"
+                          style="cursor:pointer;"
                         >
                           用户管理
                         </a>
                       </li>
                       <li class="col-md-6 p-0">
-                        <a class="nav-link active" data-toggle="pill">
+                        <a class="nav-link active" data-toggle="pill" style="cursor:pointer;">
                           员工管理
                         </a>
                       </li>
@@ -355,6 +361,7 @@
                                     true
                                   )
                                 "
+                                style="cursor:pointer;"
                               >
                                 <i class="ri-pencil-line"></i>
                               </a>
@@ -365,6 +372,7 @@
                                 title=""
                                 data-original-title="Delete"
                                 @click="handleStaffDel(item.userId)"
+                                style="cursor:pointer;"
                                 ><i class="ri-delete-bin-line"></i
                               ></a>
                             </div>
@@ -384,18 +392,19 @@
                               tabindex="-1"
                               aria-disabled="true"
                               @click="prevStaffPage()"
+                              style="cursor:pointer;"
                               >Previous</a
                             >
                           </li>
                           <li class="page-item">
-                            <a class="page-link"
+                            <a class="page-link" style="cursor:pointer;"
                               >第{{ currentStaffPage }}页/共{{
                                 totalStaffPage
                               }}页</a
                             >
                           </li>
                           <li class="page-item">
-                            <a class="page-link" @click="nextStaffPage()"
+                            <a class="page-link" @click="nextStaffPage()" style="cursor:pointer;"
                               >Next</a
                             >
                           </li>
@@ -415,7 +424,7 @@
     <div
       id="item1"
       v-if="showModal"
-      class="iq-card"
+      class="iq-card box animated bounceInDown"
       style="
         background-color: #fff;
         position: fixed;
@@ -488,7 +497,7 @@
     <div
       id="item1"
       v-if="showStaff"
-      class="iq-card"
+      class="iq-card box animated bounceInDown"
       style="
         background-color: #fff;
         position: fixed;

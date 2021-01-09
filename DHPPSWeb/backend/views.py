@@ -8,8 +8,8 @@ from django.db.models import F, Count
 from backend import models
 from backend import customSerializers
 from backend.sendSms import SendSms
-# from backend import returnDataSimulator
-from backend.getPrediction import SendParamsToCmd
+from backend import returnDataSimulator
+# from backend.getPrediction import SendParamsToCmd
 from django.http import JsonResponse
 from django_redis import get_redis_connection
 from django.utils import timezone
@@ -726,13 +726,13 @@ def StartSimulate(request):
                 logging.error('########################################################')
                 return JsonResponse({"message": "案例保存失败，数据库出错", "status": 404})
             # 调用函数以执行外部模型，通过命令行参数传入对应参数，获得返回预测值
-            dailyInfectMatrix = SendParamsToCmd(
-                popuList=initPopList,
-                transMatrix=initRoadList,
-                infectedList=initInfectedList
-                )
+            # dailyInfectMatrix = SendParamsToCmd(
+            #     popuList=initPopList,
+            #     transMatrix=initRoadList,
+            #     infectedList=initInfectedList
+            #     )
 
-            # dailyInfectMatrix = returnDataSimulator.model(inputList=initPopList, length=dayNum)
+            dailyInfectMatrix = returnDataSimulator.model(inputList=initPopList, length=dayNum)
 
             if (dailyInfectMatrix[0] == "Return a non-list result!"):
                 return JsonResponse({"message": "模型运行出错，返回了非List", "status": 404})
@@ -839,13 +839,13 @@ def StartSimulate(request):
                 logging.error('########################################################')
                 return JsonResponse({"message": "案例保存失败，数据库出错", "status": 404})
             # 调用函数以执行外部模型，通过命令行参数传入对应参数，获得返回预测值
-            dailyInfectMatrix = SendParamsToCmd(
-                popuList=initPopList,
-                transMatrix=initRoadList,
-                infectedList=initInfectedList
-                )
+            # dailyInfectMatrix = SendParamsToCmd(
+            #     popuList=initPopList,
+            #     transMatrix=initRoadList,
+            #     infectedList=initInfectedList
+            #     )
 
-            # dailyInfectMatrix = returnDataSimulator.model(inputList=initPopList, length=dayNum)
+            dailyInfectMatrix = returnDataSimulator.model(inputList=initPopList, length=dayNum)
 
             if (dailyInfectMatrix[0] == "Return a non-list result!"):
                 return JsonResponse({"message": "模型运行出错，返回了非List", "status": 404})

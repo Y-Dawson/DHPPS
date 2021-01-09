@@ -7,9 +7,7 @@
       </div>
 
       <div class="toMy">
-        <router-link :to="{ path: '/Userprofile' }" style="margin-left: 10px; float: left"
-          >个人中心</router-link
-        >
+        <button @click="toProfile">个人中心</button>
       </div>
     </header>
 
@@ -360,7 +358,7 @@
               DeleteCity('ci1');
             "
           >
-            <img src="../../assets/layui/images/city.png" alt="" />
+            <img src="../../assets/layui/images/city.png" title="A" alt="" />
             <div class="city-infor" id="cityinf1">
               <!-- <el-form-item prop="cityName">
                 <el-input
@@ -405,7 +403,7 @@
               DeleteCity('ci2');
             "
           >
-            <img src="../../assets/layui/images/city.png" alt="" />
+            <img src="../../assets/layui/images/city.png" title="B" alt="" />
             <div class="city-infor" id="cityinf2">
               <!-- <el-form-item prop="cityName">
                 <el-input
@@ -450,7 +448,7 @@
               DeleteCity('ci3');
             "
           >
-            <img src="../../assets/layui/images/city.png" alt="" />
+            <img src="../../assets/layui/images/city.png" title="C" alt="" />
             <div class="city-infor" id="cityinf3">
               <el-form-item prop="population" class="set_input">
                 <el-input v-model="cityForm.population" placeholder="城市人口"></el-input>
@@ -488,7 +486,7 @@
               DeleteCity('ci4');
             "
           >
-            <img src="../../assets/layui/images/city.png" alt="" />
+            <img src="../../assets/layui/images/city.png" title="D" alt="" />
             <div class="city-infor" id="cityinf4">
               <el-form-item prop="population" class="set_input">
                 <el-input v-model="cityForm.population" placeholder="城市人口"></el-input>
@@ -526,7 +524,7 @@
               DeleteCity('ci5');
             "
           >
-            <img src="../../assets/layui/images/city.png" alt="" />
+            <img src="../../assets/layui/images/city.png" title="E" alt="" />
             <div class="city-infor" id="cityinf5">
               <el-form-item prop="population" class="set_input">
                 <el-input v-model="cityForm.population" placeholder="城市人口"></el-input>
@@ -564,7 +562,7 @@
               DeleteCity('ci6');
             "
           >
-            <img src="../../assets/layui/images/city.png" alt="" />
+            <img src="../../assets/layui/images/city.png" title="F" alt="" />
             <div class="city-infor" id="cityinf6">
               <el-form-item prop="population" class="set_input">
                 <el-input v-model="cityForm.population" placeholder="城市人口"></el-input>
@@ -602,7 +600,7 @@
               DeleteCity('ci7');
             "
           >
-            <img src="../../assets/layui/images/city.png" alt="" />
+            <img src="../../assets/layui/images/city.png" title="G" alt="" />
             <div class="city-infor" id="cityinf7">
               <el-form-item prop="population" class="set_input">
                 <el-input v-model="cityForm.population" placeholder="城市人口"></el-input>
@@ -640,7 +638,7 @@
               DeleteCity('ci8');
             "
           >
-            <img src="../../assets/layui/images/city.png" alt="" />
+            <img src="../../assets/layui/images/city.png" title="H" alt="" />
             <div class="city-infor" id="cityinf8">
               <el-form-item prop="population" class="set_input">
                 <el-input v-model="cityForm.population" placeholder="城市人口"></el-input>
@@ -678,7 +676,7 @@
               DeleteCity('ci9');
             "
           >
-            <img src="../../assets/layui/images/city.png" alt="" />
+            <img src="../../assets/layui/images/city.png" title="I" alt="" />
             <div class="city-infor" id="cityinf9">
               <el-form-item prop="population" class="set_input">
                 <el-input v-model="cityForm.population" placeholder="城市人口"></el-input>
@@ -716,7 +714,7 @@
               DeleteCity('ci10');
             "
           >
-            <img src="../../assets/layui/images/city.png" alt="" />
+            <img src="../../assets/layui/images/city.png" title="J" alt="" />
             <div class="city-infor" id="cityinf10">
               <el-form-item prop="population" class="set_input">
                 <el-input v-model="cityForm.population" placeholder="城市人口"></el-input>
@@ -886,7 +884,7 @@ export default {
           {
             min: 0,
             max: 1000,
-            message: "人流量在0到1000之间",
+            message: "人流量在0到100%之间",
             trigger: "blur",
           },
         ],
@@ -1130,16 +1128,24 @@ export default {
       this.sc = false;
       this.mc = false;
 
-      if (nowcitycnt == 1) {
+      var flag = false;
+      for (var i = 1; i <= 10; i++) {
+        if (cityUsed[i] == true) {
+          flag = true;
+        }
+      }
+
+      if (flag == false) {
         this.$message({
           type: "warning",
           message: "您还未进行任何创建",
         });
-        this.bs = false;
+        this.sc = false;
         return;
+      } else {
+        console.log("到这了");
+        this.BeginToSimulation().then((response) => {});
       }
-
-      this.BeginToSimulation().then((response) => {});
     },
 
     SaveCase(sc) {
@@ -1154,7 +1160,14 @@ export default {
       this.bs = false;
       this.mc = false;
 
-      if (nowcitycnt == 1) {
+      var flag = false;
+      for (var i = 1; i <= 10; i++) {
+        if (this.cityUsed[i] == true) {
+          flag = true;
+        }
+      }
+
+      if (flag == false) {
         this.$message({
           type: "warning",
           message: "您还未进行任何创建",
@@ -1293,10 +1306,7 @@ export default {
       };
 
       var option = {
-        color:[
-          "#ff7437",
-          "#5998e4"
-        ],
+        color: ["#ff7437", "#5998e4"],
         tooltip: {
           trigger: "axis",
           axisPointer: {
@@ -1545,10 +1555,16 @@ export default {
           // }
 
           for (var i = 1; i <= 10; i++) {
-            if(cityUsed[i]==true){
-              var s ="cityname:" + cName[i] + ",initpop:" + cPeople[i] + ",initinfect:" + cInf[i];
+            if (cityUsed[i] == true) {
+              var s =
+                "cityname:" +
+                cName[i] +
+                ",initpop:" +
+                cPeople[i] +
+                ",initinfect:" +
+                cInf[i];
               city_infor.push(s);
-              trcitycnt+=1;
+              trcitycnt += 1;
             }
           }
 
@@ -1599,8 +1615,8 @@ export default {
           //   }
           // }
           for (var i = 1; i <= 10; i++) {
-            if(cityUsed[i]==true){
-              var cp=document.getElementById("ci"+i);
+            if (cityUsed[i] == true) {
+              var cp = document.getElementById("ci" + i);
               var n = this.GetName(i);
               var x = cp.style.left.substring(0, cp.style.left.length - 2);
               var y = cp.style.top.substring(0, cp.style.top.length - 2);
@@ -1656,8 +1672,8 @@ export default {
       this.$prompt("请输入此案例名称", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        inputPattern: /^[\u4e00-\u9fa5_a-zA-Z0-9]{1,3}$/,
-        inputErrorMessage: "案例名称可为汉字、英文字母和数字，长度为1到3个字符",
+        inputPattern: /^[\u4e00-\u9fa5_a-zA-Z0-9]{1,5}$/,
+        inputErrorMessage: "案例名称可为汉字、英文字母和数字，长度为1到5个字符",
       })
         .then(({ value }) => {
           this.sc = false;
@@ -1675,8 +1691,14 @@ export default {
           var loopcnt = 0;
           var trcitycnt = 0;
           for (var i = 1; i <= 10; i++) {
-            if(cityUsed[i]==true){
-              var s ="cityname:" + cName[i] + ",initpop:" + cPeople[i] + ",initinfect:" + cInf[i];
+            if (cityUsed[i] == true) {
+              var s =
+                "cityname:" +
+                cName[i] +
+                ",initpop:" +
+                cPeople[i] +
+                ",initinfect:" +
+                cInf[i];
               city_infor.push(s);
             }
           }
@@ -1712,8 +1734,8 @@ export default {
           var city_position = [];
           loopcnt = 0;
           for (var i = 1; i <= 10; i++) {
-            if(cityUsed[i]==true){
-              var cp=document.getElementById("ci"+i);
+            if (cityUsed[i] == true) {
+              var cp = document.getElementById("ci" + i);
               var n = this.GetName(i);
               var x = cp.style.left.substring(0, cp.style.left.length - 2);
               var y = cp.style.top.substring(0, cp.style.top.length - 2);
@@ -1825,11 +1847,12 @@ export default {
 
     ConfirmRoad(tcx1, tcy1, tcx2, tcy2, dx, dy, dis) {
       var tra = 0;
-      console.log("输入人流量");
-      this.$prompt("请输入此路人流量（1-100）", "提示", {
+      // console.log("输入人流量");
+      this.$prompt("请输入此路人流量（1%-100%）", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         inputPattern: /^[0-9]/,
+        inputPlaceholder: "请输入整数，如设置为50%，请输入50",
         inputErrorMessage: "人流量格式不正确",
       })
         .then(({ value }) => {
@@ -1839,7 +1862,7 @@ export default {
               callback: (action) => {
                 this.$message({
                   type: "info",
-                  message: `action: ${action}`,
+                  message: "请重新创建",
                 });
               },
             });
@@ -2371,6 +2394,9 @@ export default {
 
       citycnt++;
       nowcitycnt++;
+
+      this.cityForm.population = "";
+      this.cityForm.beginInfected = "";
       // console.log(typeof(this.city_po));
     },
 
@@ -2467,15 +2493,56 @@ export default {
     },
 
     toMapModel() {
-      this.$router.push({
-        path: "/settingMap",
-        query: {
-          params: JSON.stringify({
-            userId: this.userId,
-            caseName: 999,
-          }),
-        },
-      });
+      this.$confirm(
+        "请确保您已保存案例，此操作将会丢失您在此页面上的所有编辑内容, 是否继续?",
+        "提示",
+        {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        }
+      )
+        .then(() => {
+          this.$router.push({
+            path: "/settingMap",
+            query: {
+              params: JSON.stringify({
+                caseName: 999,
+              }),
+            },
+          });
+        })
+        .catch(() => {
+          this.mc = false;
+          this.$message({
+            type: "info",
+            message: "已取消跳转",
+          });
+        });
+    },
+
+    toProfile() {
+      this.$confirm(
+        "请确保您已保存案例，此操作将会丢失您在此页面上的所有编辑内容, 是否继续?",
+        "提示",
+        {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        }
+      )
+        .then(() => {
+          this.$router.push({
+            path: "/UserProfile",
+          });
+        })
+        .catch(() => {
+          this.mc = false;
+          this.$message({
+            type: "info",
+            message: "已取消跳转",
+          });
+        });
     },
 
     correctCity() {
@@ -2584,10 +2651,11 @@ header .toMy {
   top: 5px;
 }
 
-.toMy a {
-  font-size: 20px;
+.toMy button {
+  background-color: transparent;
   color: white;
-  text-decoration: none;
+  font-size: 20px;
+  border: none;
 }
 
 .layui-nav-tree .layui-nav-item a {
@@ -2674,7 +2742,11 @@ header .toMy {
   background-color: #bfa;
 } */
 .tools-wrapper button:hover {
-  background-image: linear-gradient(to right, rgb(93,96,181,0.5), rgb(89,151,227,0.5));
+  background-image: linear-gradient(
+    to right,
+    rgb(93, 96, 181, 0.5),
+    rgb(89, 151, 227, 0.5)
+  );
 }
 /* 
 .tools-wrapper button:active {
@@ -2691,7 +2763,7 @@ header .toMy {
   height: 69px;
   color: rgb(255, 255, 255);
   border: 1px solid transparent;
-  background-image: linear-gradient(to right, #5D5EB4, #5998e4);
+  background-image: linear-gradient(to right, #5d5eb4, #5998e4);
   /* cursor: url(); */
 }
 
@@ -2738,7 +2810,11 @@ header .toMy {
   width: 340px;
   height: 655px;
   padding-top: 20px;
-  background-image: linear-gradient(to right, rgb(93,96,181,0.5), rgb(89,151,227,0.5));
+  background-image: linear-gradient(
+    to right,
+    rgb(93, 96, 181, 0.5),
+    rgb(89, 151, 227, 0.5)
+  );
   /* background-color: #fff; */
   /* border: 1px solid rgb(204, 204, 204); */
   border-radius: 10px;
@@ -2920,7 +2996,11 @@ canvas {
   border: 1px solid rgb(187, 187, 187);
   padding-top: 10px;
   border-radius: 10%;
-  background-image: linear-gradient(to right, rgb(93,96,181,0.5), rgb(89,151,227,0.5));
+  background-image: linear-gradient(
+    to right,
+    rgb(93, 96, 181, 0.5),
+    rgb(89, 151, 227, 0.5)
+  );
   z-index: 9;
 }
 

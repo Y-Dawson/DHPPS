@@ -26,7 +26,7 @@
                         </ul>
                      </li> -->
               <li class="active">
-                <a class="iq-waves-effect"
+                <a class="iq-waves-effect" style="cursor:pointer;"
                   ><i class="ri-user-line"></i><span>信息管理</span></a
                 >
               </li>
@@ -36,7 +36,7 @@
                   :to="{
                     path: '/AdminCaseManage',
                   }"
-                  ><i class="ri-home-4-line"></i
+                  ><i class="ri-map-pin-line"></i
                   ><span>案例管理</span></router-link
                 >
               </li>
@@ -46,7 +46,7 @@
                   :to="{
                     path: '/AdminModelView',
                   }"
-                  ><i class="ri-home-4-line"></i
+                  ><i class="ri-bar-chart-grouped-fill"></i
                   ><span>查看模型</span></router-link
                 >
               </li>
@@ -184,6 +184,7 @@
                                     true
                                   )
                                 "
+                                style="cursor:pointer;"
                               >
                                 <i class="ri-pencil-line"></i>
                               </a>
@@ -194,6 +195,7 @@
                                 title=""
                                 data-original-title="Delete"
                                 @click="handleDel(item.userId)"
+                                style="cursor:pointer;"
                                 ><i class="ri-delete-bin-line"></i
                               ></a>
                             </div>
@@ -213,16 +215,17 @@
                               tabindex="-1"
                               aria-disabled="true"
                               @click="prevPage()"
+                              style="cursor:pointer;"
                               >Previous</a
                             >
                           </li>
                           <li class="page-item">
-                            <a class="page-link"
+                            <a class="page-link" style="cursor:pointer;"
                               >第{{ currentPage }}页/共{{ totalPage }}页</a
                             >
                           </li>
                           <li class="page-item">
-                            <a class="page-link" @click="nextPage()">Next</a>
+                            <a class="page-link" @click="nextPage()" style="cursor:pointer;">Next</a>
                           </li>
                         </ul>
                       </nav>
@@ -240,7 +243,7 @@
     <div
       id="item1"
       v-if="showModal"
-      class="iq-card"
+      class="iq-card box animated bounceInDown"
       style="
         background-color: #fff;
         position: fixed;
@@ -390,7 +393,8 @@ export default {
             this.$router.push({
               path: "/Login",
             });
-          } else if (
+          } 
+          else if (
             response.data.authority == 2 ||
             response.data.authority == 3
           ) {

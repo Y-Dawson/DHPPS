@@ -21,7 +21,7 @@
                 >
               </li>
               <li class="active">
-                <a class="iq-waves-effect"
+                <a class="iq-waves-effect" style="cursor:pointer;"
                   ><i class="ri-file-edit-line"></i><span>修改资料</span></a
                 >
               </li>
@@ -32,7 +32,7 @@
                     path: '/UserCase',
                     query: { uI: this.userId },
                   }"
-                  ><i class="ri-file-list-line"></i
+                  ><i class="ri-map-pin-line"></i
                   ><span>我的案例</span></router-link
                 >
               </li>
@@ -206,8 +206,8 @@
                           </el-form-item>
                           <el-form-item label="出生日期">
                             <el-date-picker
-                              clearable="false"
-                              editable="false"
+                              :clearable="false"
+                              :editable="false"
                               v-model="ruleForm.value1"
                               type="date"
                               value-format="yyyy-MM-dd"

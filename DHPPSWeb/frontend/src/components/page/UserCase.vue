@@ -32,8 +32,8 @@
                 >
               </li>
               <li class="active">
-                <a class="iq-waves-effect">
-                <i class="ri-file-list-line"></i
+                <a class="iq-waves-effect" style="cursor:pointer;">
+                <i class="ri-map-pin-line"></i
                   ><span>我的案例</span></a>
               </li>
             </ul>
@@ -83,8 +83,8 @@
                 <div
                   class="box-card-group"
                   style="
-                    margin-left: 40px;
-                    margin-top: 20px;
+                    margin-left: 5%;
+                    margin-top: 2%;
                     margin-bottom:10px;
                     width: auto;
                     height: 480px;
