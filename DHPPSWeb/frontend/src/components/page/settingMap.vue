@@ -15,9 +15,9 @@
 
     <section class="mainbox">
       <div class="column">
-        <el-button type="primary" @click="add_city">增加城市</el-button>
-        <el-button type="primary" @click="reduce_city">删除城市</el-button>
-        <el-button type="primary" @click="save_case">保存案例</el-button>
+        <el-button class="topbtn" type="primary" @click="add_city">增加城市</el-button>
+        <el-button class="topbtn" type="primary" @click="reduce_city">删除城市</el-button>
+        <el-button class="topbtn" type="primary" @click="save_case">保存案例</el-button>
         <div class="panel">
           <div>
             <span class="little-title">城市列表：</span>
@@ -39,9 +39,9 @@
       </div>
 
       <div class="column">
-        <el-button type="primary" @click="add_road">增加双向航线</el-button>
-        <el-button type="primary" @click="reduce_road">删除航线</el-button>
-        <el-button type="primary" @click="begin_simulation">开始模拟</el-button>
+        <el-button class="topbtn" type="primary" @click="add_road">增加双向航线</el-button>
+        <el-button class="topbtn" type="primary" @click="reduce_road">删除航线</el-button>
+        <el-button class="topbtn" type="primary" @click="begin_simulation">开始模拟</el-button>
         <div class="panel">
           <div>
             <span class="little-title">航线列表：</span>
@@ -54,7 +54,7 @@
       </div>
     </section>
 
-    <el-dialog title="新增城市" :visible.sync="isShow1" :before-close="handleclose">
+    <el-dialog title="新增城市" :visible.sync="isShow1">
       <el-form
         :model="ruleForm"
         :rules="rules"
@@ -107,13 +107,13 @@
         </el-form-item>
 
         <el-form-item>
-          <el-button type="primary" @click="create_city">立即创建</el-button>
+          <el-button class="topbtn" type="primary" @click="create_city">立即创建</el-button>
           <!-- <el-button type="info" @click="resetForm('ruleForm')">重置</el-button> -->
         </el-form-item>
       </el-form>
     </el-dialog>
 
-    <el-dialog title="删除城市" :visible.sync="isShow3" :before-close="handleclose">
+    <el-dialog title="删除城市" :visible.sync="isShow3">
       <el-form
         :model="ruleForm"
         :rules="rules"
@@ -132,12 +132,12 @@
         </el-form-item>
 
         <el-form-item>
-          <el-button type="primary" @click="delete_city">确认删除</el-button>
+          <el-button class="topbtn" type="primary" @click="delete_city">确认删除</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
 
-    <el-dialog title="新增航线" :visible.sync="isShow2" :before-close="handleclose">
+    <el-dialog title="新增航线" :visible.sync="isShow2">
       <el-form
         :model="ruleForm"
         :rules="rules"
@@ -169,12 +169,12 @@
         </el-form-item>
 
         <el-form-item>
-          <el-button type="primary" @click="create_road">立即创建</el-button>
+          <el-button class="topbtn" type="primary" @click="create_road">立即创建</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
 
-    <el-dialog title="删除航线" :visible.sync="isShow4" :before-close="handleclose">
+    <el-dialog title="删除航线" :visible.sync="isShow4">
       <el-form
         :model="ruleForm"
         :rules="rules"
@@ -193,7 +193,7 @@
         </el-form-item>
 
         <el-form-item>
-          <el-button type="primary" @click="delete_road">确认删除</el-button>
+          <el-button class="topbtn" type="primary" @click="delete_road">确认删除</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -1155,7 +1155,10 @@ export default {
   padding: 0;
   box-sizing: border-box;
 }
-
+.topbtn{
+  background: linear-gradient(to right, rgb(93,96,181), rgb(89,151,227));
+  border: 0px;
+}
 li {
   list-style: none;
 }
@@ -1171,7 +1174,7 @@ li {
 header {
   position: relative;
   height: 1.25rem;
-  background: url("../../assets/img/head_bg.png") no-repeat;
+  background: url("../../assets/img/head_bg2.png") no-repeat;
   height: 50px;
   width: 100%;
   background-size: 100% 100%;

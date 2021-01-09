@@ -133,8 +133,7 @@
       </div> -->
 
       <ul class="city-list">
-        <span class="title">已创建：</span>
-        <li>
+        <li style="margin-bottom: 20px">
           <div class="panel">
             <h2>城市信息</h2>
             <div class="chart" id="bar"></div>
@@ -969,6 +968,11 @@ export default {
       };
 
       var option = {
+        color:[
+          "#ff7437",
+          "#5998e4",
+          "#5D5EB4"
+        ],
         tooltip: {
           trigger: "axis",
           axisPointer: {
@@ -976,7 +980,7 @@ export default {
           },
         },
         legend: {
-          data: ["总人口", "感染人数", "新增感染人数"],
+          data: ["总人口", "感染人数", "感染人数变化"],
         },
         grid: {
           left: 20,
@@ -1023,7 +1027,7 @@ export default {
             data: this.cityInf,
           },
           {
-            name: "感染人数较前一日变化",
+            name: "感染人数变化",
             type: "bar",
             label: seriesLabel,
             data: this.cityNewInf,
@@ -1181,7 +1185,7 @@ body {
 header {
   position: relative;
   height: 1.25rem;
-  background: url("../../assets/img/head_bg.png") no-repeat;
+  background: url("../../assets/img/head_bg2.png") no-repeat;
   height: 50px;
   width: 100%;
   background-size: 100% 100%;
@@ -1260,7 +1264,7 @@ h1 {
   background-color: #fff;
   border: 1px solid rgb(204, 204, 204);
   border-radius: 10px;
-  box-shadow: 2px 2px rgba(0, 0, 0, 0.2);
+  box-shadow: 5px 5px 8px rgba(0, 0, 0, 0.1);
 }
 
 .tools-wrapper .el-button {
@@ -1278,7 +1282,7 @@ h1 {
   width: 150px;
   height: 69px;
   color: grey;
-  background-color: rgb(241, 245, 253);
+  background-image: linear-gradient(to right, rgb(93,96,181,0.5), rgb(89,151,227,0.5));
   /* background-color: #bfa; */
   border: 1px solid transparent;
 }
@@ -1294,7 +1298,7 @@ h1 {
 }
 
 .tools-wrapper .stop-simulate button:hover {
-  background-color: skyblue;
+  background-image: linear-gradient(to right, rgb(93,96,181,0.5), rgb(89,151,227,0.5));
 }
 
 .el-form-item {
@@ -1333,6 +1337,7 @@ h1 {
 }
 
 .tools-wrapper .line {
+  display: none;
   width: 150px;
   height: 1px;
   background-color: #999;
@@ -1352,10 +1357,10 @@ h1 {
   right: 0;
   width: 340px;
   height: 655px;
-  background-color: rgb(241, 245, 253);
-  border: 1px solid rgb(204, 204, 204);
+  padding-top: 20px;
+  background-image: linear-gradient(to right, rgb(93,96,181,0.5), rgb(89,151,227,0.5));
   border-radius: 10px;
-  box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.2);
+  box-shadow: -5px 5px 8px rgba(0, 0, 0, 0.1);
 }
 
 .city-list .title {
@@ -1369,10 +1374,12 @@ h1 {
   margin-left: 10px;
   width: 320px;
   height: 300px;
-  background-color: rgb(241, 245, 253);
-  border: 1px solid rgb(204, 204, 204);
   border-radius: 10px;
   box-shadow: 2px 2px rgba(0, 0, 0, 0.2);
+  background-color: #fff;
+  /* border: 1px solid rgb(204, 204, 204); */
+  border-radius: 10px;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .city-list div span {

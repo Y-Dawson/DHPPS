@@ -139,17 +139,17 @@ export default {
       var newb = new Array();
 
       newb.push(foreData[0][j]["infected"]);
-      newb.push(foreData[31][j]["infected"]);
-      newb.push(foreData[59][j]["infected"]);
-      newb.push(foreData[90][j]["infected"]);
-      newb.push(foreData[120][j]["infected"]);
-      newb.push(foreData[151][j]["infected"]);
-      newb.push(foreData[181][j]["infected"]);
-      newb.push(foreData[212][j]["infected"]);
-      newb.push(foreData[243][j]["infected"]);
-      newb.push(foreData[273][j]["infected"]);
-      newb.push(foreData[304][j]["infected"]);
-      newb.push(foreData[334][j]["infected"]);
+      newb.push(foreData[14][j]["infected"]);
+      newb.push(foreData[28][j]["infected"]);
+      newb.push(foreData[42][j]["infected"]);
+      newb.push(foreData[56][j]["infected"]);
+      newb.push(foreData[70][j]["infected"]);
+      newb.push(foreData[84][j]["infected"]);
+      newb.push(foreData[98][j]["infected"]);
+      newb.push(foreData[112][j]["infected"]);
+      newb.push(foreData[126][j]["infected"]);
+      newb.push(foreData[140][j]["infected"]);
+      newb.push(foreData[154][j]["infected"]);
       newa["data"] = newb;
 
       newa["smooth"] = "true";
@@ -268,18 +268,18 @@ export default {
         xAxis: {
           type: "category",
           data: [
-            "一月",
-            "二月",
-            "三月",
-            "四月",
-            "五月",
-            "六月",
-            "七月",
-            "八月",
-            "九月",
-            "十月",
-            "十一月",
-            "十二月",
+            "1.01",
+            "1.15",
+            "1.29",
+            "2.12",
+            "2.26",
+            "3.12",
+            "3.26",
+            "4.09",
+            "4.23",
+            "5.07",
+            "5.21",
+            "6.04",
           ],
           axisTick: {
             show: false,
@@ -666,7 +666,7 @@ body {
 header {
   position: relative;
   height: 1.25rem;
-  background: url(../../assets/img/head_bg.png) no-repeat;
+  background: url(../../assets/img/head_bg2.png) no-repeat;
   height: 50px;
   width: 100%;
   background-size: 100% 100%;

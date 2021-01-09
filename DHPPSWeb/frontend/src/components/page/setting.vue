@@ -175,8 +175,8 @@
       </div> -->
 
       <ul class="city-list">
-        <span class="title">已创建：</span>
-        <li>
+        <!-- <span class="title">已创建：</span> -->
+        <li style="margin-bottom: 20px">
           <div class="panel">
             <h2>城市信息</h2>
             <div class="chart" id="bar"></div>
@@ -1293,6 +1293,10 @@ export default {
       };
 
       var option = {
+        color:[
+          "#ff7437",
+          "#5998e4"
+        ],
         tooltip: {
           trigger: "axis",
           axisPointer: {
@@ -2547,7 +2551,7 @@ body {
 header {
   position: relative;
   height: 1.25rem;
-  background: url("../../assets/img/head_bg.png") no-repeat;
+  background: url("../../assets/img/head_bg2.png") no-repeat;
   height: 50px;
   width: 100%;
   background-size: 100% 100%;
@@ -2652,7 +2656,7 @@ header .toMy {
   background-color: #fff;
   border: 1px solid rgb(204, 204, 204);
   border-radius: 10px;
-  box-shadow: 2px 2px rgba(0, 0, 0, 0.2);
+  box-shadow: 5px 5px 8px rgba(0, 0, 0, 0.1);
 }
 
 .tools-wrapper button {
@@ -2660,7 +2664,8 @@ header .toMy {
   width: 150px;
   height: 69px;
   color: #000;
-  background-color: rgb(241, 245, 253);
+  border-radius: 14px;
+  background-color: transparent;
   /* background-color: #bfa; */
   border: 1px solid transparent;
 }
@@ -2669,7 +2674,7 @@ header .toMy {
   background-color: #bfa;
 } */
 .tools-wrapper button:hover {
-  background-color: skyblue;
+  background-image: linear-gradient(to right, rgb(93,96,181,0.5), rgb(89,151,227,0.5));
 }
 /* 
 .tools-wrapper button:active {
@@ -2684,9 +2689,9 @@ header .toMy {
   display: block;
   width: 150px;
   height: 69px;
-  color: #000;
+  color: rgb(255, 255, 255);
   border: 1px solid transparent;
-  background-color: red;
+  background-image: linear-gradient(to right, #5D5EB4, #5998e4);
   /* cursor: url(); */
 }
 
@@ -2712,6 +2717,7 @@ header .toMy {
 }
 
 .tools-wrapper .line {
+  display: none;
   width: 150px;
   height: 1px;
   background-color: #999;
@@ -2731,10 +2737,12 @@ header .toMy {
   right: 0;
   width: 340px;
   height: 655px;
-  background-color: rgb(241, 245, 253);
-  border: 1px solid rgb(204, 204, 204);
+  padding-top: 20px;
+  background-image: linear-gradient(to right, rgb(93,96,181,0.5), rgb(89,151,227,0.5));
+  /* background-color: #fff; */
+  /* border: 1px solid rgb(204, 204, 204); */
   border-radius: 10px;
-  box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.2);
+  box-shadow: -5px 5px 8px rgba(0, 0, 0, 0.1);
 }
 
 .city-list .title {
@@ -2748,10 +2756,10 @@ header .toMy {
   margin-left: 10px;
   width: 320px;
   height: 300px;
-  background-color: rgb(241, 245, 253);
-  border: 1px solid rgb(204, 204, 204);
+  background-color: #fff;
+  /* border: 1px solid rgb(204, 204, 204); */
   border-radius: 10px;
-  box-shadow: 2px 2px rgba(0, 0, 0, 0.2);
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .city-list div span {
@@ -2910,7 +2918,9 @@ canvas {
   margin-top: -150px;
   margin-left: 60px;
   border: 1px solid rgb(187, 187, 187);
-  background-color: #bfa;
+  padding-top: 10px;
+  border-radius: 10%;
+  background-image: linear-gradient(to right, rgb(93,96,181,0.5), rgb(89,151,227,0.5));
   z-index: 9;
 }
 
