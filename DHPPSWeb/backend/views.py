@@ -847,7 +847,7 @@ def StartSimulate(request):
 
             # dailyInfectMatrix = returnDataSimulator.model(inputList=initPopList, length=dayNum)
 
-            if (dailyInfectMatrix[0] == "Return a non-list result!"):
+            if (dailyInfectMatrix[0] == "R"):
                 return JsonResponse({"message": "模型运行出错，返回了非List", "status": 404})
 
             # 构造发回数据
