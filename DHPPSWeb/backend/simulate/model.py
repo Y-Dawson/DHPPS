@@ -204,7 +204,7 @@ def AcquireData(population,transport,infected):
   global rateModel
   global casePer 
   scale = [float(population/1000)]
-  transportListTemp = []
+transportListTemp = [0,]
   for i in transport:
     if i!=float(0):
       transportListTemp.append(i)
