@@ -208,7 +208,6 @@
       >
         <div class="chat-header-icons d-flex" style="padding: 5px 15px">
           <a
-            href="javascript:void();"
             class="chat-icon-phone iq-bg-primary"
             style="width: 100px;cursor:pointer;"
             @click="ClosePage()"
@@ -224,8 +223,8 @@
                 <div
                   class="box-card-group"
                   style="
-                    margin-left: 10%;
-                    margin-top: 20px;
+                    margin-left: 5%;
+                    margin-top: 2%;
                     margin-bottom:10px;
                     width: auto;
                     height: 480px;
@@ -601,9 +600,10 @@ export default {
 /* 案例块样式 */
 .box-card {
   border-radius: 14px;
-  width: 250px;
+  width: 280px;
   /* float: left; */
-  margin-right: 180px;
+  margin-right: 40px;
+  margin-left: 10px;
   margin-bottom: 20px;
 }
 .reset {

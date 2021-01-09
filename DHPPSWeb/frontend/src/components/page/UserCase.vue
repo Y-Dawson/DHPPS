@@ -83,8 +83,8 @@
                 <div
                   class="box-card-group"
                   style="
-                    margin-left: 40px;
-                    margin-top: 20px;
+                    margin-left: 5%;
+                    margin-top: 2%;
                     margin-bottom:10px;
                     width: auto;
                     height: 480px;
