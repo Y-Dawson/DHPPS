@@ -93,7 +93,7 @@ DATABASES = {
         'HOST': '127.0.0.1',  # 数据库地址，本机 ip 地址 127.0.0.1
         'PORT': 3306,  # 端口
         'USER': 'root',  # 数据库用户
-        'PASSWORD': 'xxsql',  # 数据库密码
+        'PASSWORD': 'z3876390',  # 数据库密码
     }
 }
 # Set the path of initial data files
@@ -267,7 +267,7 @@ LOGGING = {
         'default': {
             'level': 'INFO',
             'class': 'logging.handlers.RotatingFileHandler',  # 保存到文件，自动切
-            'filename': os.path.join(BASE_LOG_DIR, "xxx_info.log"),  # 日志文件
+            'filename': os.path.join(BASE_LOG_DIR, "backend_info.log"),  # 日志文件
             'maxBytes': 1024 * 1024 * 50,  # 日志大小 50M
             'backupCount': 3,  # 最多备份几个
             'formatter': 'standard',
@@ -277,7 +277,7 @@ LOGGING = {
         'error': {
             'level': 'ERROR',
             'class': 'logging.handlers.RotatingFileHandler',  # 保存到文件，自动切
-            'filename': os.path.join(BASE_LOG_DIR, "xxx_err.log"),  # 日志文件
+            'filename': os.path.join(BASE_LOG_DIR, "backend_err.log"),  # 日志文件
             'maxBytes': 1024 * 1024 * 50,  # 日志大小 50M
             'backupCount': 5,
             'formatter': 'standard',
@@ -287,7 +287,7 @@ LOGGING = {
         'collect': {
             'level': 'INFO',
             'class': 'logging.handlers.RotatingFileHandler',  # 保存到文件，自动切
-            'filename': os.path.join(BASE_LOG_DIR, "xxx_collect.log"),
+            'filename': os.path.join(BASE_LOG_DIR, "backend_collect.log"),
             'maxBytes': 1024 * 1024 * 50,  # 日志大小 50M
             'backupCount': 5,
             'formatter': 'collect',
