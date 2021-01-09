@@ -848,9 +848,9 @@ def StartSimulate(request):
                     cityCase = {}
                     cityCase["cityName"] = cityNameList[cityIdx]
                     cityCase["population"] = initPopList[cityIdx]
-                    print("Get day num: ", dayCount)
-                    print("Get city num:", cityIdx)
-                    print("value: ", dailyInfectMatrix[cityIdx][dayCount])
+                    # print("Get day num: ", dayCount)
+                    # print("Get city num:", cityIdx)
+                    # print("value: ", dailyInfectMatrix[cityIdx][dayCount])
                     cityCase["infected"] = int(dailyInfectMatrix[cityIdx][dayCount])
 
                     if (dayCount == 0):
