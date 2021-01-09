@@ -1247,7 +1247,7 @@ export default {
   box-sizing: border-box;
 }
 .topbtn {
-  background: linear-gradient(to right, rgb(93, 96, 181), rgb(89, 151, 227));
+  background: linear-gradient(to right, rgb(93, 96, 181,0.7), rgb(89, 151, 227,0.7));
   border: 0px;
 }
 li {
@@ -1265,7 +1265,7 @@ li {
 header {
   position: relative;
   height: 1.25rem;
-  background: url("../../assets/img/head_bg3.png") no-repeat;
+  background: url("../../assets/img/head_bg2.png") no-repeat;
   height: 50px;
   width: 100%;
   background-size: 100% 100%;
