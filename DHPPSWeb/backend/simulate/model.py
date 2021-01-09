@@ -252,6 +252,6 @@ def GetPredict(popuList,transMatrix,infectedList):
     return AcquireAllData(popuList,transMatrix,infectedList)
   
 if __name__ == '__main__':
-  print(GetPredict([2000,4000],[[50,60],[120,40]],[100,256]))
-  #print(GetPredict(eval(sys.argv[1]),eval(sys.argv[2]),eval(sys.argv[3])))
+  # print(GetPredict([2000,4000],[[50,60],[120,40]],[100,256]))
+  print(GetPredict(eval(sys.argv[1]),eval(sys.argv[2]),eval(sys.argv[3])))
   #print(rateModel(torch.from_numpy(np.array([57.2]))))
