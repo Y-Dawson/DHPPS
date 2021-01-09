@@ -1253,7 +1253,7 @@ li {
 header {
   position: relative;
   height: 1.25rem;
-  background: url("../../assets/img/head_bg2.png") no-repeat;
+  background: url("../../assets/img/head_bg3.png") no-repeat;
   height: 50px;
   width: 100%;
   background-size: 100% 100%;
