@@ -164,6 +164,7 @@ def seir(y,t,b,a,g,p,u,N):
 
     return dy
 path=os.path.join(os.getcwd(),'backend/simulate')
+#path = os.getcwd()+'/'
 rateModel = torch.load(os.path.join(path,'rate.pth'))
 daysModel = torch.load(os.path.join(path,'days.pth'))
 IncubPeriod=3.22 
@@ -215,7 +216,7 @@ def AcquireData(population,transport,infected):
   scaledInfected = float(infected/scale[0])
   infectedList = [scaledInfected]
   daysResult = daysModel(torch.from_numpy(np.array(infectedList)))
-  scaleResult = rateModel(torch.from_numpy(np.array(infectedList)))
+  scaleResult = rateModel(torch.from_numpy(np.array(transportList)))
   day = int(daysResult)+1
   scale = float(scale[0])
   returnListRaw = casePer[day:]
@@ -223,7 +224,7 @@ def AcquireData(population,transport,infected):
   for i in returnListRaw:
     temp =0
     if i>0:
-      returnList.append(i*scale*float(scaleResult))
+      returnList.append(i*scale*0.5*float(scaleResult))
     else:
       returnList.append(float(0.0))
   repairIndex=0
@@ -236,7 +237,7 @@ def AcquireData(population,transport,infected):
         break
   if flag == 1:
     returnList = returnList[repairIndex:]
-
+  #print('scaleResult:{0}'.format(scaleResult))
   return returnList
 
 def AcquireAllData(popuList,transMatrix,infectedList):
@@ -251,5 +252,6 @@ def GetPredict(popuList,transMatrix,infectedList):
     return AcquireAllData(popuList,transMatrix,infectedList)
   
 if __name__ == '__main__':
-  #print(GetPredict([2000,4000],[[50,60],[120,40]],[100,256]))
-  print(GetPredict(eval(sys.argv[1]),eval(sys.argv[2]),eval(sys.argv[3])))
+  print(GetPredict([2000,4000],[[50,60],[120,40]],[100,256]))
+  #print(GetPredict(eval(sys.argv[1]),eval(sys.argv[2]),eval(sys.argv[3])))
+  #print(rateModel(torch.from_numpy(np.array([57.2]))))
