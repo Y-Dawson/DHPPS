@@ -204,14 +204,15 @@ def AcquireData(population,transport,infected):
   global rateModel
   global casePer 
   scale = [float(population/1000)]
-transportListTemp = [0,]
+  transportListTemp = []
   for i in transport:
     if i!=float(0):
       transportListTemp.append(i)
-  
+  if len(transportListTemp)==0:
+    transportListTemp = [0]
   transportList = [float(reduce(lambda x,y:x+y,transportListTemp))]
   transportList = [i/len(transportList) for i in transportList]
-  
+  #print(transportList)
   scaledInfected = float(infected/scale[0])
   infectedList = [scaledInfected]
   daysResult = daysModel(torch.from_numpy(np.array(infectedList)))
