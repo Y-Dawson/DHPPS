@@ -838,6 +838,8 @@ def StartSimulate(request):
             print("dayNum: ", dayNum)
             print("cityNum: ", cityNum)
             print("dayNumInFact: ", len(dailyInfectMatrix[0]))
+            print("dayNumInFact: ", len(dailyInfectMatrix[1]))
+            print("dayNumInFact: ", len(dailyInfectMatrix[2]))
             print("cityNumInFact: ", len(dailyInfectMatrix))
             DailyForecastData = []
             for dayCount in range(dayNum):
@@ -848,7 +850,7 @@ def StartSimulate(request):
                     cityCase["population"] = initPopList[cityIdx]
                     print("Get day num: ", dayCount)
                     print("Get city num:", cityIdx)
-                    print("value: ",dailyInfectMatrix[cityIdx][dayCount])
+                    print("value: ", dailyInfectMatrix[cityIdx][dayCount])
                     cityCase["infected"] = int(dailyInfectMatrix[cityIdx][dayCount])
 
                     if (dayCount == 0):
