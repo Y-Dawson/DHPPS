@@ -886,7 +886,7 @@ export default {
           {
             min: 0,
             max: 1000,
-            message: "人流量在0到1000之间",
+            message: "人流量在0到100%之间",
             trigger: "blur",
           },
         ],
@@ -1130,12 +1130,19 @@ export default {
       this.sc = false;
       this.mc = false;
 
-      if (nowcitycnt == 1) {
+      var flag = false;
+      for (var i = 1; i <= 10; i++) {
+        if (this.cityUsed[i] == true) {
+          flag = true;
+        }
+      }
+
+      if (flag == false) {
         this.$message({
           type: "warning",
           message: "您还未进行任何创建",
         });
-        this.bs = false;
+        this.sc = false;
         return;
       }
 
@@ -1154,7 +1161,14 @@ export default {
       this.bs = false;
       this.mc = false;
 
-      if (nowcitycnt == 1) {
+      var flag = false;
+      for (var i = 1; i <= 10; i++) {
+        if (this.cityUsed[i] == true) {
+          flag = true;
+        }
+      }
+
+      if (flag == false) {
         this.$message({
           type: "warning",
           message: "您还未进行任何创建",
@@ -1293,10 +1307,7 @@ export default {
       };
 
       var option = {
-        color:[
-          "#ff7437",
-          "#5998e4"
-        ],
+        color: ["#ff7437", "#5998e4"],
         tooltip: {
           trigger: "axis",
           axisPointer: {
@@ -1545,10 +1556,16 @@ export default {
           // }
 
           for (var i = 1; i <= 10; i++) {
-            if(cityUsed[i]==true){
-              var s ="cityname:" + cName[i] + ",initpop:" + cPeople[i] + ",initinfect:" + cInf[i];
+            if (cityUsed[i] == true) {
+              var s =
+                "cityname:" +
+                cName[i] +
+                ",initpop:" +
+                cPeople[i] +
+                ",initinfect:" +
+                cInf[i];
               city_infor.push(s);
-              trcitycnt+=1;
+              trcitycnt += 1;
             }
           }
 
@@ -1599,8 +1616,8 @@ export default {
           //   }
           // }
           for (var i = 1; i <= 10; i++) {
-            if(cityUsed[i]==true){
-              var cp=document.getElementById("ci"+i);
+            if (cityUsed[i] == true) {
+              var cp = document.getElementById("ci" + i);
               var n = this.GetName(i);
               var x = cp.style.left.substring(0, cp.style.left.length - 2);
               var y = cp.style.top.substring(0, cp.style.top.length - 2);
@@ -1675,8 +1692,14 @@ export default {
           var loopcnt = 0;
           var trcitycnt = 0;
           for (var i = 1; i <= 10; i++) {
-            if(cityUsed[i]==true){
-              var s ="cityname:" + cName[i] + ",initpop:" + cPeople[i] + ",initinfect:" + cInf[i];
+            if (cityUsed[i] == true) {
+              var s =
+                "cityname:" +
+                cName[i] +
+                ",initpop:" +
+                cPeople[i] +
+                ",initinfect:" +
+                cInf[i];
               city_infor.push(s);
             }
           }
@@ -1712,8 +1735,8 @@ export default {
           var city_position = [];
           loopcnt = 0;
           for (var i = 1; i <= 10; i++) {
-            if(cityUsed[i]==true){
-              var cp=document.getElementById("ci"+i);
+            if (cityUsed[i] == true) {
+              var cp = document.getElementById("ci" + i);
               var n = this.GetName(i);
               var x = cp.style.left.substring(0, cp.style.left.length - 2);
               var y = cp.style.top.substring(0, cp.style.top.length - 2);
@@ -1825,11 +1848,12 @@ export default {
 
     ConfirmRoad(tcx1, tcy1, tcx2, tcy2, dx, dy, dis) {
       var tra = 0;
-      console.log("输入人流量");
-      this.$prompt("请输入此路人流量（1-100）", "提示", {
+      // console.log("输入人流量");
+      this.$prompt("请输入此路人流量（1%-100%）", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         inputPattern: /^[0-9]/,
+        inputPlaceholder: "请输入整数，如设置为50%，请输入50",
         inputErrorMessage: "人流量格式不正确",
       })
         .then(({ value }) => {
@@ -1839,7 +1863,7 @@ export default {
               callback: (action) => {
                 this.$message({
                   type: "info",
-                  message: `action: ${action}`,
+                  message: "请重新创建",
                 });
               },
             });
@@ -2371,6 +2395,9 @@ export default {
 
       citycnt++;
       nowcitycnt++;
+
+      this.cityForm.population = "";
+      this.cityForm.beginInfected = "";
       // console.log(typeof(this.city_po));
     },
 
@@ -2674,7 +2701,11 @@ header .toMy {
   background-color: #bfa;
 } */
 .tools-wrapper button:hover {
-  background-image: linear-gradient(to right, rgb(93,96,181,0.5), rgb(89,151,227,0.5));
+  background-image: linear-gradient(
+    to right,
+    rgb(93, 96, 181, 0.5),
+    rgb(89, 151, 227, 0.5)
+  );
 }
 /* 
 .tools-wrapper button:active {
@@ -2691,7 +2722,7 @@ header .toMy {
   height: 69px;
   color: rgb(255, 255, 255);
   border: 1px solid transparent;
-  background-image: linear-gradient(to right, #5D5EB4, #5998e4);
+  background-image: linear-gradient(to right, #5d5eb4, #5998e4);
   /* cursor: url(); */
 }
 
@@ -2738,7 +2769,11 @@ header .toMy {
   width: 340px;
   height: 655px;
   padding-top: 20px;
-  background-image: linear-gradient(to right, rgb(93,96,181,0.5), rgb(89,151,227,0.5));
+  background-image: linear-gradient(
+    to right,
+    rgb(93, 96, 181, 0.5),
+    rgb(89, 151, 227, 0.5)
+  );
   /* background-color: #fff; */
   /* border: 1px solid rgb(204, 204, 204); */
   border-radius: 10px;
@@ -2920,7 +2955,11 @@ canvas {
   border: 1px solid rgb(187, 187, 187);
   padding-top: 10px;
   border-radius: 10%;
-  background-image: linear-gradient(to right, rgb(93,96,181,0.5), rgb(89,151,227,0.5));
+  background-image: linear-gradient(
+    to right,
+    rgb(93, 96, 181, 0.5),
+    rgb(89, 151, 227, 0.5)
+  );
   z-index: 9;
 }
 

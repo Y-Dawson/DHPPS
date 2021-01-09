@@ -39,9 +39,13 @@
       </div>
 
       <div class="column">
-        <el-button class="topbtn" type="primary" @click="add_road">增加双向航线</el-button>
+        <el-button class="topbtn" type="primary" @click="add_road"
+          >增加双向航线</el-button
+        >
         <el-button class="topbtn" type="primary" @click="reduce_road">删除航线</el-button>
-        <el-button class="topbtn" type="primary" @click="begin_simulation">开始模拟</el-button>
+        <el-button class="topbtn" type="primary" @click="begin_simulation"
+          >开始模拟</el-button
+        >
         <div class="panel">
           <div>
             <span class="little-title">航线列表：</span>
@@ -107,7 +111,9 @@
         </el-form-item>
 
         <el-form-item>
-          <el-button class="topbtn" type="primary" @click="create_city">立即创建</el-button>
+          <el-button class="topbtn" type="primary" @click="create_city"
+            >立即创建</el-button
+          >
           <!-- <el-button type="info" @click="resetForm('ruleForm')">重置</el-button> -->
         </el-form-item>
       </el-form>
@@ -132,7 +138,9 @@
         </el-form-item>
 
         <el-form-item>
-          <el-button class="topbtn" type="primary" @click="delete_city">确认删除</el-button>
+          <el-button class="topbtn" type="primary" @click="delete_city"
+            >确认删除</el-button
+          >
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -169,7 +177,9 @@
         </el-form-item>
 
         <el-form-item>
-          <el-button class="topbtn" type="primary" @click="create_road">立即创建</el-button>
+          <el-button class="topbtn" type="primary" @click="create_road"
+            >立即创建</el-button
+          >
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -193,7 +203,9 @@
         </el-form-item>
 
         <el-form-item>
-          <el-button class="topbtn" type="primary" @click="delete_road">确认删除</el-button>
+          <el-button class="topbtn" type="primary" @click="delete_road"
+            >确认删除</el-button
+          >
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -324,10 +336,10 @@ export default {
         this.road_di.push(s);
         var ts = cn1 + "-" + cn2;
 
-        roadnum+=1;
+        roadnum += 1;
         var newa = new Array();
-        newa["id"]=roadnum;
-        newa["name"]=ts;
+        newa["id"] = roadnum;
+        newa["name"] = ts;
         this.used_road.push(newa);
 
         var newb = new Array();
@@ -589,10 +601,17 @@ export default {
 
     add_city() {
       this.isShow1 = true;
+      this.selected = "";
+      this.ruleForm.to_pop.length = "";
+      this.ruleForm.begin_inf.length = "";
     },
 
     create_city() {
       var cn = document.getElementById("selected").value;
+      // tcn.value="";
+      // console.log("cn",cn);
+      // console.log("tcn",tcn);
+      // console.log("value",tcn.value);
 
       for (var i in this.city_po) {
         var tc = this.city_po[i].split(":");
@@ -706,7 +725,16 @@ export default {
     },
 
     reduce_city() {
+      if (this.used_city1.length == 0) {
+        this.$message({
+          type: "warning",
+          message: "你还没有创建任何城市",
+        });
+        return;
+      }
+
       this.isShow3 = true;
+      this.selected3 = "";
     },
 
     delete_city() {
@@ -768,6 +796,9 @@ export default {
 
     add_road() {
       this.isShow2 = true;
+      this.selected1 = "";
+      this.selected2 = "";
+      this.ruleForm.volumn = "";
     },
 
     create_road() {
@@ -882,7 +913,16 @@ export default {
     },
 
     reduce_road() {
+      if (this.used_road.length == 0) {
+        this.$message({
+          type: "warning",
+          message: "你还没有创建任何航线",
+        });
+        return;
+      }
+
       this.isShow4 = true;
+      this.selected4 = "";
     },
 
     delete_road() {
@@ -1155,8 +1195,8 @@ export default {
   padding: 0;
   box-sizing: border-box;
 }
-.topbtn{
-  background: linear-gradient(to right, rgb(93,96,181), rgb(89,151,227));
+.topbtn {
+  background: linear-gradient(to right, rgb(93, 96, 181), rgb(89, 151, 227));
   border: 0px;
 }
 li {
