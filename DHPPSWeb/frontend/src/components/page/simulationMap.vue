@@ -29,7 +29,7 @@
           <div class="map1"></div>
           <div class="map2"></div>
           <div class="map3"></div>
-          <div class="chart" id="map"></div>
+          <div class="chart" id="map" style=" width: 100%; height: 500px;"></div>
         </div>
       </div>
 
@@ -87,12 +87,12 @@ export default {
     this.params = JSON.parse(this.$route.query.params);
 
     // console.log("用户ID：", this.params.userId);
-    console.log("案例名：", this.params.caseName);
-    console.log("城市数目：", this.params.citynum);
-    console.log("道路数目：", this.params.roadnum);
-    console.log("初始城市信息：", this.params.InitCityData);
-    console.log("道路信息：", this.params.InitRoadData);
-    console.log("每日病例：", this.params.DailyInfected.data.DailyForecastData);
+    // console.log("案例名：", this.params.caseName);
+    // console.log("城市数目：", this.params.citynum);
+    // console.log("道路数目：", this.params.roadnum);
+    // console.log("初始城市信息：", this.params.InitCityData);
+    // console.log("道路信息：", this.params.InitRoadData);
+    // console.log("每日病例：", this.params.DailyInfected.data.DailyForecastData);
     var foreData = this.params.DailyInfected.data.DailyForecastData;
 
     // this.userId = this.params.userId;
@@ -123,14 +123,14 @@ export default {
 
     var cn;
     for (var j in this.params.InitCityData) {
-      console.log(this.params.InitCityData[j]);
+      // console.log(this.params.InitCityData[j]);
       var tc = this.params.InitCityData[j].split(":");
       var ttc = tc[1].split(",");
       cn = ttc[0];
       this.citynamelist.push(cn);
     }
 
-    console.log("citynamelist", this.citynamelist);
+    // console.log("citynamelist", this.citynamelist);
 
     for (var j in this.citynamelist) {
       var newa = {};
@@ -157,7 +157,7 @@ export default {
       this.linemap_information.push(newa);
     }
 
-    console.log("series", this.linemap_information);
+    // console.log("series", this.linemap_information);
 
     for (var j in this.citynamelist) {
       var newc = {};
@@ -166,9 +166,9 @@ export default {
       this.piemap_information.push(newc);
     }
 
-    console.log("pieinf", this.piemap_information);
+    // console.log("pieinf", this.piemap_information);
 
-    console.log("road_inf", this.params.InitRoadData);
+    // console.log("road_inf", this.params.InitRoadData);
 
     var road_data = [];
     for (var j in this.params.InitRoadData) {
@@ -178,20 +178,20 @@ export default {
       var te = this.params.InitRoadData[j].split(":");
       var tte1 = te[1].split(",");
       var tte2 = te[2].split(",");
-      console.log("te", te);
+      // console.log("te", te);
       c1["name"] = tte1[0];
       c2["name"] = tte2[0];
       c2["value"] = parseInt(te[3]);
       newa.push(c1);
       newa.push(c2);
-      console.log("newa", newa);
+      // console.log("newa", newa);
       road_data.push(newa);
     }
 
-    console.log("road_data", road_data);
+    // console.log("road_data", road_data);
     // this.map_information.push(road_data);
     this.map_information = road_data;
-    console.log("mapinf", this.map_information);
+    // console.log("mapinf", this.map_information);
 
     var YCData = [
       [{ name: "拉萨" }, { name: "济南", value: 100 }],
@@ -201,7 +201,7 @@ export default {
       [{ name: "银川" }, { name: "西宁", value: 100 }],
     ];
 
-    console.log("ycdata", YCData);
+    // console.log("ycdata", YCData);
 
     this.drawLine();
 
@@ -419,13 +419,13 @@ export default {
         var te = this.params.InitRoadData[j].split(":");
         var tte1 = te[1].split(",");
         var tte2 = te[2].split(",");
-        console.log("te", te);
+        // console.log("te", te);
         c1["name"] = tte1[0];
         c2["name"] = tte2[0];
         c2["value"] = parseInt(te[3]);
         newa.push(c1);
         newa.push(c2);
-        console.log("newa", newa);
+        // console.log("newa", newa);
         road_data.push(newa);
 
         c3["name"] = tte2[0];
@@ -433,7 +433,7 @@ export default {
         c4["value"] = parseInt(te[3]);
         newb.push(c3);
         newb.push(c4);
-        console.log("newb", newb);
+        // console.log("newb", newb);
         road_data.push(newb);
       }
 
@@ -450,8 +450,8 @@ export default {
       }
 
       var XAData = road_data;
-      console.log("mapData", mapData);
-      console.log("XAData", XAData);
+      // console.log("mapData", mapData);
+      // console.log("XAData", XAData);
 
       var planePath =
         "path://M1705.06,1318.313v-89.254l-319.9-221.799l0.073-208.063c0.521-84.662-26.629-121.796-63.961-121.491c-37.332-0.305-64.482,36.829-63.961,121.491l0.073,208.063l-319.9,221.799v89.254l330.343-157.288l12.238,241.308l-134.449,92.931l0.531,42.034l175.125-42.917l175.125,42.917l0.531-42.034l-134.449-92.931l12.238-241.308L1705.06,1318.313z";
@@ -576,16 +576,16 @@ export default {
             }
           },
         },
-        legend: {
-          orient: "vertical",
-          top: "bottom",
-          left: "right",
-          data: ["西安 Top1", "西宁 Top2", "银川 Top2"],
-          textStyle: {
-            color: "#fff",
-          },
-          selectedMode: "multiple",
-        },
+        // legend: {
+        //   orient: "vertical",
+        //   top: "bottom",
+        //   left: "right",
+        //   data: ["西安 Top1", "西宁 Top2", "银川 Top2"],
+        //   textStyle: {
+        //     color: "#fff",
+        //   },
+        //   selectedMode: "multiple",
+        // },
         geo: {
           map: "china",
           label: {
@@ -666,7 +666,7 @@ body {
 header {
   position: relative;
   height: 1.25rem;
-  background: url(../../assets/img/head_bg2.png) no-repeat;
+  background: url("../../assets/img/head_bg2.png") no-repeat;
   height: 50px;
   width: 100%;
   background-size: 100% 100%;
