@@ -576,16 +576,16 @@ export default {
             }
           },
         },
-        legend: {
-          orient: "vertical",
-          top: "bottom",
-          left: "right",
-          data: ["西安 Top1", "西宁 Top2", "银川 Top2"],
-          textStyle: {
-            color: "#fff",
-          },
-          selectedMode: "multiple",
-        },
+        // legend: {
+        //   orient: "vertical",
+        //   top: "bottom",
+        //   left: "right",
+        //   data: ["西安 Top1", "西宁 Top2", "银川 Top2"],
+        //   textStyle: {
+        //     color: "#fff",
+        //   },
+        //   selectedMode: "multiple",
+        // },
         geo: {
           map: "china",
           label: {

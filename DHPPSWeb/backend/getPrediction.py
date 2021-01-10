@@ -25,7 +25,7 @@ def SendParamsToCmd(popuList, transMatrix, infectedList):
         # print(len(resultList))
         # print(len(resultList[0]))
         if (not isinstance(resultList, list)):
-            resultList = list("Return a non-list result!")
+            resultList = list("R")
         # print(resultList)
         return resultList
     except subprocess.CalledProcessError as exc:

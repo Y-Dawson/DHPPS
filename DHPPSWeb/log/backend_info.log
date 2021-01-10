@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 [2021-01-09 19:10:19,467][MainThread:12400][task_id:django.utils.autoreload][autoreload.py:613][INFO][Watching for file changes with StatReloader]
 [2021-01-09 19:10:38,607][MainThread:12400][task_id:django.utils.autoreload][autoreload.py:236][INFO][D:\_Study_To_Death\大三上\Software_Engineering\DHPPS-beta\DHPPSWeb\backend\urls.py changed, reloading.]
 [2021-01-09 19:10:41,685][MainThread:8952][task_id:django.utils.autoreload][autoreload.py:613][INFO][Watching for file changes with StatReloader]
@@ -11,3 +12,8 @@
 [2021-01-10 10:15:03,258][MainThread:24612][task_id:django.utils.autoreload][autoreload.py:240][INFO][F:\β-front\DHPPS\DHPPSWeb\backend\views.py changed, reloading.]
 [2021-01-10 10:15:10,109][MainThread:24700][task_id:django.utils.autoreload][autoreload.py:617][INFO][Watching for file changes with StatReloader]
 [2021-01-10 10:15:16,511][MainThread:24700][task_id:django.utils.autoreload][autoreload.py:240][INFO][F:\β-front\DHPPS\DHPPSWeb\DHPPSWeb\settings.py changed, reloading.]
+=======
+>>>>>>> 5df8957779ddf773832431c084a0d47535eaf9c8
+[2021-01-10 10:40:16,290][MainThread:16084][task_id:django.utils.autoreload][autoreload.py:617][INFO][Watching for file changes with StatReloader]
+[2021-01-10 10:42:50,399][MainThread:16084][task_id:django.utils.autoreload][autoreload.py:240][INFO][F:\β-front\DHPPS\DHPPSWeb\backend\views.py changed, reloading.]
+[2021-01-10 10:42:56,304][MainThread:24012][task_id:django.utils.autoreload][autoreload.py:617][INFO][Watching for file changes with StatReloader]

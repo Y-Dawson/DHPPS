@@ -536,16 +536,16 @@ export default {
             }
           },
         },
-        legend: {
-          orient: "vertical",
-          top: "bottom",
-          left: "right",
-          data: ["西安 Top3", "西宁 Top3", "银川 Top3"],
-          textStyle: {
-            color: "#fff",
-          },
-          selectedMode: "multiple",
-        },
+        // legend: {
+        //   orient: "vertical",
+        //   top: "bottom",
+        //   left: "right",
+        //   data: ["西安 Top3"],
+        //   textStyle: {
+        //     color: "#fff",
+        //   },
+        //   selectedMode: "multiple",
+        // },
         geo: {
           map: "china",
           label: {
