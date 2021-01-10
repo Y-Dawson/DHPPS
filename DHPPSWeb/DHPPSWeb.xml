@@ -3,9 +3,10 @@
     <chdir>/root/DHPPS-beta/DHPPSWeb/</chdir><!-- 项目路径 -->
     <module>DHPPSWeb.wsgi</module><!--这是django项目中的wsgi文件，在mysite/mysite目录下-->
     <processes>4</processes> <!-- 进程数 --> 
-    <thread>2</thread>
+    <thread>2</thread><!-- 线程数 -->
     <daemonize>uwsgi.log</daemonize><!-- 日志文件 -->
-    <buffer-size>65536</buffer-size>
-    <disable-logging>true</disable-logging>
-    <py-autoreload>1</py-autoreload>
+    <buffer-size>65536</buffer-size><!--uwsgi的最大缓存-->
+    <disable-logging>true</disable-logging><!--  true只记录uwsgi错误和内部消息，不记录常规请求信息，false反之-->
+    <py-autoreload>1</py-autoreload><!-- 代码修改后自动重启 -->
+    <vacuum>true</vacuum><!--true当服务器退出的时候自动清理环境，删除unix socket文件和pid文件，false反之-->
 </uwsgi>
