@@ -536,16 +536,16 @@ export default {
             }
           },
         },
-        // legend: {
-        //   orient: "vertical",
-        //   top: "bottom",
-        //   left: "right",
-        //   data: ["西安 Top3"],
-        //   textStyle: {
-        //     color: "#fff",
-        //   },
-        //   selectedMode: "multiple",
-        // },
+        legend: {
+          orient: "vertical",
+          top: "bottom",
+          left: "right",
+          data: ["西安 Top3", "西宁 Top3", "银川 Top3"],
+          textStyle: {
+            color: "#fff",
+          },
+          selectedMode: "multiple",
+        },
         geo: {
           map: "china",
           label: {
@@ -1390,8 +1390,8 @@ header .toMy {
 }
 
 .map .map1 {
-  width: 410px;
-  height: 410px;
+  width: 310px;
+  height: 310px;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -1406,12 +1406,12 @@ header .toMy {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 470px;
-  height: 470px;
+  width: 370px;
+  height: 370px;
   background: url("../../assets/img/lbx.png");
   background-size: 100% 100%;
   animation: rotate1 15s linear infinite;
-  opacity: 0.2;
+  opacity: 0.3;
 }
 
 .map .map3 {
@@ -1419,12 +1419,12 @@ header .toMy {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 435px;
-  height: 435px;
+  width: 335px;
+  height: 335px;
   background: url("../../assets/img/jt.png");
   background-size: 100% 100%;
   animation: rotate2 15s linear infinite;
-  opacity: 0.2;
+  opacity: 0.5;
 }
 
 .map .chart {
