@@ -576,16 +576,16 @@ export default {
             }
           },
         },
-        // legend: {
-        //   orient: "vertical",
-        //   top: "bottom",
-        //   left: "right",
-        //   data: ["西安 Top1", "西宁 Top2", "银川 Top2"],
-        //   textStyle: {
-        //     color: "#fff",
-        //   },
-        //   selectedMode: "multiple",
-        // },
+        legend: {
+          orient: "vertical",
+          top: "bottom",
+          left: "right",
+          data: ["西安 Top1", "西宁 Top2", "银川 Top2"],
+          textStyle: {
+            color: "#fff",
+          },
+          selectedMode: "multiple",
+        },
         geo: {
           map: "china",
           label: {
@@ -871,7 +871,7 @@ header .stop {
   transform: translate(-50%, -50%);
   background: url(../../assets/img/map.png);
   background-size: 100% 100%;
-  opacity: 0.3;
+  opacity: 0.1;
 }
 
 .map .map2 {
@@ -884,7 +884,7 @@ header .stop {
   background: url(../../assets/img/lbx.png);
   background-size: 100% 100%;
   animation: rotate1 15s linear infinite;
-  opacity: 0.6;
+  opacity: 0.3;
 }
 
 .map .map3 {
@@ -897,7 +897,7 @@ header .stop {
   background: url(../../assets/img/jt.png);
   background-size: 100% 100%;
   animation: rotate2 15s linear infinite;
-  opacity: 0.6;
+  opacity: 0.5;
 }
 
 .map .chart {
