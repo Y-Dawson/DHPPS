@@ -32,7 +32,7 @@
           <div class="map1"></div>
           <div class="map2"></div>
           <div class="map3"></div>
-          <div class="chart" id="map"></div>
+          <div class="chart" id="map" style=" width: 100%; height: 500px;"></div>
         </div>
       </div>
 

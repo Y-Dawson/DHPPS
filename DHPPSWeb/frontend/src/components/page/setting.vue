@@ -805,6 +805,7 @@ export default {
       mc: false,
 
       alreadyConfirm: true,
+      // ifShow: false,
 
       cid1: "",
       cid2: "",
@@ -1160,7 +1161,7 @@ export default {
         return;
       } else {
         // console.log("到这了");
-        this.BeginToSimulation().then((response) => {});
+        this.BeginToSimulation();
       }
     },
 
@@ -1192,7 +1193,7 @@ export default {
         return;
       }
 
-      this.SaveConfirm().then((response) => {});
+      this.SaveConfirm();
     },
 
     MyCase(mc) {
@@ -1410,7 +1411,6 @@ export default {
         color: ["#dd4444", "#fec42c", "#80F1BE"],
         legend: {
           top: 10,
-          data: ["北京"],
           textStyle: {
             color: "#fff",
             fontSize: 16,
@@ -2101,7 +2101,7 @@ export default {
 
           // var pu=document.getElementById("dpu");
           // pu.style.visibility="visible";
-          this.ConfirmRoad(tcx1, tcy1, tcx2, tcy2, dx, dy, dis).then((response) => {});
+          this.ConfirmRoad(tcx1, tcy1, tcx2, tcy2, dx, dy, dis);
         }
       }
     },
@@ -2243,7 +2243,7 @@ export default {
 
     DeleteCity(e) {
       if (this.dp == true) {
-        this.ConfirmDeleteCity(e).then((response) => {});
+        this.ConfirmDeleteCity(e);
       }
     },
 
@@ -2572,7 +2572,7 @@ export default {
 
     correctCity() {
       if (this.alreadyConfirm == false) {
-        console.log("有城市需要修正位置");
+        // console.log("有城市需要修正位置");
         var n = this.GetUnused();
         var c = "ci" + n;
         // console.log(c);

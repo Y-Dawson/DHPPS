@@ -161,16 +161,13 @@
             <img
               src="../../assets/layui/images/city.gif"
               alt=""
-              :title="cityname[o-1]"
+              :title="cityname[o - 1]"
               @click="outp('cityinf' + o)"
             />
             <div class="city-infor" :id="'cityinf' + o">
               <div v-for="j in row_cnt[o]" :key="j">
                 <span v-for="k in people_cnt[o][j]" :key="k" class="text item">
-                  <i
-                    :id="'i' + o + j + k"
-                    class="el-icon-user-solid"
-                  ></i>
+                  <i :id="'i' + o + j + k" class="el-icon-user-solid"></i>
                 </span>
               </div>
             </div>
@@ -222,6 +219,8 @@ export default {
     return {
       fits: ["fill"],
       url: "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
+
+      // ifShow: false,
 
       ss: false,
       disable: true,
@@ -567,8 +566,8 @@ export default {
           if (response.data.message != "返回数据成功") {
             this.$message("您尚未登录");
             this.$router.push({
-              path:'/Login'
-            })
+              path: "/Login",
+            });
           }
           // alert(JSON.stringify(response.data)),
         })
@@ -714,17 +713,17 @@ export default {
       if (n == "L") return 12;
     },
 
-    getCityName(n){
-      if(n==1) return "A";
-      if(n==2) return "B";
-      if(n==3) return "C";
-      if(n==4) return "D";
-      if(n==5) return "E";
-      if(n==6) return "F";
-      if(n==7) return "G";
-      if(n==8) return "H";
-      if(n==9) return "I";
-      if(n==10) return "J";
+    getCityName(n) {
+      if (n == 1) return "A";
+      if (n == 2) return "B";
+      if (n == 3) return "C";
+      if (n == 4) return "D";
+      if (n == 5) return "E";
+      if (n == 6) return "F";
+      if (n == 7) return "G";
+      if (n == 8) return "H";
+      if (n == 9) return "I";
+      if (n == 10) return "J";
     },
 
     AddInformation(n, popu, dinf, inf) {
@@ -983,11 +982,7 @@ export default {
       };
 
       var option = {
-        color:[
-          "#ff7437",
-          "#5998e4",
-          "#5D5EB4"
-        ],
+        color: ["#ff7437", "#5998e4", "#5D5EB4"],
         tooltip: {
           trigger: "axis",
           axisPointer: {
@@ -1081,7 +1076,7 @@ export default {
         color: ["#dd4444", "#fec42c", "#80F1BE"],
         legend: {
           top: 10,
-          data: ["北京"],
+          // data: ["北京"],
           textStyle: {
             color: "#fff",
             fontSize: 16,
@@ -1297,7 +1292,11 @@ h1 {
   width: 150px;
   height: 69px;
   color: grey;
-  background-image: linear-gradient(to right, rgb(93,96,181,0.5), rgb(89,151,227,0.5));
+  background-image: linear-gradient(
+    to right,
+    rgb(93, 96, 181, 0.5),
+    rgb(89, 151, 227, 0.5)
+  );
   /* background-color: #bfa; */
   border: 1px solid transparent;
 }
@@ -1313,7 +1312,11 @@ h1 {
 }
 
 .tools-wrapper .stop-simulate button:hover {
-  background-image: linear-gradient(to right, rgb(93,96,181,0.5), rgb(89,151,227,0.5));
+  background-image: linear-gradient(
+    to right,
+    rgb(93, 96, 181, 0.5),
+    rgb(89, 151, 227, 0.5)
+  );
 }
 
 .el-form-item {
@@ -1373,7 +1376,11 @@ h1 {
   width: 340px;
   height: 655px;
   padding-top: 20px;
-  background-image: linear-gradient(to right, rgb(93,96,181,0.5), rgb(89,151,227,0.5));
+  background-image: linear-gradient(
+    to right,
+    rgb(93, 96, 181, 0.5),
+    rgb(89, 151, 227, 0.5)
+  );
   border-radius: 10px;
   box-shadow: -5px 5px 8px rgba(0, 0, 0, 0.1);
 }
@@ -1557,7 +1564,7 @@ canvas {
   z-index: 9999;
 }
 
-.city-infor i{
+.city-infor i {
   margin-right: 3px;
 }
 
