@@ -217,7 +217,7 @@
                                 margin-left: 0;
                                 align: left;
                                 display: block;
-                                float: left;
+                                width:65%;
                               "
                               id="inputdate"
                             >

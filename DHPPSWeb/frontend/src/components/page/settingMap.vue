@@ -1378,15 +1378,15 @@ header .toMy {
 }
 
 .map .map1 {
-  width: 310px;
-  height: 310px;
+  width: 410px;
+  height: 410px;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   background: url("../../assets/img/map.png");
   background-size: 100% 100%;
-  opacity: 0.3;
+  opacity: 0.1;
 }
 
 .map .map2 {
@@ -1394,12 +1394,12 @@ header .toMy {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 370px;
-  height: 370px;
+  width: 470px;
+  height: 470px;
   background: url("../../assets/img/lbx.png");
   background-size: 100% 100%;
   animation: rotate1 15s linear infinite;
-  opacity: 0.6;
+  opacity: 0.2;
 }
 
 .map .map3 {
@@ -1407,12 +1407,12 @@ header .toMy {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 335px;
-  height: 335px;
+  width: 435px;
+  height: 435px;
   background: url("../../assets/img/jt.png");
   background-size: 100% 100%;
   animation: rotate2 15s linear infinite;
-  opacity: 0.6;
+  opacity: 0.2;
 }
 
 .map .chart {
