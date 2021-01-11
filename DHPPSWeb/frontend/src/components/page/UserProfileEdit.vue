@@ -86,7 +86,7 @@
                   <div class="iq-edit-list">
                     <ul class="iq-edit-profile d-flex nav nav-pills">
                       <li class="col-md-6 p-0">
-                        <a class="nav-link active" data-toggle="pill">
+                        <a class="nav-link active" data-toggle="pill" style="cursor:pointer;">
                           修改资料
                         </a>
                       </li>
@@ -95,6 +95,7 @@
                           class="nav-link"
                           data-toggle="pill"
                           @click="ShowEditPWD()"
+                          style="cursor:pointer;"
                         >
                           修改密码
                         </a>
@@ -269,12 +270,13 @@
                           class="nav-link"
                           data-toggle="pill"
                           @click="CloseEditPWD()"
+                          style="cursor:pointer;"
                         >
                           修改资料
                         </a>
                       </li>
                       <li class="col-md-6 p-0">
-                        <a class="nav-link active" data-toggle="pill">
+                        <a class="nav-link active" data-toggle="pill" style="cursor:pointer;">
                           修改密码
                         </a>
                       </li>

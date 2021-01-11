@@ -369,7 +369,11 @@
               </el-form-item> -->
 
               <el-form-item prop="population" class="set_input">
-                <el-input v-model="cityForm.population" placeholder="城市人口"  @keyup.enter.native="ReturnFalse(event)"></el-input>
+                <el-input
+                  v-model="cityForm.population"
+                  placeholder="城市人口"
+                  @keyup.enter.native="ReturnFalse(event)"
+                ></el-input>
               </el-form-item>
 
               <el-form-item prop="beginInfected" class="set_input">
@@ -415,14 +419,18 @@
               </el-form-item> -->
 
               <el-form-item prop="population" class="set_input">
-                <el-input v-model="cityForm.population" placeholder="城市人口" @keyup.enter.native="ReturnFalse"></el-input>
+                <el-input
+                  v-model="cityForm.population"
+                  placeholder="城市人口"
+                  @keyup.enter.native="ReturnFalse"
+                ></el-input>
               </el-form-item>
 
               <el-form-item prop="beginInfected" class="set_input">
                 <el-input
                   v-model="cityForm.beginInfected"
                   placeholder="初始感染人数"
-                  @keyup.enter.native='ReturnFalse'
+                  @keyup.enter.native="ReturnFalse"
                 ></el-input>
               </el-form-item>
 
@@ -454,14 +462,18 @@
             <img src="../../assets/layui/images/city.png" title="C" alt="" />
             <div class="city-infor" id="cityinf3">
               <el-form-item prop="population" class="set_input">
-                <el-input v-model="cityForm.population" placeholder="城市人口" @keyup.enter.native='ReturnFalse'></el-input>
+                <el-input
+                  v-model="cityForm.population"
+                  placeholder="城市人口"
+                  @keyup.enter.native="ReturnFalse"
+                ></el-input>
               </el-form-item>
 
               <el-form-item prop="beginInfected" class="set_input">
                 <el-input
                   v-model="cityForm.beginInfected"
                   placeholder="初始感染人数"
-                  @keyup.enter.native='ReturnFalse'
+                  @keyup.enter.native="ReturnFalse"
                 ></el-input>
               </el-form-item>
 
@@ -493,14 +505,18 @@
             <img src="../../assets/layui/images/city.png" title="D" alt="" />
             <div class="city-infor" id="cityinf4">
               <el-form-item prop="population" class="set_input">
-                <el-input v-model="cityForm.population" placeholder="城市人口" @keyup.enter.native='ReturnFalse'></el-input>
+                <el-input
+                  v-model="cityForm.population"
+                  placeholder="城市人口"
+                  @keyup.enter.native="ReturnFalse"
+                ></el-input>
               </el-form-item>
 
               <el-form-item prop="beginInfected" class="set_input">
                 <el-input
                   v-model="cityForm.beginInfected"
                   placeholder="初始感染人数"
-                  @keyup.enter.native='ReturnFalse'
+                  @keyup.enter.native="ReturnFalse"
                 ></el-input>
               </el-form-item>
 
@@ -532,14 +548,18 @@
             <img src="../../assets/layui/images/city.png" title="E" alt="" />
             <div class="city-infor" id="cityinf5">
               <el-form-item prop="population" class="set_input">
-                <el-input v-model="cityForm.population" placeholder="城市人口" @keyup.enter.native='ReturnFalse'></el-input>
+                <el-input
+                  v-model="cityForm.population"
+                  placeholder="城市人口"
+                  @keyup.enter.native="ReturnFalse"
+                ></el-input>
               </el-form-item>
 
               <el-form-item prop="beginInfected" class="set_input">
                 <el-input
                   v-model="cityForm.beginInfected"
                   placeholder="初始感染人数"
-                  @keyup.enter.native='ReturnFalse'
+                  @keyup.enter.native="ReturnFalse"
                 ></el-input>
               </el-form-item>
 
@@ -571,14 +591,18 @@
             <img src="../../assets/layui/images/city.png" title="F" alt="" />
             <div class="city-infor" id="cityinf6">
               <el-form-item prop="population" class="set_input">
-                <el-input v-model="cityForm.population" placeholder="城市人口" @keyup.enter.native='ReturnFalse'></el-input>
+                <el-input
+                  v-model="cityForm.population"
+                  placeholder="城市人口"
+                  @keyup.enter.native="ReturnFalse"
+                ></el-input>
               </el-form-item>
 
               <el-form-item prop="beginInfected" class="set_input">
                 <el-input
                   v-model="cityForm.beginInfected"
                   placeholder="初始感染人数"
-                  @keyup.enter.native='ReturnFalse'
+                  @keyup.enter.native="ReturnFalse"
                 ></el-input>
               </el-form-item>
 
@@ -610,14 +634,18 @@
             <img src="../../assets/layui/images/city.png" title="G" alt="" />
             <div class="city-infor" id="cityinf7">
               <el-form-item prop="population" class="set_input">
-                <el-input v-model="cityForm.population" placeholder="城市人口" @keyup.enter.native='ReturnFalse'></el-input>
+                <el-input
+                  v-model="cityForm.population"
+                  placeholder="城市人口"
+                  @keyup.enter.native="ReturnFalse"
+                ></el-input>
               </el-form-item>
 
               <el-form-item prop="beginInfected" class="set_input">
                 <el-input
                   v-model="cityForm.beginInfected"
                   placeholder="初始感染人数"
-                  @keyup.enter.native='ReturnFalse'
+                  @keyup.enter.native="ReturnFalse"
                 ></el-input>
               </el-form-item>
 
@@ -649,14 +677,18 @@
             <img src="../../assets/layui/images/city.png" title="H" alt="" />
             <div class="city-infor" id="cityinf8">
               <el-form-item prop="population" class="set_input">
-                <el-input v-model="cityForm.population" placeholder="城市人口" @keyup.enter.native='ReturnFalse'></el-input>
+                <el-input
+                  v-model="cityForm.population"
+                  placeholder="城市人口"
+                  @keyup.enter.native="ReturnFalse"
+                ></el-input>
               </el-form-item>
 
               <el-form-item prop="beginInfected" class="set_input">
                 <el-input
                   v-model="cityForm.beginInfected"
                   placeholder="初始感染人数"
-                  @keyup.enter.native='ReturnFalse'
+                  @keyup.enter.native="ReturnFalse"
                 ></el-input>
               </el-form-item>
 
@@ -688,14 +720,18 @@
             <img src="../../assets/layui/images/city.png" title="I" alt="" />
             <div class="city-infor" id="cityinf9">
               <el-form-item prop="population" class="set_input">
-                <el-input v-model="cityForm.population" placeholder="城市人口" @keyup.enter.native='ReturnFalse'></el-input>
+                <el-input
+                  v-model="cityForm.population"
+                  placeholder="城市人口"
+                  @keyup.enter.native="ReturnFalse"
+                ></el-input>
               </el-form-item>
 
               <el-form-item prop="beginInfected" class="set_input">
                 <el-input
                   v-model="cityForm.beginInfected"
                   placeholder="初始感染人数"
-                  @keyup.enter.native='ReturnFalse'
+                  @keyup.enter.native="ReturnFalse"
                 ></el-input>
               </el-form-item>
 
@@ -727,14 +763,18 @@
             <img src="../../assets/layui/images/city.png" title="J" alt="" />
             <div class="city-infor" id="cityinf10">
               <el-form-item prop="population" class="set_input">
-                <el-input v-model="cityForm.population" placeholder="城市人口" @keyup.enter.native='ReturnFalse'></el-input>
+                <el-input
+                  v-model="cityForm.population"
+                  placeholder="城市人口"
+                  @keyup.enter.native="ReturnFalse"
+                ></el-input>
               </el-form-item>
 
               <el-form-item prop="beginInfected" class="set_input">
                 <el-input
                   v-model="cityForm.beginInfected"
                   placeholder="初始感染人数"
-                  @keyup.enter.native='ReturnFalse'
+                  @keyup.enter.native="ReturnFalse"
                 ></el-input>
               </el-form-item>
 
@@ -1074,7 +1114,7 @@ export default {
   },
 
   methods: {
-    ReturnFalse(e){
+    ReturnFalse(e) {
       //console.log("有回车",e);
       return false;
     },
@@ -1725,6 +1765,7 @@ export default {
                 ",initinfect:" +
                 cInf[i];
               city_infor.push(s);
+              trcitycnt += 1;
             }
           }
           myFormData.append("citynum", trcitycnt);
@@ -1949,8 +1990,9 @@ export default {
           ll.style.transform = "rotate(" + rotang + "deg)";
 
           var newd = {};
-          newd["A"] = this.road_c1;
-          newd["B"] = this.road_c2;
+
+          newd["A"] = this.GetCityNum(this.road_c1);
+          newd["B"] = this.GetCityNum(this.road_c2);
           newd["lineid"] = "line" + linecnt;
           this.lineUsed.push(newd);
           // console.log("lineUsed", this.lineUsed);
@@ -2186,6 +2228,9 @@ export default {
           }
 
           var cname = this.GetNum(e);
+
+          // console.log("cname",cname);
+          // console.log("lineuse",this.lineUsed);
           for (var i in this.lineUsed) {
             if (this.lineUsed[i]["A"] == cname || this.lineUsed[i]["B"] == cname) {
               var lin = document.getElementById(this.lineUsed[i]["lineid"]);

@@ -165,16 +165,17 @@
                               tabindex="-1"
                               aria-disabled="true"
                               @click="GetPrevCasePage()"
+                              style="cursor:pointer;"
                               >Previous</a
                             >
                           </li>
                           <li class="page-item">
-                            <a class="page-link"
+                            <a class="page-link" style="cursor:pointer;"
                               >第{{ currentCasePage }}页/共{{ totalCasePage }}页</a
                             >
                           </li>
                           <li class="page-item">
-                            <a class="page-link" @click="GetNextCasePage()">Next</a>
+                            <a class="page-link" @click="GetNextCasePage()" style="cursor:pointer;">Next</a>
                           </li>
                         </ul>
                       </nav>

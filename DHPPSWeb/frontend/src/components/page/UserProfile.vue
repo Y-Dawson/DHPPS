@@ -306,13 +306,6 @@ export default {
       })
         .then(() => {
           this.logout();
-          this.$message({
-            type: "success",
-            message: "退出成功！",
-          });
-          this.$router.push({
-            path: "/Login",
-          });
         })
         .catch(() => {
           this.$message({
@@ -325,6 +318,15 @@ export default {
       var self = this;
       axios
       .get("/apis/backend/logout/")
+      .then(() => {
+          this.$message({
+            type: "success",
+            message: "退出成功！",
+          });
+          this.$router.push({
+            path: "/Login",
+          });
+        })
       .catch(() => {
           this.$message({
             type: "error",
