@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from backend.models import AccountInformation, CaseData, CityPosition, DailyForecastData
 from backend.models import InitCityData, InitRoadData, LoginData, Authority, PersonalProfile, CaseMode
-from rest_framework.serializers import SerializerMethodField
+
 
 class CaseModeSerializer(serializers.ModelSerializer):
     class Meta:

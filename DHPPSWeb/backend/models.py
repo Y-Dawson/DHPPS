@@ -8,7 +8,6 @@
 from django.db import models
 import uuid
 import os
-from _datetime import date
 from django.utils import timezone
 
 
