@@ -1990,8 +1990,9 @@ export default {
           ll.style.transform = "rotate(" + rotang + "deg)";
 
           var newd = {};
-          newd["A"] = this.road_c1;
-          newd["B"] = this.road_c2;
+
+          newd["A"] = this.GetCityNum(this.road_c1);
+          newd["B"] = this.GetCityNum(this.road_c2);
           newd["lineid"] = "line" + linecnt;
           this.lineUsed.push(newd);
           // console.log("lineUsed", this.lineUsed);
@@ -2227,6 +2228,9 @@ export default {
           }
 
           var cname = this.GetNum(e);
+
+          // console.log("cname",cname);
+          // console.log("lineuse",this.lineUsed);
           for (var i in this.lineUsed) {
             if (this.lineUsed[i]["A"] == cname || this.lineUsed[i]["B"] == cname) {
               var lin = document.getElementById(this.lineUsed[i]["lineid"]);
