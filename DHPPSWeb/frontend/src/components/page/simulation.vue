@@ -1555,7 +1555,7 @@ canvas {
 .img-list .city .city-infor {
   position: absolute;
   display: block;
-  height: 185px;
+  height: 195px;
   width: 190px;
   margin-top: -240px;
   margin-left: 75px;

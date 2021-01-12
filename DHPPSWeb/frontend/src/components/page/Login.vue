@@ -7,7 +7,7 @@
                 <el-form-item prop="account" class="loginForm">
                   <el-input
                     v-model="loginForm.account"
-                    placeholder="用户名/手机号"
+                    placeholder="手机号"
                     id="loginPhone"
                     clearable
                     class="MyInput"
@@ -63,7 +63,7 @@ export default {
 
       loginFormRules: {
         account: [
-          { required: true, message: "请输入用户名/手机号", trigger: "blur" },
+          { required: true, message: "请输入手机号", trigger: "blur" },
           {
             min:11, max:11,
             message: "请输入正确的手机号",

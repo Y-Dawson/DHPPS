@@ -32,7 +32,7 @@
           <div class="map1"></div>
           <div class="map2"></div>
           <div class="map3"></div>
-          <div class="chart" id="map" style=" width: 100%; height: 500px;"></div>
+          <div class="chart" id="map" style="width: 100%; height: 500px"></div>
         </div>
       </div>
 
@@ -102,10 +102,16 @@
           </select>
         </el-form-item>
         <el-form-item label="总人口" prop="to_pop" class="e_inp">
-          <el-input v-model="ruleForm.to_pop" placeholder="请输入总人口：1~1000000的整数"></el-input>
+          <el-input
+            v-model="ruleForm.to_pop"
+            placeholder="请输入总人口：1~1000000的整数"
+          ></el-input>
         </el-form-item>
         <el-form-item label="初始感染数" prop="begin_inf" class="e_inp">
-          <el-input v-model="ruleForm.begin_inf" placeholder="请输入初始感染数：大于1的整数且不超过该城市人口的30%"></el-input>
+          <el-input
+            v-model="ruleForm.begin_inf"
+            placeholder="请输入初始感染数：大于1的整数且不超过该城市人口的30%"
+          ></el-input>
         </el-form-item>
 
         <el-form-item>
@@ -171,7 +177,10 @@
         </el-form-item>
 
         <el-form-item label="人流量" prop="volumn" class="vol e_inp">
-          <el-input v-model="ruleForm.volumn" placeholder="请输入此路人流量（1%-100%），输入为整数，如设置为50%，请输入50"></el-input>
+          <el-input
+            v-model="ruleForm.volumn"
+            placeholder="请输入此路人流量（1%-100%），输入为整数，如设置为50%，请输入50"
+          ></el-input>
         </el-form-item>
 
         <el-form-item>
@@ -266,11 +275,21 @@ export default {
       rules: {
         to_pop: [
           { required: true, message: "请输入总人口", trigger: "blur" },
-          { min: 1, max: 10000000, message: "人口数量应在1到1000000之间", trigger: "blur" },
+          {
+            min: 1,
+            max: 10000000,
+            message: "人口数量应在1到1000000之间",
+            trigger: "blur",
+          },
         ],
         begin_inf: [
           { required: true, message: "请输入初始感染人数", trigger: "blur" },
-          { min: 1, max: 300000, message: "初始感染人数应该大于1且不超过人口的30%", trigger: "blur" },
+          {
+            min: 1,
+            max: 300000,
+            message: "初始感染人数应该大于1且不超过人口的30%",
+            trigger: "blur",
+          },
         ],
         volumn: [
           { required: true, message: "请输入人流量", trigger: "blur" },
@@ -300,7 +319,7 @@ export default {
       // console.log("从地图模拟页面返回");
 
       citycnt = parseInt(this.params.citynum);
-      roadcnt = this.params.roadnum;
+      roadcnt = parseInt(this.params.roadnum);
 
       var nowcnt = 0;
       var cn, totp, initinf;
@@ -374,7 +393,6 @@ export default {
       var geoCoordMap = {
         上海: [121.4648, 31.2891],
         乌鲁木齐: [87.9236, 43.5883],
-        保定: [115.0488, 39.0948],
         兰州: [103.5901, 36.3043],
         北京: [116.4551, 40.2539],
         南京: [118.8062, 31.9208],
@@ -403,6 +421,7 @@ export default {
         长春: [125.8154, 44.2584],
         长沙: [113.0823, 28.2568],
         西宁: [101.4038, 36.8207],
+        南昌: [116.0046, 28.6633],
       };
 
       var XAData = [[{ name: "西安" }, { name: "西安", value: 0 }]];
@@ -588,6 +607,14 @@ export default {
     },
 
     add_city() {
+      if (citycnt == 25) {
+        this.$message({
+          type: "warning",
+          message: "城市数目已达上限，请尝试其他操作",
+        });
+        return;
+      }
+
       this.isShow1 = true;
       this.selected = "";
       this.ruleForm.to_pop = "";
@@ -764,7 +791,7 @@ export default {
       var twtd = waitTodelete.reverse();
       for (var i in twtd) {
         this.road_di.splice(twtd[i], 1);
-        this.used_road.splice(twtd[i],1);
+        this.used_road.splice(twtd[i], 1);
       }
       // console.log("delete road_di",this.road_di);
 
@@ -793,6 +820,14 @@ export default {
     },
 
     add_road() {
+      if (roadcnt == 25) {
+        this.$message({
+          type: "warning",
+          message: "航线数目已达上限，请尝试其他操作",
+        });
+        return;
+      }
+
       this.isShow2 = true;
       this.selected1 = "";
       this.selected2 = "";
@@ -1237,7 +1272,7 @@ export default {
   box-sizing: border-box;
 }
 .topbtn {
-  background: linear-gradient(to right, rgb(93, 96, 181,0.7), rgb(89, 151, 227,0.7));
+  background: linear-gradient(to right, rgb(93, 96, 181, 0.7), rgb(89, 151, 227, 0.7));
   border: 0px;
 }
 li {
@@ -1448,7 +1483,7 @@ header .toMy {
   margin-left: -75px;
 }
 
-.e_inp{
+.e_inp {
   margin-bottom: 22px;
 }
 

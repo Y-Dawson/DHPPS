@@ -1,3 +1,6 @@
 [2021-01-11 15:18:45,422][MainThread:1840][task_id:django.utils.autoreload][autoreload.py:617][INFO][Watching for file changes with StatReloader]
 [2021-01-11 15:19:51,206][Thread-3:13856][task_id:root][views.py:177][ERROR][########################################################]
 [2021-01-11 15:28:03,418][Thread-29:16620][task_id:root][views.py:539][ERROR][########################################################]
+[2021-01-12 20:14:09,958][MainThread:13124][task_id:django.utils.autoreload][autoreload.py:617][INFO][Watching for file changes with StatReloader]
+[2021-01-12 20:14:45,677][Thread-2:4136][task_id:root][views.py:177][ERROR][########################################################]
+[2021-01-12 20:20:26,005][MainThread:13124][task_id:django.utils.autoreload][autoreload.py:240][INFO][F:\β-front\DHPPS\DHPPSWeb\DHPPSWeb\settings.py changed, reloading.]
