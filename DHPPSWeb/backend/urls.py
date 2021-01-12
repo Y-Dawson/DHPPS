@@ -69,7 +69,4 @@ urlpatterns = [
     path('profile/', views.PersonalProfileViewSet.as_view({'get': 'list', 'post': 'create'})),
     # 有参数：get=retrieve one,put=partial_update one,delete=delete one
     path('profile/<int:pk>/', views.PersonalProfileViewSet.as_view({'get': 'retrieve', 'put': 'partial_update', 'delete': 'destroy'})),
-
-    # 接口文档
-    # path('docs/', include_docs_urls(title='DHPPS-Backend-doc'))
 ]
