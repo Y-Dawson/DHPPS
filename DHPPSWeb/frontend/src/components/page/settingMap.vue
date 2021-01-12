@@ -80,7 +80,7 @@
             <option value="银川">银川</option>
             <option value="南京">南京</option>
             <option value="乌鲁木齐">乌鲁木齐</option>
-            <option value="保定">保定</option>
+            <option value="南昌">南昌</option>
             <option value="兰州">兰州</option>
             <option value="南宁">南宁</option>
             <option value="合肥">合肥</option>
